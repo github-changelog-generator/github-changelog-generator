@@ -1,0 +1,2 @@
+class ChangelogGenerator
+end
