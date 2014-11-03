@@ -6,6 +6,9 @@ require 'json'
 
 @project_path = '/Users/petrkorolev/repo/ActionSheetPicker-3.0'
 
+@github_user = 'skywinder'
+@github_repo_name = 'ActionSheetPicker-3.0'
+
 tag1 = '1.1.21'
 tag2 = '1.2.0'
 
@@ -24,15 +27,13 @@ def findTagsDates(tag1, tag2)
     exit
   end
 
-  re = /(.*)\s\(.*\)/m
-  match_result = re.match(value1)
 
-  unless match_result
+  unless /(.*)\s\(.*\)/.match(value1)[1]
     puts 'Not found any versions'
     exit
   end
 
-  time = Time.parse(match_result[1])
+  time = Time.parse(/(.*)\s\(.*\)/.match(value1)[1])
 end
 
 def getAllClosedPullRequests
@@ -48,6 +49,24 @@ def getAllClosedPullRequests
   json
 end
 
+
+def compund_changelog (tag_time, pull_requests)
+  log = ''
+  last_tag = exec_command('git describe --abbrev=0 --tags').strip
+  log += "## [#{last_tag}] (https://github.com/#{@github_user}/#{@github_repo_name}/tree/#{last_tag})\n"
+  time_string = tag_time.strftime "%Y/%m/%d"
+  log += "#### #{time_string}\n"
+
+  pull_requests.each { |dict|
+    merge = "#{dict[:title]} (##{dict[:number]})\n"
+  log += "- #{merge}"
+  }
+
+  puts log
+  File.open('output.txt', 'w') { |file| file.write(log) }
+
+end
+
 tag_time = findTagsDates tag1, tag2
 
 pull_requests = getAllClosedPullRequests
@@ -57,7 +76,5 @@ pull_requests.delete_if { |req|
   t < tag_time
 }
 
-pull_requests.each { |dict|
-  # print_json dict
-  puts "##{dict[:number]} - #{dict[:title]} (#{dict[:closed_at]})"
-}
+
+compund_changelog(tag_time, pull_requests)
