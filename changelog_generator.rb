@@ -38,7 +38,7 @@ end
 
 def getAllClosedPullRequests
 
-  if @oauth_token.length
+  if @oauth_token
     github = Github.new oauth_token: @oauth_token
   else
     github = Github.new
