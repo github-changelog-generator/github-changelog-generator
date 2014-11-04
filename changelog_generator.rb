@@ -3,14 +3,16 @@
 
 require_relative 'log_generator'
 
-generator = LogGenerator.new
+if __FILE__ == $0
+  generator = LogGenerator.new
 
-tag_time = generator.findPrevTagDate
-pull_requests = generator.getAllClosedPullRequests
+  tag_time = generator.findPrevTagDate
+  pull_requests = generator.getAllClosedPullRequests
 
-pull_requests.delete_if { |req|
-  t = Time.parse(req[:closed_at]).utc
-  t < tag_time
-}
+  pull_requests.delete_if { |req|
+    t = Time.parse(req[:closed_at]).utc
+    t < tag_time
+  }
 
-generator.compund_changelog(tag_time, pull_requests)
+  generator.compund_changelog(tag_time, pull_requests)
+end
