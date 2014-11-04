@@ -3,14 +3,7 @@
 
 require 'github_api'
 require 'json'
-
-@project_path = '/Users/petrkorolev/repo/ActionSheetPicker-3.0'
-
-@github_user = 'skywinder'
-@github_repo_name = 'ActionSheetPicker-3.0'
-
-tag1 = '1.1.21'
-tag2 = '1.2.0'
+require_relative 'constants'
 
 def print_json(json)
   puts JSON.pretty_generate(json)
@@ -22,13 +15,13 @@ end
 
 def findPrevTagDate
 
-  value1 =  exec_command "git log --tags --simplify-by-decoration --pretty=\"format:%ci %d\" | grep tag"
+  value1 = exec_command "git log --tags --simplify-by-decoration --pretty=\"format:%ci %d\" | grep tag"
   unless value1
     puts 'not found this tag'
     exit
   end
 
-  scan_results =  value1.scan(/.*tag.*/)
+  scan_results = value1.scan(/.*tag.*/)
 
   prev_tag = scan_results[1]
 
@@ -44,20 +37,25 @@ end
 
 
 def getAllClosedPullRequests
-  github = Github.new oauth_token: '8587bb22f6bf125454768a4a19dbcc774ea68d48'
-  issues = github.pull_requests.list 'skywinder', 'ActionSheetPicker-3.0', :state => 'closed'
-  json = issues.body
 
-  json.each { |dict|
-    # print_json dict
-    # puts "##{dict[:number]} - #{dict[:title]} (#{dict[:closed_at]})"
-  }
+  if @oauth_token.length
+    github = Github.new oauth_token: @oauth_token
+  else
+    github = Github.new
+  end
+    issues = github.pull_requests.list @github_user, @github_repo_name, :state => 'closed'
+    json = issues.body
 
-  json
+    json.each { |dict|
+      # print_json dict
+      # puts "##{dict[:number]} - #{dict[:title]} (#{dict[:closed_at]})"
+    }
+
+    json
+
 end
 
-
-def compund_changelog (tag_time, pull_requests)
+def compund_changelog(tag_time, pull_requests)
   log = ''
   last_tag = exec_command('git describe --abbrev=0 --tags').strip
   log += "## [#{last_tag}] (https://github.com/#{@github_user}/#{@github_repo_name}/tree/#{last_tag})\n"
@@ -67,7 +65,7 @@ def compund_changelog (tag_time, pull_requests)
 
   pull_requests.each { |dict|
     merge = "#{dict[:title]} ([\\##{dict[:number]}](https://github.com/#{@github_user}/#{@github_repo_name}/pull/#{dict[:number]}))\n"
-  log += "- #{merge}"
+    log += "- #{merge}"
   }
 
   puts log
@@ -84,5 +82,4 @@ pull_requests.delete_if { |req|
   t < tag_time
 }
 
-
-compund_changelog(tag_time, pull_requests)
+compund_changelog tag_time, pull_requests
