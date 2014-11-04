@@ -20,21 +20,28 @@ def exec_command(cmd)
   %x[cd #{@project_path} && #{cmd}]
 end
 
-def findTagsDates(tag1, tag2)
-  value1 =  exec_command "git log --tags --simplify-by-decoration --pretty=\"format:%ci %d\" | grep #{tag1}"
+def findPrevTagDate
+
+  value1 =  exec_command "git log --tags --simplify-by-decoration --pretty=\"format:%ci %d\" | grep tag"
   unless value1
     puts 'not found this tag'
     exit
   end
 
+  scan_results =  value1.scan(/.*tag.*/)
 
-  unless /(.*)\s\(.*\)/.match(value1)[1]
+  prev_tag = scan_results[1]
+
+  unless scan_results.count
     puts 'Not found any versions'
     exit
   end
 
-  time = Time.parse(/(.*)\s\(.*\)/.match(value1)[1])
+  puts "Prev tag is #{prev_tag}"
+
+  time = Time.parse(prev_tag)
 end
+
 
 def getAllClosedPullRequests
   github = Github.new oauth_token: '8587bb22f6bf125454768a4a19dbcc774ea68d48'
@@ -54,11 +61,12 @@ def compund_changelog (tag_time, pull_requests)
   log = ''
   last_tag = exec_command('git describe --abbrev=0 --tags').strip
   log += "## [#{last_tag}] (https://github.com/#{@github_user}/#{@github_repo_name}/tree/#{last_tag})\n"
+
   time_string = tag_time.strftime "%Y/%m/%d"
   log += "#### #{time_string}\n"
 
   pull_requests.each { |dict|
-    merge = "#{dict[:title]} (##{dict[:number]})\n"
+    merge = "#{dict[:title]} ([\\##{dict[:number]}](https://github.com/#{@github_user}/#{@github_repo_name}/pull/#{dict[:number]}))\n"
   log += "- #{merge}"
   }
 
@@ -67,7 +75,7 @@ def compund_changelog (tag_time, pull_requests)
 
 end
 
-tag_time = findTagsDates tag1, tag2
+tag_time = findPrevTagDate
 
 pull_requests = getAllClosedPullRequests
 
