@@ -20,6 +20,8 @@ class ChangelogGenerator
     end
     @all_tags = self.get_all_tags
     @pull_requests = self.get_all_closed_pull_requests
+
+    @tag_times_hash = {}
   end
 
   def print_json(json)
@@ -40,9 +42,6 @@ class ChangelogGenerator
 
     if @options[:verbose]
       puts 'Receive all pull requests'
-      # json.each { |dict|
-      #   p "##{dict[:number]} - #{dict[:title]} (#{dict[:closed_at]})"
-      # }
     end
 
     json
@@ -78,19 +77,22 @@ class ChangelogGenerator
         puts "Can't find tag #{tag1} -> exit"
         exit
       end
-
-
     else
       log += self.generate_log_for_all_tags
     end
 
     puts log
-    File.open('output.txt', 'w') { |file| file.write(log) }
+    File.open('output.md', 'w') { |file| file.write(log) }
 
   end
 
   def generate_log_for_all_tags
-    log = self.generate_log_between_tags(self.all_tags[0], self.all_tags[1])
+    log = ''
+    for index in 1 ... self.all_tags.size
+      log += self.generate_log_between_tags(self.all_tags[index-1], self.all_tags[index])
+    end
+
+    log
   end
 
   def is_megred(number)
@@ -126,7 +128,6 @@ class ChangelogGenerator
 
   def generate_log_between_tags(since_tag, till_tag)
 
-    log = ''
     since_tag_time = self.get_time_of_tag(since_tag)
     till_tag_time = self.get_time_of_tag(till_tag)
 
@@ -136,7 +137,7 @@ class ChangelogGenerator
       since_tag_time, till_tag_time = till_tag_time, since_tag_time
     end
 
-    since_tag_name = since_tag['name']
+    till_tag_name = till_tag['name']
 
     pull_requests = Array.new(@pull_requests)
 
@@ -149,14 +150,14 @@ class ChangelogGenerator
       !in_range
     }
 
-    self.create_log(pull_requests, since_tag_name, since_tag_time)
+    self.create_log(pull_requests, till_tag_name, till_tag_time)
   end
 
-  def create_log(pull_requests, since_tag_name, since_tag_time)
-    log = ''
-    log += "## [#{since_tag_name}] (https://github.com/#{$github_user}/#{$github_repo_name}/tree/#{since_tag_name})\n"
+  def create_log(pull_requests, tag_name, tag_time)
 
-    time_string = since_tag_time.strftime "%Y/%m/%d"
+    log = "## [#{tag_name}] (https://github.com/#{$github_user}/#{$github_repo_name}/tree/#{tag_name})\n"
+
+    time_string = tag_time.strftime "%d/%m/%y"
     log += "#### #{time_string}\n"
 
     pull_requests.each { |dict|
@@ -168,6 +169,10 @@ class ChangelogGenerator
 
   def get_time_of_tag(prev_tag)
 
+    if @tag_times_hash[prev_tag['name']]
+      return @tag_times_hash[prev_tag['name']]
+    end
+
     if @options[:verbose]
       puts "Get time for tag #{prev_tag['name']}"
     end
@@ -175,6 +180,7 @@ class ChangelogGenerator
     github_git_data_commits_get = @github.git_data.commits.get $github_user, $github_repo_name, prev_tag['commit']['sha']
     time_string = github_git_data_commits_get['committer']['date']
     Time.parse(time_string)
+    @tag_times_hash[prev_tag['name']] = Time.parse(time_string)
   end
 
 end
@@ -184,5 +190,4 @@ if __FILE__ == $0
   log_generator = ChangelogGenerator.new
 
   log_generator.compund_changelog
-  # log_generator.generate_log_between_tags(tags[1], tags[2])
 end
