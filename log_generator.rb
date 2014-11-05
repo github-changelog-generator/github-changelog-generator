@@ -4,6 +4,12 @@ require 'json'
 
 class LogGenerator
 
+  attr_accessor :options
+
+  def initialize(options = {})
+    @options = options
+  end
+
   def print_json(json)
     puts JSON.pretty_generate(json)
   end
@@ -13,7 +19,7 @@ class LogGenerator
     %x[#{exec_cmd}]
   end
 
-  def findPrevTagDate
+  def find_prev_tag_date
 
     value1 = exec_command "git log --tags --simplify-by-decoration --pretty=\"format:%ci %d\" | grep tag"
     unless value1
@@ -30,13 +36,14 @@ class LogGenerator
       exit
     end
 
-    puts "Prev tag is #{prev_tag}"
-
+    if @options[:verbose]
+      puts "Prev tag is #{prev_tag}"
+    end
     time = Time.parse(prev_tag)
   end
 
 
-  def getAllClosedPullRequests
+  def get_all_closed_pull_requests
 
     if $oauth_token
       github = Github.new oauth_token: $oauth_token
