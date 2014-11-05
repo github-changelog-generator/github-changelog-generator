@@ -138,11 +138,10 @@ class ChangelogGenerator
 
     since_tag_name = since_tag['name']
 
-    pull_requests = @pull_requests
+    pull_requests = Array.new(@pull_requests)
 
     pull_requests.delete_if { |req|
       t = Time.parse(req[:closed_at]).utc
-
       true_classor_false_class = t > since_tag_time
       classor_false_class = t < till_tag_time
 
@@ -150,16 +149,20 @@ class ChangelogGenerator
       !in_range
     }
 
+    self.create_log(pull_requests, since_tag_name, since_tag_time)
+  end
+
+  def create_log(pull_requests, since_tag_name, since_tag_time)
+    log = ''
     log += "## [#{since_tag_name}] (https://github.com/#{$github_user}/#{$github_repo_name}/tree/#{since_tag_name})\n"
 
     time_string = since_tag_time.strftime "%Y/%m/%d"
     log += "#### #{time_string}\n"
 
     pull_requests.each { |dict|
-      merge = "#{dict[:title]} ([\\##{dict[:number]}](https://github.com/#{$github_user}/#{$github_repo_name}/pull/#{dict[:number]}))\n"
+      merge = "#{dict[:title]} ([\\##{dict[:number]}](https://github.com/#{$github_user}/#{$github_repo_name}/pull/#{dict[:number]}))\n\n"
       log += "- #{merge}"
     }
-
     log
   end
 
