@@ -56,10 +56,7 @@ class ChangelogGenerator
     log = ''
 
     if @options[:last]
-      prev_tag = self.all_tags[1]
-      last_tag = self.all_tags[0]
-
-      log += self.generate_log_between_tags(prev_tag, last_tag)
+      log += self.generate_log_between_tags(self.all_tags[0], self.all_tags[1])
     elsif @options[:tag1] && @options[:tag2]
 
       tag1 = @options[:tag1]
@@ -93,7 +90,7 @@ class ChangelogGenerator
   end
 
   def generate_log_for_all_tags
-
+    log = self.generate_log_between_tags(self.all_tags[0], self.all_tags[1])
   end
 
   def is_megred(number)
