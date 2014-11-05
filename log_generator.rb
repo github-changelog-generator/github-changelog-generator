@@ -53,10 +53,12 @@ class LogGenerator
     issues = @github.pull_requests.list $github_user, $github_repo_name, :state => 'closed'
     json = issues.body
 
-    json.each { |dict|
-      # print_json dict
-      # puts "##{dict[:number]} - #{dict[:title]} (#{dict[:closed_at]})"
-    }
+    if @options[:verbose]
+      puts 'All pull requests:'
+      json.each { |dict|
+        p "##{dict[:number]} - #{dict[:title]} (#{dict[:closed_at]})"
+      }
+    end
 
     json
 
@@ -86,12 +88,12 @@ class LogGenerator
 
   def get_all_merged_pull_requests
     json = self.get_all_closed_pull_requests
-    puts 'Check if the requests is merged'
+    puts 'Check if the requests is merged... (it can take a while)'
 
     json.delete_if { |req|
       merged = self.is_megred(req[:number])
       if @options[:verbose]
-        puts "##{req[:number]} merged #{merged}"
+        puts "##{req[:number]} #{merged ? 'merged' : 'not merged'}"
       end
       !merged
     }
@@ -107,10 +109,5 @@ if __FILE__ == $0
   p pull_requests.count
   json = log_generator.get_all_merged_pull_requests
   p json.count
-
-  # json.each { |dict|
-  #   # print_json dict
-  #   p "##{dict[:number]} - #{dict[:title]} (#{dict[:closed_at]})"
-  # }
 
 end
