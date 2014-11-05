@@ -61,7 +61,28 @@ class ChangelogGenerator
 
       log += self.generate_log_between_tags(prev_tag, last_tag)
     elsif @options[:tag1] && @options[:tag2]
-      log += self.generate_log_between_tags(@options[:tag1], @options[:tag2])
+
+      tag1 = @options[:tag1]
+      tag2 = @options[:tag2]
+      tags_strings = []
+      self.all_tags.each { |x| tags_strings.push(x['name'])}
+
+      if tags_strings.include?(tag1)
+        if tags_strings.include?(tag2)
+          hash = Hash[tags_strings.map.with_index.to_a]
+          index1 = hash[tag1]
+          index2 = hash[tag2]
+          log += self.generate_log_between_tags(self.all_tags[index1], self.all_tags[index2])
+        else
+          puts "Can't find tag #{tag2} -> exit"
+          exit
+        end
+      else
+        puts "Can't find tag #{tag1} -> exit"
+        exit
+      end
+
+
     else
       log += self.generate_log_for_all_tags
     end
@@ -152,13 +173,8 @@ class ChangelogGenerator
     end
 
     github_git_data_commits_get = @github.git_data.commits.get $github_user, $github_repo_name, prev_tag['commit']['sha']
-    if github_git_data_commits_get
-      time_string = github_git_data_commits_get['committer']['date']
-      Time.parse(time_string)
-    else
-      puts "Can't find tag #{prev_tag['name']} -> exit"
-      exit
-    end
+    time_string = github_git_data_commits_get['committer']['date']
+    Time.parse(time_string)
   end
 
 end
