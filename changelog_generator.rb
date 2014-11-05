@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 require_relative 'constants'
 require_relative 'parser'
 require 'github_api'
