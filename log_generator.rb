@@ -1,6 +1,7 @@
 require_relative 'constants'
 require 'github_api'
 require 'json'
+require 'httparty'
 
 class LogGenerator
 
@@ -65,6 +66,9 @@ class LogGenerator
   end
 
   def compund_changelog(tag_time, pull_requests)
+    if @options[:verbose]
+      puts 'Generating changelog:'
+    end
     log = ''
     last_tag = exec_command('git describe --abbrev=0 --tags').strip
     log += "## [#{last_tag}] (https://github.com/#{$github_user}/#{$github_repo_name}/tree/#{last_tag})\n"
@@ -99,15 +103,26 @@ class LogGenerator
     }
   end
 
+  def get_all_tags
+    url = "https://api.github.com/repos/skywinder/ActionSheetPicker-3.0/tags"
+    so_url = 'https://api.stackexchange.com/2.2/questions?site=stackoverflow'
+    response = HTTParty.get(url,
+                            :headers => { "Authorization" => "token 8587bb22f6bf125454768a4a19dbcc774ea68d48",
+                                          "User-Agent" => "APPLICATION_NAME"})
+
+    json_parse = JSON.parse(response.body)
+
+    json_parse.each { |obj| p obj['name'] }
+
+  end
+
 end
 
 if __FILE__ == $0
 
   log_generator = LogGenerator.new({:verbose => true})
 
-  pull_requests = log_generator.get_all_closed_pull_requests
-  p pull_requests.count
-  json = log_generator.get_all_merged_pull_requests
-  p json.count
+  tags = log_generator.get_all_tags
+  p tags
 
 end
