@@ -7,15 +7,9 @@ require_relative 'parser'
 def run_generator options
   generator = LogGenerator.new(options)
 
-  tag_time = generator.find_prev_tag_date
-  pull_requests = generator.get_all_closed_pull_requests
+  prev_tag = generator.find_prev_tag
 
-  pull_requests.delete_if { |req|
-    t = Time.parse(req[:closed_at]).utc
-    t < tag_time
-  }
-
-  generator.compund_changelog(tag_time, pull_requests)
+  generator.compund_changelog(prev_tag)
 end
 
 if __FILE__ == $0

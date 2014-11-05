@@ -5,7 +5,7 @@ require 'httparty'
 
 class LogGenerator
 
-  attr_accessor :options
+  attr_accessor :options, :all_tags
 
   def initialize(options = {})
     @options = options
@@ -14,6 +14,7 @@ class LogGenerator
     else
       @github = Github.new
     end
+    @all_tags = self.get_all_tags
   end
 
   def print_json(json)
@@ -25,27 +26,9 @@ class LogGenerator
     %x[#{exec_cmd}]
   end
 
-  def find_prev_tag_date
-
-    value1 = exec_command "git log --tags --simplify-by-decoration --pretty=\"format:%ci %d\" | grep tag"
-    unless value1
-      puts 'not found this tag'
-      exit
-    end
-
-    scan_results = value1.scan(/.*tag.*/)
-
-    prev_tag = scan_results[1]
-
-    unless scan_results.any?
-      puts 'Not found any versions -> exit'
-      exit
-    end
-
-    if @options[:verbose]
-      puts "Prev tag is #{prev_tag}"
-    end
-    time = Time.parse(prev_tag)
+  def find_prev_tag
+    var = self.all_tags[1]
+    p var
   end
 
 
@@ -65,22 +48,14 @@ class LogGenerator
 
   end
 
-  def compund_changelog(tag_time, pull_requests)
+  def compund_changelog(prev_tag)
     if @options[:verbose]
       puts 'Generating changelog:'
     end
     log = ''
-    last_tag = exec_command('git describe --abbrev=0 --tags').strip
-    log += "## [#{last_tag}] (https://github.com/#{$github_user}/#{$github_repo_name}/tree/#{last_tag})\n"
+    last_tag = self.all_tags[0]
 
-    time_string = tag_time.strftime "%Y/%m/%d"
-    log += "#### #{time_string}\n"
-
-    pull_requests.each { |dict|
-      merge = "#{dict[:title]} ([\\##{dict[:number]}](https://github.com/#{$github_user}/#{$github_repo_name}/pull/#{dict[:number]}))\n"
-      log += "- #{merge}"
-    }
-
+    log += self.generate_log_between_tags(prev_tag, last_tag)
     puts log
     File.open('output.txt', 'w') { |file| file.write(log) }
 
@@ -111,8 +86,38 @@ class LogGenerator
                                           "User-Agent" => "APPLICATION_NAME"})
 
     json_parse = JSON.parse(response.body)
+  end
 
-    json_parse.each { |obj| p obj['name'] }
+  def generate_log_between_tags(prev_tag, last_tag)
+
+    last_tag_name = last_tag['name']
+    log = ''
+    prev_tag_time = self.get_time_of_tag(prev_tag)
+    pull_requests = self.get_all_closed_pull_requests
+
+    pull_requests.delete_if { |req|
+      t = Time.parse(req[:closed_at]).utc
+      t < prev_tag_time
+    }
+
+    log += "## [#{last_tag_name}] (https://github.com/#{$github_user}/#{$github_repo_name}/tree/#{last_tag_name})\n"
+
+    time_string = prev_tag_time.strftime "%Y/%m/%d"
+    log += "#### #{time_string}\n"
+
+    pull_requests.each { |dict|
+      merge = "#{dict[:title]} ([\\##{dict[:number]}](https://github.com/#{$github_user}/#{$github_repo_name}/pull/#{dict[:number]}))\n"
+      log += "- #{merge}"
+    }
+
+    log
+  end
+
+  def get_time_of_tag(prev_tag)
+    github_git_data_commits_get = @github.git_data.commits.get $github_user, $github_repo_name, prev_tag['commit']['sha']
+    self.print_json github_git_data_commits_get.body
+    time_string = github_git_data_commits_get['committer']['date']
+    Time.parse(time_string)
 
   end
 
@@ -122,7 +127,7 @@ if __FILE__ == $0
 
   log_generator = LogGenerator.new({:verbose => true})
 
-  tags = log_generator.get_all_tags
-  p tags
+  tags = log_generator.all_tags
 
+  log_generator.generate_log_between_tags(tags[1], tags[2])
 end
