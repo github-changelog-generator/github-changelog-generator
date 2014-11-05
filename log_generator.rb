@@ -8,6 +8,11 @@ class LogGenerator
 
   def initialize(options = {})
     @options = options
+    if $oauth_token
+      @github = Github.new oauth_token: $oauth_token
+    else
+      @github = Github.new
+    end
   end
 
   def print_json(json)
@@ -45,12 +50,7 @@ class LogGenerator
 
   def get_all_closed_pull_requests
 
-    if $oauth_token
-      github = Github.new oauth_token: $oauth_token
-    else
-      github = Github.new
-    end
-    issues = github.pull_requests.list $github_user, $github_repo_name, :state => 'closed'
+    issues = @github.pull_requests.list $github_user, $github_repo_name, :state => 'closed'
     json = issues.body
 
     json.each { |dict|
@@ -79,5 +79,38 @@ class LogGenerator
     File.open('output.txt', 'w') { |file| file.write(log) }
 
   end
+
+  def is_megred(number)
+    @github.pull_requests.merged? $github_user, $github_repo_name, number
+  end
+
+  def get_all_merged_pull_requests
+    json = self.get_all_closed_pull_requests
+    puts 'Check if the requests is merged'
+
+    json.delete_if { |req|
+      merged = self.is_megred(req[:number])
+      if @options[:verbose]
+        puts "##{req[:number]} merged #{merged}"
+      end
+      !merged
+    }
+  end
+
+end
+
+if __FILE__ == $0
+
+  log_generator = LogGenerator.new({:verbose => true})
+
+  pull_requests = log_generator.get_all_closed_pull_requests
+  p pull_requests.count
+  json = log_generator.get_all_merged_pull_requests
+  p json.count
+
+  # json.each { |dict|
+  #   # print_json dict
+  #   p "##{dict[:number]} - #{dict[:title]} (#{dict[:closed_at]})"
+  # }
 
 end
