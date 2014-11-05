@@ -52,7 +52,8 @@ class ChangelogGenerator
     if @options[:verbose]
       puts 'Generating changelog:'
     end
-    log = ''
+    log = '# Changelog'
+
 
     if @options[:last]
       log += self.generate_log_between_tags(self.all_tags[0], self.all_tags[1])
@@ -127,7 +128,6 @@ class ChangelogGenerator
   end
 
   def generate_log_between_tags(since_tag, till_tag)
-
     since_tag_time = self.get_time_of_tag(since_tag)
     till_tag_time = self.get_time_of_tag(till_tag)
 
