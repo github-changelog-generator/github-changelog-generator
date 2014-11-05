@@ -52,8 +52,8 @@ class ChangelogGenerator
     if @options[:verbose]
       puts 'Generating changelog:'
     end
-    log = '# Changelog'
 
+    log = "# Changelog\n\n----\n\n"
 
     if @options[:last]
       log += self.generate_log_between_tags(self.all_tags[0], self.all_tags[1])
@@ -82,8 +82,15 @@ class ChangelogGenerator
       log += self.generate_log_for_all_tags
     end
 
-    puts log
-    File.open('output.md', 'w') { |file| file.write(log) }
+
+    if @options[:verbose]
+      puts log
+    end
+
+    output_filename = "#{$github_repo_name}_changelog.md"
+    File.open(output_filename, 'w') { |file| file.write(log) }
+
+    puts "Done! Generated log placed in #{output_filename}"
 
   end
 
