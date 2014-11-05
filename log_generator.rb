@@ -27,8 +27,7 @@ class LogGenerator
   end
 
   def find_prev_tag
-    var = self.all_tags[1]
-    p var
+    self.all_tags[1]
   end
 
 
@@ -38,10 +37,10 @@ class LogGenerator
     json = issues.body
 
     if @options[:verbose]
-      puts 'All pull requests:'
-      json.each { |dict|
-        p "##{dict[:number]} - #{dict[:title]} (#{dict[:closed_at]})"
-      }
+      # puts 'All pull requests:'
+      # json.each { |dict|
+      #   p "##{dict[:number]} - #{dict[:title]} (#{dict[:closed_at]})"
+      # }
     end
 
     json
@@ -79,11 +78,10 @@ class LogGenerator
   end
 
   def get_all_tags
-    url = "https://api.github.com/repos/skywinder/ActionSheetPicker-3.0/tags"
-    so_url = 'https://api.stackexchange.com/2.2/questions?site=stackoverflow'
+    url = "https://api.github.com/repos/#{$github_user}/#{$github_repo_name}/tags"
     response = HTTParty.get(url,
-                            :headers => { "Authorization" => "token 8587bb22f6bf125454768a4a19dbcc774ea68d48",
-                                          "User-Agent" => "APPLICATION_NAME"})
+                            :headers => {'Authorization' => 'token 8587bb22f6bf125454768a4a19dbcc774ea68d48',
+                                        'User-Agent' => 'Changelog-Generator'})
 
     json_parse = JSON.parse(response.body)
   end
@@ -115,7 +113,6 @@ class LogGenerator
 
   def get_time_of_tag(prev_tag)
     github_git_data_commits_get = @github.git_data.commits.get $github_user, $github_repo_name, prev_tag['commit']['sha']
-    self.print_json github_git_data_commits_get.body
     time_string = github_git_data_commits_get['committer']['date']
     Time.parse(time_string)
 
