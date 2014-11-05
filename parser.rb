@@ -18,6 +18,10 @@ class Parser
       opts.on('-v', '--[no-]verbose', 'Run verbosely') do |v|
         @options[:verbose] = v
       end
+
+      opts.on('-l', '--last-changes', 'generate log between last 2 tags') do |last|
+        @options[:last] = last
+      end
     }
 
     parser.parse!

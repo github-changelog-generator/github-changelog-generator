@@ -49,17 +49,29 @@ class ChangelogGenerator
 
   end
 
-  def compund_changelog_for_last_tag
+  def compund_changelog
     if @options[:verbose]
       puts 'Generating changelog:'
     end
     log = ''
-    prev_tag = self.all_tags[1]
-    last_tag = self.all_tags[0]
 
-    log += self.generate_log_between_tags(prev_tag, last_tag)
+    if @options[:last]
+      prev_tag = self.all_tags[1]
+      last_tag = self.all_tags[0]
+
+      log += self.generate_log_between_tags(prev_tag, last_tag)
+    elsif @options[:tag1] && @options[:tag2]
+      log += self.generate_log_between_tags(@options[:tag1], @options[:tag2])
+    else
+      log += self.generate_log_for_all_tags
+    end
+
     puts log
     File.open('output.txt', 'w') { |file| file.write(log) }
+
+  end
+
+  def generate_log_for_all_tags
 
   end
 
@@ -140,9 +152,13 @@ class ChangelogGenerator
     end
 
     github_git_data_commits_get = @github.git_data.commits.get $github_user, $github_repo_name, prev_tag['commit']['sha']
-    time_string = github_git_data_commits_get['committer']['date']
-    Time.parse(time_string)
-
+    if github_git_data_commits_get
+      time_string = github_git_data_commits_get['committer']['date']
+      Time.parse(time_string)
+    else
+      puts "Can't find tag #{prev_tag['name']} -> exit"
+      exit
+    end
   end
 
 end
@@ -151,8 +167,6 @@ if __FILE__ == $0
 
   log_generator = ChangelogGenerator.new
 
-  prev_tag = log_generator.all_tags[0]
-  last_tag = log_generator.all_tags[2]
-  puts log_generator.generate_log_between_tags(prev_tag, last_tag)
+  log_generator.compund_changelog
   # log_generator.generate_log_between_tags(tags[1], tags[2])
 end
