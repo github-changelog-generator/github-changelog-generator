@@ -164,7 +164,7 @@ class ChangelogGenerator
 
     log = "## [#{tag_name}] (https://github.com/#{$github_user}/#{$github_repo_name}/tree/#{tag_name})\n"
 
-    time_string = tag_time.strftime "%d/%m/%y"
+    time_string = tag_time.strftime '%d/%m/%y'
     log += "#### #{time_string}\n"
 
     pull_requests.each { |dict|
