@@ -1,9 +1,9 @@
-ChangelogGenerator
+Github Changelog Generator
 ==================
 
 This script automatically generate change-log from your tags and merged pull-requests.
 
-		Usage: changelog_generator.rb -u user_name -p project_name [-t 16-digit-GitHubToken] [options]
+		Usage: github_changelog_generator.rb -u user_name -p project_name [-t 16-digit-GitHubToken] [options]
 		    -u, --user [USER]                your username on GitHub
 		    -p, --project [PROJECT]          name of project on GitHub
 		    -t, --token [TOKEN]              To make more than 50 requests this app required your OAuth token for GitHub. You can generate it on https://github.com/settings/applications
@@ -13,6 +13,6 @@ This script automatically generate change-log from your tags and merged pull-req
 		    -f, --date-format [FORMAT]       date format. default is %d/%m/%y 
 
 ### Example:
-`./changelog_generator.rb -u your-username -p your-project [-t 16-digit-GitHub-token-for-more-than-50-requests]`
+`github_changelog_generator.rb -u your-username -p your-project [-t 16-digit-GitHub-token-for-more-than-50-requests]`
 
 In output you get `[your_project]_changelog.md` file with automatically generated changelogs.
