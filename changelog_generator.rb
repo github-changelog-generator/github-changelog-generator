@@ -1,6 +1,5 @@
 #!/usr/bin/env ruby
 
-require_relative 'constants'
 require_relative 'parser'
 require 'github_api'
 require 'json'
@@ -13,8 +12,8 @@ class ChangelogGenerator
 
   def initialize()
     @options = Parser.new.options
-    if $oauth_token
-      @github = Github.new oauth_token: $oauth_token
+    if @options[:token]
+      @github = Github.new oauth_token: @options[:token]
     else
       @github = Github.new
     end
@@ -37,7 +36,7 @@ class ChangelogGenerator
   def get_all_closed_pull_requests
 
 
-    issues = @github.pull_requests.list $github_user, $github_repo_name, :state => 'closed'
+    issues = @github.pull_requests.list @options[:user], @options[:project], :state => 'closed'
     json = issues.body
 
     if @options[:verbose]
@@ -53,7 +52,7 @@ class ChangelogGenerator
       puts 'Generating changelog:'
     end
 
-    log = "# Changelog\n\n----\n\n"
+    log = "# Changelog\n\n"
 
     if @options[:last]
       log += self.generate_log_between_tags(self.all_tags[0], self.all_tags[1])
@@ -87,7 +86,7 @@ class ChangelogGenerator
       puts log
     end
 
-    output_filename = "#{$github_repo_name}_changelog.md"
+    output_filename = "#{@options[:project]}_changelog.md"
     File.open(output_filename, 'w') { |file| file.write(log) }
 
     puts "Done! Generated log placed in #{output_filename}"
@@ -104,7 +103,7 @@ class ChangelogGenerator
   end
 
   def is_megred(number)
-    @github.pull_requests.merged? $github_user, $github_repo_name, number
+    @github.pull_requests.merged? @options[:user], @options[:project], number
   end
 
   def get_all_merged_pull_requests
@@ -123,15 +122,21 @@ class ChangelogGenerator
   def get_all_tags
 
     if @options[:verbose]
-      puts "Receive tags for repo #{$github_repo_name}"
+      puts "Receive tags for repo #{@options[:project]}"
     end
 
-    url = "https://api.github.com/repos/#{$github_user}/#{$github_repo_name}/tags"
+    url = "https://api.github.com/repos/#{@options[:user]}/#{@options[:project]}/tags"
     response = HTTParty.get(url,
                             :headers => {'Authorization' => 'token 8587bb22f6bf125454768a4a19dbcc774ea68d48',
                                         'User-Agent' => 'Changelog-Generator'})
 
     json_parse = JSON.parse(response.body)
+
+    if @options[:verbose]
+      puts "Found #{json_parse.count} tags"
+    end
+
+    json_parse
   end
 
   def generate_log_between_tags(since_tag, till_tag)
@@ -162,13 +167,14 @@ class ChangelogGenerator
 
   def create_log(pull_requests, tag_name, tag_time)
 
-    log = "## [#{tag_name}] (https://github.com/#{$github_user}/#{$github_repo_name}/tree/#{tag_name})\n"
+    trimmed_tag = tag_name.tr('v', '')
+    log = "## [#{trimmed_tag}] (https://github.com/#{@options[:user]}/#{@options[:project]}/tree/#{tag_name})\n"
 
-    time_string = tag_time.strftime '%d/%m/%y'
+    time_string = tag_time.strftime @options[:format]
     log += "#### #{time_string}\n"
 
     pull_requests.each { |dict|
-      merge = "#{dict[:title]} ([\\##{dict[:number]}](https://github.com/#{$github_user}/#{$github_repo_name}/pull/#{dict[:number]}))\n\n"
+      merge = "#{dict[:title]} [\\##{dict[:number]}](https://github.com/#{@options[:user]}/#{@options[:project]}/pull/#{dict[:number]})\n\n"
       log += "- #{merge}"
     }
     log
@@ -184,7 +190,7 @@ class ChangelogGenerator
       puts "Get time for tag #{prev_tag['name']}"
     end
 
-    github_git_data_commits_get = @github.git_data.commits.get $github_user, $github_repo_name, prev_tag['commit']['sha']
+    github_git_data_commits_get = @github.git_data.commits.get @options[:user], @options[:project], prev_tag['commit']['sha']
     time_string = github_git_data_commits_get['committer']['date']
     Time.parse(time_string)
     @tag_times_hash[prev_tag['name']] = Time.parse(time_string)
