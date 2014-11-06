@@ -193,8 +193,5 @@ class ChangelogGenerator
 end
 
 if __FILE__ == $0
-
-  log_generator = ChangelogGenerator.new
-
-  log_generator.compund_changelog
+  ChangelogGenerator.new.compund_changelog
 end
