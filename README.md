@@ -1,6 +1,8 @@
 Github Changelog Generator
 ==================
 
+[![Gem Version](https://badge.fury.io/rb/github_changelog_generator.svg)](http://badge.fury.io/rb/github_changelog_generator)
+
 This script automatically generate change-log from your tags and merged pull-requests.
 
 ## Installation:
