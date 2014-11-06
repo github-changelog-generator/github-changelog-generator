@@ -18,4 +18,5 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency(%q<httparty>, ["~> 0.6"])
   s.add_runtime_dependency(%q<github_api>, ["~> 0.12"])
 
+  s.executables   = %w(github_changelog_generator)
 end
