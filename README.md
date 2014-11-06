@@ -13,7 +13,7 @@ This script automatically generate change-log from your tags and merged pull-req
 ### Example usage:
 `github_changelog_generator -u github-username -p github-project`
 
-In output you will get `[your_project]_changelog.md` file with *pretty Markdown-formatted* changelogs in your current directory.
+In output you will get `[your_project]_CHANGELOG.md` file with *pretty Markdown-formatted* changelogs in your current directory.
 
 ### Params:
     github_changelog_generator -u user_name -p project_name [-t 16-digit-GitHubToken] [options]
