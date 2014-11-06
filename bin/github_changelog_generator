@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require 'github_changelog_generator'
+
+ChangelogGenerator.new.compund_changelog
