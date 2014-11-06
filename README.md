@@ -40,3 +40,16 @@ Then you have to generate this token or wait for 1 hour
 ## License
 
 Github Changelog Generator is released under the [MIT License](http://www.opensource.org/licenses/MIT).
+
+## Contributing
+
+1. Create an issue to discuss about your idea
+2. Fork it (https://github.com/skywinder/Github-Changelog-Generator/fork)
+3. Create your feature branch (`git checkout -b my-new-feature`)
+4. Commit your changes (`git commit -am 'Add some feature'`)
+5. Push to the branch (`git push origin my-new-feature`)
+6. Create a new Pull Request
+
+**Bug reports, feature requests, patches, well-wishes, and rap demo tapes are always welcome!**
+
+*Improvements more than welcome - they are kindly requested! :)*
