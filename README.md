@@ -45,7 +45,7 @@ Github Changelog Generator is released under the [MIT License](http://www.openso
 ## Contributing
 
 1. Create an issue to discuss about your idea
-2. Fork it (https://github.com/skywinder/Github-Changelog-Generator/fork)
+2. [Fork it] (https://github.com/skywinder/Github-Changelog-Generator/fork)
 3. Create your feature branch (`git checkout -b my-new-feature`)
 4. Commit your changes (`git commit -am 'Add some feature'`)
 5. Push to the branch (`git push origin my-new-feature`)
