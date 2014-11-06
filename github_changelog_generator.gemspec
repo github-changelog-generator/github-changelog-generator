@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.date = %q{2014-10-10}
   s.description = %q{Script, that automatically generate change-log from your tags and pull-requests}
   s.email = %q{sky4winder+github_changelog_generator@gmail.com}
-  s.files = ["Rakefile", "lib/github_changelog_generator.rb", "lib/github_changelog_generator/parser.rb", "bin/github_changelog_generator"]
+  s.files = ["lib/github_changelog_generator.rb", "lib/github_changelog_generator/parser.rb", "bin/github_changelog_generator"]
   #s.test_files = ["test/test_github_changelog_generator.rb"]
   s.homepage = %q{https://github.com/skywinder/Github-Changelog-Generator}
   s.require_paths = ["lib"]
