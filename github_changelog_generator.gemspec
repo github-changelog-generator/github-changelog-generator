@@ -1,9 +1,9 @@
 Gem::Specification.new do |s|
   s.name               = "github_changelog_generator"
-  s.version            = "0.0.1"
+  s.version            = "0.0.2"
   s.default_executable = "github_changelog_generator"
 
-  s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
+  s.required_ruby_version     = '>= 1.9.3'
   s.authors = ["Petr Korolev"]
   s.date = %q{2014-10-10}
   s.description = %q{Script, that automatically generate change-log from your tags and pull-requests}
@@ -14,8 +14,7 @@ Gem::Specification.new do |s|
   s.rubygems_version = %q{1.6.2}
   s.summary = %q{Script, that automatically generate change-log from your tags and pull-requests.}
   s.license       = "MIT"
-
-  s.add_runtime_dependency(%q<httparty>, ["~> 0.6"])
+  s.add_runtime_dependency(%q<httparty>, ["~> 0.13"])
   s.add_runtime_dependency(%q<github_api>, ["~> 0.12"])
 
   s.executables   = %w(github_changelog_generator)
