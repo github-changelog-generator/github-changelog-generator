@@ -28,8 +28,16 @@ class ChangelogGenerator
     options = {:tag1 => nil, :tag2 => nil, :format => '%d/%m/%y'}
 
     parser = OptionParser.new { |opts|
-      opts.banner = 'Usage: changelog_generator.rb [tag1 tag2] [-u user_name -p project_name] [options]'
-
+      opts.banner = 'Usage: changelog_generator.rb -u user_name -p project_name [-t 16-digit-GitHubToken] [options]'
+      opts.on('-u', '--user [USER]', 'your username on GitHub') do |last|
+        options[:user] = last
+      end
+      opts.on('-p', '--project [PROJECT]', 'name of project on GitHub') do |last|
+        options[:project] = last
+      end
+      opts.on('-t', '--token [TOKEN]', 'To make more than 50 requests this app required your OAuth token for GitHub. You can generate it on https://github.com/settings/applications') do |last|
+        options[:token] = last
+      end
       opts.on('-h', '--help', 'Displays Help') do
         puts opts
         exit
@@ -39,15 +47,6 @@ class ChangelogGenerator
       end
       opts.on('-l', '--last-changes', 'generate log between last 2 tags') do |last|
         options[:last] = last
-      end
-      opts.on('-u', '--user [USER]', 'your username on GitHub') do |last|
-        options[:user] = last
-      end
-      opts.on('-p', '--project [PROJECT]', 'name of project on GitHub') do |last|
-        options[:project] = last
-      end
-      opts.on('-t', '--token [TOKEN]', 'your OAuth token GitHub') do |last|
-        options[:token] = last
       end
       opts.on('-f', '--date-format [FORMAT]', 'date format. default is %d/%m/%y') do |last|
         options[:format] = last
@@ -174,11 +173,12 @@ class ChangelogGenerator
 
   def get_all_tags
 
+    url = "https://api.github.com/repos/#{@options[:user]}/#{@options[:project]}/tags"
+
     if @options[:verbose]
-      puts "Receive tags for repo #{@options[:project]}"
+      puts "Receive tags for repo #{url}"
     end
 
-    url = "https://api.github.com/repos/#{@options[:user]}/#{@options[:project]}/tags"
     response = HTTParty.get(url,
                             :headers => {'Authorization' => 'token 8587bb22f6bf125454768a4a19dbcc774ea68d48',
                                         'User-Agent' => 'Changelog-Generator'})
