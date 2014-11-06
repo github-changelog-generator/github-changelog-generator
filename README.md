@@ -16,3 +16,8 @@ This script automatically generate change-log from your tags and merged pull-req
 `github_changelog_generator.rb -u your-username -p your-project [-t 16-digit-GitHub-token-for-more-than-50-requests]`
 
 In output you get `[your_project]_changelog.md` file with automatically generated changelogs.
+
+
+## License
+
+Github Changelog Generator is released under the [MIT License](http://www.opensource.org/licenses/MIT).
