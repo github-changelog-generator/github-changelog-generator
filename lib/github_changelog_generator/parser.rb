@@ -6,7 +6,7 @@ class Parser
     options = {:tag1 => nil, :tag2 => nil, :format => '%d/%m/%y'}
 
     parser = OptionParser.new { |opts|
-      opts.banner = 'Usage: changelog_generator.rb -u user_name -p project_name [-t 16-digit-GitHubToken] [options]'
+      opts.banner = 'Usage: changelog_generator -u user_name -p project_name [-t 16-digit-GitHubToken] [options]'
       opts.on('-u', '--user [USER]', 'your username on GitHub') do |last|
         options[:user] = last
       end
