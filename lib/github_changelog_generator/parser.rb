@@ -23,7 +23,7 @@ class Parser
       opts.on('-v', '--[no-]verbose', 'Run verbosely') do |v|
         options[:verbose] = v
       end
-      opts.on('-i', '--[no-]issues', 'Include closed issues to changelog') do |v|
+      opts.on('--[no-]issues', 'Include closed issues to changelog. Default is true') do |v|
         options[:issues] = v
       end
       opts.on('--[no-]pull-requests', 'Include pull-requests to changelog. Default is true') do |v|

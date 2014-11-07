@@ -231,11 +231,7 @@ class ChangelogGenerator
 
     if @options[:issues]
       # Generate issues:
-      if issues && issues.any?
-        if pull_requests && pull_requests.any? && @options[:pulls]
-          log += "\n\n-\n\n"
-        end
-
+      if issues
         issues.each { |dict|
           merge = "*Fixed issue:* #{dict[:title]} [\\##{dict[:number]}](https://github.com/#{@options[:user]}/#{@options[:project]}/issues/#{dict[:number]})\n\n"
           log += "- #{merge}"
