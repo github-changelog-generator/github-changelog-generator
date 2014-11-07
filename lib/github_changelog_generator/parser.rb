@@ -29,7 +29,7 @@ class Parser
       opts.on('-f', '--date-format [FORMAT]', 'Date format. Default is %d/%m/%y') do |last|
         options[:format] = last
       end
-      opts.on('-o', '--output [FORMAT]', 'Output file. Default is CHANGELOG.md') do |last|
+      opts.on('-o', '--output [NAME]', 'Output file. Default is CHANGELOG.md') do |last|
         options[:output] = last
       end
     }

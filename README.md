@@ -27,7 +27,7 @@ See `github_changelog_generator --help` for detailed usage.
 	    -v, --[no-]verbose               Run verbosely
 	    -l, --last-changes               Generate log between only last 2 tags
 	    -f, --date-format [FORMAT]       Date format. Default is %d/%m/%y
-	    -o, --output [FORMAT]            Output file. Default is CHANGELOG.md
+	    -o, --output [NAME]            Output file. Default is CHANGELOG.md
 
 ## Examples:
 ### This changelog: [ActionSheetPicker-3.0/CHANGELOG.md](https://github.com/skywinder/ActionSheetPicker-3.0/blob/master/CHANGELOG.md)
