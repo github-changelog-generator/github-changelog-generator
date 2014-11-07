@@ -20,6 +20,7 @@ class ChangelogGenerator
     end
     @all_tags = self.get_all_tags
     @pull_requests = self.get_all_closed_pull_requests
+    @issues = self.get_all_issues
 
     @tag_times_hash = {}
   end
@@ -157,7 +158,24 @@ class ChangelogGenerator
 
     }
 
-    self.create_log(pull_requests, till_tag_name, till_tag_time)
+    issues = Array.new(@issues)
+
+    issues.delete_if{ |issue|
+      if issue[:closed_at]
+        t = Time.parse(issue[:closed_at]).utc
+        tag_is_later_since = t > since_tag_time
+        tag_is_before_till = t <= till_tag_time
+
+        in_range = (tag_is_later_since) && (tag_is_before_till)
+        !in_range
+      else
+        true
+      end
+
+    }
+
+    self.create_log(pull_requests, issues, till_tag_name, till_tag_time)
+
   end
 
   def generate_log_before_tag(tag)
@@ -167,26 +185,65 @@ class ChangelogGenerator
     pull_requests = Array.new(@pull_requests)
 
     pull_requests.delete_if { |req|
-      t = Time.parse(req[:closed_at]).utc
-      t > tag_time
+      if req[:merged_at]
+        t = Time.parse(req[:merged_at]).utc
+        t > tag_time
+      else
+        true
+      end
+
     }
 
-    self.create_log(pull_requests, tag_name, tag_time)
+    issues = Array.new(@issues)
+
+    issues.delete_if{ |issue|
+      if issue[:closed_at]
+        t = Time.parse(issue[:closed_at]).utc
+        t > tag_time
+      else
+        true
+      end
+    }
+
+    self.create_log(pull_requests, issues, tag_name, tag_time)
 
   end
 
-  def create_log(pull_requests, tag_name, tag_time)
+  def create_log(pull_requests, issues, tag_name, tag_time)
 
+    # Generate tag name and link
     trimmed_tag = tag_name.tr('v', '')
     log = "## [#{trimmed_tag}] (https://github.com/#{@options[:user]}/#{@options[:project]}/tree/#{tag_name})\n"
 
+    #Generate date string:
     time_string = tag_time.strftime @options[:format]
     log += "#### #{time_string}\n"
 
-    pull_requests.each { |dict|
-      merge = "#{dict[:title]} [\\##{dict[:number]}](https://github.com/#{@options[:user]}/#{@options[:project]}/pull/#{dict[:number]})\n\n"
-      log += "- #{merge}"
-    }
+    if @options[:pulls]
+      # Generate pull requests:
+      if pull_requests
+        pull_requests.each { |dict|
+          merge = "#{dict[:title]} [\\##{dict[:number]}](https://github.com/#{@options[:user]}/#{@options[:project]}/pull/#{dict[:number]})\n\n"
+          log += "- #{merge}"
+        }
+      end
+    end
+
+    if @options[:issues]
+      # Generate issues:
+      if issues && issues.any?
+        if pull_requests && pull_requests.any? && @options[:pulls]
+          log += "\n\n-\n\n"
+        end
+
+        issues.each { |dict|
+          merge = "*Fixed issue:* #{dict[:title]} [\\##{dict[:number]}](https://github.com/#{@options[:user]}/#{@options[:project]}/issues/#{dict[:number]})\n\n"
+          log += "- #{merge}"
+        }
+      end
+
+    end
+
     log
   end
 
@@ -212,6 +269,10 @@ class ChangelogGenerator
       issues = @github.issues.list user: @options[:user], repo: @options[:project], state: 'closed', filter: 'all', labels: label
       all_issues = all_issues.concat(issues.body)
     }
+    if @options[:verbose]
+      puts "Receive all closed issues with labels #{@options[:labels]}: #{all_issues.count} issues"
+    end
+
     all_issues
 
   end
@@ -221,5 +282,4 @@ end
 if __FILE__ == $0
   changelog_generator = ChangelogGenerator.new
   changelog_generator.compund_changelog
-  changelog_generator.get_all_issues
 end

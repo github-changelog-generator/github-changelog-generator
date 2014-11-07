@@ -3,7 +3,7 @@ require 'optparse'
 
 class Parser
   def self.parse_options
-    options = {:tag1 => nil, :tag2 => nil, :format => '%d/%m/%y', :output => 'CHANGELOG.md', :labels => %w(bug enhancement)}
+    options = {:tag1 => nil, :tag2 => nil, :format => '%d/%m/%y', :output => 'CHANGELOG.md', :labels => %w(bug enhancement), :pulls => true, :issues => true  }
 
     parser = OptionParser.new { |opts|
       opts.banner = 'Usage: changelog_generator --user username --project project_name [options]'
@@ -25,6 +25,9 @@ class Parser
       end
       opts.on('-i', '--[no-]issues', 'Include closed issues to changelog') do |v|
         options[:issues] = v
+      end
+      opts.on('--[no-]pull-requests', 'Include pull-requests to changelog. Default is true') do |v|
+        options[:pulls] = v
       end
       opts.on('-l', '--last-changes', 'Generate log between last 2 tags only') do |last|
         options[:last] = last
