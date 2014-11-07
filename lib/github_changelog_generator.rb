@@ -102,6 +102,8 @@ class ChangelogGenerator
       log += self.generate_log_between_tags(self.all_tags[index-1], self.all_tags[index])
     end
 
+    log += self.generate_log_before_tag(self.all_tags.last)
+
     log
   end
 
@@ -159,14 +161,29 @@ class ChangelogGenerator
 
     pull_requests.delete_if { |req|
       t = Time.parse(req[:closed_at]).utc
-      true_classor_false_class = t > since_tag_time
-      classor_false_class = t < till_tag_time
+      tag_is_later_since = t > since_tag_time
+      tag_is_before_till = t < till_tag_time
 
-      in_range = (true_classor_false_class) && (classor_false_class)
+      in_range = (tag_is_later_since) && (tag_is_before_till)
       !in_range
     }
 
     self.create_log(pull_requests, till_tag_name, till_tag_time)
+  end
+
+  def generate_log_before_tag(tag)
+    tag_time = self.get_time_of_tag(tag)
+    tag_name = tag['name']
+
+    pull_requests = Array.new(@pull_requests)
+
+    pull_requests.delete_if { |req|
+      t = Time.parse(req[:closed_at]).utc
+      t > tag_time
+    }
+
+    self.create_log(pull_requests, tag_name, tag_time)
+
   end
 
   def create_log(pull_requests, tag_name, tag_time)
