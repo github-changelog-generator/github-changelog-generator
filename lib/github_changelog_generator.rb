@@ -160,9 +160,9 @@ class ChangelogGenerator
     pull_requests = Array.new(@pull_requests)
 
     pull_requests.delete_if { |req|
-      t = Time.parse(req[:closed_at]).utc
+      t = Time.parse(req[:merged_at]).utc
       tag_is_later_since = t > since_tag_time
-      tag_is_before_till = t < till_tag_time
+      tag_is_before_till = t <= till_tag_time
 
       in_range = (tag_is_later_since) && (tag_is_before_till)
       !in_range
