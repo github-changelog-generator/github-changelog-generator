@@ -3,7 +3,7 @@ require 'optparse'
 
 class Parser
   def self.parse_options
-    options = {:tag1 => nil, :tag2 => nil, :format => '%d/%m/%y', :output => 'CHANGELOG.md'}
+    options = {:tag1 => nil, :tag2 => nil, :format => '%d/%m/%y', :output => 'CHANGELOG.md', :labels => %w(bug enhancement), :pulls => true, :issues => true  }
 
     parser = OptionParser.new { |opts|
       opts.banner = 'Usage: changelog_generator --user username --project project_name [options]'
@@ -23,7 +23,13 @@ class Parser
       opts.on('-v', '--[no-]verbose', 'Run verbosely') do |v|
         options[:verbose] = v
       end
-      opts.on('-l', '--last-changes', 'Generate log between only last 2 tags') do |last|
+      opts.on('--[no-]issues', 'Include closed issues to changelog. Default is true') do |v|
+        options[:issues] = v
+      end
+      opts.on('--[no-]pull-requests', 'Include pull-requests to changelog. Default is true') do |v|
+        options[:pulls] = v
+      end
+      opts.on('-l', '--last-changes', 'Generate log between last 2 tags only') do |last|
         options[:last] = last
       end
       opts.on('-f', '--date-format [FORMAT]', 'Date format. Default is %d/%m/%y') do |last|
@@ -31,6 +37,9 @@ class Parser
       end
       opts.on('-o', '--output [NAME]', 'Output file. Default is CHANGELOG.md') do |last|
         options[:output] = last
+      end
+      opts.on('--labels  x,y,z', Array, 'List of labels. Issues with that labels will be included to changelog. Default is \'bug,enhancement\'') do |list|
+        options[:labels] = list
       end
     }
 
