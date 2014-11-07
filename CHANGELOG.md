@@ -1,12 +1,16 @@
 # Changelog
 
-## [0.3.0] (https://github.com/skywinder/Github-Changelog-Generator/tree/0.3.0)
+## [1.0.0] (https://github.com/skywinder/Github-Changelog-Generator/tree/1.0.0)
 #### 07/11/14
+- Add support for issues in CHANGELOG [\#7](https://github.com/skywinder/Github-Changelog-Generator/pull/7)
+
 - Fix parsing date of pull request [\#3](https://github.com/skywinder/Github-Changelog-Generator/pull/3)
 
 - *Fixed bug:* Last tag not appeared in changelog [\#5](https://github.com/skywinder/Github-Changelog-Generator/issues/5)
 
-- *Fixed issue:* Implement option to specify output filename [\#4](https://github.com/skywinder/Github-Changelog-Generator/issues/4)
+- *Implemented enhancement:* Add support for fixed issues and implemented enchanments. [\#6](https://github.com/skywinder/Github-Changelog-Generator/issues/6)
+
+- *Implemented enhancement:* Implement option to specify output filename [\#4](https://github.com/skywinder/Github-Changelog-Generator/issues/4)
 
 ## [0.1.0] (https://github.com/skywinder/Github-Changelog-Generator/tree/0.1.0)
 #### 07/11/14
