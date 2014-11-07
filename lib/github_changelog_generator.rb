@@ -233,7 +233,27 @@ class ChangelogGenerator
       # Generate issues:
       if issues
         issues.each { |dict|
-          merge = "*Fixed issue:* #{dict[:title]} [\\##{dict[:number]}](https://github.com/#{@options[:user]}/#{@options[:project]}/issues/#{dict[:number]})\n\n"
+          is_bug = false
+          is_enhancement  = false
+          dict.labels.each { |label|
+            if label.name == 'bug'
+              is_bug = true
+            end
+            if label.name == 'enhancement'
+              is_enhancement  = true
+            end
+          }
+
+          intro = 'Closed issue'
+          if is_bug
+            intro =  'Fixed bug'
+          end
+
+          if is_enhancement
+            intro = 'Implemented enhancement'
+          end
+
+          merge = "*#{intro}:* #{dict[:title]} [\\##{dict[:number]}](https://github.com/#{@options[:user]}/#{@options[:project]}/issues/#{dict[:number]})\n\n"
           log += "- #{merge}"
         }
       end
