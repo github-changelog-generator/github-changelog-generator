@@ -24,6 +24,9 @@ OptionParser.new { |opts|
   opts.on('-p', '--patch', 'Bump patch version') do |v|
     @options[:bump_number] = :patch
   end
+  opts.on('-r', '--revert', 'Revert last bump') do |v|
+    @options[:revert] = v
+  end
 }.parse!
 
 p @options
@@ -115,7 +118,7 @@ end
 
 def execute_line(line)
   output = `#{line}`
-  check_exit_status
+  check_exit_status(output)
 
   output
 end
@@ -128,12 +131,12 @@ def execute_line_if_not_dry_run(line)
     puts line
     value = %x[#{line}]
     puts value
-    check_exit_status
+    check_exit_status(value)
     value
   end
 end
 
-def check_exit_status
+def check_exit_status(output)
   if $?.exitstatus != 0
     puts "Output:\n#{output}\nExit status = #{$?.exitstatus} ->Terminate script."
     exit
@@ -166,8 +169,30 @@ def run_bumping_script
 
 end
 
+def revert_last_bump
+  spec_file = find_spec_file
+  result, versions_array = find_version_in_podspec(spec_file)
+  execute_line_if_not_dry_run("git tag -d #{result}")
+  execute_line_if_not_dry_run("git push --delete origin #{result}")
+  execute_line_if_not_dry_run("git push --delete origin #{result}")
+  puts "HARD reset HEAD~1?\nClick Y to continue:"
+  str = gets.chomp
+  if str != 'Y'
+    puts '-> exit'
+    exit
+  else
+    execute_line_if_not_dry_run("git reset --hard HEAD~1")
+  end
+
+
+end
+
 if __FILE__ == $0
 
-  run_bumping_script
+  if @options[:revert]
+    revert_last_bump
+  else
+    run_bumping_script
+  end
 
 end
