@@ -60,7 +60,7 @@ class ChangelogGenerator
       tag1 = @options[:tag1]
       tag2 = @options[:tag2]
       tags_strings = []
-      self.all_tags.each { |x| tags_strings.push(x['name'])}
+      self.all_tags.each { |x| tags_strings.push(x['name']) }
 
       if tags_strings.include?(tag1)
         if tags_strings.include?(tag2)
@@ -117,9 +117,14 @@ class ChangelogGenerator
       puts "Receive tags for repo #{url}"
     end
 
-    response = HTTParty.get(url,
-                            :headers => {'Authorization' => "token #{@options[:token]}",
-                                        'User-Agent' => 'Changelog-Generator'})
+    if @options[:token]
+      response = HTTParty.get(url,
+                              :headers => {'Authorization' => "token #{@options[:token]}",
+                                           'User-Agent' => 'Changelog-Generator'})
+    else
+      response = HTTParty.get(url,
+                              :headers => {'User-Agent' => 'Changelog-Generator'})
+    end
 
     json_parse = JSON.parse(response.body)
 
@@ -160,7 +165,7 @@ class ChangelogGenerator
 
     issues = Array.new(@issues)
 
-    issues.delete_if{ |issue|
+    issues.delete_if { |issue|
       if issue[:closed_at]
         t = Time.parse(issue[:closed_at]).utc
         tag_is_later_since = t > since_tag_time
@@ -196,7 +201,7 @@ class ChangelogGenerator
 
     issues = Array.new(@issues)
 
-    issues.delete_if{ |issue|
+    issues.delete_if { |issue|
       if issue[:closed_at]
         t = Time.parse(issue[:closed_at]).utc
         t > tag_time
@@ -234,19 +239,19 @@ class ChangelogGenerator
       if issues
         issues.each { |dict|
           is_bug = false
-          is_enhancement  = false
+          is_enhancement = false
           dict.labels.each { |label|
             if label.name == 'bug'
               is_bug = true
             end
             if label.name == 'enhancement'
-              is_enhancement  = true
+              is_enhancement = true
             end
           }
 
           intro = 'Closed issue'
           if is_bug
-            intro =  'Fixed bug'
+            intro = 'Fixed bug'
           end
 
           if is_enhancement

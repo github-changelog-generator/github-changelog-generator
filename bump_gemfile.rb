@@ -179,7 +179,7 @@ def run_bumping_script
   bumped_version = bump_version(versions_array)
 
   unless @options[:dry_run]
-    puts 'Are you sure? Click Y to continue:'
+    puts 'Are you sure? Press Y to continue:'
     str = gets.chomp
     if str != 'Y'
       puts '-> exit'
@@ -196,7 +196,6 @@ def run_bumping_script
   execute_line_if_not_dry_run("gem build #{spec_file}")
 
   gem = find_current_gem_file
-
   execute_line_if_not_dry_run("gem push #{gem}")
   # execute_line_if_not_dry_run("pod trunk push #{spec_file}")
 
@@ -206,7 +205,7 @@ def revert_last_bump
   spec_file = find_spec_file
   result, _ = find_version_in_podspec(spec_file)
 
-  puts "DELETE tag #{result} and HARD reset HEAD~1?\nClick Y to continue:"
+  puts "DELETE tag #{result} and HARD reset HEAD~1?\nPress Y to continue:"
   str = gets.chomp
   if str != 'Y'
     puts '-> exit'
