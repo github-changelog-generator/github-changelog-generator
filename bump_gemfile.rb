@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 require 'optparse'
 
+SPEC_TYPE = 'gemspec'
+
 @options = {:dry_run => false, :major => false, :minor => false, :patch => true}
 
 OptionParser.new { |opts|
@@ -37,8 +39,45 @@ def check_repo_is_clean_or_dry_run
   end
 end
 
-def find_version_in_podspec
-  readme = File.read('ActionSheetPicker-3.0.podspec')
+def execute_line(line)
+  output = `#{line}`
+  if $?.exitstatus != 0
+    puts "Output:\n#{output}\nExit status = #{$?.exitstatus} ->Terminate script."
+  end
+
+  output
+end
+
+def find_spec_file
+  list_of_scpecs = execute_line("find . -name '*.#{SPEC_TYPE}'")
+  arr = list_of_scpecs.split("\n")
+
+  spec_file = ''
+
+  case arr.count
+    when 0
+      puts "No #{SPEC_TYPE} files found. -> Exit."
+      exit
+    when 1
+      spec_file = arr[0]
+    else
+      puts 'Which spec should be used?'
+      arr.each_with_index {|file, index| puts "#{index+1}. #{file}"}
+      input_index = Integer(gets.chomp)
+      spec_file = arr[input_index-1]
+  end
+
+  if spec_file == nil
+    puts "Can't find specified spec file -> exit"
+    exit
+  end
+
+  spec_file.sub('./', '')
+
+end
+
+def find_version_in_podspec(podspec)
+  readme = File.read(#{podspec})
 
   re = /(\d+)\.(\d+)\.(\d+)/m
 
@@ -50,7 +89,9 @@ def find_version_in_podspec
   end
 
   puts "Found version #{match_result[0]}"
-  return match_result[0], match_result.captures
+  p match_result[0], match_result.captures
+  exit
+  # return match_result[0], match_result.captures
 end
 
 def bump_version(result_array)
@@ -76,9 +117,9 @@ def bump_version(result_array)
   bumped_version
 end
 
-def execute_line(line)
+def execute_line_if_not_dry_run(line)
   if @options[:dry_run]
-    puts 'Dry run: ' + line
+    puts "Dry run:\n#{line}"
   else
     puts line
     value = %x[#{line}]
@@ -91,26 +132,35 @@ def execute_line(line)
 end
 
 
-check_repo_is_clean_or_dry_run
-result, result_array = find_version_in_podspec
-bumped_version = bump_version(result_array)
+def run_bumping_script
 
-unless @options[:dry_run]
+  check_repo_is_clean_or_dry_run
+  result, result_array = find_version_in_podspec(find_spec_file)
+  bumped_version = bump_version(result_array)
 
-  puts 'Are you sure? Click Y to continue:'
-  str = gets.chomp
-  if str != 'Y'
-    puts '-> exit'
-    exit
+  unless @options[:dry_run]
+
+    puts 'Are you sure? Click Y to continue:'
+    str = gets.chomp
+    if str != 'Y'
+      puts '-> exit'
+      exit
+    end
+
   end
+
+  execute_line_if_not_dry_run("sed -i \"\" \"s/#{result}/#{bumped_version}/\" README.md")
+  execute_line_if_not_dry_run("sed -i \"\" \"s/#{result}/#{bumped_version}/\" ActionSheetPicker-3.0.podspec")
+  execute_line_if_not_dry_run("git commit --all -m \"Update #{$SPEC_TYPE} to version #{bumped_version}\"")
+  execute_line_if_not_dry_run("git tag #{bumped_version}")
+  execute_line_if_not_dry_run('git push')
+  execute_line_if_not_dry_run('git push --tags')
+  execute_line_if_not_dry_run('pod trunk push ./ActionSheetPicker-3.0.podspec')
 
 end
 
-execute_line("sed -i \"\" \"s/#{result}/#{bumped_version}/\" README.md")
-execute_line("sed -i \"\" \"s/#{result}/#{bumped_version}/\" ActionSheetPicker-3.0.podspec")
-execute_line("git commit --all -m \"Update podspec to version #{bumped_version}\"")
-execute_line("git tag #{bumped_version}")
-execute_line('git push')
-execute_line('git push --tags')
-execute_line('pod trunk push ./ActionSheetPicker-3.0.podspec')
+if __FILE__ == $0
 
+  result, result_array = find_version_in_podspec(find_spec_file)
+  
+end
