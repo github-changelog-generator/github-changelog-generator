@@ -117,9 +117,14 @@ class ChangelogGenerator
       puts "Receive tags for repo #{url}"
     end
 
-    response = HTTParty.get(url,
-                            :headers => {'Authorization' => "token #{@options[:token]}",
-                                        'User-Agent' => 'Changelog-Generator'})
+    if @options[:token]
+      response = HTTParty.get(url,
+                              :headers => {'Authorization' => "token #{@options[:token]}",
+                                           'User-Agent' => 'Changelog-Generator'})
+    else
+      response = HTTParty.get(url,
+                              :headers => {'User-Agent' => 'Changelog-Generator'})
+    end
 
     json_parse = JSON.parse(response.body)
 
