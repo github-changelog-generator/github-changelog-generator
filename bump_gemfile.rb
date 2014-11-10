@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 require 'optparse'
 
-@options = {:dry_run => false, :major => false, :minor => false, :revision => true}
+@options = {:dry_run => false, :major => false, :minor => false, :patch => true}
 
 OptionParser.new { |opts|
   opts.banner = 'Usage: bump.rb [options]'
@@ -16,7 +16,7 @@ OptionParser.new { |opts|
     @options[:minor] = v
   end
   opts.on('-p', '--patch', 'Bump patch version') do |v|
-    @options[:revision] = v
+    @options[:patch] = v
   end
 }.parse!
 
@@ -66,7 +66,7 @@ def bump_version(result_array)
       bumped_result[1] += 1
       bumped_result[2] = 0
     else
-      if @options[:revision]
+      if @options[:patch]
         bumped_result[2] += 1
       end
     end
