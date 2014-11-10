@@ -2,11 +2,11 @@
 
 ## [1.1.0] (https://github.com/skywinder/Github-Changelog-Generator/tree/1.1.0)
 #### 10/11/14
-- *Fixed bug:* Bug with wrong credentials in 1.0.1 [\#12](https://github.com/skywinder/Github-Changelog-Generator/issues/12)
-
 - *Implemented enhancement:* Detect username and project form origin [\#11](https://github.com/skywinder/Github-Changelog-Generator/issues/11)
 
 - *Fixed bug:* Markdown formating in the last line wrong [\#9](https://github.com/skywinder/Github-Changelog-Generator/issues/9)
+
+- *Fixed bug:* Bug with wrong credentials in 1.0.1 [\#12](https://github.com/skywinder/Github-Changelog-Generator/issues/12)
 
 ## [1.0.1] (https://github.com/skywinder/Github-Changelog-Generator/tree/1.0.1)
 #### 10/11/14
@@ -22,9 +22,9 @@
 
 - *Implemented enhancement:* Add support for fixed issues and implemented enchanments. [\#6](https://github.com/skywinder/Github-Changelog-Generator/issues/6)
 
-- *Fixed bug:* Last tag not appeared in changelog [\#5](https://github.com/skywinder/Github-Changelog-Generator/issues/5)
-
 - *Implemented enhancement:* Implement option to specify output filename [\#4](https://github.com/skywinder/Github-Changelog-Generator/issues/4)
+
+- *Fixed bug:* Last tag not appeared in changelog [\#5](https://github.com/skywinder/Github-Changelog-Generator/issues/5)
 
 - *Closed issue:* Add support for issues in CHANGELOG [\#7](https://github.com/skywinder/Github-Changelog-Generator/pull/7)
 
@@ -36,9 +36,9 @@
 
 - *Merged pull-request:* Add option (-o --output) to specify name of the output file. [\#1](https://github.com/skywinder/Github-Changelog-Generator/pull/1)
 
-- *Closed issue:* Add changelog generation for last tag [\#2](https://github.com/skywinder/Github-Changelog-Generator/pull/2)
-
 - *Closed issue:* Add option (-o --output) to specify name of the output file. [\#1](https://github.com/skywinder/Github-Changelog-Generator/pull/1)
+
+- *Closed issue:* Add changelog generation for last tag [\#2](https://github.com/skywinder/Github-Changelog-Generator/pull/2)
 
 ## [0.0.2] (https://github.com/skywinder/Github-Changelog-Generator/tree/0.0.2)
 #### 06/11/14

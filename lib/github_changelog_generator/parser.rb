@@ -3,7 +3,7 @@ require 'optparse'
 
 class Parser
   def self.parse_options
-    options = {:tag1 => nil, :tag2 => nil, :format => '%d/%m/%y', :output => 'CHANGELOG.md', :labels => %w(bug enhancement), :pulls => true, :issues => true, :verbose => true, :add_issues_wo_labels => true }
+    options = {:tag1 => nil, :tag2 => nil, :format => '%d/%m/%y', :output => 'CHANGELOG.md', :labels => %w(bug enhancement), :pulls => true, :issues => true, :verbose => true, :add_issues_wo_labels => true, :merge_prefix => '*Merged pull-request:* ' }
 
     parser = OptionParser.new { |opts|
       opts.banner = 'Usage: changelog_generator [options]'

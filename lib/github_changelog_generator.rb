@@ -228,7 +228,7 @@ class ChangelogGenerator
       # Generate pull requests:
       if pull_requests
         pull_requests.each { |dict|
-          merge = "#{dict[:title]} [\\##{dict[:number]}](https://github.com/#{@options[:user]}/#{@options[:project]}/pull/#{dict[:number]})\n\n"
+          merge = "#{@options[:merge_prefix]}#{dict[:title]} [\\##{dict[:number]}](#{dict.html_url})\n\n"
           log += "- #{merge}"
         }
       end
@@ -237,34 +237,47 @@ class ChangelogGenerator
     if @options[:issues]
       # Generate issues:
       if issues
-        issues.each { |dict|
-          is_bug = false
-          is_enhancement = false
-          dict.labels.each { |label|
-            if label.name == 'bug'
-              is_bug = true
+        issues.sort! { |x, y|
+          if x.labels.any? && y.labels.any?
+            x.labels[0].name <=> y.labels[0].name
+          else
+            if x.labels.any?
+              1
+            else
+              if y.labels.any?
+                -1
+              else
+                0
+              end
             end
-            if label.name == 'enhancement'
-              is_enhancement = true
-            end
-          }
-
-          intro = 'Closed issue'
-          if is_bug
-            intro = 'Fixed bug'
           end
-
-          if is_enhancement
-            intro = 'Implemented enhancement'
-          end
-
-          merge = "*#{intro}:* #{dict[:title]} [\\##{dict[:number]}](https://github.com/#{@options[:user]}/#{@options[:project]}/issues/#{dict[:number]})\n\n"
-          log += "- #{merge}"
-        }
+        }.reverse!
       end
+      issues.each { |dict|
+        is_bug = false
+        is_enhancement = false
+        dict.labels.each { |label|
+          if label.name == 'bug'
+            is_bug = true
+          end
+          if label.name == 'enhancement'
+            is_enhancement = true
+          end
+        }
 
+        intro = 'Closed issue'
+        if is_bug
+          intro = 'Fixed bug'
+        end
+
+        if is_enhancement
+          intro = 'Implemented enhancement'
+        end
+
+        merge = "*#{intro}:* #{dict[:title]} [\\##{dict[:number]}](#{dict.html_url})\n\n"
+        log += "- #{merge}"
+      }
     end
-
     log
   end
 
@@ -290,12 +303,12 @@ class ChangelogGenerator
     issues_req = @github.issues.list user: @options[:user], repo: @options[:project], state: 'closed', filter: 'all', labels: nil
 
     filtered_issues = issues_req.body.select { |issues|
-      (issues.labels.map { |issue| issue.name} & @options[:labels]).any?
-      }
+      (issues.labels.map { |issue| issue.name } & @options[:labels]).any?
+    }
 
     if @options[:add_issues_wo_labels]
       issues_wo_labels = issues_req.body.select {
-          |issues| !issues.labels.map { |issue| issue.name}.any?
+          |issues| !issues.labels.map { |issue| issue.name }.any?
       }
       filtered_issues.concat(issues_wo_labels)
     end
