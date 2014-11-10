@@ -3,7 +3,11 @@ require 'optparse'
 
 SPEC_TYPE = 'gemspec'
 
-@options = {:dry_run => false, :major => false, :minor => false, :patch => true}
+:major
+:minor
+:patch
+
+@options = {:dry_run => false, :bump_number => :patch}
 
 OptionParser.new { |opts|
   opts.banner = 'Usage: bump.rb [options]'
@@ -12,13 +16,13 @@ OptionParser.new { |opts|
     @options[:dry_run] = v
   end
   opts.on('-a', '--major', 'Bump major version') do |v|
-    @options[:major] = v
+    @options[:bump_number] = :major
   end
   opts.on('-m', '--minor', 'Bump minor version') do |v|
-    @options[:minor] = v
+    @options[:bump_number] = :minor
   end
   opts.on('-p', '--patch', 'Bump patch version') do |v|
-    @options[:patch] = v
+    @options[:bump_number] = :patch
   end
 }.parse!
 
@@ -39,14 +43,6 @@ def check_repo_is_clean_or_dry_run
   end
 end
 
-def execute_line(line)
-  output = `#{line}`
-  if $?.exitstatus != 0
-    puts "Output:\n#{output}\nExit status = #{$?.exitstatus} ->Terminate script."
-  end
-
-  output
-end
 
 def find_spec_file
   list_of_scpecs = execute_line("find . -name '*.#{SPEC_TYPE}'")
@@ -62,7 +58,7 @@ def find_spec_file
       spec_file = arr[0]
     else
       puts 'Which spec should be used?'
-      arr.each_with_index {|file, index| puts "#{index+1}. #{file}"}
+      arr.each_with_index { |file, index| puts "#{index+1}. #{file}" }
       input_index = Integer(gets.chomp)
       spec_file = arr[input_index-1]
   end
@@ -77,8 +73,9 @@ def find_spec_file
 end
 
 def find_version_in_podspec(podspec)
-  readme = File.read(#{podspec})
+  readme = File.read(podspec)
 
+  #try to find version in format 1.22.333
   re = /(\d+)\.(\d+)\.(\d+)/m
 
   match_result = re.match(readme)
@@ -89,78 +86,88 @@ def find_version_in_podspec(podspec)
   end
 
   puts "Found version #{match_result[0]}"
-  p match_result[0], match_result.captures
-  exit
-  # return match_result[0], match_result.captures
+  return match_result[0], match_result.captures
 end
 
-def bump_version(result_array)
-  bumped_result = result_array.dup
+def bump_version(versions_array)
+  bumped_result = versions_array.dup
   bumped_result.map! { |x| x.to_i }
 
-  if @options[:major]
-    bumped_result[0] += 1
-    bumped_result[1] = 0
-    bumped_result[2] = 0
-  else
-    if @options[:minor]
+  case @options[:bump_number]
+    when :major
+      bumped_result[0] += 1
+      bumped_result[1] = 0
+      bumped_result[2] = 0
+    when :minor
       bumped_result[1] += 1
       bumped_result[2] = 0
+    when :patch
+      bumped_result[2] += 1
     else
-      if @options[:patch]
-        bumped_result[2] += 1
-      end
-    end
+      raise('unknown bump_number')
   end
+
+
   bumped_version = bumped_result.join('.')
-  puts "Bump version: #{result_array.join('.')} -> #{bumped_version}"
+  puts "Bump version: #{versions_array.join('.')} -> #{bumped_version}"
   bumped_version
+end
+
+def execute_line(line)
+  output = `#{line}`
+  check_exit_status
+
+  output
 end
 
 def execute_line_if_not_dry_run(line)
   if @options[:dry_run]
-    puts "Dry run:\n#{line}"
+    puts "Dry run: #{line}"
+    nil
   else
     puts line
     value = %x[#{line}]
     puts value
-    if $?.exitstatus != 0
-      puts "Error (exit status = #{$?} -> exit"
-      exit
-    end
+    check_exit_status
+    value
   end
 end
 
+def check_exit_status
+  if $?.exitstatus != 0
+    puts "Output:\n#{output}\nExit status = #{$?.exitstatus} ->Terminate script."
+    exit
+  end
+end
 
 def run_bumping_script
 
   check_repo_is_clean_or_dry_run
-  result, result_array = find_version_in_podspec(find_spec_file)
-  bumped_version = bump_version(result_array)
+  spec_file = find_spec_file
+  result, versions_array = find_version_in_podspec(spec_file)
+  bumped_version = bump_version(versions_array)
 
   unless @options[:dry_run]
-
     puts 'Are you sure? Click Y to continue:'
     str = gets.chomp
     if str != 'Y'
       puts '-> exit'
       exit
     end
-
   end
 
   execute_line_if_not_dry_run("sed -i \"\" \"s/#{result}/#{bumped_version}/\" README.md")
-  execute_line_if_not_dry_run("sed -i \"\" \"s/#{result}/#{bumped_version}/\" ActionSheetPicker-3.0.podspec")
+  execute_line_if_not_dry_run("sed -i \"\" \"s/#{result}/#{bumped_version}/\" #{spec_file}")
   execute_line_if_not_dry_run("git commit --all -m \"Update #{$SPEC_TYPE} to version #{bumped_version}\"")
   execute_line_if_not_dry_run("git tag #{bumped_version}")
-  execute_line_if_not_dry_run('git push')
-  execute_line_if_not_dry_run('git push --tags')
-  execute_line_if_not_dry_run('pod trunk push ./ActionSheetPicker-3.0.podspec')
+  # execute_line_if_not_dry_run('git push')
+  # execute_line_if_not_dry_run('git push --tags')
+  # execute_line_if_not_dry_run("pod trunk push #{spec_file}")
 
 end
 
 if __FILE__ == $0
 
-  result, result_array = find_version_in_podspec(find_spec_file)
-  
+  run_bumping_script
+
 end
