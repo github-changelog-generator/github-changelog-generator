@@ -48,8 +48,36 @@ end
 
 
 def find_spec_file
-  list_of_scpecs = execute_line("find . -name '*.#{SPEC_TYPE}'")
-  arr = list_of_scpecs.split("\n")
+  list_of_specs = execute_line("find . -name '*.#{SPEC_TYPE}'")
+  arr = list_of_specs.split("\n")
+
+  spec_file = ''
+
+  case arr.count
+    when 0
+      puts "No #{SPEC_TYPE} files found. -> Exit."
+      exit
+    when 1
+      spec_file = arr[0]
+    else
+      puts 'Which spec should be used?'
+      arr.each_with_index { |file, index| puts "#{index+1}. #{file}" }
+      input_index = Integer(gets.chomp)
+      spec_file = arr[input_index-1]
+  end
+
+  if spec_file == nil
+    puts "Can't find specified spec file -> exit"
+    exit
+  end
+
+  spec_file.sub('./', '')
+
+end
+
+def find_current_gem_file
+  list_of_specs = execute_line("find . -name '*.gem'")
+  arr = list_of_specs.split("\n")
 
   spec_file = ''
 
@@ -163,28 +191,30 @@ def run_bumping_script
   execute_line_if_not_dry_run("sed -i \"\" \"s/#{result}/#{bumped_version}/\" #{spec_file}")
   execute_line_if_not_dry_run("git commit --all -m \"Update #{$SPEC_TYPE} to version #{bumped_version}\"")
   execute_line_if_not_dry_run("git tag #{bumped_version}")
-  # execute_line_if_not_dry_run('git push')
-  # execute_line_if_not_dry_run('git push --tags')
+  execute_line_if_not_dry_run('git push')
+  execute_line_if_not_dry_run('git push --tags')
+  execute_line_if_not_dry_run("gem build #{spec_file}")
+
+  gem = find_current_gem_file
+
+  execute_line_if_not_dry_run("gem push #{gem}")
   # execute_line_if_not_dry_run("pod trunk push #{spec_file}")
 
 end
 
 def revert_last_bump
   spec_file = find_spec_file
-  result, versions_array = find_version_in_podspec(spec_file)
-  execute_line_if_not_dry_run("git tag -d #{result}")
-  execute_line_if_not_dry_run("git push --delete origin #{result}")
-  execute_line_if_not_dry_run("git push --delete origin #{result}")
-  puts "HARD reset HEAD~1?\nClick Y to continue:"
+  result, _ = find_version_in_podspec(spec_file)
+
+  puts "DELETE tag #{result} and HARD reset HEAD~1?\nClick Y to continue:"
   str = gets.chomp
   if str != 'Y'
     puts '-> exit'
     exit
-  else
-    execute_line_if_not_dry_run("git reset --hard HEAD~1")
   end
-
-
+  execute_line_if_not_dry_run("git tag -d #{result}")
+  execute_line_if_not_dry_run('git reset --hard HEAD~1')
+  execute_line_if_not_dry_run("git push --delete origin #{result}")
 end
 
 if __FILE__ == $0
