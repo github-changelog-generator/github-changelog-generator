@@ -3,14 +3,14 @@ require 'optparse'
 
 class Parser
   def self.parse_options
-    options = {:tag1 => nil, :tag2 => nil, :format => '%d/%m/%y', :output => 'CHANGELOG.md', :labels => %w(bug enhancement), :pulls => true, :issues => true  }
+    options = {:tag1 => nil, :tag2 => nil, :format => '%d/%m/%y', :output => 'CHANGELOG.md', :labels => %w(bug enhancement), :pulls => true, :issues => true, :verbose => true}
 
     parser = OptionParser.new { |opts|
-      opts.banner = 'Usage: changelog_generator --user username --project project_name [options]'
-      opts.on('-u', '--user [USER]', 'Username of the owner of target GitHub repo (required)') do |last|
+      opts.banner = 'Usage: changelog_generator [options]'
+      opts.on('-u', '--user [USER]', 'Username of the owner of target GitHub repo') do |last|
         options[:user] = last
       end
-      opts.on('-p', '--project [PROJECT]', 'Name of project on GitHub (required)') do |last|
+      opts.on('-p', '--project [PROJECT]', 'Name of project on GitHub') do |last|
         options[:project] = last
       end
       opts.on('-t', '--token [TOKEN]', 'To make more than 50 requests this script required your OAuth token for GitHub. You can generate it on https://github.com/settings/applications') do |last|
@@ -50,6 +50,17 @@ class Parser
       puts parser.banner
       exit
     end
+
+    if !options[:user] && !options[:project]
+      remote = `git remote -vv`.split("\n")
+      match = /.*(?:[:\/])(\w*)\/((?:-|\w)*)\.git.*/.match(remote[0])
+
+      if match[1] && match[2]
+        puts "Detected user:#{match[1]}, project:#{match[2]}"
+        options[:user], options[:project] = match[1], match[2]
+      end
+    end
+
 
     if !options[:user] || !options[:project]
       puts parser.banner
