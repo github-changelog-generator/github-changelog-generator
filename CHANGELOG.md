@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.1] (https://github.com/skywinder/Github-Changelog-Generator/tree/1.1.1)
+#### 10/11/14
+- *Merged pull-request:* Remove duplicates of issues and pull-requests with same number [\#15](https://github.com/skywinder/Github-Changelog-Generator/pull/15)
+
+- *Merged pull-request:* Sort issues by tags [\#14](https://github.com/skywinder/Github-Changelog-Generator/pull/14)
+
+- *Merged pull-request:* Add ability to add or exclude issues without any labels [\#13](https://github.com/skywinder/Github-Changelog-Generator/pull/13)
+
 ## [1.1.0] (https://github.com/skywinder/Github-Changelog-Generator/tree/1.1.0)
 #### 10/11/14
 - *Implemented enhancement:* Detect username and project form origin [\#11](https://github.com/skywinder/Github-Changelog-Generator/issues/11)
