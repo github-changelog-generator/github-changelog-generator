@@ -10,7 +10,7 @@ This script automatically generate change-log from your tags and merged pull-req
 ## Installation:
 	[sudo] gem install github_changelog_generator
 
-## Usage
+## Usage:
 **It's really simple**: 
 
 - `cd` to your Project folder with configured git and just type:
@@ -60,9 +60,9 @@ It's time to create this token or wait for 1 hour before GitHub reset the counte
 
 **Nothing is impossible!** Open an [issue](https://github.com/skywinder/Github-Changelog-Generator/issues/new) and let's get this generator better together!
 
-**Bug reports, feature requests, patches, well-wishes are always welcome!**
+*Bug reports, feature requests, patches, well-wishes are always welcome!*
 
-## Contributing
+## Contributing:
 
 1. Create an issue to discuss about your idea
 2. [Fork it] (https://github.com/skywinder/Github-Changelog-Generator/fork)
