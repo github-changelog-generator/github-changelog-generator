@@ -56,9 +56,9 @@ class Parser
 
     if !options[:user] && !options[:project]
       remote = `git remote -vv`.split("\n")
-      match = /.*(?:[:\/])(\w*)\/((?:-|\w)*)\.git.*/.match(remote[0])
+      match = /.*(?:[:\/])(\w*)\/((?:-|\w|\.)*)\.git.*/.match(remote[0])
 
-      if match[1] && match[2]
+      if match && match[1] && match[2]
         puts "Detected user:#{match[1]}, project:#{match[2]}"
         options[:user], options[:project] = match[1], match[2]
       end
