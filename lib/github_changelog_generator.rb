@@ -109,6 +109,7 @@ class ChangelogGenerator
     url = "https://api.github.com/repos/#{@options[:user]}/#{@options[:project]}/tags"
 
     if @options[:verbose]
+
       puts "Receive tags for repo #{url}"
     end
 
@@ -293,8 +294,6 @@ class ChangelogGenerator
   end
 
   def get_all_issues
-    all_issues = []
-
     issues_req = @github.issues.list user: @options[:user], repo: @options[:project], state: 'closed', filter: 'all', labels: nil
 
     filtered_issues = issues_req.body.select { |issues|
@@ -315,7 +314,7 @@ class ChangelogGenerator
     }
 
     if @options[:verbose]
-      puts "Receive all closed issues with labels #{@options[:labels]}: #{all_issues.count} issues"
+      puts "Receive all closed issues with labels #{@options[:labels]}: #{filtered_issues.count} issues"
     end
 
     filtered_issues
