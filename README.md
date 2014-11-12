@@ -49,7 +49,14 @@ Type `github_changelog_generator --help` for detailed usage.
 
 
 ## FAQ:
-Since GitHub allow to make only 50 requests without authentication it's recommended to run this scrip with key `-t [your-16-digit-token]` that you can easily **[generate it here](https://github.com/settings/applications)**.
+Since GitHub allow to make only 50 requests without authentication it's recommended to run this script with token
+
+**You can easily [generate it here](https://github.com/settings/applications)**.
+
+And:
+
+- Run with key `-t [your-16-digit-token]` that 
+- Or add to your shell variable CHANGELOG_GITHUB_TOKEN and specify there your token
 
 So, if you got error like this:
 >! /Library/Ruby/Gems/2.0.0/gems/github_api-0.12.2/lib/github_api/response/raise_error.rb:14:in `on_complete'
