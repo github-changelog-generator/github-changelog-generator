@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.1.2] (https://github.com/skywinder/Github-Changelog-Generator/tree/1.1.2)
+#### 12/11/14
+- *Merged pull-request:* Fix bug with dot signs in project name [\#18](https://github.com/skywinder/Github-Changelog-Generator/pull/18)
+
+- *Merged pull-request:* Fix bug with dot signs in user name [\#17](https://github.com/skywinder/Github-Changelog-Generator/pull/17)
+
 ## [1.1.1] (https://github.com/skywinder/Github-Changelog-Generator/tree/1.1.1)
 #### 10/11/14
 - *Merged pull-request:* Remove duplicates of issues and pull-requests with same number [\#15](https://github.com/skywinder/Github-Changelog-Generator/pull/15)
