@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version     = '>= 1.9.3'
   s.authors = ["Petr Korolev"]
-  s.date = %q{2014-10-10}
+  s.date = `date +"%Y-%m-%d"`.strip!
   s.description = %q{Script, that automatically generate change-log from your tags and pull-requests}
   s.email = %q{sky4winder+github_changelog_generator@gmail.com}
   s.files = ["lib/github_changelog_generator.rb", "lib/github_changelog_generator/parser.rb", "bin/github_changelog_generator"]
