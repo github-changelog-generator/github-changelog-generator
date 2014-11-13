@@ -56,7 +56,9 @@ Since GitHub allow to make only 50 requests without authentication it's recommen
 And:
 
 - Run with key `-t [your-16-digit-token]` that 
-- Or add to your shell variable CHANGELOG_GITHUB_TOKEN and specify there your token
+- Or set environment variable `CHANGELOG_GITHUB_TOKEN` and specify there your token. 
+ 		
+	i.e. add to your `~/.bash_profile` or `~/.zshrc` or any other place to load ENV variables string `export CHANGELOG_GITHUB_TOKEN="your-40-digit-github-token"'`
 
 So, if you got error like this:
 >! /Library/Ruby/Gems/2.0.0/gems/github_api-0.12.2/lib/github_api/response/raise_error.rb:14:in `on_complete'
@@ -65,7 +67,7 @@ It's time to create this token or wait for 1 hour before GitHub reset the counte
 
 ## Am I missed some essential feature?
 
-**Nothing is impossible!** Open an [issue](https://github.com/skywinder/Github-Changelog-Generator/issues/new) and let's get this generator better together!
+**Nothing is impossible!** Open an [issue](https://github.com/skywinder/Github-Changelog-Generator/issues/new) and let's make generator better together!
 
 *Bug reports, feature requests, patches, well-wishes are always welcome!*
 
