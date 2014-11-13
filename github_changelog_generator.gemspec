@@ -16,6 +16,7 @@ Gem::Specification.new do |s|
   s.license       = "MIT"
   s.add_runtime_dependency(%q<httparty>, ["~> 0.13"])
   s.add_runtime_dependency(%q<github_api>, ["~> 0.12"])
+  s.add_runtime_dependency(%q<colorize>, ["~> 0.7"])
 
   s.executables   = %w(github_changelog_generator)
 end

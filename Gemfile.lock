@@ -2,6 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     addressable (2.3.6)
+    colorize (0.7.3)
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
     faraday (0.9.0)
@@ -39,5 +40,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  colorize
   github_api
   httparty

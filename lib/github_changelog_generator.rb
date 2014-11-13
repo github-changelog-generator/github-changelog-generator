@@ -3,6 +3,7 @@
 require 'github_api'
 require 'json'
 require 'httparty'
+require 'colorize'
 require_relative 'github_changelog_generator/parser'
 
 
@@ -13,11 +14,15 @@ class ChangelogGenerator
   def initialize()
 
     @options = Parser.parse_options
-    if @options[:token]
-      @github = Github.new oauth_token: @options[:token]
-    else
+
+    github_token
+
+    if @github_token.nil?
       @github = Github.new
+    else
+      @github = Github.new oauth_token: @github_token
     end
+
     @all_tags = self.get_all_tags
     @pull_requests = self.get_all_closed_pull_requests
     @issues = self.get_all_issues
@@ -113,13 +118,13 @@ class ChangelogGenerator
       puts "Receive tags for repo #{url}"
     end
 
-    if @options[:token]
-      response = HTTParty.get(url,
-                              :headers => {'Authorization' => "token #{@options[:token]}",
-                                           'User-Agent' => 'Changelog-Generator'})
-    else
+    if @github_token.nil?
       response = HTTParty.get(url,
                               :headers => {'User-Agent' => 'Changelog-Generator'})
+    else
+      response = HTTParty.get(url,
+                              :headers => {'Authorization' => "token #{@github_token}",
+                                           'User-Agent' => 'Changelog-Generator'})
     end
 
     json_parse = JSON.parse(response.body)
@@ -130,6 +135,23 @@ class ChangelogGenerator
 
     json_parse
   end
+
+  def github_token
+    if @options[:token]
+      return @github_token ||= @options[:token]
+    end
+
+    env_var = ENV.fetch 'CHANGELOG_GITHUB_TOKEN', nil
+
+    unless env_var
+      puts "Warning: No token provided (-t option) and variable $CHANGELOG_GITHUB_TOKEN was not found.".yellow
+      puts "This script can make only 50 requests to GitHub API per hour without token!".yellow
+    end
+
+    @github_token ||= env_var
+
+  end
+
 
   def generate_log_between_tags(since_tag, till_tag)
     since_tag_time = self.get_time_of_tag(since_tag)
@@ -325,5 +347,5 @@ end
 
 if __FILE__ == $0
   changelog_generator = ChangelogGenerator.new
-  changelog_generator.compund_changelog
+  # changelog_generator.compund_changelog
 end

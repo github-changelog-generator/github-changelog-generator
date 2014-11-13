@@ -13,7 +13,7 @@ class Parser
       opts.on('-p', '--project [PROJECT]', 'Name of project on GitHub') do |last|
         options[:project] = last
       end
-      opts.on('-t', '--token [TOKEN]', 'To make more than 50 requests this script required your OAuth token for GitHub. You can generate it on https://github.com/settings/applications') do |last|
+      opts.on('-t', '--token [TOKEN]', 'To make more than 50 requests this script required your OAuth token for GitHub. You can generate here: https://github.com/settings/tokens/new') do |last|
         options[:token] = last
       end
       opts.on('-h', '--help', 'Displays Help') do
