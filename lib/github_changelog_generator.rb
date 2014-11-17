@@ -100,6 +100,19 @@ class ChangelogGenerator
 
   def generate_log_for_all_tags
     log = ''
+    @all_tags.each {|tag| self.get_time_of_tag(tag)}
+
+
+    if @options[:verbose]
+      puts "Sorting tags.."
+    end
+
+    @all_tags.sort_by! {|x| self.get_time_of_tag(x)}.reverse!
+
+    if @options[:verbose]
+      puts "Generating log.."
+    end
+
     for index in 1 ... self.all_tags.size
       log += self.generate_log_between_tags(self.all_tags[index], self.all_tags[index-1])
     end
@@ -307,7 +320,7 @@ class ChangelogGenerator
     end
 
     if @options[:verbose]
-      puts "Get time for tag #{prev_tag['name']}"
+      puts "Getting time for tag #{prev_tag['name']}"
     end
 
     github_git_data_commits_get = @github.git_data.commits.get @options[:user], @options[:project], prev_tag['commit']['sha']
