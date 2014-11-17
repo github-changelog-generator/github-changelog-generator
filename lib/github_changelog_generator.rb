@@ -41,11 +41,15 @@ class ChangelogGenerator
 
 
   def get_all_closed_pull_requests
-    request = @github.pull_requests.list @options[:user], @options[:project], :state => 'closed'
-    pull_requests = request.body
+    response = @github.pull_requests.list @options[:user], @options[:project], :state => 'closed'
+
+    pull_requests = []
+    response.each_page do |page|
+      pull_requests.concat(page)
+    end
 
     if @options[:verbose]
-      puts 'Receive all pull requests'
+      puts "Receive all pull requests: #{pull_requests.count}"
     end
 
     pull_requests
@@ -97,7 +101,7 @@ class ChangelogGenerator
   def generate_log_for_all_tags
     log = ''
     for index in 1 ... self.all_tags.size
-      log += self.generate_log_between_tags(self.all_tags[index-1], self.all_tags[index])
+      log += self.generate_log_between_tags(self.all_tags[index], self.all_tags[index-1])
     end
 
     log += self.generate_log_before_tag(self.all_tags.last)
@@ -118,22 +122,18 @@ class ChangelogGenerator
       puts "Receive tags for repo #{url}"
     end
 
-    if @github_token.nil?
-      response = HTTParty.get(url,
-                              :headers => {'User-Agent' => 'Changelog-Generator'})
-    else
-      response = HTTParty.get(url,
-                              :headers => {'Authorization' => "token #{@github_token}",
-                                           'User-Agent' => 'Changelog-Generator'})
-    end
+    response = @github.repos.tags @options[:user], @options[:project]
 
-    json_parse = JSON.parse(response.body)
+    tags = []
+    response.each_page do |page|
+      tags.concat(page)
+    end
 
     if @options[:verbose]
-      puts "Found #{json_parse.count} tags"
+      puts "Found #{tags.count} tags"
     end
 
-    json_parse
+    tags
   end
 
   def github_token
@@ -153,28 +153,29 @@ class ChangelogGenerator
   end
 
 
-  def generate_log_between_tags(since_tag, till_tag)
-    since_tag_time = self.get_time_of_tag(since_tag)
-    till_tag_time = self.get_time_of_tag(till_tag)
+  def generate_log_between_tags(older_tag, newer_tag)
+    older_tag_time = self.get_time_of_tag(older_tag)
+    newer_tag_time = self.get_time_of_tag(newer_tag)
 
     # if we mix up tags order - lits fix it!
-    if since_tag_time > till_tag_time
-      since_tag, till_tag = till_tag, since_tag
-      since_tag_time, till_tag_time = till_tag_time, since_tag_time
-    end
+    # if older_tag_time < newer_tag_time
+    #   older_tag, newer_tag = newer_tag, older_tag
+    #   older_tag_time, newer_tag_time = newer_tag_time, older_tag_time
+    #   puts "Swap tags!"
+    # end
 
-    till_tag_name = till_tag['name']
+    newer_tag_name = newer_tag['name']
 
     pull_requests = Array.new(@pull_requests)
 
     pull_requests.delete_if { |req|
       if req[:merged_at]
         t = Time.parse(req[:merged_at]).utc
-        tag_is_later_since = t > since_tag_time
-        tag_is_before_till = t <= till_tag_time
+        tag_is_older_of_older = t > older_tag_time
+        tag_is_newer_than_new = t <= newer_tag_time
 
-        in_range = (tag_is_later_since) && (tag_is_before_till)
-        !in_range
+        tag_not_in_range = (tag_is_older_of_older) && (tag_is_newer_than_new)
+        !tag_not_in_range
       else
         true
       end
@@ -186,8 +187,8 @@ class ChangelogGenerator
     issues.delete_if { |issue|
       if issue[:closed_at]
         t = Time.parse(issue[:closed_at]).utc
-        tag_is_later_since = t > since_tag_time
-        tag_is_before_till = t <= till_tag_time
+        tag_is_later_since = t > older_tag_time
+        tag_is_before_till = t <= newer_tag_time
 
         in_range = (tag_is_later_since) && (tag_is_before_till)
         !in_range
@@ -197,7 +198,7 @@ class ChangelogGenerator
 
     }
 
-    self.create_log(pull_requests, issues, till_tag_name, till_tag_time)
+    self.create_log(pull_requests, issues, newer_tag_name, newer_tag_time)
 
   end
 
@@ -316,27 +317,38 @@ class ChangelogGenerator
   end
 
   def get_all_issues
-    issues_req = @github.issues.list user: @options[:user], repo: @options[:project], state: 'closed', filter: 'all', labels: nil
+    response = @github.issues.list user: @options[:user], repo: @options[:project], state: 'closed', filter: 'all', labels: nil
 
-    filtered_issues = issues_req.body.select { |issues|
-      #compare is there any labels from @options[:labels] array
-      (issues.labels.map { |issue| issue.name } & @options[:labels]).any?
-    }
 
-    if @options[:add_issues_wo_labels]
-      issues_wo_labels = issues_req.body.select {
-          |issues| !issues.labels.map { |issue| issue.name }.any?
-      }
-      filtered_issues.concat(issues_wo_labels)
+    issues = []
+    response.each_page do |page|
+      issues.concat(page)
     end
 
-  # remove pull request from issues:
-    filtered_issues.select! { |x|
+    # remove pull request from issues:
+    issues.select! { |x|
       x.pull_request == nil
     }
 
     if @options[:verbose]
-      puts "Receive all closed issues with labels #{@options[:labels]}: #{filtered_issues.count} issues"
+      puts "Receive all closed issues: #{issues.count}"
+    end
+
+    filtered_issues = issues.select { |issue|
+      #compare is there any labels from @options[:labels] array
+      (issue.labels.map { |label| label.name } & @options[:labels]).any?
+    }
+
+    if @options[:add_issues_wo_labels]
+      issues_wo_labels = issues.select {
+        # add issues without any labels
+          |issue| !issue.labels.map { |label| label.name }.any?
+      }
+      filtered_issues.concat(issues_wo_labels)
+    end
+
+    if @options[:verbose]
+      puts "Filter issues with labels #{@options[:labels]}#{@options[:add_issues_wo_labels]? ' and w/o labels' : ''}: #{filtered_issues.count} issues"
     end
 
     filtered_issues
@@ -347,5 +359,5 @@ end
 
 if __FILE__ == $0
   changelog_generator = ChangelogGenerator.new
-  # changelog_generator.compund_changelog
+  changelog_generator.compund_changelog
 end
