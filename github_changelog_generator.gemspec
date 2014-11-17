@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name               = "github_changelog_generator"
-  s.version            = "1.1.2"
+  s.version            = GitHubChangelogGenerator::VERSION
   s.default_executable = "github_changelog_generator"
 
   s.required_ruby_version     = '>= 1.9.3'
