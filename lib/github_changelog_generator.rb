@@ -5,6 +5,7 @@ require 'json'
 require 'httparty'
 require 'colorize'
 require_relative 'github_changelog_generator/parser'
+require_relative 'github_changelog_generator/version'
 
 module GitHubChangelogGenerator
   class ChangelogGenerator
