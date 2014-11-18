@@ -2,7 +2,6 @@
 
 require 'github_api'
 require 'json'
-require 'httparty'
 require 'colorize'
 require_relative 'github_changelog_generator/parser'
 require_relative 'github_changelog_generator/version'
@@ -12,7 +11,7 @@ module GitHubChangelogGenerator
 
     attr_accessor :options, :all_tags, :github
 
-    def initialize()
+    def initialize
 
       @options = Parser.parse_options
 
@@ -372,8 +371,7 @@ module GitHubChangelogGenerator
   end
 
   if __FILE__ == $0
-    changelog_generator = ChangelogGenerator.new
-    changelog_generator.compund_changelog
+    GitHubChangelogGenerator::ChangelogGenerator.new.compund_changelog
   end
 
 end

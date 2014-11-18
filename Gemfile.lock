@@ -16,10 +16,6 @@ GEM
       nokogiri (~> 1.6.3)
       oauth2
     hashie (3.3.1)
-    httparty (0.13.2)
-      json (~> 1.8)
-      multi_xml (>= 0.5.2)
-    json (1.8.1)
     jwt (1.0.0)
     mini_portile (0.6.1)
     multi_json (1.10.1)
@@ -42,4 +38,3 @@ PLATFORMS
 DEPENDENCIES
   colorize
   github_api
-  httparty
