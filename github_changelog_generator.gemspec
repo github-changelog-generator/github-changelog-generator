@@ -26,7 +26,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundler", "~> 1.7"
   spec.add_development_dependency "rake", "~> 10.0"
 
-  spec.add_runtime_dependency(%q<httparty>, ["~> 0.13"])
   spec.add_runtime_dependency(%q<github_api>, ["~> 0.12"])
   spec.add_runtime_dependency(%q<colorize>, ["~> 0.7"])
 
