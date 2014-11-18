@@ -1,10 +1,10 @@
 # Changelog
 
-## [1.1.3] (https://github.com/skywinder/Github-Changelog-Generator/tree/1.1.3)
+## [1.1.4] (https://github.com/skywinder/Github-Changelog-Generator/tree/1.1.4)
 #### 18/11/14
 - *Merged pull-request:* Sort tags by date [\#23](https://github.com/skywinder/Github-Changelog-Generator/pull/23)
 
-- *Implemented enhancement:* Implement ability to retrieve GitHub token from some shell variable (to not put it to script directly) [\#19](https://github.com/skywinder/Github-Changelog-Generator/issues/19)
+- *Implemented enhancement:* Implement ability to retrieve GitHub token from ENV variable (to not put it to script directly) [\#19](https://github.com/skywinder/Github-Changelog-Generator/issues/19)
 
 - *Fixed bug:* Script fills changelog only for first 30 tags. [\#20](https://github.com/skywinder/Github-Changelog-Generator/issues/20)
 
