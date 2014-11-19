@@ -54,6 +54,12 @@ module GitHubChangelogGenerator
 
       parser.parse!
 
+      if options[:verbose]
+        puts 'Input options:'
+        pp options
+        puts ''
+      end
+
       #udefined case with 1 parameter:
       if ARGV[0] && !ARGV[1]
         puts parser.banner
