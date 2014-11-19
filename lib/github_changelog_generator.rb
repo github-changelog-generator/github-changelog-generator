@@ -15,6 +15,12 @@ module GitHubChangelogGenerator
 
       @options = Parser.parse_options
 
+      if options[:verbose]
+        puts 'Input options:'
+        pp options
+        puts ''
+      end
+
       github_token
 
       if @github_token.nil?
@@ -39,7 +45,7 @@ module GitHubChangelogGenerator
     end
 
     def exec_command(cmd)
-      exec_cmd = "cd #{$project_path} && #{cmd}"
+      exec_cmd = "cd #{$project_path} and #{cmd}"
       %x[#{exec_cmd}]
     end
 
@@ -104,7 +110,7 @@ module GitHubChangelogGenerator
 
       if @options[:last]
         log += self.generate_log_between_tags(self.all_tags[0], self.all_tags[1])
-      elsif @options[:tag1] && @options[:tag2]
+      elsif @options[:tag1] and @options[:tag2]
 
         tag1 = @options[:tag1]
         tag2 = @options[:tag2]
@@ -222,23 +228,23 @@ module GitHubChangelogGenerator
     end
 
     def delete_by_time(array, hash_key, newer_tag_time, older_tag_time = nil)
-      array_new = Array.new(array)
-      array_new.delete_if { |req|
+      array.select { |req|
         if req[hash_key]
           t = Time.parse(req[hash_key]).utc
 
           if older_tag_time.nil?
-            tag_is_older_of_older = true
+            tag_in_range_old = true
           else
-            tag_is_older_of_older = t > older_tag_time
+            tag_in_range_old = t > older_tag_time
           end
 
-          tag_is_newer_than_new = t <= newer_tag_time
+          tag_in_range_new = t <= newer_tag_time
 
-          tag_not_in_range = (tag_is_older_of_older) && (tag_is_newer_than_new)
-          !tag_not_in_range
+          tag_in_range = (tag_in_range_old) && (tag_in_range_new)
+          
+          tag_in_range
         else
-          true
+          false
         end
       }
     end
@@ -340,12 +346,7 @@ module GitHubChangelogGenerator
 
     def get_all_issues
 
-      if @options[:verbose]
-        puts 'Fetching closed issues..'
-      end
-
       response = @github.issues.list user: @options[:user], repo: @options[:project], state: 'closed', filter: 'all', labels: nil
-
 
       issues = []
       response.each_page do |page|
