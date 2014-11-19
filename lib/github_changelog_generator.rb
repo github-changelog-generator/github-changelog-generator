@@ -173,17 +173,35 @@ module GitHubChangelogGenerator
 
 
     def generate_log_between_tags(older_tag, newer_tag)
-      older_tag_time = self.get_time_of_tag(older_tag)
-      newer_tag_time = self.get_time_of_tag(newer_tag)
 
+      newer_tag_time = self.get_time_of_tag(newer_tag)
       newer_tag_name = newer_tag['name']
 
-      pull_requests = Array.new(@pull_requests)
+      if older_tag.nil?
+        filtered_pull_requests = delete_by_time(@pull_requests ,:merged_at, newer_tag_time)
+        issues = delete_by_time(@issues ,:closed_at, newer_tag_time)
+      else
+        older_tag_time = self.get_time_of_tag(older_tag)
+        filtered_pull_requests = delete_by_time(@pull_requests ,:merged_at, newer_tag_time, older_tag_time)
+        issues = delete_by_time(@issues ,:closed_at, newer_tag_time, older_tag_time)
+      end
 
-      pull_requests.delete_if { |req|
-        if req[:merged_at]
-          t = Time.parse(req[:merged_at]).utc
-          tag_is_older_of_older = t > older_tag_time
+      self.create_log(filtered_pull_requests, issues, newer_tag_name, newer_tag_time)
+
+    end
+
+    def delete_by_time(array, hash_key, newer_tag_time, older_tag_time = nil)
+      array_new = Array.new(array)
+      array_new.delete_if { |req|
+        if req[hash_key]
+          t = Time.parse(req[hash_key]).utc
+
+          if older_tag_time.nil?
+            tag_is_older_of_older = false
+          else
+            tag_is_older_of_older = t > older_tag_time
+          end
+
           tag_is_newer_than_new = t <= newer_tag_time
 
           tag_not_in_range = (tag_is_older_of_older) && (tag_is_newer_than_new)
@@ -191,58 +209,11 @@ module GitHubChangelogGenerator
         else
           true
         end
-
       }
-
-      issues = Array.new(@issues)
-
-      issues.delete_if { |issue|
-        if issue[:closed_at]
-          t = Time.parse(issue[:closed_at]).utc
-          tag_is_later_since = t > older_tag_time
-          tag_is_before_till = t <= newer_tag_time
-
-          in_range = (tag_is_later_since) && (tag_is_before_till)
-          !in_range
-        else
-          true
-        end
-
-      }
-
-      self.create_log(pull_requests, issues, newer_tag_name, newer_tag_time)
-
     end
 
     def generate_log_before_tag(tag)
-      tag_time = self.get_time_of_tag(tag)
-      tag_name = tag['name']
-
-      pull_requests = Array.new(@pull_requests)
-
-      pull_requests.delete_if { |req|
-        if req[:merged_at]
-          t = Time.parse(req[:merged_at]).utc
-          t > tag_time
-        else
-          true
-        end
-
-      }
-
-      issues = Array.new(@issues)
-
-      issues.delete_if { |issue|
-        if issue[:closed_at]
-          t = Time.parse(issue[:closed_at]).utc
-          t > tag_time
-        else
-          true
-        end
-      }
-
-      self.create_log(pull_requests, issues, tag_name, tag_time)
-
+      generate_log_between_tags(nil, tag)
     end
 
     def create_log(pull_requests, issues, tag_name, tag_time)
