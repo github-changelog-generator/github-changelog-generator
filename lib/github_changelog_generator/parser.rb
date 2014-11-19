@@ -6,7 +6,7 @@ require_relative 'version'
 module GitHubChangelogGenerator
   class Parser
     def self.parse_options
-      options = {:tag1 => nil, :tag2 => nil, :format => '%d/%m/%y', :output => 'CHANGELOG.md', :labels => %w(bug enhancement), :pulls => true, :issues => true, :verbose => true, :add_issues_wo_labels => true, :merge_prefix => '*Merged pull-request:* ', :author => true}
+      options = {:tag1 => nil, :tag2 => nil, :format => '%d/%m/%y', :output => 'CHANGELOG.md', :labels => %w(bug enhancement), :pulls => true, :issues => true, :verbose => true, :add_issues_wo_labels => true, :merge_prefix => '*Merged pull-request:* ', :author => true, :pull_request_labels => nil}
 
       parser = OptionParser.new { |opts|
         opts.banner = 'Usage: changelog_generator [options]'
@@ -50,7 +50,7 @@ module GitHubChangelogGenerator
         opts.on('--labels  x,y,z', Array, 'Issues with that labels will be included to changelog. Default is \'bug,enhancement\'') do |list|
           options[:labels] = list
         end
-        opts.on('--[no-]filter-pull-requests  x,y,z', Array, 'Pull requests with that labels will be included to changelog. pull requests w\o labels will be included anyway.') do |list|
+        opts.on('--filter-pull-requests  x,y,z', Array, 'Pull requests with that labels will be included to changelog. pull requests w\o labels will be included anyway.') do |list|
           options[:pull_request_labels] = list
         end
         opts.on('-v', '--version', 'Print version number') do |v|
