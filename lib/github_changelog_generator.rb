@@ -45,6 +45,11 @@ module GitHubChangelogGenerator
 
 
     def get_all_closed_pull_requests
+
+      if @options[:verbose]
+        puts 'Fetching pull requests..'
+      end
+
       response = @github.pull_requests.list @options[:user], @options[:project], :state => 'closed'
 
       pull_requests = []
@@ -53,7 +58,7 @@ module GitHubChangelogGenerator
       end
 
       if @options[:verbose]
-        puts "Receive all pull requests: #{pull_requests.count}"
+        puts "Received all closed pull requests: #{pull_requests.count}"
       end
 
       pull_requests
@@ -132,11 +137,8 @@ module GitHubChangelogGenerator
 
     def get_all_tags
 
-      url = "https://api.github.com/repos/#{@options[:user]}/#{@options[:project]}/tags"
-
       if @options[:verbose]
-
-        puts "Receive tags for repo #{url}"
+        puts 'Fetching all tags..'
       end
 
       response = @github.repos.tags @options[:user], @options[:project]
@@ -334,6 +336,11 @@ module GitHubChangelogGenerator
     end
 
     def get_all_issues
+
+      if @options[:verbose]
+        puts 'Fetching closed issues..'
+      end
+
       response = @github.issues.list user: @options[:user], repo: @options[:project], state: 'closed', filter: 'all', labels: nil
 
 
@@ -348,7 +355,7 @@ module GitHubChangelogGenerator
       }
 
       if @options[:verbose]
-        puts "Receive all closed issues: #{issues.count}"
+        puts "Received closed issues: #{issues.count}"
       end
 
       filtered_issues = issues.select { |issue|
