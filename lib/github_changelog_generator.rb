@@ -61,6 +61,36 @@ module GitHubChangelogGenerator
         puts "Received all closed pull requests: #{pull_requests.count}"
       end
 
+      unless @options[:pull_request_labels].nil?
+
+        if @options[:verbose]
+          puts 'Filter all pull requests by labels.'
+        end
+
+        filtered_pull_requests = pull_requests.select { |pull_request|
+          #We need issue to fetch labels
+          issue = @github.issues.get @options[:user], @options[:project], pull_request.number
+          #compare is there any labels from @options[:labels] array
+          select_no_label = !issue.labels.map { |label| label.name }.any?
+
+          if @options[:verbose]
+            puts "Filter request \##{issue.number}."
+          end
+
+          if @options[:pull_request_labels].any?
+            select_by_label = (issue.labels.map { |label| label.name } & @options[:pull_request_labels]).any?
+          else
+            select_by_label = false
+          end
+
+          select_by_label | select_no_label
+        }
+
+        if @options[:verbose]
+          puts "Filtered pull requests with specified labels and w/o labels: #{filtered_pull_requests.count}"
+        end
+        return filtered_pull_requests
+      end
       pull_requests
     end
 
@@ -178,12 +208,12 @@ module GitHubChangelogGenerator
       newer_tag_name = newer_tag['name']
 
       if older_tag.nil?
-        filtered_pull_requests = delete_by_time(@pull_requests ,:merged_at, newer_tag_time)
-        issues = delete_by_time(@issues ,:closed_at, newer_tag_time)
+        filtered_pull_requests = delete_by_time(@pull_requests, :merged_at, newer_tag_time)
+        issues = delete_by_time(@issues, :closed_at, newer_tag_time)
       else
         older_tag_time = self.get_time_of_tag(older_tag)
-        filtered_pull_requests = delete_by_time(@pull_requests ,:merged_at, newer_tag_time, older_tag_time)
-        issues = delete_by_time(@issues ,:closed_at, newer_tag_time, older_tag_time)
+        filtered_pull_requests = delete_by_time(@pull_requests, :merged_at, newer_tag_time, older_tag_time)
+        issues = delete_by_time(@issues, :closed_at, newer_tag_time, older_tag_time)
       end
 
       self.create_log(filtered_pull_requests, issues, newer_tag_name, newer_tag_time)
