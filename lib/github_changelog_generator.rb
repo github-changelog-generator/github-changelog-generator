@@ -61,6 +61,19 @@ module GitHubChangelogGenerator
         puts "Received all closed pull requests: #{pull_requests.count}"
       end
 
+      filtered_pull_requests = pull_requests.select { |pull_request|
+        #We need issue to fetch labels
+        issue = @github.issues.get @options[:user], @options[:project], pull_request.number
+        #compare is there any labels from @options[:labels] array
+        select_no_label = !issue.labels.map { |label| label.name }.any?
+        select_by_label = (issue.labels.map { |label| label.name } & @options[:labels]).any?
+        select_by_label | select_no_label
+      }
+
+      if @options[:verbose]
+        puts "Filtered pull requests with specified labels and w/o labels: #{filtered_pull_requests.count}"
+      end
+
       pull_requests
     end
 
