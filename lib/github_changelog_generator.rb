@@ -91,6 +91,7 @@ module GitHubChangelogGenerator
         end
         return filtered_pull_requests
       end
+
       pull_requests
     end
 
@@ -227,7 +228,7 @@ module GitHubChangelogGenerator
           t = Time.parse(req[hash_key]).utc
 
           if older_tag_time.nil?
-            tag_is_older_of_older = false
+            tag_is_older_of_older = true
           else
             tag_is_older_of_older = t > older_tag_time
           end
