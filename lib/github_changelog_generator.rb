@@ -176,13 +176,6 @@ module GitHubChangelogGenerator
       older_tag_time = self.get_time_of_tag(older_tag)
       newer_tag_time = self.get_time_of_tag(newer_tag)
 
-      # if we mix up tags order - lits fix it!
-      # if older_tag_time < newer_tag_time
-      #   older_tag, newer_tag = newer_tag, older_tag
-      #   older_tag_time, newer_tag_time = newer_tag_time, older_tag_time
-      #   puts "Swap tags!"
-      # end
-
       newer_tag_name = newer_tag['name']
 
       pull_requests = Array.new(@pull_requests)
@@ -265,10 +258,18 @@ module GitHubChangelogGenerator
       if @options[:pulls]
         # Generate pull requests:
         if pull_requests
-          pull_requests.each { |dict|
-            merge = "#{@options[:merge_prefix]}#{dict[:title]} [\\##{dict[:number]}](#{dict.html_url})\n\n"
-            log += "- #{merge}"
-          }
+          if @options[:author]
+            pull_requests.each { |dict|
+              merge = "#{@options[:merge_prefix]}#{dict[:title]} [\\##{dict[:number]}](#{dict.html_url}) ([#{dict.user.login}](#{dict.user.html_url}))\n\n"
+              log += "- #{merge}"
+            }
+          else
+            pull_requests.each { |dict|
+              merge = "#{@options[:merge_prefix]}#{dict[:title]} [\\##{dict[:number]}](#{dict.html_url})\n\n"
+              log += "- #{merge}"
+            }
+          end
+
         end
       end
 
