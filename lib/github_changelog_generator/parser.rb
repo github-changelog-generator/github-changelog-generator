@@ -1,11 +1,12 @@
 #!/usr/bin/env ruby
 require 'optparse'
+require 'PP'
 require_relative 'version'
 
 module GitHubChangelogGenerator
   class Parser
     def self.parse_options
-      options = {:tag1 => nil, :tag2 => nil, :format => '%d/%m/%y', :output => 'CHANGELOG.md', :labels => %w(bug enhancement), :pulls => true, :issues => true, :verbose => true, :add_issues_wo_labels => true, :merge_prefix => '*Merged pull-request:* '}
+      options = {:tag1 => nil, :tag2 => nil, :format => '%d/%m/%y', :output => 'CHANGELOG.md', :labels => %w(bug enhancement), :pulls => true, :issues => true, :verbose => true, :add_issues_wo_labels => true, :merge_prefix => '*Merged pull-request:* ', :author => true}
 
       parser = OptionParser.new { |opts|
         opts.banner = 'Usage: changelog_generator [options]'
@@ -36,6 +37,9 @@ module GitHubChangelogGenerator
         end
         opts.on('-l', '--last-changes', 'Generate log between last 2 tags only') do |last|
           options[:last] = last
+        end
+        opts.on('--[no-]author', 'Add author of pull-request in the end. Default is true') do |author|
+          options[:last] = author
         end
         opts.on('-f', '--date-format [FORMAT]', 'Date format. Default is %d/%m/%y') do |last|
           options[:format] = last
