@@ -25,7 +25,11 @@ module GitHubChangelogGenerator
 
       @all_tags = self.get_all_tags
       @pull_requests = self.get_all_closed_pull_requests
-      @issues = self.get_all_issues
+      if @options[:issues]
+        @issues = self.get_all_issues
+      else
+        @issues = []
+      end
 
       @tag_times_hash = {}
     end
