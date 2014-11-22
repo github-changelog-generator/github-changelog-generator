@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.2.1] (https://github.com/skywinder/Github-Changelog-Generator/tree/1.2.1)
+#### 22/11/14
+- *Merged pull-request:* Issues for last tag not in list [\#29](https://github.com/skywinder/Github-Changelog-Generator/pull/29) ([skywinder](https://github.com/skywinder))
+
+- *Merged pull-request:* Disable default --filter-pull-requests option. [\#28](https://github.com/skywinder/Github-Changelog-Generator/pull/28) ([skywinder](https://github.com/skywinder))
+
 ## [1.2.0] (https://github.com/skywinder/Github-Changelog-Generator/tree/1.2.0)
 #### 19/11/14
 - *Merged pull-request:* Add filter for pull-requests labels. (option --filter-pull-requests) [\#27](https://github.com/skywinder/Github-Changelog-Generator/pull/27) ([skywinder](https://github.com/skywinder))
