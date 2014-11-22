@@ -52,6 +52,11 @@ Type `github_changelog_generator --help` for detailed usage.
 		github_changelog_generator -u skywinder -p ActionSheetPicker-3.0
 
 
+## Projects using this library
+[Wikipage with list of projects](https://github.com/skywinder/Github-Changelog-Generator/wiki/Projects-using-Github-Changelog-Generator) 
+
+*If you are using `ActionSheetPicker-3.0` in your app or know of an app that uses it, please add it to [this] (https://github.com/skywinder/Github-Changelog-Generator/wiki/Projects-using-Github-Changelog-Generator) list.*
+
 ## FAQ:
 Since GitHub allow to make only 50 requests without authentication it's recommended to run this script with token
 
