@@ -16,12 +16,8 @@ module GitHubChangelogGenerator
         opts.on('-p', '--project [PROJECT]', 'Name of project on GitHub') do |last|
           options[:project] = last
         end
-        opts.on('-t', '--token [TOKEN]', 'To make more than 50 requests this script required your OAuth token for GitHub. You can generate here: https://github.com/settings/tokens/new') do |last|
+        opts.on('-t', '--token [TOKEN]', 'To make more than 50 requests per hour your GitHub token required. You can generate it here: https://github.com/settings/tokens/new') do |last|
           options[:token] = last
-        end
-        opts.on('-h', '--help', 'Displays Help') do
-          puts opts
-          exit
         end
         opts.on('--[no-]verbose', 'Run verbosely. Default is true') do |v|
           options[:verbose] = v
@@ -35,9 +31,6 @@ module GitHubChangelogGenerator
         opts.on('--[no-]pull-requests', 'Include pull-requests to changelog. Default is true') do |v|
           options[:pulls] = v
         end
-        opts.on('-l', '--last-changes', 'Generate log between last 2 tags only') do |last|
-          options[:last] = last
-        end
         opts.on('--[no-]author', 'Add author of pull-request in the end. Default is true') do |author|
           options[:last] = author
         end
@@ -50,11 +43,15 @@ module GitHubChangelogGenerator
         opts.on('--labels  x,y,z', Array, 'Issues with that labels will be included to changelog. Default is \'bug,enhancement\'') do |list|
           options[:labels] = list
         end
-        opts.on('--filter-pull-requests  x,y,z', Array, 'Pull requests with that labels will be included to changelog. pull requests w\o labels will be included anyway.') do |list|
+        opts.on('--filter-pull-requests  x,y,z', Array, 'Pull requests only with that labels will be included to changelog.') do |list|
           options[:pull_request_labels] = list
         end
         opts.on('-v', '--version', 'Print version number') do |v|
           puts "Version: #{GitHubChangelogGenerator::VERSION}"
+          exit
+        end
+        opts.on('-h', '--help', 'Displays Help') do
+          puts opts
           exit
         end
       }
