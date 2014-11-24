@@ -15,17 +15,17 @@ You're almost done!
 ## Usage
 **It's really simple**: 
 
-- `cd` to your Project folder with configured git and just type:
+- If your **git remote** `origin` refer to your GitHub repo, then just go to your project folder  just run:
 
 		github_changelog_generator
 
-- from anywhere:
+-  or from anywhere:
 
 		github_changelog_generator -u github-username -p github-project
      
 As output you will get `CHANGELOG.md` file with *pretty Markdown-formatted* changelog.
 
-## Params:
+### Params:
 Type `github_changelog_generator --help` for detailed usage.
 
     Usage: changelog_generator [options]
@@ -44,6 +44,25 @@ Type `github_changelog_generator --help` for detailed usage.
             --labels  x,y,z              List of labels. Issues with that labels will be included to changelog. Default is 'bug,enhancement'
         -v, --version                    Print version number
 
+
+### GitHub token
+
+Since GitHub allow to make only 50 requests without authentication it's recommended to run this script with token
+
+**You can easily [generate it here](https://github.com/settings/applications)**.
+
+And:
+
+- Run with key `-t [your-16-digit-token]` 
+- Or set environment variable `CHANGELOG_GITHUB_TOKEN` and specify there your token. 
+ 		
+	i.e. add to your `~/.bash_profile` or `~/.zshrc` or any other place to load ENV variables string `export CHANGELOG_GITHUB_TOKEN="your-40-digit-github-token"'`
+
+So, if you got error like this:
+>! /Library/Ruby/Gems/2.0.0/gems/github_api-0.12.2/lib/github_api/response/raise_error.rb:14:in `on_complete'
+
+It's time to create this token or wait for 1 hour before GitHub reset the counter for your IP.
+
 ## Examples:
 
 - Look at **[CHANGELOG.md](https://github.com/skywinder/Github-Changelog-Generator/blob/master/CHANGELOG.md)** for **this** project
@@ -55,24 +74,7 @@ Type `github_changelog_generator --help` for detailed usage.
 ## Projects using this library
 [Wikipage with list of projects](https://github.com/skywinder/Github-Changelog-Generator/wiki/Projects-using-Github-Changelog-Generator) 
 
-*If you are using `ActionSheetPicker-3.0` in your app or know of an app that uses it, please add it to [this] (https://github.com/skywinder/Github-Changelog-Generator/wiki/Projects-using-Github-Changelog-Generator) list.*
-
-## FAQ:
-Since GitHub allow to make only 50 requests without authentication it's recommended to run this script with token
-
-**You can easily [generate it here](https://github.com/settings/applications)**.
-
-And:
-
-- Run with key `-t [your-16-digit-token]` that 
-- Or set environment variable `CHANGELOG_GITHUB_TOKEN` and specify there your token. 
- 		
-	i.e. add to your `~/.bash_profile` or `~/.zshrc` or any other place to load ENV variables string `export CHANGELOG_GITHUB_TOKEN="your-40-digit-github-token"'`
-
-So, if you got error like this:
->! /Library/Ruby/Gems/2.0.0/gems/github_api-0.12.2/lib/github_api/response/raise_error.rb:14:in `on_complete'
-
-It's time to create this token or wait for 1 hour before GitHub reset the counter for your IP.
+*If you are using `github_changelog_generator` for generation chamgelog in your project or know of project that uses it, please add it to [this] (https://github.com/skywinder/Github-Changelog-Generator/wiki/Projects-using-Github-Changelog-Generator) list.*
 
 ## Am I missed some essential feature?
 
