@@ -43,7 +43,7 @@ module GitHubChangelogGenerator
         opts.on('--labels  x,y,z', Array, 'Issues with that labels will be included to changelog. Default is \'bug,enhancement\'') do |list|
           options[:labels] = list
         end
-        opts.on('--filter-pull-requests  x,y,z', Array, 'Pull requests only with that labels will be included to changelog.') do |list|
+        opts.on('--labels-pr x,y,z', Array, 'Only pull requests with specified labels will be included to changelog. Default is nil') do |list|
           options[:pull_request_labels] = list
         end
         opts.on('-v', '--version', 'Print version number') do |v|
