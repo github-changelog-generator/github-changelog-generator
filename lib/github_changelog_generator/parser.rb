@@ -19,6 +19,12 @@ module GitHubChangelogGenerator
         opts.on('-t', '--token [TOKEN]', 'To make more than 50 requests per hour your GitHub token required. You can generate it here: https://github.com/settings/tokens/new') do |last|
           options[:token] = last
         end
+        opts.on('-f', '--date-format [FORMAT]', 'Date format. Default is %d/%m/%y') do |last|
+          options[:format] = last
+        end
+        opts.on('-o', '--output [NAME]', 'Output file. Default is CHANGELOG.md') do |last|
+          options[:output] = last
+        end
         opts.on('--[no-]verbose', 'Run verbosely. Default is true') do |v|
           options[:verbose] = v
         end
@@ -33,12 +39,6 @@ module GitHubChangelogGenerator
         end
         opts.on('--[no-]author', 'Add author of pull-request in the end. Default is true') do |author|
           options[:last] = author
-        end
-        opts.on('-f', '--date-format [FORMAT]', 'Date format. Default is %d/%m/%y') do |last|
-          options[:format] = last
-        end
-        opts.on('-o', '--output [NAME]', 'Output file. Default is CHANGELOG.md') do |last|
-          options[:output] = last
         end
         opts.on('--labels  x,y,z', Array, 'Issues with that labels will be included to changelog. Default is \'bug,enhancement\'') do |list|
           options[:labels] = list
