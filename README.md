@@ -94,3 +94,7 @@ It's time to create this token or wait for 1 hour before GitHub reset the counte
 ## License
 
 Github Changelog Generator is released under the [MIT License](http://www.opensource.org/licenses/MIT).
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/skywinder/github-changelog-generator/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
