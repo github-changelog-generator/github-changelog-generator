@@ -4,6 +4,7 @@ require 'github_api'
 require 'json'
 require 'colorize'
 require_relative 'github_changelog_generator/parser'
+require_relative 'github_changelog_generator/generator'
 require_relative 'github_changelog_generator/version'
 
 module GitHubChangelogGenerator
@@ -28,6 +29,8 @@ module GitHubChangelogGenerator
       else
         @github = Github.new oauth_token: @github_token
       end
+
+      generator = Generator.new(@options)
 
       @all_tags = self.get_all_tags
       @pull_requests = self.get_all_closed_pull_requests
@@ -264,19 +267,11 @@ module GitHubChangelogGenerator
 
       if @options[:pulls]
         # Generate pull requests:
-        if pull_requests
+        pull_requests.each { |pull_request|
+          merge = generator.get_string_for_pull_request(pull_request)
+          log += "- #{merge}"
 
-            pull_requests.each { |dict|
-              merge = "#{@options[:merge_prefix]}#{dict[:title]} [\\##{dict[:number]}](#{dict.html_url})"
-              if @options[:author]
-                merge += " ([#{dict.user.login}](#{dict.user.html_url}))\n\n"
-              else
-                merge += "\n\n"
-              end
-              log += "- #{merge}"
-            }
-
-        end
+        } if pull_requests
       end
 
       if @options[:issues]
