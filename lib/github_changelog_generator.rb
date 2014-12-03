@@ -265,17 +265,16 @@ module GitHubChangelogGenerator
       if @options[:pulls]
         # Generate pull requests:
         if pull_requests
-          if @options[:author]
+
             pull_requests.each { |dict|
-              merge = "#{@options[:merge_prefix]}#{dict[:title]} [\\##{dict[:number]}](#{dict.html_url}) ([#{dict.user.login}](#{dict.user.html_url}))\n\n"
+              merge = "#{@options[:merge_prefix]}#{dict[:title]} [\\##{dict[:number]}](#{dict.html_url})"
+              if @options[:author]
+                merge += " ([#{dict.user.login}](#{dict.user.html_url}))\n\n"
+              else
+                merge += "\n\n"
+              end
               log += "- #{merge}"
             }
-          else
-            pull_requests.each { |dict|
-              merge = "#{@options[:merge_prefix]}#{dict[:title]} [\\##{dict[:number]}](#{dict.html_url})\n\n"
-              log += "- #{merge}"
-            }
-          end
 
         end
       end
