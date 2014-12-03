@@ -314,10 +314,9 @@ module GitHubChangelogGenerator
             intro = 'Implemented enhancement'
           end
 
-          dict[:title].gsub! '>', '\>'
-          dict[:title].gsub! '*', '\*'
-          dict[:title].gsub! '_', '\_'
-          merge = "*#{intro}:* #{dict[:title]} [\\##{dict[:number]}](#{dict.html_url})\n\n"
+          enc_string = @generator.encapsulate_string dict[:title]
+
+          merge = "*#{intro}:* #{enc_string} [\\##{dict[:number]}](#{dict.html_url})\n\n"
           log += "- #{merge}"
         }
       end
