@@ -111,7 +111,6 @@ module GitHubChangelogGenerator
       if @options[:last]
         log += self.generate_log_between_tags(self.all_tags[0], self.all_tags[1])
       elsif @options[:tag1] and @options[:tag2]
-
         tag1 = @options[:tag1]
         tag2 = @options[:tag2]
         tags_strings = []
@@ -159,11 +158,11 @@ module GitHubChangelogGenerator
         puts "Generating log.."
       end
 
-      for index in 1 ... self.all_tags.size
+      (1 ... self.all_tags.size).each { |index|
         log += self.generate_log_between_tags(self.all_tags[index], self.all_tags[index-1])
-      end
+      }
 
-      log += self.generate_log_before_tag(self.all_tags.last)
+      log += generate_log_between_tags(nil, self.all_tags.last)
 
       log
     end
@@ -216,14 +215,14 @@ module GitHubChangelogGenerator
 
       if older_tag.nil?
         filtered_pull_requests = delete_by_time(@pull_requests, :merged_at, newer_tag_time)
-        issues = delete_by_time(@issues, :closed_at, newer_tag_time)
+        filtered_issues = delete_by_time(@issues, :closed_at, newer_tag_time)
       else
         older_tag_time = self.get_time_of_tag(older_tag)
         filtered_pull_requests = delete_by_time(@pull_requests, :merged_at, newer_tag_time, older_tag_time)
-        issues = delete_by_time(@issues, :closed_at, newer_tag_time, older_tag_time)
+        filtered_issues = delete_by_time(@issues, :closed_at, newer_tag_time, older_tag_time)
       end
 
-      self.create_log(filtered_pull_requests, issues, newer_tag_name, newer_tag_time)
+      self.create_log(filtered_pull_requests, filtered_issues, newer_tag_name, newer_tag_time)
 
     end
 
@@ -241,7 +240,7 @@ module GitHubChangelogGenerator
           tag_in_range_new = t <= newer_tag_time
 
           tag_in_range = (tag_in_range_old) && (tag_in_range_new)
-          
+
           tag_in_range
         else
           false
@@ -249,15 +248,15 @@ module GitHubChangelogGenerator
       }
     end
 
-    def generate_log_before_tag(tag)
-      generate_log_between_tags(nil, tag)
-    end
-
+# @param [Array] pull_requests
+# @param [Array] issues
+# @param [String] tag_name
+# @param [String] tag_time
+# @return [String]
     def create_log(pull_requests, issues, tag_name, tag_time)
 
       # Generate tag name and link
-      trimmed_tag = tag_name.tr('v', '')
-      log = "## [#{trimmed_tag}] (https://github.com/#{@options[:user]}/#{@options[:project]}/tree/#{tag_name})\n"
+      log = "## [#{tag_name}] (https://github.com/#{@options[:user]}/#{@options[:project]}/tree/#{tag_name})\n"
 
       #Generate date string:
       time_string = tag_time.strftime @options[:format]
