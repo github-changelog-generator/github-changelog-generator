@@ -30,7 +30,7 @@ module GitHubChangelogGenerator
         @github = Github.new oauth_token: @github_token
       end
 
-      generator = Generator.new(@options)
+      @generator = Generator.new(@options)
 
       @all_tags = self.get_all_tags
       @pull_requests = self.get_all_closed_pull_requests
@@ -142,7 +142,7 @@ module GitHubChangelogGenerator
       output_filename = "#{@options[:output]}"
       File.open(output_filename, 'w') { |file| file.write(log) }
 
-      puts "Done! Generated log placed in #{output_filename}"
+      puts "Done! Generated log placed in #{`pwd`.strip!}/#{output_filename}"
 
     end
 
@@ -268,7 +268,7 @@ module GitHubChangelogGenerator
       if @options[:pulls]
         # Generate pull requests:
         pull_requests.each { |pull_request|
-          merge = generator.get_string_for_pull_request(pull_request)
+          merge = @generator.get_string_for_pull_request(pull_request)
           log += "- #{merge}"
 
         } if pull_requests
@@ -314,6 +314,9 @@ module GitHubChangelogGenerator
             intro = 'Implemented enhancement'
           end
 
+          dict[:title].gsub! '>', '\>'
+          dict[:title].gsub! '*', '\*'
+          dict[:title].gsub! '_', '\_'
           merge = "*#{intro}:* #{dict[:title]} [\\##{dict[:number]}](#{dict.html_url})\n\n"
           log += "- #{merge}"
         }
