@@ -30,6 +30,7 @@ GEM
       multi_xml (~> 0.5)
       rack (~> 1.2)
     rack (1.5.2)
+    rake (10.4.2)
     thread_safe (0.3.4)
 
 PLATFORMS
@@ -38,3 +39,4 @@ PLATFORMS
 DEPENDENCIES
   colorize
   github_api
+  rake
