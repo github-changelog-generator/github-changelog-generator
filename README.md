@@ -3,6 +3,7 @@ GitHub Changelog Generator
 
 [![Gem Version](https://badge.fury.io/rb/github_changelog_generator.svg)](http://badge.fury.io/rb/github_changelog_generator)
 [![Build Status](https://travis-ci.org/skywinder/Github-Changelog-Generator.svg?branch=master)](https://travis-ci.org/skywinder/Github-Changelog-Generator)
+
 Changelog generation has never been so easy.
 
 This script automatically generate change-log from your tags and merged pull-requests.
