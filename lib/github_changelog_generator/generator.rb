@@ -1,16 +1,14 @@
 module GitHubChangelogGenerator
   class Generator
 
-    def initialize(options)
+    def initialize(options = nil)
       @options = options
     end
 
     def get_string_for_pull_request(pull_request)
-      pull_request[:title].gsub! '>', '\>'
-      pull_request[:title].gsub! '*', '\*'
-      pull_request[:title].gsub! '_', '\_'
+      encapsulated_title = self.encapsulate_string pull_request[:title]
 
-      merge = "#{@options[:merge_prefix]}#{pull_request[:title]} [\\##{pull_request[:number]}](#{pull_request.html_url})"
+      merge = "#{@options[:merge_prefix]}#{encapsulated_title} [\\##{pull_request[:number]}](#{pull_request.html_url})"
       if @options[:author]
         merge += " ([#{pull_request.user.login}](#{pull_request.user.html_url}))\n\n"
       else
@@ -19,5 +17,18 @@ module GitHubChangelogGenerator
       merge
     end
 
+    def encapsulate_string(string)
+
+      string.gsub! '\\', '\\\\'
+
+      encpas_chars = %w(> * _ \( \) [ ])
+      encpas_chars.each{ |char|
+        string.gsub! char, "\\#{char}"
+      }
+
+      string
+    end
+
   end
+
 end
