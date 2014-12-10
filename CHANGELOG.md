@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.2.2] (https://github.com/skywinder/Github-Changelog-Generator/tree/1.2.2)
+#### 10/12/14
+- *Merged pull-request:* Add a Bitdeli Badge to README [\#36](https://github.com/skywinder/Github-Changelog-Generator/pull/36) ([bitdeli-chef](https://github.com/bitdeli-chef))
+
 ## [1.2.1] (https://github.com/skywinder/Github-Changelog-Generator/tree/1.2.1)
 #### 22/11/14
 - *Merged pull-request:* Issues for last tag not in list [\#29](https://github.com/skywinder/Github-Changelog-Generator/pull/29) ([skywinder](https://github.com/skywinder))
@@ -8,11 +12,11 @@
 
 ## [1.2.0] (https://github.com/skywinder/Github-Changelog-Generator/tree/1.2.0)
 #### 19/11/14
-- *Merged pull-request:* Add filter for pull-requests labels. (option --filter-pull-requests) [\#27](https://github.com/skywinder/Github-Changelog-Generator/pull/27) ([skywinder](https://github.com/skywinder))
+- *Merged pull-request:* Add filter for pull-requests labels. \(option --filter-pull-requests\) [\#27](https://github.com/skywinder/Github-Changelog-Generator/pull/27) ([skywinder](https://github.com/skywinder))
 
-- *Merged pull-request:* Test Pull-Request [\#26](https://github.com/skywinder/Github-Changelog-Generator/pull/26) ([skywinder](https://github.com/skywinder))
+- *Merged pull-request:* Test Pull-Request SHOULD NOT APPEAR IN LOG! [\#26](https://github.com/skywinder/Github-Changelog-Generator/pull/26) ([skywinder](https://github.com/skywinder))
 
-- *Merged pull-request:* Add ability to insert authors of pull-requests (--[no-]author option) [\#25](https://github.com/skywinder/Github-Changelog-Generator/pull/25) ([skywinder](https://github.com/skywinder))
+- *Merged pull-request:* Add ability to insert authors of pull-requests \(--\[no-\]author option\) [\#25](https://github.com/skywinder/Github-Changelog-Generator/pull/25) ([skywinder](https://github.com/skywinder))
 
 - *Merged pull-request:* Don't receive issues in case of --no-isses flag specied [\#24](https://github.com/skywinder/Github-Changelog-Generator/pull/24) ([skywinder](https://github.com/skywinder))
 
@@ -20,7 +24,7 @@
 #### 18/11/14
 - *Merged pull-request:* Sort tags by date [\#23](https://github.com/skywinder/Github-Changelog-Generator/pull/23) ([skywinder](https://github.com/skywinder))
 
-- *Implemented enhancement:* Implement ability to retrieve GitHub token from ENV variable (to not put it to script directly) [\#19](https://github.com/skywinder/Github-Changelog-Generator/issues/19)
+- *Implemented enhancement:* Implement ability to retrieve GitHub token from ENV variable \(to not put it to script directly\) [\#19](https://github.com/skywinder/Github-Changelog-Generator/issues/19)
 
 - *Fixed bug:* Script fills changelog only for first 30 tags. [\#20](https://github.com/skywinder/Github-Changelog-Generator/issues/20)
 
@@ -66,7 +70,7 @@
 #### 07/11/14
 - *Merged pull-request:* Add changelog generation for last tag [\#2](https://github.com/skywinder/Github-Changelog-Generator/pull/2) ([skywinder](https://github.com/skywinder))
 
-- *Merged pull-request:* Add option (-o --output) to specify name of the output file. [\#1](https://github.com/skywinder/Github-Changelog-Generator/pull/1) ([skywinder](https://github.com/skywinder))
+- *Merged pull-request:* Add option \(-o --output\) to specify name of the output file. [\#1](https://github.com/skywinder/Github-Changelog-Generator/pull/1) ([skywinder](https://github.com/skywinder))
 
 ## [0.0.2] (https://github.com/skywinder/Github-Changelog-Generator/tree/0.0.2)
 #### 06/11/14
