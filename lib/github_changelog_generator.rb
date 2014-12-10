@@ -4,6 +4,7 @@ require 'github_api'
 require 'json'
 require 'colorize'
 require_relative 'github_changelog_generator/parser'
+require_relative 'github_changelog_generator/generator'
 require_relative 'github_changelog_generator/version'
 
 module GitHubChangelogGenerator
@@ -28,6 +29,8 @@ module GitHubChangelogGenerator
       else
         @github = Github.new oauth_token: @github_token
       end
+
+      @generator = Generator.new(@options)
 
       @all_tags = self.get_all_tags
       @pull_requests = self.get_all_closed_pull_requests
@@ -139,7 +142,7 @@ module GitHubChangelogGenerator
       output_filename = "#{@options[:output]}"
       File.open(output_filename, 'w') { |file| file.write(log) }
 
-      puts "Done! Generated log placed in #{output_filename}"
+      puts "Done! Generated log placed in #{`pwd`.strip!}/#{output_filename}"
 
     end
 
@@ -264,20 +267,11 @@ module GitHubChangelogGenerator
 
       if @options[:pulls]
         # Generate pull requests:
-        if pull_requests
-          if @options[:author]
-            pull_requests.each { |dict|
-              merge = "#{@options[:merge_prefix]}#{dict[:title]} [\\##{dict[:number]}](#{dict.html_url}) ([#{dict.user.login}](#{dict.user.html_url}))\n\n"
-              log += "- #{merge}"
-            }
-          else
-            pull_requests.each { |dict|
-              merge = "#{@options[:merge_prefix]}#{dict[:title]} [\\##{dict[:number]}](#{dict.html_url})\n\n"
-              log += "- #{merge}"
-            }
-          end
+        pull_requests.each { |pull_request|
+          merge = @generator.get_string_for_pull_request(pull_request)
+          log += "- #{merge}"
 
-        end
+        } if pull_requests
       end
 
       if @options[:issues]
@@ -320,7 +314,9 @@ module GitHubChangelogGenerator
             intro = 'Implemented enhancement'
           end
 
-          merge = "*#{intro}:* #{dict[:title]} [\\##{dict[:number]}](#{dict.html_url})\n\n"
+          enc_string = @generator.encapsulate_string dict[:title]
+
+          merge = "*#{intro}:* #{enc_string} [\\##{dict[:number]}](#{dict.html_url})\n\n"
           log += "- #{merge}"
         }
       end
