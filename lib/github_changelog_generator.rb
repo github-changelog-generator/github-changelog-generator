@@ -67,7 +67,7 @@ module GitHubChangelogGenerator
       end
 
       if @options[:verbose]
-        puts "Received all closed pull requests: #{pull_requests.count}"
+        puts "Received closed pull requests: #{pull_requests.count}"
       end
 
       unless @options[:pull_request_labels].nil?
@@ -340,6 +340,10 @@ module GitHubChangelogGenerator
     end
 
     def get_all_issues
+
+      if @options[:verbose]
+        puts 'Fetching closed issues..'
+      end
 
       response = @github.issues.list user: @options[:user], repo: @options[:project], state: 'closed', filter: 'all', labels: nil
 
