@@ -14,6 +14,8 @@ module GitHubChangelogGenerator
 
     attr_accessor :options, :all_tags, :github
 
+    PER_PAGE_NUMBER = 100
+
     def initialize
 
       @options = Parser.parse_options
@@ -27,9 +29,10 @@ module GitHubChangelogGenerator
       github_token
 
       if @github_token.nil?
-        @github = Github.new
+        @github = Github.new per_page: PER_PAGE_NUMBER
       else
-        @github = Github.new oauth_token: @github_token
+        @github = Github.new oauth_token: @github_token,
+                             per_page: PER_PAGE_NUMBER
       end
 
       @generator = Generator.new(@options)
@@ -58,15 +61,20 @@ module GitHubChangelogGenerator
     def get_all_closed_pull_requests
 
       if @options[:verbose]
-        puts 'Fetching pull requests..'
+        print "Fetching pull requests...\r"
       end
 
       response = @github.pull_requests.list @options[:user], @options[:project], :state => 'closed'
 
       pull_requests = []
+      page_i = 0
       response.each_page do |page|
+        print "Fetching pull requests... #{page_i}\r"
+        page_i += PER_PAGE_NUMBER
         pull_requests.concat(page)
       end
+
+      print "\r"
 
       if @options[:verbose]
         puts "Received closed pull requests: #{pull_requests.count}"
@@ -184,16 +192,19 @@ module GitHubChangelogGenerator
     def get_all_tags
 
       if @options[:verbose]
-        puts 'Fetching all tags..'
+        print "Fetching tags...\r"
       end
 
       response = @github.repos.tags @options[:user], @options[:project]
 
       tags = []
+      page_i = 0
       response.each_page do |page|
+        print "Fetching tags... #{page_i}\r"
+        page_i += PER_PAGE_NUMBER
         tags.concat(page)
       end
-
+      print "\r"
       if @options[:verbose]
         puts "Found #{tags.count} tags"
       end
@@ -345,15 +356,21 @@ module GitHubChangelogGenerator
     def get_all_issues
 
       if @options[:verbose]
-        puts 'Fetching closed issues..'
+        puts "Fetching closed issues...\r"
       end
 
       response = @github.issues.list user: @options[:user], repo: @options[:project], state: 'closed', filter: 'all', labels: nil
 
       issues = []
+      page_i = 0
       response.each_page do |page|
+        print "Fetching closed issues... #{page_i}\r"
+        page_i += PER_PAGE_NUMBER
+        pull_requests.concat(page)
         issues.concat(page)
       end
+
+      print "\r"
 
       # remove pull request from issues:
       issues.select! { |x|
