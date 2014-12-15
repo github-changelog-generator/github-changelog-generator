@@ -356,15 +356,21 @@ module GitHubChangelogGenerator
     def get_all_issues
 
       if @options[:verbose]
-        puts 'Fetching closed issues..'
+        puts "Fetching closed issues...\r"
       end
 
       response = @github.issues.list user: @options[:user], repo: @options[:project], state: 'closed', filter: 'all', labels: nil
 
       issues = []
+      page_i = 0
       response.each_page do |page|
+        print "Fetching closed issues... #{page_i}\r"
+        page_i += PER_PAGE_NUMBER
+        pull_requests.concat(page)
         issues.concat(page)
       end
+
+      print "\r"
 
       # remove pull request from issues:
       issues.select! { |x|
