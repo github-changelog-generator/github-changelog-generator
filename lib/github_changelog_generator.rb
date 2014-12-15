@@ -69,8 +69,8 @@ module GitHubChangelogGenerator
       pull_requests = []
       page_i = 0
       response.each_page do |page|
-        print "Fetching pull requests... #{page_i}\r"
         page_i += PER_PAGE_NUMBER
+        print "Fetching pull requests... #{page_i}\r"
         pull_requests.concat(page)
       end
 
@@ -200,8 +200,8 @@ module GitHubChangelogGenerator
       tags = []
       page_i = 0
       response.each_page do |page|
-        print "Fetching tags... #{page_i}\r"
         page_i += PER_PAGE_NUMBER
+        print "Fetching tags... #{page_i}\r"
         tags.concat(page)
       end
       print "\r"
@@ -364,8 +364,8 @@ module GitHubChangelogGenerator
       issues = []
       page_i = 0
       response.each_page do |page|
-        print "Fetching closed issues... #{page_i}\r"
         page_i += PER_PAGE_NUMBER
+        print "Fetching closed issues... #{page_i}\r"
         issues.concat(page)
       end
 
