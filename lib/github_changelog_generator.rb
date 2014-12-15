@@ -14,7 +14,7 @@ module GitHubChangelogGenerator
 
     attr_accessor :options, :all_tags, :github
 
-    PER_PAGE_NUMBER = 100
+    PER_PAGE_NUMBER = 30
 
     def initialize
 
@@ -356,7 +356,7 @@ module GitHubChangelogGenerator
     def get_all_issues
 
       if @options[:verbose]
-        puts "Fetching closed issues...\r"
+        print "Fetching closed issues...\r"
       end
 
       response = @github.issues.list user: @options[:user], repo: @options[:project], state: 'closed', filter: 'all', labels: nil
@@ -366,7 +366,6 @@ module GitHubChangelogGenerator
       response.each_page do |page|
         print "Fetching closed issues... #{page_i}\r"
         page_i += PER_PAGE_NUMBER
-        pull_requests.concat(page)
         issues.concat(page)
       end
 
@@ -379,6 +378,11 @@ module GitHubChangelogGenerator
 
       if @options[:verbose]
         puts "Received closed issues: #{issues.count}"
+      end
+
+
+      if @options[:verbose]
+        puts "Filtering issues with labels #{@options[:labels]}#{@options[:add_issues_wo_labels] ? ' and w/o labels' : ''}"
       end
 
       filtered_issues = issues.select { |issue|
@@ -395,7 +399,7 @@ module GitHubChangelogGenerator
       end
 
       if @options[:verbose]
-        puts "Filter issues with labels #{@options[:labels]}#{@options[:add_issues_wo_labels] ? ' and w/o labels' : ''}: #{filtered_issues.count} issues"
+        puts "Filtered issues: #{filtered_issues.count}"
       end
 
       filtered_issues
