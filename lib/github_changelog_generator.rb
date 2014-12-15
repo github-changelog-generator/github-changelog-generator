@@ -3,6 +3,8 @@
 require 'github_api'
 require 'json'
 require 'colorize'
+require 'benchmark'
+
 require_relative 'github_changelog_generator/parser'
 require_relative 'github_changelog_generator/generator'
 require_relative 'github_changelog_generator/version'
@@ -148,8 +150,13 @@ module GitHubChangelogGenerator
 
     def generate_log_for_all_tags
       log = ''
-      @all_tags.each { |tag| self.get_time_of_tag(tag) }
 
+      # Async fetching tags:
+      threads = []
+      @all_tags.each { |tag|
+        threads << Thread.new { self.get_time_of_tag(tag) }
+      }
+      threads.each { |thr| thr.join }
 
       if @options[:verbose]
         puts "Sorting tags.."
@@ -327,10 +334,6 @@ module GitHubChangelogGenerator
 
       if @tag_times_hash[prev_tag['name']]
         return @tag_times_hash[prev_tag['name']]
-      end
-
-      if @options[:verbose]
-        puts "Getting time for tag #{prev_tag['name']}"
       end
 
       github_git_data_commits_get = @github.git_data.commits.get @options[:user], @options[:project], prev_tag['commit']['sha']
