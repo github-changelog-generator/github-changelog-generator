@@ -14,7 +14,7 @@ module GitHubChangelogGenerator
 
     attr_accessor :options, :all_tags, :github
 
-    PER_PAGE_NUMBER = 100
+    PER_PAGE_NUMBER = 30
 
     def initialize
 
@@ -380,6 +380,11 @@ module GitHubChangelogGenerator
         puts "Received closed issues: #{issues.count}"
       end
 
+
+      if @options[:verbose]
+        puts "Filtering issues with labels #{@options[:labels]}#{@options[:add_issues_wo_labels] ? ' and w/o labels' : ''}"
+      end
+
       filtered_issues = issues.select { |issue|
         #compare is there any labels from @options[:labels] array
         (issue.labels.map { |label| label.name } & @options[:labels]).any?
@@ -394,7 +399,7 @@ module GitHubChangelogGenerator
       end
 
       if @options[:verbose]
-        puts "Filter issues with labels #{@options[:labels]}#{@options[:add_issues_wo_labels] ? ' and w/o labels' : ''}: #{filtered_issues.count} issues"
+        puts "Filtered issues: #{filtered_issues.count}"
       end
 
       filtered_issues
