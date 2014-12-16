@@ -3,6 +3,8 @@
 require 'github_api'
 require 'json'
 require 'colorize'
+require 'benchmark'
+
 require_relative 'github_changelog_generator/parser'
 require_relative 'github_changelog_generator/generator'
 require_relative 'github_changelog_generator/version'
@@ -11,6 +13,8 @@ module GitHubChangelogGenerator
   class ChangelogGenerator
 
     attr_accessor :options, :all_tags, :github
+
+    PER_PAGE_NUMBER = 30
 
     def initialize
 
@@ -25,9 +29,10 @@ module GitHubChangelogGenerator
       github_token
 
       if @github_token.nil?
-        @github = Github.new
+        @github = Github.new per_page: PER_PAGE_NUMBER
       else
-        @github = Github.new oauth_token: @github_token
+        @github = Github.new oauth_token: @github_token,
+                             per_page: PER_PAGE_NUMBER
       end
 
       @generator = Generator.new(@options)
@@ -56,18 +61,23 @@ module GitHubChangelogGenerator
     def get_all_closed_pull_requests
 
       if @options[:verbose]
-        puts 'Fetching pull requests..'
+        print "Fetching pull requests...\r"
       end
 
       response = @github.pull_requests.list @options[:user], @options[:project], :state => 'closed'
 
       pull_requests = []
+      page_i = 0
       response.each_page do |page|
+        page_i += PER_PAGE_NUMBER
+        print "Fetching pull requests... #{page_i}\r"
         pull_requests.concat(page)
       end
 
+      print "\r"
+
       if @options[:verbose]
-        puts "Received all closed pull requests: #{pull_requests.count}"
+        puts "Received closed pull requests: #{pull_requests.count}"
       end
 
       unless @options[:pull_request_labels].nil?
@@ -148,8 +158,13 @@ module GitHubChangelogGenerator
 
     def generate_log_for_all_tags
       log = ''
-      @all_tags.each { |tag| self.get_time_of_tag(tag) }
 
+      # Async fetching tags:
+      threads = []
+      @all_tags.each { |tag|
+        threads << Thread.new { self.get_time_of_tag(tag) }
+      }
+      threads.each { |thr| thr.join }
 
       if @options[:verbose]
         puts "Sorting tags.."
@@ -177,16 +192,19 @@ module GitHubChangelogGenerator
     def get_all_tags
 
       if @options[:verbose]
-        puts 'Fetching all tags..'
+        print "Fetching tags...\r"
       end
 
       response = @github.repos.tags @options[:user], @options[:project]
 
       tags = []
+      page_i = 0
       response.each_page do |page|
+        page_i += PER_PAGE_NUMBER
+        print "Fetching tags... #{page_i}\r"
         tags.concat(page)
       end
-
+      print "\r"
       if @options[:verbose]
         puts "Found #{tags.count} tags"
       end
@@ -329,10 +347,6 @@ module GitHubChangelogGenerator
         return @tag_times_hash[prev_tag['name']]
       end
 
-      if @options[:verbose]
-        puts "Getting time for tag #{prev_tag['name']}"
-      end
-
       github_git_data_commits_get = @github.git_data.commits.get @options[:user], @options[:project], prev_tag['commit']['sha']
       time_string = github_git_data_commits_get['committer']['date']
       Time.parse(time_string)
@@ -341,12 +355,21 @@ module GitHubChangelogGenerator
 
     def get_all_issues
 
+      if @options[:verbose]
+        print "Fetching closed issues...\r"
+      end
+
       response = @github.issues.list user: @options[:user], repo: @options[:project], state: 'closed', filter: 'all', labels: nil
 
       issues = []
+      page_i = 0
       response.each_page do |page|
+        page_i += PER_PAGE_NUMBER
+        print "Fetching closed issues... #{page_i}\r"
         issues.concat(page)
       end
+
+      print "\r"
 
       # remove pull request from issues:
       issues.select! { |x|
@@ -355,6 +378,11 @@ module GitHubChangelogGenerator
 
       if @options[:verbose]
         puts "Received closed issues: #{issues.count}"
+      end
+
+
+      if @options[:verbose]
+        puts "Filtering issues with labels #{@options[:labels]}#{@options[:add_issues_wo_labels] ? ' and w/o labels' : ''}"
       end
 
       filtered_issues = issues.select { |issue|
@@ -371,7 +399,7 @@ module GitHubChangelogGenerator
       end
 
       if @options[:verbose]
-        puts "Filter issues with labels #{@options[:labels]}#{@options[:add_issues_wo_labels] ? ' and w/o labels' : ''}: #{filtered_issues.count} issues"
+        puts "Filtered issues: #{filtered_issues.count}"
       end
 
       filtered_issues

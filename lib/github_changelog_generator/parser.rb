@@ -58,15 +58,21 @@ module GitHubChangelogGenerator
 
       parser.parse!
 
-      #udefined case with 1 parameter:
       if ARGV[0] && !ARGV[1]
-        puts parser.banner
-        exit
+        # this match should parse https://github.com/skywinder/Github-Changelog-Generator and skywinder/Github-Changelog-Generator to user and name
+        match = /(?:.+github\.com\/)?(.+)\/(.+)/.match(ARGV[0])
+
+        if match[2].nil?
+          exit
+        else
+          options[:user] = match[1]
+          options[:project]= match[2]
+        end
       end
 
       if !options[:user] && !options[:project]
         remote = `git remote -vv`.split("\n")
-        match = /.*(?:[:\/])((?:-|\w|\.)*)\/((?:-|\w|\.)*)\.git.*/.match(remote[0])
+        match = /.*(?:[:\/])((?:-|\w|\.)*)\/((?:-|\w|\.)*)(?:\.git)?.*/.match(remote[0])
 
         if match && match[1] && match[2]
           puts "Detected user:#{match[1]}, project:#{match[2]}"
@@ -83,7 +89,6 @@ module GitHubChangelogGenerator
       if ARGV[1]
         options[:tag1] = ARGV[0]
         options[:tag2] = ARGV[1]
-
       end
 
       options
