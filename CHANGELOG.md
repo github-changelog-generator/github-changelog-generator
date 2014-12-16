@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.2.4] (https://github.com/skywinder/Github-Changelog-Generator/tree/1.2.4)
+#### 16/12/14
+- *Merged pull-request:* Fix crash when user is NULL [\#40](https://github.com/skywinder/Github-Changelog-Generator/pull/40) ([skywinder](https://github.com/skywinder))
+
+- *Merged pull-request:* Implement async fetching [\#39](https://github.com/skywinder/Github-Changelog-Generator/pull/39) ([skywinder](https://github.com/skywinder))
+
+- *Implemented enhancement:* Add ability to run with one parameter instead -u -p [\#38](https://github.com/skywinder/Github-Changelog-Generator/issues/38)
+
+- *Implemented enhancement:* Detailed output [\#33](https://github.com/skywinder/Github-Changelog-Generator/issues/33)
+
+- *Fixed bug:* Docs lacking or basic behavior not as advertised [\#30](https://github.com/skywinder/Github-Changelog-Generator/issues/30)
+
+## [1.2.3] (https://github.com/skywinder/Github-Changelog-Generator/tree/1.2.3)
+#### 16/12/14
+- *Fixed bug:* Encapsulate \[ \> \* \_ \ \] signs in issues names [\#34](https://github.com/skywinder/Github-Changelog-Generator/issues/34)
+
 ## [1.2.2] (https://github.com/skywinder/Github-Changelog-Generator/tree/1.2.2)
 #### 10/12/14
 - *Merged pull-request:* Add a Bitdeli Badge to README [\#36](https://github.com/skywinder/Github-Changelog-Generator/pull/36) ([bitdeli-chef](https://github.com/bitdeli-chef))
