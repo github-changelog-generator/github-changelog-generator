@@ -253,18 +253,30 @@ module GitHubChangelogGenerator
           milestone_is_tag = @all_tags.find{|tag|
             tag.name == issue.milestone.title
           }
-
-          if milestone_is_tag.nil?
-            true
-          else
-            issue.milestone.title == newer_tag_name
-          end
+          milestone_is_tag.nil?
         end
 
       }
 
       #add missed issues (according milestones)
+      issues_to_add = @issues.select{|issue|
+        if issue.milestone.nil?
+          false
+        else
+          #check, that this milestone in tag list:
+          milestone_is_tag = @all_tags.find{|tag|
+            tag.name == issue.milestone.title
+          }
 
+          if milestone_is_tag.nil?
+            false
+          else
+            issue.milestone.title == newer_tag_name
+          end
+        end
+      }
+
+      filtered_issues |= issues_to_add
 
       self.create_log(filtered_pull_requests, filtered_issues, newer_tag_name, newer_tag_time)
 

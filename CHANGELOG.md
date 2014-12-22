@@ -12,19 +12,23 @@
 
 - *Fixed bug:* Docs lacking or basic behavior not as advertised [\#30](https://github.com/skywinder/Github-Changelog-Generator/issues/30)
 
+- *Fixed bug:* Crash when try generate log for rails [\#35](https://github.com/skywinder/Github-Changelog-Generator/issues/35)
+
 ## [1.2.3] (https://github.com/skywinder/Github-Changelog-Generator/tree/1.2.3)
 #### 16/12/14
-- *Fixed bug:* Encapsulate \[ \> \* \_ \ \] signs in issues names [\#34](https://github.com/skywinder/Github-Changelog-Generator/issues/34)
-
 ## [1.2.2] (https://github.com/skywinder/Github-Changelog-Generator/tree/1.2.2)
 #### 10/12/14
 - *Merged pull-request:* Add a Bitdeli Badge to README [\#36](https://github.com/skywinder/Github-Changelog-Generator/pull/36) ([bitdeli-chef](https://github.com/bitdeli-chef))
+
+- *Fixed bug:* Encapsulate \[ \> \* \_ \ \] signs in issues names [\#34](https://github.com/skywinder/Github-Changelog-Generator/issues/34)
 
 ## [1.2.1] (https://github.com/skywinder/Github-Changelog-Generator/tree/1.2.1)
 #### 22/11/14
 - *Merged pull-request:* Issues for last tag not in list [\#29](https://github.com/skywinder/Github-Changelog-Generator/pull/29) ([skywinder](https://github.com/skywinder))
 
 - *Merged pull-request:* Disable default --filter-pull-requests option. [\#28](https://github.com/skywinder/Github-Changelog-Generator/pull/28) ([skywinder](https://github.com/skywinder))
+
+- *Fixed bug:* Script fills changelog only for first 30 tags. [\#20](https://github.com/skywinder/Github-Changelog-Generator/issues/20)
 
 ## [1.2.0] (https://github.com/skywinder/Github-Changelog-Generator/tree/1.2.0)
 #### 19/11/14
@@ -41,8 +45,6 @@
 - *Merged pull-request:* Sort tags by date [\#23](https://github.com/skywinder/Github-Changelog-Generator/pull/23) ([skywinder](https://github.com/skywinder))
 
 - *Implemented enhancement:* Implement ability to retrieve GitHub token from ENV variable \(to not put it to script directly\) [\#19](https://github.com/skywinder/Github-Changelog-Generator/issues/19)
-
-- *Fixed bug:* Script fills changelog only for first 30 tags. [\#20](https://github.com/skywinder/Github-Changelog-Generator/issues/20)
 
 ## [1.1.2] (https://github.com/skywinder/Github-Changelog-Generator/tree/1.1.2)
 #### 12/11/14
