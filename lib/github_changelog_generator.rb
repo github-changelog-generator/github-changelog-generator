@@ -231,6 +231,11 @@ module GitHubChangelogGenerator
 
     def generate_log_between_tags(older_tag, newer_tag)
 
+      if newer_tag.nil?
+        puts "Can't find tag -> terminate"
+        exit 1
+      end
+
       newer_tag_time = self.get_time_of_tag(newer_tag)
       newer_tag_name = newer_tag['name']
 
