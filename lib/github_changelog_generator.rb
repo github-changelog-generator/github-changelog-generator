@@ -244,39 +244,41 @@ module GitHubChangelogGenerator
       end
 
 
-      #delete excess irrelevant issues (according milestones)
-      filtered_issues.select!{ |issue|
-        if issue.milestone.nil?
-          true
-        else
-          #check, that this milestone in tag list:
-          milestone_is_tag = @all_tags.find{|tag|
-            tag.name == issue.milestone.title
-          }
-          milestone_is_tag.nil?
-        end
+      if @options[:filter_issues_by_milestone]
+        #delete excess irrelevant issues (according milestones)
+        filtered_issues.select! { |issue|
+          if issue.milestone.nil?
+            true
+          else
+            #check, that this milestone in tag list:
+            milestone_is_tag = @all_tags.find { |tag|
+              tag.name == issue.milestone.title
+            }
+            milestone_is_tag.nil?
+          end
 
-      }
+        }
 
-      #add missed issues (according milestones)
-      issues_to_add = @issues.select{|issue|
-        if issue.milestone.nil?
-          false
-        else
-          #check, that this milestone in tag list:
-          milestone_is_tag = @all_tags.find{|tag|
-            tag.name == issue.milestone.title
-          }
-
-          if milestone_is_tag.nil?
+        #add missed issues (according milestones)
+        issues_to_add = @issues.select { |issue|
+          if issue.milestone.nil?
             false
           else
-            issue.milestone.title == newer_tag_name
-          end
-        end
-      }
+            #check, that this milestone in tag list:
+            milestone_is_tag = @all_tags.find { |tag|
+              tag.name == issue.milestone.title
+            }
 
-      filtered_issues |= issues_to_add
+            if milestone_is_tag.nil?
+              false
+            else
+              issue.milestone.title == newer_tag_name
+            end
+          end
+        }
+
+        filtered_issues |= issues_to_add
+      end
 
       self.create_log(filtered_pull_requests, filtered_issues, newer_tag_name, newer_tag_time)
 
@@ -430,7 +432,7 @@ module GitHubChangelogGenerator
       if @options[:add_issues_wo_labels]
         issues_wo_labels = issues.select {
           # add issues without any labels
-            |issue| !issue.labels.map  { |label| label.name }.any?
+            |issue| !issue.labels.map { |label| label.name }.any?
         }
         filtered_issues.concat(issues_wo_labels)
       end
