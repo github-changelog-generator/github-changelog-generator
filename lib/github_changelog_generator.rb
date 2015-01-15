@@ -28,12 +28,12 @@ module GitHubChangelogGenerator
 
       github_token
 
-      if @github_token.nil?
-        @github = Github.new per_page: PER_PAGE_NUMBER
-      else
-        @github = Github.new oauth_token: @github_token,
-                             per_page: PER_PAGE_NUMBER
-      end
+      github_options = {per_page: PER_PAGE_NUMBER}
+      github_options[:oauth_token] = @github_token unless @github_token.nil?
+      github_options[:endpoint] = options[:github_endpoint] unless options[:github_endpoint].nil?
+      github_options[:site] = options[:github_endpoint] unless options[:github_site].nil?
+
+      @github = Github.new github_options
 
       @generator = Generator.new(@options)
 
@@ -276,8 +276,10 @@ module GitHubChangelogGenerator
 # @return [String]
     def create_log(pull_requests, issues, tag_name, tag_time)
 
+      github_site = options[:github_site] || 'https://github.com'
+
       # Generate tag name and link
-      log = "## [#{tag_name}] (https://github.com/#{@options[:user]}/#{@options[:project]}/tree/#{tag_name})\n"
+      log = "## [#{tag_name}] (#{github_site}/#{@options[:user]}/#{@options[:project]}/tree/#{tag_name})\n"
 
       #Generate date string:
       time_string = tag_time.strftime @options[:format]

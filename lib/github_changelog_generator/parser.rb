@@ -46,6 +46,12 @@ module GitHubChangelogGenerator
         opts.on('--labels-pr x,y,z', Array, 'Only pull requests with specified labels will be included to changelog. Default is nil') do |list|
           options[:pull_request_labels] = list
         end
+        opts.on('--github-site [URL]', 'The Enterprise Github site on which your project is hosted.') do |last|
+          options[:github_site] = last
+        end
+        opts.on('--github-api [URL]', 'The enterprise endpoint to use for your Github API.') do |last|
+          options[:github_endpoint] = last
+        end
         opts.on('-v', '--version', 'Print version number') do |v|
           puts "Version: #{GitHubChangelogGenerator::VERSION}"
           exit
@@ -59,8 +65,9 @@ module GitHubChangelogGenerator
       parser.parse!
 
       if ARGV[0] && !ARGV[1]
+        github_site = options[:github_site] ? options[:github_site] : 'github.com'
         # this match should parse https://github.com/skywinder/Github-Changelog-Generator and skywinder/Github-Changelog-Generator to user and name
-        match = /(?:.+github\.com\/)?(.+)\/(.+)/.match(ARGV[0])
+        match = /(?:.+#{Regexp.escape(github_site)}\/)?(.+)\/(.+)/.match(ARGV[0])
 
         if match[2].nil?
           exit
