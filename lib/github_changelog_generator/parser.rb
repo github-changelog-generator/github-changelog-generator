@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 require 'optparse'
-require 'PP'
+require 'pp'
 require_relative 'version'
 
 module GitHubChangelogGenerator
