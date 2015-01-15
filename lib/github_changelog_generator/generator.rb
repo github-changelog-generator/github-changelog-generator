@@ -10,10 +10,10 @@ module GitHubChangelogGenerator
 
       merge = "#{@options[:merge_prefix]}#{encapsulated_title} [\\##{pull_request[:number]}](#{pull_request.html_url})"
       if @options[:author]
-        if !pull_request.user.nil?
-          merge += " ([#{pull_request.user.login}](#{pull_request.user.html_url}))\n\n"
-        else
+        if pull_request.user.nil?
           merge += " ({Null user})\n\n"
+        else
+          merge += " ([#{pull_request.user.login}](#{pull_request.user.html_url}))\n\n"
         end
       else
         merge += "\n\n"

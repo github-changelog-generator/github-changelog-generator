@@ -6,7 +6,7 @@ require_relative 'version'
 module GitHubChangelogGenerator
   class Parser
     def self.parse_options
-      options = {:tag1 => nil, :tag2 => nil, :format => '%d/%m/%y', :output => 'CHANGELOG.md', :labels => %w(bug enhancement), :pulls => true, :issues => true, :verbose => true, :add_issues_wo_labels => true, :merge_prefix => '*Merged pull-request:* ', :author => true, :pull_request_labels => nil}
+      options = {:tag1 => nil, :tag2 => nil, :format => '%d/%m/%y', :output => 'CHANGELOG.md', :labels => %w(bug enhancement), :pulls => true, :issues => true, :verbose => true, :add_issues_wo_labels => true, :merge_prefix => '*Merged pull-request:* ', :author => true, :pull_request_labels => nil, :filter_issues_by_milestone => true}
 
       parser = OptionParser.new { |opts|
         opts.banner = 'Usage: changelog_generator [options]'
@@ -36,6 +36,9 @@ module GitHubChangelogGenerator
         end
         opts.on('--[no-]pull-requests', 'Include pull-requests to changelog. Default is true') do |v|
           options[:pulls] = v
+        end
+        opts.on('--[no-]filter-issues-by-milestone', 'Use milestone to detect when issue was resolved. Default is true') do |last|
+          options[:filter_issues_by_milestone] = last
         end
         opts.on('--[no-]author', 'Add author of pull-request in the end. Default is true') do |author|
           options[:last] = author

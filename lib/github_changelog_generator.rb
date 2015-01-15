@@ -231,6 +231,11 @@ module GitHubChangelogGenerator
 
     def generate_log_between_tags(older_tag, newer_tag)
 
+      if newer_tag.nil?
+        puts "Can't find tag -> terminate"
+        exit 1
+      end
+
       newer_tag_time = self.get_time_of_tag(newer_tag)
       newer_tag_name = newer_tag['name']
 
@@ -241,6 +246,43 @@ module GitHubChangelogGenerator
         older_tag_time = self.get_time_of_tag(older_tag)
         filtered_pull_requests = delete_by_time(@pull_requests, :merged_at, newer_tag_time, older_tag_time)
         filtered_issues = delete_by_time(@issues, :closed_at, newer_tag_time, older_tag_time)
+      end
+
+
+      if @options[:filter_issues_by_milestone]
+        #delete excess irrelevant issues (according milestones)
+        filtered_issues.select! { |issue|
+          if issue.milestone.nil?
+            true
+          else
+            #check, that this milestone in tag list:
+            milestone_is_tag = @all_tags.find { |tag|
+              tag.name == issue.milestone.title
+            }
+            milestone_is_tag.nil?
+          end
+
+        }
+
+        #add missed issues (according milestones)
+        issues_to_add = @issues.select { |issue|
+          if issue.milestone.nil?
+            false
+          else
+            #check, that this milestone in tag list:
+            milestone_is_tag = @all_tags.find { |tag|
+              tag.name == issue.milestone.title
+            }
+
+            if milestone_is_tag.nil?
+              false
+            else
+              issue.milestone.title == newer_tag_name
+            end
+          end
+        }
+
+        filtered_issues |= issues_to_add
       end
 
       self.create_log(filtered_pull_requests, filtered_issues, newer_tag_name, newer_tag_time)
