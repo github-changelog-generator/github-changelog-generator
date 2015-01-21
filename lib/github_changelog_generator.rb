@@ -321,7 +321,7 @@ module GitHubChangelogGenerator
       github_site = options[:github_site] || 'https://github.com'
 
       # Generate tag name and link
-      log = "## [#{tag_name}] (#{github_site}/#{@options[:user]}/#{@options[:project]}/tree/#{tag_name})\n"
+      log = "## [#{tag_name}](#{github_site}/#{@options[:user]}/#{@options[:project]}/tree/#{tag_name})\n"
 
       #Generate date string:
       time_string = tag_time.strftime @options[:format]
