@@ -16,13 +16,13 @@ You're almost done!
 ## Usage
 **It's really simple**: 
 
-- If your **git remote** `origin` refer to your GitHub repo, then just go to your project folder  just run:
+- If your **git remote** `origin` refer to your GitHub repo, then just go to your project folder and run:
 
 		github_changelog_generator
 
 -  or from anywhere:
 
-		github_changelog_generator -u github-username -p github-project
+		github_changelog_generator -u github_username -p github_project
      
 As output you will get `CHANGELOG.md` file with *pretty Markdown-formatted* changelog.
 
