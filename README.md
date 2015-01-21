@@ -24,7 +24,7 @@ You're almost done!
 
 		github_changelog_generator -u github_username -p github_project
      
-As output you will get `CHANGELOG.md` file with *pretty Markdown-formatted* changelog.
+As output you will get `CHANGELOG.md` file with pretty *Markdown-formatted* changelog.
 
 ### Params:
 Type `github_changelog_generator --help` for detailed usage.
@@ -57,7 +57,9 @@ And:
 - Run with key `-t [your-16-digit-token]` 
 - Or set environment variable `CHANGELOG_GITHUB_TOKEN` and specify there your token. 
  		
-	i.e. add to your `~/.bash_profile` or `~/.zshrc` or any other place to load ENV variables string `export CHANGELOG_GITHUB_TOKEN="your-40-digit-github-token"'`
+	i.e. add to your `~/.bash_profile` or `~/.zshrc` or any other place to load ENV variables string :
+
+        export CHANGELOG_GITHUB_TOKEN="your-40-digit-github-token"
 
 So, if you got error like this:
 >! /Library/Ruby/Gems/2.0.0/gems/github_api-0.12.2/lib/github_api/response/raise_error.rb:14:in `on_complete'
