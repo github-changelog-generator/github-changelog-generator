@@ -313,26 +313,26 @@ module GitHubChangelogGenerator
       }
     end
 
-# @param [Array] pull_requests
-# @param [Array] issues
-# @param [String] tag_name
-# @param [String] tag_time
-# @param [String] older_tag_name
-# @return [String]
-    def create_log(pull_requests, issues, tag_name, tag_time, older_tag_name = nil)
+    # @param [Array] pull_requests
+    # @param [Array] issues
+    # @param [String] newer_tag_name
+    # @param [String] newer_tag_time
+    # @param [String] older_tag_name
+    # @return [String]
+    def create_log(pull_requests, issues, newer_tag_name, newer_tag_time, older_tag_name = nil)
 
       github_site = options[:github_site] || 'https://github.com'
 
       project_url = "#{github_site}/#{@options[:user]}/#{@options[:project]}"
 
       # Generate tag name and link
-      log = "## [#{tag_name}](#{project_url}/tree/#{tag_name})\n"
+      log = "## [#{newer_tag_name}](#{project_url}/tree/#{newer_tag_name})\n"
 
       # Generate compare link
-      log += "[Full Changelog](#{project_url}/compare/#{older_tag_name}...#{tag_name})\n" if older_tag_name
+      log += "[Full Changelog](#{project_url}/compare/#{older_tag_name}...#{newer_tag_name})\n" if older_tag_name
 
       #Generate date string:
-      time_string = tag_time.strftime @options[:format]
+      time_string = newer_tag_time.strftime @options[:format]
       log += "#### #{time_string}\n"
 
       if @options[:pulls]
