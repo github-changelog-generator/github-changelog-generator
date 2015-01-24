@@ -240,10 +240,12 @@ module GitHubChangelogGenerator
       newer_tag_name = newer_tag['name']
 
       if older_tag.nil?
+        older_tag_name = nil
         filtered_pull_requests = delete_by_time(@pull_requests, :merged_at, newer_tag_time)
         filtered_issues = delete_by_time(@issues, :closed_at, newer_tag_time)
       else
         older_tag_time = self.get_time_of_tag(older_tag)
+        older_tag_name = older_tag['name']
         filtered_pull_requests = delete_by_time(@pull_requests, :merged_at, newer_tag_time, older_tag_time)
         filtered_issues = delete_by_time(@issues, :closed_at, newer_tag_time, older_tag_time)
       end
@@ -285,7 +287,7 @@ module GitHubChangelogGenerator
         filtered_issues |= issues_to_add
       end
 
-      self.create_log(filtered_pull_requests, filtered_issues, newer_tag_name, newer_tag_time)
+      self.create_log(filtered_pull_requests, filtered_issues, newer_tag_name, newer_tag_time, older_tag_name)
 
     end
 
@@ -315,13 +317,19 @@ module GitHubChangelogGenerator
 # @param [Array] issues
 # @param [String] tag_name
 # @param [String] tag_time
+# @param [String] older_tag_name
 # @return [String]
-    def create_log(pull_requests, issues, tag_name, tag_time)
+    def create_log(pull_requests, issues, tag_name, tag_time, older_tag_name = nil)
 
       github_site = options[:github_site] || 'https://github.com'
 
+      project_url = "#{github_site}/#{@options[:user]}/#{@options[:project]}"
+
       # Generate tag name and link
-      log = "## [#{tag_name}](#{github_site}/#{@options[:user]}/#{@options[:project]}/tree/#{tag_name})\n"
+      log = "## [#{tag_name}](#{project_url}/tree/#{tag_name})\n"
+
+      # Generate compare link
+      log += "[Full Changelog](#{project_url}/compare/#{older_tag_name}...#{tag_name})\n" if older_tag_name
 
       #Generate date string:
       time_string = tag_time.strftime @options[:format]
