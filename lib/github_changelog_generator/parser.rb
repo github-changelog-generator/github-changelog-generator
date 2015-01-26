@@ -6,7 +6,7 @@ require_relative 'version'
 module GitHubChangelogGenerator
   class Parser
     def self.parse_options
-      options = {:tag1 => nil, :tag2 => nil, :format => '%d/%m/%y', :output => 'CHANGELOG.md', :labels => %w(bug enhancement), :pulls => true, :issues => true, :verbose => true, :add_issues_wo_labels => true, :merge_prefix => '*Merged pull-request:* ', :author => true, :pull_request_labels => nil, :filter_issues_by_milestone => true}
+      options = {:tag1 => nil, :tag2 => nil, :format => '%d/%m/%y', :output => 'CHANGELOG.md', :labels => %w(bug enhancement), :pulls => true, :issues => true, :verbose => true, :add_issues_wo_labels => true, :merge_prefix => '*Merged pull-request:* ', :author => true, :pull_request_labels => nil, :filter_issues_by_milestone => true, :compare_link => true}
 
       parser = OptionParser.new { |opts|
         opts.banner = 'Usage: changelog_generator [options]'
@@ -42,6 +42,9 @@ module GitHubChangelogGenerator
         end
         opts.on('--[no-]author', 'Add author of pull-request in the end. Default is true') do |author|
           options[:last] = author
+        end
+        opts.on('--[no-]compare-link', 'Include compare link between older version and newer version. Default is true') do |v|
+          options[:compare_link] = v
         end
         opts.on('--labels  x,y,z', Array, 'Issues with that labels will be included to changelog. Default is \'bug,enhancement\'') do |list|
           options[:labels] = list
