@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.2.7](https://github.com/skywinder/Github-Changelog-Generator/tree/1.2.7)
+[Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.2.6...1.2.7)
+#### 26/01/15
+- *Merged pull-request:* Add compare link between older version and newer version [\#46](https://github.com/skywinder/Github-Changelog-Generator/pull/46) ([sue445](https://github.com/sue445))
+
 ## [1.2.6](https://github.com/skywinder/Github-Changelog-Generator/tree/1.2.6)
 [Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.2.5...1.2.6)
 #### 21/01/15
