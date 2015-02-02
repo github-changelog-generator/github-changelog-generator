@@ -13,6 +13,20 @@ You're almost done!
 
 	[sudo] gem install github_changelog_generator
 
+
+#Features
+
+- **Fully automate changelog generation** - all you need to do - is close issue or merge pull-request by **Github issue tracker**
+- Automatically split issues by type:
+    - 	**Issues** (closed issues w/o any labels)
+    - **Merged pull-requests** (all merged pull-requests)
+    - **Bug-fixes** (by label `bug` in issue)
+    - **Enhancements** (by label `enhancement` in issue)
+
+- Excluding "questions" from changelog (issues marked as `question` labels)
+- Ability to manually specify in which version issue was fixed (in case, when closed date is not match) by setting `milestone` of issue the same name as tag of  required version
+- Ability to exclude some issues from changelog (by labels)
+
 ## Usage
 **It's really simple**: 
 
