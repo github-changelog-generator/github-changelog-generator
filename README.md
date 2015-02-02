@@ -40,7 +40,7 @@ Changelog generation has never been so easy.
 > - *Closed issue:* No "cancel" button [\#122](https://github.com/skywinder/ActionSheetPicker-3.0/issues/122)
 
 
-##Features and the benefits and advantages of this project to others:
+###Features and advantages of this project as compared to other:
 - Custom date format supported
 - Automatically split issues by type:
     - 	**Issues** (closed issues w/o any labels)
