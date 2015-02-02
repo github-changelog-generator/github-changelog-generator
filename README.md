@@ -13,8 +13,30 @@ You're almost done!
 
 	[sudo] gem install github_changelog_generator
 
+## Example:
 
-#Features
+># Changelog
+> 
+> ## [1.3.10](https://github.com/skywinder/ActionSheetPicker-3.0/tree/1.3.10)
+> #### 09/01/15
+> - *Merged pull-request:* add header file to public [\#115](https://github.com/skywinder/ActionSheetPicker-3.0/pull/115)
+> ([skywinder](https://github.com/skywinder))
+> 
+> - *Merged pull-request:* Fix bad interaction with Git submodules.
+> [\#112](https://github.com/skywinder/ActionSheetPicker-3.0/pull/112)
+> ([JimDabell](https://github.com/JimDabell))
+> 
+> - *Implemented enhancement:* Should have minimum/maximum date property exposed
+> [\#97](https://github.com/skywinder/ActionSheetPicker-3.0/issues/97)
+> 
+> ## [1.3.9](https://github.com/skywinder/ActionSheetPicker-3.0/tree/1.3.9)
+> #### 11/12/14
+> - *Closed issue:* Bad interaction with submodules [\#111](https://github.com/skywinder/ActionSheetPicker-3.0/issues/111)
+> 
+> - *Closed issue:* No "cancel" button [\#122](https://github.com/skywinder/ActionSheetPicker-3.0/issues/122)
+
+
+##Features
 
 - **Fully automate changelog generation** - all you need to do - is close issue or merge pull-request by **Github issue tracker**
 - Automatically split issues by type:
@@ -27,7 +49,7 @@ You're almost done!
 - Ability to manually specify in which version issue was fixed (in case, when closed date is not match) by setting `milestone` of issue the same name as tag of  required version
 - Ability to exclude some issues from changelog (by labels)
 
-## Usage
+## Usage:
 **It's really simple**: 
 
 - If your **git remote** `origin` refer to your GitHub repo, then just go to your project folder and run:
