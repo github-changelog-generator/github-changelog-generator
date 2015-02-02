@@ -15,8 +15,6 @@ You're almost done!
 
 ## Example:
 
-># Changelog
-> 
 > ## [1.3.10](https://github.com/skywinder/ActionSheetPicker-3.0/tree/1.3.10)
 > #### 09/01/15
 > - *Merged pull-request:* add header file to public [\#115](https://github.com/skywinder/ActionSheetPicker-3.0/pull/115)
