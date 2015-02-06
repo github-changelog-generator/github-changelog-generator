@@ -72,15 +72,23 @@ module GitHubChangelogGenerator
 
       if ARGV[0] && !ARGV[1]
         github_site = options[:github_site] ? options[:github_site] : 'github.com'
-        # this match should parse https://github.com/skywinder/Github-Changelog-Generator and skywinder/Github-Changelog-Generator to user and name
+        # this match should parse  strings such "https://github.com/skywinder/Github-Changelog-Generator" or "skywinder/Github-Changelog-Generator" to user and name
         match = /(?:.+#{Regexp.escape(github_site)}\/)?(.+)\/(.+)/.match(ARGV[0])
 
-        if match[2].nil?
+        begin
+        param = match[2].nil?
+        rescue
+          puts "Can't detect user and name from first parameter: '#{ARGV[0]}' -> exit'"
+          exit
+        end
+        if param
           exit
         else
           options[:user] = match[1]
           options[:project]= match[2]
         end
+
+
       end
 
       if !options[:user] && !options[:project]
