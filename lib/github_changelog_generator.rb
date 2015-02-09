@@ -294,7 +294,7 @@ module GitHubChangelogGenerator
     def delete_by_time(array, hash_key, newer_tag_time, older_tag_time = nil)
       array.select { |req|
         if req[hash_key]
-          t = Time.parse(req[hash_key]).utc
+          t = Time.parse(req[hash_key]).utc - 60
 
           if older_tag_time.nil?
             tag_in_range_old = true
