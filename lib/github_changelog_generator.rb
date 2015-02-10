@@ -38,7 +38,7 @@ module GitHubChangelogGenerator
       @generator = Generator.new(@options)
 
       @all_tags = self.get_all_tags
-      @pull_requests = self.get_all_closed_pull_requests
+      @pull_requests = self.get_filtered_pull_requests
       if @options[:issues]
         @issues = self.get_all_issues
       else
@@ -57,13 +57,10 @@ module GitHubChangelogGenerator
       %x[#{exec_cmd}]
     end
 
-
     def get_all_closed_pull_requests
-
       if @options[:verbose]
         print "Fetching pull requests...\r"
       end
-
       response = @github.pull_requests.list @options[:user], @options[:project], :state => 'closed'
 
       pull_requests = []
@@ -73,12 +70,18 @@ module GitHubChangelogGenerator
         print "Fetching pull requests... #{page_i}\r"
         pull_requests.concat(page)
       end
-
       print "\r"
 
       if @options[:verbose]
         puts "Received closed pull requests: #{pull_requests.count}"
       end
+
+      pull_requests
+    end
+
+    def get_filtered_pull_requests
+
+      pull_requests = self.get_all_closed_pull_requests
 
       unless @options[:pull_request_labels].nil?
 
@@ -87,10 +90,11 @@ module GitHubChangelogGenerator
         end
 
         filtered_pull_requests = pull_requests.select { |pull_request|
-          #We need issue to fetch labels
+          #fetch this issue to get labels array
           issue = @github.issues.get @options[:user], @options[:project], pull_request.number
+
           #compare is there any labels from @options[:labels] array
-          select_no_label = !issue.labels.map { |label| label.name }.any?
+          issue_without_labels = !issue.labels.map { |label| label.name }.any?
 
           if @options[:verbose]
             puts "Filter request \##{issue.number}."
@@ -102,7 +106,7 @@ module GitHubChangelogGenerator
             select_by_label = false
           end
 
-          select_by_label | select_no_label
+          select_by_label | issue_without_labels
         }
 
         if @options[:verbose]
@@ -116,7 +120,7 @@ module GitHubChangelogGenerator
 
     def compund_changelog
       if @options[:verbose]
-        puts 'Generating changelog:'
+        puts 'Generating changelog...'
       end
 
       log = "# Changelog\n\n"
