@@ -67,10 +67,11 @@ module GitHubChangelogGenerator
       page_i = 0
       response.each_page do |page|
         page_i += PER_PAGE_NUMBER
-        print "Fetching pull requests... #{page_i}\r"
+        count_pages = response.count_pages
+        print "Fetching pull requests... #{page_i}/#{count_pages * PER_PAGE_NUMBER}\r"
         pull_requests.concat(page)
       end
-      print "\r"
+      print " \r"
 
       if @options[:verbose]
         puts "Received closed pull requests: #{pull_requests.count}"
@@ -203,12 +204,13 @@ module GitHubChangelogGenerator
 
       tags = []
       page_i = 0
+      count_pages = response.count_pages
       response.each_page do |page|
         page_i += PER_PAGE_NUMBER
-        print "Fetching tags... #{page_i}\r"
+        print "Fetching tags... #{page_i}/#{count_pages * PER_PAGE_NUMBER}\r"
         tags.concat(page)
       end
-      print "\r"
+      print " \r"
       if @options[:verbose]
         puts "Found #{tags.count} tags"
       end
@@ -421,13 +423,18 @@ module GitHubChangelogGenerator
 
       issues = []
       page_i = 0
+      count_pages = response.count_pages
       response.each_page do |page|
         page_i += PER_PAGE_NUMBER
-        print "Fetching closed issues... #{page_i}\r"
+        print "Fetching issues... #{page_i}/#{count_pages * PER_PAGE_NUMBER}\r"
         issues.concat(page)
       end
-
-      print "\r"
+      #
+      # print " \r"
+      #
+      # # if @options[:verbose]
+      #   puts "Received issues...: #{issues.count}"
+      # end
 
       # remove pull request from issues:
       issues.select! { |x|
