@@ -71,10 +71,10 @@ module GitHubChangelogGenerator
         print "Fetching pull requests... #{page_i}/#{count_pages * PER_PAGE_NUMBER}\r"
         pull_requests.concat(page)
       end
-      print " \r"
+      print "                               \r"
 
       if @options[:verbose]
-        puts "Received closed pull requests: #{pull_requests.count}"
+        puts "Received pull requests: #{pull_requests.count}"
       end
 
       pull_requests
@@ -120,9 +120,6 @@ module GitHubChangelogGenerator
     end
 
     def compund_changelog
-      if @options[:verbose]
-        puts 'Generating changelog...'
-      end
 
       log = "# Changelog\n\n"
 
@@ -210,7 +207,7 @@ module GitHubChangelogGenerator
         print "Fetching tags... #{page_i}/#{count_pages * PER_PAGE_NUMBER}\r"
         tags.concat(page)
       end
-      print " \r"
+      print "                               \r"
       if @options[:verbose]
         puts "Found #{tags.count} tags"
       end
@@ -429,22 +426,17 @@ module GitHubChangelogGenerator
         print "Fetching issues... #{page_i}/#{count_pages * PER_PAGE_NUMBER}\r"
         issues.concat(page)
       end
-      #
-      # print " \r"
-      #
-      # # if @options[:verbose]
-      #   puts "Received issues...: #{issues.count}"
-      # end
+
+      print "                               \r"
+
+      if @options[:verbose]
+        puts "Received issues: #{issues.count}"
+      end
 
       # remove pull request from issues:
       issues.select! { |x|
         x.pull_request == nil
       }
-
-      if @options[:verbose]
-        puts "Received closed issues: #{issues.count}"
-      end
-
 
       if @options[:verbose]
         puts "Filtering issues with labels #{@options[:labels]}#{@options[:add_issues_wo_labels] ? ' and w/o labels' : ''}"
