@@ -298,7 +298,7 @@ module GitHubChangelogGenerator
 
       array.select { |req|
         if req[hash_key]
-          t = Time.parse(req[hash_key]).utc - 60
+          t = Time.parse(req[hash_key]).utc
 
           if older_tag_time.nil?
             tag_in_range_old = true
