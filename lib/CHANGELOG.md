@@ -3,6 +3,8 @@
 ## [1.2.8](https://github.com/skywinder/Github-Changelog-Generator/tree/1.2.8)
 [Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.2.7...1.2.8)
 #### 17/02/15
+- *Merged pull-request:* Feature/fix 37 [\#49](https://github.com/skywinder/Github-Changelog-Generator/pull/49) ([skywinder](https://github.com/skywinder))
+
 - *Closed issue:* Bugs, that closed simultaneously with push not appeared in correct version. [\#37](https://github.com/skywinder/Github-Changelog-Generator/issues/37)
 
 ## [1.2.7](https://github.com/skywinder/Github-Changelog-Generator/tree/1.2.7)
@@ -29,8 +31,6 @@
 ## [1.2.4](https://github.com/skywinder/Github-Changelog-Generator/tree/1.2.4)
 [Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.2.3...1.2.4)
 #### 16/12/14
-- *Merged pull-request:* Fix crash when user is NULL [\#40](https://github.com/skywinder/Github-Changelog-Generator/pull/40) ([skywinder](https://github.com/skywinder))
-
 - *Merged pull-request:* Implement async fetching [\#39](https://github.com/skywinder/Github-Changelog-Generator/pull/39) ([skywinder](https://github.com/skywinder))
 
 - *Implemented enhancement:* Add ability to run with one parameter instead -u -p [\#38](https://github.com/skywinder/Github-Changelog-Generator/issues/38)
@@ -40,6 +40,8 @@
 ## [1.2.3](https://github.com/skywinder/Github-Changelog-Generator/tree/1.2.3)
 [Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.2.2...1.2.3)
 #### 16/12/14
+- *Merged pull-request:* Fix crash when user is NULL [\#40](https://github.com/skywinder/Github-Changelog-Generator/pull/40) ([skywinder](https://github.com/skywinder))
+
 - *Implemented enhancement:* Add ability to run with one parameter instead -u -p [\#38](https://github.com/skywinder/Github-Changelog-Generator/issues/38)
 
 - *Implemented enhancement:* Detailed output [\#33](https://github.com/skywinder/Github-Changelog-Generator/issues/33)
