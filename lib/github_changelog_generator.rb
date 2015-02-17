@@ -287,7 +287,7 @@ module GitHubChangelogGenerator
       newer_tag_name = newer_tag['name']
 
       filtered_pull_requests = delete_by_time(@pull_requests, :merged_at, newer_tag_time, older_tag)
-      filtered_issues = delete_by_time(@issues, :closed_at, newer_tag_time, older_tag)
+      filtered_issues = delete_by_time(@issues, :actual_date, newer_tag_time, older_tag)
 
       older_tag_name  = older_tag.nil? ? nil : older_tag['name']
 
