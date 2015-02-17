@@ -51,16 +51,28 @@ module GitHubChangelogGenerator
     end
 
     def detect_actual_closed_dates
-      @issues.each{|issue|
-        closed_date = find_closed_date_by_commit(issue)
 
+      if @options[:verbose]
+        print "Fetching close commit date for issues...\r"
+      end
+
+      threads = []
+      @issues.each{|issue|
+        threads << Thread.new {
+          find_closed_date_by_commit(issue)
+        }
       }
+      threads.each { |thr| thr.join }
+
+      if @options[:verbose]
+        puts 'Fetching close commit date for issues: Done!'
+      end
+
+      return 0
 
     end
 
     def find_closed_date_by_commit(issue)
-      closed_date = nil
-      puts issue[:number]
       unless issue['events'].nil?
         # reverse! - to find latest closed event. (event goes in date order)
         issue['events'].reverse!.each{|event|
@@ -71,12 +83,10 @@ module GitHubChangelogGenerator
               commit = @github.git_data.commits.get @options[:user], @options[:project], event[:commit_id]
               issue[:actual_date] = commit[:author][:date]
             end
-
             break
           end
         }
       end
-      closed_date
     end
 
     def print_json(json)
