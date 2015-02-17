@@ -41,11 +41,31 @@ module GitHubChangelogGenerator
       @pull_requests = self.get_filtered_pull_requests
       if @options[:issues]
         @issues = self.get_all_issues
+        fetch_event_for_issues(@issues)
+        detect_actual_closed_dates
       else
         @issues = []
       end
 
       @tag_times_hash = {}
+    end
+
+    def detect_actual_closed_dates
+      @issues.each{|issue|
+        closed_date = find_closed_date_by_commit(issue)
+
+      }
+
+    end
+
+    def find_closed_date_by_commit(issue)
+      puts issue[:number]
+      unless issue['events'].nil?
+        issue['events'].each{|event|
+          puts event[:event]
+        }
+      end
+      0
     end
 
     def print_json(json)
@@ -442,14 +462,11 @@ module GitHubChangelogGenerator
         x.pull_request == nil
       }
 
-      if @options[:verbose]
-        puts "Filtering issues with labels #{@options[:labels]}#{@options[:add_issues_wo_labels] ? ' and w/o labels' : ''}"
-      end
-
       filtered_issues = issues.select { |issue|
         #compare is there any labels from @options[:labels] array
         (issue.labels.map { |label| label.name } & @options[:labels]).any?
       }
+
 
       if @options[:add_issues_wo_labels]
         issues_wo_labels = issues.select {
@@ -459,27 +476,37 @@ module GitHubChangelogGenerator
         filtered_issues.concat(issues_wo_labels)
       end
 
+
       if @options[:verbose]
-        print "Fetching events for issues...\r"
+        puts "Filtered issues with labels #{@options[:labels]}#{@options[:add_issues_wo_labels] ? ' and w/o labels' : ''}: #{filtered_issues.count}"
+      end
+
+      filtered_issues
+
+    end
+
+    def fetch_event_for_issues(filtered_issues)
+      if @options[:verbose]
+        print "Fetching events for issues: 0/#{filtered_issues.count}\r"
       end
 
       # Async fetching events:
       threads = []
 
-      filtered_issues.each{|issue|
-        threads << Thread.new{
-          obj =  @github.issues.events.list user: @options[:user], repo: @options[:project], issue_number: issue['number']
+      i = 0
+      filtered_issues.each { |issue|
+        threads << Thread.new {
+          obj = @github.issues.events.list user: @options[:user], repo: @options[:project], issue_number: issue['number']
           issue[:events] = obj.body
+          print "Fetching events for issues: #{i+1}/#{filtered_issues.count}\r"
+          i +=1
         }
-        threads.each { |thr| thr.join }
       }
+      threads.each { |thr| thr.join }
 
       if @options[:verbose]
         puts "Fetching events for issues: Done!"
       end
-
-      filtered_issues
-
     end
 
   end
