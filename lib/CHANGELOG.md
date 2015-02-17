@@ -33,6 +33,8 @@
 
 - *Merged pull-request:* Implement async fetching [\#39](https://github.com/skywinder/Github-Changelog-Generator/pull/39) ([skywinder](https://github.com/skywinder))
 
+- *Implemented enhancement:* Add ability to run with one parameter instead -u -p [\#38](https://github.com/skywinder/Github-Changelog-Generator/issues/38)
+
 - *Fixed bug:* Crash when try generate log for rails [\#35](https://github.com/skywinder/Github-Changelog-Generator/issues/35)
 
 ## [1.2.3](https://github.com/skywinder/Github-Changelog-Generator/tree/1.2.3)
@@ -111,6 +113,8 @@
 ## [1.0.0](https://github.com/skywinder/Github-Changelog-Generator/tree/1.0.0)
 [Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/0.1.0...1.0.0)
 #### 07/11/14
+- *Merged pull-request:* Implement support of different tags. [\#8](https://github.com/skywinder/Github-Changelog-Generator/pull/8) ([skywinder](https://github.com/skywinder))
+
 - *Merged pull-request:* Add support for issues in CHANGELOG [\#7](https://github.com/skywinder/Github-Changelog-Generator/pull/7) ([skywinder](https://github.com/skywinder))
 
 - *Merged pull-request:* Fix parsing date of pull request [\#3](https://github.com/skywinder/Github-Changelog-Generator/pull/3) ([skywinder](https://github.com/skywinder))
