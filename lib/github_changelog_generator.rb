@@ -67,9 +67,6 @@ module GitHubChangelogGenerator
       if @options[:verbose]
         puts 'Fetching close commit date for issues: Done!'
       end
-
-      return 0
-
     end
 
     def find_closed_date_by_commit(issue)
@@ -87,6 +84,7 @@ module GitHubChangelogGenerator
           end
         }
       end
+      #TODO: assert issues, that remain without 'actual_date' hash for some reason.
     end
 
     def print_json(json)
