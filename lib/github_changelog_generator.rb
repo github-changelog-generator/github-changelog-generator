@@ -161,10 +161,15 @@ module GitHubChangelogGenerator
     def generate_log_for_all_tags
       log = ''
 
+      if @options[:verbose]
+        puts "Fetching tags dates.."
+      end
+
       # Async fetching tags:
       threads = []
       @all_tags.each { |tag|
-        threads << Thread.new { self.get_time_of_tag(tag) }
+        # explicit set @tag_times_hash to write data safety.
+        threads << Thread.new { self.get_time_of_tag(tag, @tag_times_hash) }
       }
       threads.each { |thr| thr.join }
 
@@ -394,19 +399,18 @@ module GitHubChangelogGenerator
       log
     end
 
-    def get_time_of_tag(tag_name)
+    def get_time_of_tag(tag_name, tag_times_hash = @tag_times_hash)
 
       if tag_name.nil?
         return nil
       end
 
-      if @tag_times_hash[tag_name['name']]
+      if tag_times_hash[tag_name['name']]
         return @tag_times_hash[tag_name['name']]
       end
 
       github_git_data_commits_get = @github.git_data.commits.get @options[:user], @options[:project], tag_name['commit']['sha']
       time_string = github_git_data_commits_get['committer']['date']
-      Time.parse(time_string)
       @tag_times_hash[tag_name['name']] = Time.parse(time_string)
     end
 
