@@ -460,7 +460,22 @@ module GitHubChangelogGenerator
       end
 
       if @options[:verbose]
-        puts "Filtered issues: #{filtered_issues.count}"
+        print "Fetching events for issues...\r"
+      end
+
+      # Async fetching events:
+      threads = []
+
+      filtered_issues.each{|issue|
+        threads << Thread.new{
+          obj =  @github.issues.events.list user: @options[:user], repo: @options[:project], issue_number: issue['number']
+          issue[:events] = obj.body
+        }
+        threads.each { |thr| thr.join }
+      }
+
+      if @options[:verbose]
+        puts "Fetching events for issues: Done!"
       end
 
       filtered_issues
