@@ -3,6 +3,8 @@
 ## [1.2.8](https://github.com/skywinder/Github-Changelog-Generator/tree/1.2.8)
 [Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.2.7...1.2.8)
 #### 17/02/15
+- *Closed issue:* Bugs, that closed simultaneously with push not appeared in correct version. [\#37](https://github.com/skywinder/Github-Changelog-Generator/issues/37)
+
 ## [1.2.7](https://github.com/skywinder/Github-Changelog-Generator/tree/1.2.7)
 [Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.2.6...1.2.7)
 #### 26/01/15
