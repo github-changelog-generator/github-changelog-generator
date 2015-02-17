@@ -242,17 +242,10 @@ module GitHubChangelogGenerator
       newer_tag_time = self.get_time_of_tag(newer_tag)
       newer_tag_name = newer_tag['name']
 
-      if older_tag.nil?
-        older_tag_name = nil
-        filtered_pull_requests = delete_by_time(@pull_requests, :merged_at, newer_tag_time)
-        filtered_issues = delete_by_time(@issues, :closed_at, newer_tag_time)
-      else
-        older_tag_time = self.get_time_of_tag(older_tag)
-        older_tag_name = older_tag['name']
-        filtered_pull_requests = delete_by_time(@pull_requests, :merged_at, newer_tag_time, older_tag_time)
-        filtered_issues = delete_by_time(@issues, :closed_at, newer_tag_time, older_tag_time)
-      end
+      filtered_pull_requests = delete_by_time(@pull_requests, :merged_at, newer_tag_time, older_tag)
+      filtered_issues = delete_by_time(@issues, :closed_at, newer_tag_time, older_tag)
 
+      older_tag_name  = older_tag.nil? ? nil : older_tag['name']
 
       if @options[:filter_issues_by_milestone]
         #delete excess irrelevant issues (according milestones)
@@ -294,7 +287,10 @@ module GitHubChangelogGenerator
 
     end
 
-    def delete_by_time(array, hash_key, newer_tag_time, older_tag_time = nil)
+    def delete_by_time(array, hash_key, newer_tag_time, older_tag = nil)
+
+      older_tag_time = self.get_time_of_tag(older_tag)
+
       array.select { |req|
         if req[hash_key]
           t = Time.parse(req[hash_key]).utc - 60
@@ -398,16 +394,20 @@ module GitHubChangelogGenerator
       log
     end
 
-    def get_time_of_tag(prev_tag)
+    def get_time_of_tag(tag_name)
 
-      if @tag_times_hash[prev_tag['name']]
-        return @tag_times_hash[prev_tag['name']]
+      if tag_name.nil?
+        return nil
       end
 
-      github_git_data_commits_get = @github.git_data.commits.get @options[:user], @options[:project], prev_tag['commit']['sha']
+      if @tag_times_hash[tag_name['name']]
+        return @tag_times_hash[tag_name['name']]
+      end
+
+      github_git_data_commits_get = @github.git_data.commits.get @options[:user], @options[:project], tag_name['commit']['sha']
       time_string = github_git_data_commits_get['committer']['date']
       Time.parse(time_string)
-      @tag_times_hash[prev_tag['name']] = Time.parse(time_string)
+      @tag_times_hash[tag_name['name']] = Time.parse(time_string)
     end
 
     def get_all_issues
