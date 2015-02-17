@@ -38,14 +38,53 @@ module GitHubChangelogGenerator
       @generator = Generator.new(@options)
 
       @all_tags = self.get_all_tags
-      @pull_requests = self.get_all_closed_pull_requests
+      @pull_requests = self.get_filtered_pull_requests
       if @options[:issues]
         @issues = self.get_all_issues
+        fetch_event_for_issues(@issues)
+        detect_actual_closed_dates
       else
         @issues = []
       end
 
       @tag_times_hash = {}
+    end
+
+    def detect_actual_closed_dates
+
+      if @options[:verbose]
+        print "Fetching close commit date for issues...\r"
+      end
+
+      threads = []
+      @issues.each{|issue|
+        threads << Thread.new {
+          find_closed_date_by_commit(issue)
+        }
+      }
+      threads.each { |thr| thr.join }
+
+      if @options[:verbose]
+        puts 'Fetching close commit date for issues: Done!'
+      end
+    end
+
+    def find_closed_date_by_commit(issue)
+      unless issue['events'].nil?
+        # reverse! - to find latest closed event. (event goes in date order)
+        issue['events'].reverse!.each{|event|
+          if event[:event].eql? 'closed'
+            if event[:commit_id].nil?
+              issue[:actual_date] = issue[:closed_at]
+            else
+              commit = @github.git_data.commits.get @options[:user], @options[:project], event[:commit_id]
+              issue[:actual_date] = commit[:author][:date]
+            end
+            break
+          end
+        }
+      end
+      #TODO: assert issues, that remain without 'actual_date' hash for some reason.
     end
 
     def print_json(json)
@@ -57,28 +96,32 @@ module GitHubChangelogGenerator
       %x[#{exec_cmd}]
     end
 
-
     def get_all_closed_pull_requests
-
       if @options[:verbose]
         print "Fetching pull requests...\r"
       end
-
       response = @github.pull_requests.list @options[:user], @options[:project], :state => 'closed'
 
       pull_requests = []
       page_i = 0
       response.each_page do |page|
         page_i += PER_PAGE_NUMBER
-        print "Fetching pull requests... #{page_i}\r"
+        count_pages = response.count_pages
+        print "Fetching pull requests... #{page_i}/#{count_pages * PER_PAGE_NUMBER}\r"
         pull_requests.concat(page)
       end
-
-      print "\r"
+      print "                               \r"
 
       if @options[:verbose]
-        puts "Received closed pull requests: #{pull_requests.count}"
+        puts "Received pull requests: #{pull_requests.count}"
       end
+
+      pull_requests
+    end
+
+    def get_filtered_pull_requests
+
+      pull_requests = self.get_all_closed_pull_requests
 
       unless @options[:pull_request_labels].nil?
 
@@ -87,10 +130,11 @@ module GitHubChangelogGenerator
         end
 
         filtered_pull_requests = pull_requests.select { |pull_request|
-          #We need issue to fetch labels
+          #fetch this issue to get labels array
           issue = @github.issues.get @options[:user], @options[:project], pull_request.number
+
           #compare is there any labels from @options[:labels] array
-          select_no_label = !issue.labels.map { |label| label.name }.any?
+          issue_without_labels = !issue.labels.map { |label| label.name }.any?
 
           if @options[:verbose]
             puts "Filter request \##{issue.number}."
@@ -102,7 +146,7 @@ module GitHubChangelogGenerator
             select_by_label = false
           end
 
-          select_by_label | select_no_label
+          select_by_label | issue_without_labels
         }
 
         if @options[:verbose]
@@ -115,9 +159,6 @@ module GitHubChangelogGenerator
     end
 
     def compund_changelog
-      if @options[:verbose]
-        puts 'Generating changelog:'
-      end
 
       log = "# Changelog\n\n"
 
@@ -159,10 +200,15 @@ module GitHubChangelogGenerator
     def generate_log_for_all_tags
       log = ''
 
+      if @options[:verbose]
+        puts "Fetching tags dates.."
+      end
+
       # Async fetching tags:
       threads = []
       @all_tags.each { |tag|
-        threads << Thread.new { self.get_time_of_tag(tag) }
+        # explicit set @tag_times_hash to write data safety.
+        threads << Thread.new { self.get_time_of_tag(tag, @tag_times_hash) }
       }
       threads.each { |thr| thr.join }
 
@@ -199,12 +245,13 @@ module GitHubChangelogGenerator
 
       tags = []
       page_i = 0
+      count_pages = response.count_pages
       response.each_page do |page|
         page_i += PER_PAGE_NUMBER
-        print "Fetching tags... #{page_i}\r"
+        print "Fetching tags... #{page_i}/#{count_pages * PER_PAGE_NUMBER}\r"
         tags.concat(page)
       end
-      print "\r"
+      print "                               \r"
       if @options[:verbose]
         puts "Found #{tags.count} tags"
       end
@@ -239,17 +286,10 @@ module GitHubChangelogGenerator
       newer_tag_time = self.get_time_of_tag(newer_tag)
       newer_tag_name = newer_tag['name']
 
-      if older_tag.nil?
-        older_tag_name = nil
-        filtered_pull_requests = delete_by_time(@pull_requests, :merged_at, newer_tag_time)
-        filtered_issues = delete_by_time(@issues, :closed_at, newer_tag_time)
-      else
-        older_tag_time = self.get_time_of_tag(older_tag)
-        older_tag_name = older_tag['name']
-        filtered_pull_requests = delete_by_time(@pull_requests, :merged_at, newer_tag_time, older_tag_time)
-        filtered_issues = delete_by_time(@issues, :closed_at, newer_tag_time, older_tag_time)
-      end
+      filtered_pull_requests = delete_by_time(@pull_requests, :merged_at, newer_tag_time, older_tag)
+      filtered_issues = delete_by_time(@issues, :actual_date, newer_tag_time, older_tag)
 
+      older_tag_name  = older_tag.nil? ? nil : older_tag['name']
 
       if @options[:filter_issues_by_milestone]
         #delete excess irrelevant issues (according milestones)
@@ -291,7 +331,10 @@ module GitHubChangelogGenerator
 
     end
 
-    def delete_by_time(array, hash_key, newer_tag_time, older_tag_time = nil)
+    def delete_by_time(array, hash_key, newer_tag_time, older_tag = nil)
+
+      older_tag_time = self.get_time_of_tag(older_tag)
+
       array.select { |req|
         if req[hash_key]
           t = Time.parse(req[hash_key]).utc
@@ -395,16 +438,19 @@ module GitHubChangelogGenerator
       log
     end
 
-    def get_time_of_tag(prev_tag)
+    def get_time_of_tag(tag_name, tag_times_hash = @tag_times_hash)
 
-      if @tag_times_hash[prev_tag['name']]
-        return @tag_times_hash[prev_tag['name']]
+      if tag_name.nil?
+        return nil
       end
 
-      github_git_data_commits_get = @github.git_data.commits.get @options[:user], @options[:project], prev_tag['commit']['sha']
+      if tag_times_hash[tag_name['name']]
+        return @tag_times_hash[tag_name['name']]
+      end
+
+      github_git_data_commits_get = @github.git_data.commits.get @options[:user], @options[:project], tag_name['commit']['sha']
       time_string = github_git_data_commits_get['committer']['date']
-      Time.parse(time_string)
-      @tag_times_hash[prev_tag['name']] = Time.parse(time_string)
+      @tag_times_hash[tag_name['name']] = Time.parse(time_string)
     end
 
     def get_all_issues
@@ -417,32 +463,29 @@ module GitHubChangelogGenerator
 
       issues = []
       page_i = 0
+      count_pages = response.count_pages
       response.each_page do |page|
         page_i += PER_PAGE_NUMBER
-        print "Fetching closed issues... #{page_i}\r"
+        print "Fetching issues... #{page_i}/#{count_pages * PER_PAGE_NUMBER}\r"
         issues.concat(page)
       end
 
-      print "\r"
+      print "                               \r"
+
+      if @options[:verbose]
+        puts "Received issues: #{issues.count}"
+      end
 
       # remove pull request from issues:
       issues.select! { |x|
         x.pull_request == nil
       }
 
-      if @options[:verbose]
-        puts "Received closed issues: #{issues.count}"
-      end
-
-
-      if @options[:verbose]
-        puts "Filtering issues with labels #{@options[:labels]}#{@options[:add_issues_wo_labels] ? ' and w/o labels' : ''}"
-      end
-
       filtered_issues = issues.select { |issue|
         #compare is there any labels from @options[:labels] array
         (issue.labels.map { |label| label.name } & @options[:labels]).any?
       }
+
 
       if @options[:add_issues_wo_labels]
         issues_wo_labels = issues.select {
@@ -452,12 +495,37 @@ module GitHubChangelogGenerator
         filtered_issues.concat(issues_wo_labels)
       end
 
+
       if @options[:verbose]
-        puts "Filtered issues: #{filtered_issues.count}"
+        puts "Filtered issues with labels #{@options[:labels]}#{@options[:add_issues_wo_labels] ? ' and w/o labels' : ''}: #{filtered_issues.count}"
       end
 
       filtered_issues
 
+    end
+
+    def fetch_event_for_issues(filtered_issues)
+      if @options[:verbose]
+        print "Fetching events for issues: 0/#{filtered_issues.count}\r"
+      end
+
+      # Async fetching events:
+      threads = []
+
+      i = 0
+      filtered_issues.each { |issue|
+        threads << Thread.new {
+          obj = @github.issues.events.list user: @options[:user], repo: @options[:project], issue_number: issue['number']
+          issue[:events] = obj.body
+          print "Fetching events for issues: #{i+1}/#{filtered_issues.count}\r"
+          i +=1
+        }
+      }
+      threads.each { |thr| thr.join }
+
+      if @options[:verbose]
+        puts "Fetching events for issues: Done!"
+      end
     end
 
   end

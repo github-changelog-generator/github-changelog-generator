@@ -31,13 +31,13 @@ module GitHubChangelogGenerator
         opts.on('--[no-]issues', 'Include closed issues to changelog. Default is true') do |v|
           options[:issues] = v
         end
-        opts.on('--[no-]issues-without-labels', 'Include closed issues without any labels to changelog. Default is true') do |v|
+        opts.on('--[no-]issues-wo-labels', 'Include closed issues without any labels to changelog. Default is true') do |v|
           options[:add_issues_wo_labels] = v
         end
         opts.on('--[no-]pull-requests', 'Include pull-requests to changelog. Default is true') do |v|
           options[:pulls] = v
         end
-        opts.on('--[no-]filter-issues-by-milestone', 'Use milestone to detect when issue was resolved. Default is true') do |last|
+        opts.on('--[no-]filter-by-milestone', 'Use milestone to detect when issue was resolved. Default is true') do |last|
           options[:filter_issues_by_milestone] = last
         end
         opts.on('--[no-]author', 'Add author of pull-request in the end. Default is true') do |author|
@@ -72,15 +72,23 @@ module GitHubChangelogGenerator
 
       if ARGV[0] && !ARGV[1]
         github_site = options[:github_site] ? options[:github_site] : 'github.com'
-        # this match should parse https://github.com/skywinder/Github-Changelog-Generator and skywinder/Github-Changelog-Generator to user and name
+        # this match should parse  strings such "https://github.com/skywinder/Github-Changelog-Generator" or "skywinder/Github-Changelog-Generator" to user and name
         match = /(?:.+#{Regexp.escape(github_site)}\/)?(.+)\/(.+)/.match(ARGV[0])
 
-        if match[2].nil?
+        begin
+        param = match[2].nil?
+        rescue
+          puts "Can't detect user and name from first parameter: '#{ARGV[0]}' -> exit'"
+          exit
+        end
+        if param
           exit
         else
           options[:user] = match[1]
           options[:project]= match[2]
         end
+
+
       end
 
       if !options[:user] && !options[:project]
