@@ -1,5 +1,8 @@
 # Changelog
 
+## [1.2.8](https://github.com/skywinder/Github-Changelog-Generator/tree/1.2.8)
+[Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.2.7...1.2.8)
+#### 17/02/15
 ## [1.2.7](https://github.com/skywinder/Github-Changelog-Generator/tree/1.2.7)
 [Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.2.6...1.2.7)
 #### 26/01/15
@@ -101,11 +104,11 @@
 ## [1.0.1](https://github.com/skywinder/Github-Changelog-Generator/tree/1.0.1)
 [Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.0.0...1.0.1)
 #### 10/11/14
+- *Merged pull-request:* Implement support of different tags. [\#8](https://github.com/skywinder/Github-Changelog-Generator/pull/8) ([skywinder](https://github.com/skywinder))
+
 ## [1.0.0](https://github.com/skywinder/Github-Changelog-Generator/tree/1.0.0)
 [Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/0.1.0...1.0.0)
 #### 07/11/14
-- *Merged pull-request:* Implement support of different tags. [\#8](https://github.com/skywinder/Github-Changelog-Generator/pull/8) ([skywinder](https://github.com/skywinder))
-
 - *Merged pull-request:* Add support for issues in CHANGELOG [\#7](https://github.com/skywinder/Github-Changelog-Generator/pull/7) ([skywinder](https://github.com/skywinder))
 
 - *Merged pull-request:* Fix parsing date of pull request [\#3](https://github.com/skywinder/Github-Changelog-Generator/pull/3) ([skywinder](https://github.com/skywinder))
