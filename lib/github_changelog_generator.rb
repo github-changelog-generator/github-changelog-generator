@@ -57,7 +57,7 @@ module GitHubChangelogGenerator
       end
 
       threads = []
-      @issues.each{|issue|
+      @issues.each { |issue|
         threads << Thread.new {
           find_closed_date_by_commit(issue)
         }
@@ -72,7 +72,7 @@ module GitHubChangelogGenerator
     def find_closed_date_by_commit(issue)
       unless issue['events'].nil?
         # reverse! - to find latest closed event. (event goes in date order)
-        issue['events'].reverse!.each{|event|
+        issue['events'].reverse!.each { |event|
           if event[:event].eql? 'closed'
             if event[:commit_id].nil?
               issue[:actual_date] = issue[:closed_at]
@@ -162,8 +162,8 @@ module GitHubChangelogGenerator
 
       log = "# Changelog\n\n"
 
-      if @options[:last]
-        log += self.generate_log_between_tags(self.all_tags[0], self.all_tags[1])
+      if @options[:unreleased_only]
+        log += self.generate_log_between_tags(self.all_tags[0], nil)
       elsif @options[:tag1] and @options[:tag2]
         tag1 = @options[:tag1]
         tag2 = @options[:tag2]
@@ -222,6 +222,10 @@ module GitHubChangelogGenerator
         puts "Generating log.."
       end
 
+      if @options[:unreleased]
+        log += self.generate_log_between_tags(self.all_tags[0], nil)
+      end
+
       (1 ... self.all_tags.size).each { |index|
         log += self.generate_log_between_tags(self.all_tags[index], self.all_tags[index-1])
       }
@@ -278,18 +282,10 @@ module GitHubChangelogGenerator
 
     def generate_log_between_tags(older_tag, newer_tag)
 
-      if newer_tag.nil?
-        puts "Can't find tag -> terminate"
-        exit 1
-      end
+      filtered_pull_requests = delete_by_time(@pull_requests, :merged_at, older_tag, newer_tag)
+      filtered_issues = delete_by_time(@issues, :actual_date, older_tag, newer_tag)
 
-      newer_tag_time = self.get_time_of_tag(newer_tag)
-      newer_tag_name = newer_tag['name']
-
-      filtered_pull_requests = delete_by_time(@pull_requests, :merged_at, newer_tag_time, older_tag)
-      filtered_issues = delete_by_time(@issues, :actual_date, newer_tag_time, older_tag)
-
-      older_tag_name  = older_tag.nil? ? nil : older_tag['name']
+      newer_tag_name = newer_tag.nil? ? nil : newer_tag['name']
 
       if @options[:filter_issues_by_milestone]
         #delete excess irrelevant issues (according milestones)
@@ -297,47 +293,52 @@ module GitHubChangelogGenerator
         filtered_pull_requests = filter_by_milestone(filtered_pull_requests, newer_tag_name, @pull_requests)
       end
 
-      self.create_log(filtered_pull_requests, filtered_issues, newer_tag_name, newer_tag_time, older_tag_name)
+      older_tag_name = older_tag.nil? ? nil : older_tag['name']
+
+      self.create_log(filtered_pull_requests, filtered_issues, newer_tag, older_tag_name)
 
     end
 
     def filter_by_milestone(filtered_issues, newer_tag_name, src_array)
       filtered_issues.select! { |issue|
+        # leave issues without milestones
         if issue.milestone.nil?
           true
         else
           #check, that this milestone in tag list:
-          milestone_is_tag = @all_tags.find { |tag|
-            tag.name == issue.milestone.title
-          }
-          milestone_is_tag.nil?
+          @all_tags.find { |tag| tag.name == issue.milestone.title }.nil?
         end
-
       }
+      unless newer_tag_name.nil?
 
-      #add missed issues (according milestones)
-      issues_to_add = src_array.select { |issue|
-        if issue.milestone.nil?
-          false
-        else
-          #check, that this milestone in tag list:
-          milestone_is_tag = @all_tags.find { |tag|
-            tag.name == issue.milestone.title
-          }
-
-          if milestone_is_tag.nil?
+        #add missed issues (according milestones)
+        issues_to_add = src_array.select { |issue|
+          if issue.milestone.nil?
             false
           else
-            issue.milestone.title == newer_tag_name
-          end
-        end
-      }
+            #check, that this milestone in tag list:
+            milestone_is_tag = @all_tags.find { |tag|
+              tag.name == issue.milestone.title
+            }
 
-      filtered_issues |= issues_to_add
+            if milestone_is_tag.nil?
+              false
+            else
+              issue.milestone.title == newer_tag_name
+            end
+          end
+        }
+
+        filtered_issues |= issues_to_add
+      end
+      filtered_issues
     end
 
-    def delete_by_time(array, hash_key, newer_tag_time, older_tag = nil)
+    def delete_by_time(array, hash_key, older_tag = nil, newer_tag = nil)
 
+      raise 'At least on of the tags should be not nil!' if (older_tag.nil? && newer_tag.nil?)
+
+      newer_tag_time = self.get_time_of_tag(newer_tag)
       older_tag_time = self.get_time_of_tag(older_tag)
 
       array.select { |req|
@@ -350,7 +351,12 @@ module GitHubChangelogGenerator
             tag_in_range_old = t > older_tag_time
           end
 
-          tag_in_range_new = t <= newer_tag_time
+          if newer_tag_time.nil?
+            tag_in_range_new = true
+          else
+            tag_in_range_new = t <= newer_tag_time
+          end
+
 
           tag_in_range = (tag_in_range_old) && (tag_in_range_new)
 
@@ -363,26 +369,33 @@ module GitHubChangelogGenerator
 
     # @param [Array] pull_requests
     # @param [Array] issues
-    # @param [String] newer_tag_name
-    # @param [String] newer_tag_time
     # @param [String] older_tag_name
     # @return [String]
-    def create_log(pull_requests, issues, newer_tag_name, newer_tag_time, older_tag_name = nil)
+    def create_log(pull_requests, issues, newer_tag, older_tag_name = nil)
+
+      newer_tag_time = newer_tag.nil? ? nil : self.get_time_of_tag(newer_tag)
+      newer_tag_name = newer_tag.nil? ? nil : newer_tag['name']
 
       github_site = options[:github_site] || 'https://github.com'
-
       project_url = "#{github_site}/#{@options[:user]}/#{@options[:project]}"
+
+      if newer_tag.nil?
+        newer_tag_name = 'Unreleased'
+        newer_tag_name2 = 'HEAD'
+        newer_tag_time = Time.new
+      else
+        newer_tag_name2 = newer_tag_name
+      end
 
       #Generate date string:
       time_string = newer_tag_time.strftime @options[:format]
 
       # Generate tag name and link
-      log = "## [#{newer_tag_name}](#{project_url}/tree/#{newer_tag_name}) (#{time_string})\n"
-
+      log = "## [#{newer_tag_name}](#{project_url}/tree/#{newer_tag_name2}) (#{time_string})\n"
 
       if @options[:compare_link] && older_tag_name
         # Generate compare link
-        log += "[Full Changelog](#{project_url}/compare/#{older_tag_name}...#{newer_tag_name})\n\n"
+        log += "[Full Changelog](#{project_url}/compare/#{older_tag_name}...#{newer_tag_name2})\n\n"
       else
         log += "\n"
       end
@@ -442,6 +455,7 @@ module GitHubChangelogGenerator
           log += "- #{merge}"
         }
       end
+
       log
     end
 
