@@ -1,9 +1,23 @@
-GitHub Changelog Generator
-==================
 
 [![Gem Version](https://badge.fury.io/rb/github_changelog_generator.svg)](http://badge.fury.io/rb/github_changelog_generator)
 [![Build Status](https://travis-ci.org/skywinder/Github-Changelog-Generator.svg?branch=master)](https://travis-ci.org/skywinder/Github-Changelog-Generator)
 
+GitHub Changelog Generator
+==================
+
+  - [Installation:](#installation)
+  - [Output example:](#output-example)
+  - [Usage:](#usage)
+    - [Params:](#params)
+    - [GitHub token](#github-token)
+  - [Features and advantages of this project as compared to other:](#features-and-advantages-of-this-project-as-compared-to-other)
+    - [Alternatives:](#alternatives)
+    - [Projects using this library:](#projects-using-this-library)
+  - [Am I missed some essential feature?](#am-i-missed-some-essential-feature)
+  - [Contributing](#contributing)
+  - [License](#license)
+
+ 
 Changelog generation has never been so easy.
 
 **Fully automate changelog generation** - This script automatically generate change-log from your tags, issues and merged pull-requests from your project's **Github issue tracker**.
