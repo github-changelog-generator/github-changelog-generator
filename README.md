@@ -49,20 +49,12 @@ Changelog generation has never been so easy.
     - Excluding "questions" from changelog (issues marked as `question` labels)
 - Custom date format supported 
 - Ability to manually specify in which version issue was fixed (in case, when closed date is not match) by setting `milestone` of issue the same name as tag of  required version
-- Ability to exclude some issues from changelog (by labels)
+- Ability to exclude specific issues from changelog (by labels)
 
 ###Alternatives:
-- [https://github.com/piwik/github-changelog-generator](https://github.com/piwik/github-changelog-generator) - just simple list of closed issues 
-    - [example](https://github.com/piwik/github-changelog-generator/blob/master/screenshot.png)
-- [https://github.com/tschaub/github-changelog](https://github.com/tschaub/github-changelog) - generator based on JS
-    - without any links and separation lists 
-    - [example](https://github.com/tschaub/github-changelog/blob/master/changelog.md)
-- [https://github.com/walmartlabs/generator-release](https://github.com/walmartlabs/generator-release) - most advanced, looks very similar to mine, but:
-    - without oath token (so, you can't make more that 50 requests)
-    - no label-filtering and sparate lists and other option.
-    - lack of customisation abilites
-    - buggy, missed some issues
-    - [Example](https://github.com/walmartlabs/generator-release/blob/master/release-notes.md)
+Here is a [wikipage list of alternatives](https://github.com/skywinder/Github-Changelog-Generator/wiki/Alternatives), that I found. But no one was satisfy my requirements.
+If you know other projects - feel free to edit this Wiki page!
+
 
 ## Usage:
 **It's really simple**: 
