@@ -5,6 +5,12 @@
 
 - *Merged pull-request:* Implement filtering of Pull Requests by milestones [\#50](https://github.com/skywinder/Github-Changelog-Generator/pull/50) ([skywinder](https://github.com/skywinder))
 
+- *Implemented enhancement:* Separate list exclude and include labels [\#52](https://github.com/skywinder/Github-Changelog-Generator/issues/52)
+
+- *Implemented enhancement:* Not Released [\#47](https://github.com/skywinder/Github-Changelog-Generator/issues/47)
+
+- *Fixed bug:* Test pull request with invalid label \(#26\) in changelog appeared. [\#44](https://github.com/skywinder/Github-Changelog-Generator/issues/44)
+
 ## [1.2.8](https://github.com/skywinder/Github-Changelog-Generator/tree/1.2.8) (2015-02-17)
 [Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.2.7...1.2.8)
 
