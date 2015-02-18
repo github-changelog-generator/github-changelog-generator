@@ -38,9 +38,17 @@ module GitHubChangelogGenerator
       @generator = Generator.new(@options)
 
       @all_tags = self.get_all_tags
-      @pull_requests = self.get_filtered_pull_requests
+      @issues, @pull_requests = self.fetch_issues_and_pull_requests
+
+      if @options[:pulls]
+        @pull_requests = self.get_filtered_pull_requests
+        self.fetch_merged_at_pull_requests
+      else
+        @pull_requests = []
+      end
+
       if @options[:issues]
-        @issues = self.get_all_issues
+        @issues = self.get_filtered_issues
         fetch_event_for_issues(@issues)
         detect_actual_closed_dates
       else
@@ -57,7 +65,7 @@ module GitHubChangelogGenerator
       end
 
       threads = []
-      @issues.each{|issue|
+      @issues.each { |issue|
         threads << Thread.new {
           find_closed_date_by_commit(issue)
         }
@@ -72,7 +80,7 @@ module GitHubChangelogGenerator
     def find_closed_date_by_commit(issue)
       unless issue['events'].nil?
         # reverse! - to find latest closed event. (event goes in date order)
-        issue['events'].reverse!.each{|event|
+        issue['events'].reverse!.each { |event|
           if event[:event].eql? 'closed'
             if event[:commit_id].nil?
               issue[:actual_date] = issue[:closed_at]
@@ -96,7 +104,7 @@ module GitHubChangelogGenerator
       %x[#{exec_cmd}]
     end
 
-    def get_all_closed_pull_requests
+    def fetch_merged_at_pull_requests
       if @options[:verbose]
         print "Fetching pull requests...\r"
       end
@@ -116,54 +124,93 @@ module GitHubChangelogGenerator
         puts "Received pull requests: #{pull_requests.count}"
       end
 
-      pull_requests
+      @pull_requests.each{|pr|
+        fetched_pr = pull_requests.find{ |fpr|
+          fpr.number == pr.number }
+        pr[:merged_at] = fetched_pr[:merged_at]
+        pull_requests.delete(fetched_pr)
+      }
     end
 
     def get_filtered_pull_requests
 
-      pull_requests = self.get_all_closed_pull_requests
+      pull_requests = @pull_requests
+      filtered_pull_requests = pull_requests
 
-      unless @options[:pull_request_labels].nil?
 
-        if @options[:verbose]
-          puts 'Filter all pull requests by labels.'
-        end
-
-        filtered_pull_requests = pull_requests.select { |pull_request|
-          #fetch this issue to get labels array
-          issue = @github.issues.get @options[:user], @options[:project], pull_request.number
-
-          #compare is there any labels from @options[:labels] array
-          issue_without_labels = !issue.labels.map { |label| label.name }.any?
-
-          if @options[:verbose]
-            puts "Filter request \##{issue.number}."
-          end
-
-          if @options[:pull_request_labels].any?
-            select_by_label = (issue.labels.map { |label| label.name } & @options[:pull_request_labels]).any?
-          else
-            select_by_label = false
-          end
-
-          select_by_label | issue_without_labels
+      unless @options[:include_labels].nil?
+        filtered_pull_requests = pull_requests.select { |issue|
+          #add all labels from @options[:incluse_labels] array
+          (issue.labels.map { |label| label.name } & @options[:include_labels]).any?
         }
-
-        if @options[:verbose]
-          puts "Filtered pull requests with specified labels and w/o labels: #{filtered_pull_requests.count}"
-        end
-        return filtered_pull_requests
       end
 
-      pull_requests
+      unless @options[:exclude_labels].nil?
+        filtered_pull_requests = filtered_pull_requests.select { |issue|
+          #delete all labels from @options[:exclude_labels] array
+          !(issue.labels.map { |label| label.name } & @options[:exclude_labels]).any?
+        }
+      end
+
+      if @options[:add_issues_wo_labels]
+        issues_wo_labels = pull_requests.select {
+          # add issues without any labels
+            |issue| !issue.labels.map { |label| label.name }.any?
+        }
+        filtered_pull_requests |= issues_wo_labels
+      end
+
+
+      if @options[:verbose]
+        puts "Filtered pull requests: #{filtered_pull_requests.count}"
+      end
+
+      filtered_pull_requests
+      #
+      # #
+      #
+      #
+      # unless @options[:pull_request_labels].nil?
+      #
+      #   if @options[:verbose]
+      #     puts 'Filter all pull requests by labels.'
+      #   end
+      #
+      #   filtered_pull_requests = filtered_pull_requests.select { |pull_request|
+      #     #fetch this issue to get labels array
+      #     issue = @github.issues.get @options[:user], @options[:project], pull_request.number
+      #
+      #     #compare is there any labels from @options[:labels] array
+      #     issue_without_labels = !issue.labels.map { |label| label.name }.any?
+      #
+      #     if @options[:verbose]
+      #       puts "Filter request \##{issue.number}."
+      #     end
+      #
+      #     if @options[:pull_request_labels].any?
+      #       select_by_label = (issue.labels.map { |label| label.name } & @options[:pull_request_labels]).any?
+      #     else
+      #       select_by_label = false
+      #     end
+      #
+      #     select_by_label | issue_without_labels
+      #   }
+      #
+      #   if @options[:verbose]
+      #     puts "Filtered pull requests with specified labels and w/o labels: #{filtered_pull_requests.count}"
+      #   end
+      #   return filtered_pull_requests
+      # end
+      #
+      # filtered_pull_requests
     end
 
     def compund_changelog
 
       log = "# Changelog\n\n"
 
-      if @options[:last]
-        log += self.generate_log_between_tags(self.all_tags[0], self.all_tags[1])
+      if @options[:unreleased_only]
+        log += self.generate_log_between_tags(self.all_tags[0], nil)
       elsif @options[:tag1] and @options[:tag2]
         tag1 = @options[:tag1]
         tag2 = @options[:tag2]
@@ -192,8 +239,8 @@ module GitHubChangelogGenerator
 
       output_filename = "#{@options[:output]}"
       File.open(output_filename, 'w') { |file| file.write(log) }
-
-      puts "Done! Generated log placed in #{`pwd`.strip!}/#{output_filename}"
+      puts 'Done!'
+      puts "Generated log placed in #{`pwd`.strip!}/#{output_filename}"
 
     end
 
@@ -201,17 +248,32 @@ module GitHubChangelogGenerator
       log = ''
 
       if @options[:verbose]
-        puts "Fetching tags dates.."
+        print "Fetching tags dates..\r"
       end
 
       # Async fetching tags:
       threads = []
+      i = 0
+      all = @all_tags.count
       @all_tags.each { |tag|
         # explicit set @tag_times_hash to write data safety.
-        threads << Thread.new { self.get_time_of_tag(tag, @tag_times_hash) }
+        threads << Thread.new {
+          self.get_time_of_tag(tag, @tag_times_hash)
+          if @options[:verbose]
+            print "Fetching tags dates: #{i+1}/#{all}\r"
+            i+=1
+          end
+
+        }
       }
+
+      print "                                 \r"
+
       threads.each { |thr| thr.join }
 
+      if @options[:verbose]
+        puts 'Fetching tags: Done!'
+      end
       if @options[:verbose]
         puts "Sorting tags.."
       end
@@ -220,6 +282,10 @@ module GitHubChangelogGenerator
 
       if @options[:verbose]
         puts "Generating log.."
+      end
+
+      if @options[:unreleased]
+        log += self.generate_log_between_tags(self.all_tags[0], nil)
       end
 
       (1 ... self.all_tags.size).each { |index|
@@ -278,36 +344,37 @@ module GitHubChangelogGenerator
 
     def generate_log_between_tags(older_tag, newer_tag)
 
-      if newer_tag.nil?
-        puts "Can't find tag -> terminate"
-        exit 1
-      end
+      filtered_pull_requests = delete_by_time(@pull_requests, :merged_at, older_tag, newer_tag)
+      filtered_issues = delete_by_time(@issues, :actual_date, older_tag, newer_tag)
 
-      newer_tag_time = self.get_time_of_tag(newer_tag)
-      newer_tag_name = newer_tag['name']
-
-      filtered_pull_requests = delete_by_time(@pull_requests, :merged_at, newer_tag_time, older_tag)
-      filtered_issues = delete_by_time(@issues, :actual_date, newer_tag_time, older_tag)
-
-      older_tag_name  = older_tag.nil? ? nil : older_tag['name']
+      newer_tag_name = newer_tag.nil? ? nil : newer_tag['name']
 
       if @options[:filter_issues_by_milestone]
         #delete excess irrelevant issues (according milestones)
-        filtered_issues.select! { |issue|
-          if issue.milestone.nil?
-            true
-          else
-            #check, that this milestone in tag list:
-            milestone_is_tag = @all_tags.find { |tag|
-              tag.name == issue.milestone.title
-            }
-            milestone_is_tag.nil?
-          end
+        filtered_issues = filter_by_milestone(filtered_issues, newer_tag_name, @issues)
+        filtered_pull_requests = filter_by_milestone(filtered_pull_requests, newer_tag_name, @pull_requests)
+      end
 
-        }
+      older_tag_name = older_tag.nil? ? nil : older_tag['name']
+
+      self.create_log(filtered_pull_requests, filtered_issues, newer_tag, older_tag_name)
+
+    end
+
+    def filter_by_milestone(filtered_issues, newer_tag_name, src_array)
+      filtered_issues.select! { |issue|
+        # leave issues without milestones
+        if issue.milestone.nil?
+          true
+        else
+          #check, that this milestone in tag list:
+          @all_tags.find { |tag| tag.name == issue.milestone.title }.nil?
+        end
+      }
+      unless newer_tag_name.nil?
 
         #add missed issues (according milestones)
-        issues_to_add = @issues.select { |issue|
+        issues_to_add = src_array.select { |issue|
           if issue.milestone.nil?
             false
           else
@@ -326,13 +393,14 @@ module GitHubChangelogGenerator
 
         filtered_issues |= issues_to_add
       end
-
-      self.create_log(filtered_pull_requests, filtered_issues, newer_tag_name, newer_tag_time, older_tag_name)
-
+      filtered_issues
     end
 
-    def delete_by_time(array, hash_key, newer_tag_time, older_tag = nil)
+    def delete_by_time(array, hash_key, older_tag = nil, newer_tag = nil)
 
+      raise 'At least on of the tags should be not nil!' if (older_tag.nil? && newer_tag.nil?)
+
+      newer_tag_time = self.get_time_of_tag(newer_tag)
       older_tag_time = self.get_time_of_tag(older_tag)
 
       array.select { |req|
@@ -345,7 +413,12 @@ module GitHubChangelogGenerator
             tag_in_range_old = t > older_tag_time
           end
 
-          tag_in_range_new = t <= newer_tag_time
+          if newer_tag_time.nil?
+            tag_in_range_new = true
+          else
+            tag_in_range_new = t <= newer_tag_time
+          end
+
 
           tag_in_range = (tag_in_range_old) && (tag_in_range_new)
 
@@ -358,27 +431,36 @@ module GitHubChangelogGenerator
 
     # @param [Array] pull_requests
     # @param [Array] issues
-    # @param [String] newer_tag_name
-    # @param [String] newer_tag_time
     # @param [String] older_tag_name
     # @return [String]
-    def create_log(pull_requests, issues, newer_tag_name, newer_tag_time, older_tag_name = nil)
+    def create_log(pull_requests, issues, newer_tag, older_tag_name = nil)
+
+      newer_tag_time = newer_tag.nil? ? nil : self.get_time_of_tag(newer_tag)
+      newer_tag_name = newer_tag.nil? ? nil : newer_tag['name']
 
       github_site = options[:github_site] || 'https://github.com'
-
       project_url = "#{github_site}/#{@options[:user]}/#{@options[:project]}"
 
-      # Generate tag name and link
-      log = "## [#{newer_tag_name}](#{project_url}/tree/#{newer_tag_name})\n"
-
-      if @options[:compare_link] && older_tag_name
-        # Generate compare link
-        log += "[Full Changelog](#{project_url}/compare/#{older_tag_name}...#{newer_tag_name})\n"
+      if newer_tag.nil?
+        newer_tag_name = 'Unreleased'
+        newer_tag_name2 = 'HEAD'
+        newer_tag_time = Time.new
+      else
+        newer_tag_name2 = newer_tag_name
       end
 
       #Generate date string:
       time_string = newer_tag_time.strftime @options[:format]
-      log += "#### #{time_string}\n"
+
+      # Generate tag name and link
+      log = "## [#{newer_tag_name}](#{project_url}/tree/#{newer_tag_name2}) (#{time_string})\n"
+
+      if @options[:compare_link] && older_tag_name
+        # Generate compare link
+        log += "[Full Changelog](#{project_url}/compare/#{older_tag_name}...#{newer_tag_name2})\n\n"
+      else
+        log += "\n"
+      end
 
       if @options[:pulls]
         # Generate pull requests:
@@ -435,6 +517,7 @@ module GitHubChangelogGenerator
           log += "- #{merge}"
         }
       end
+
       log
     end
 
@@ -453,8 +536,44 @@ module GitHubChangelogGenerator
       @tag_times_hash[tag_name['name']] = Time.parse(time_string)
     end
 
-    def get_all_issues
+    def get_filtered_issues
 
+      issues = @issues
+
+      filtered_issues = issues
+
+      unless @options[:include_labels].nil?
+        filtered_issues = issues.select { |issue|
+          #add all labels from @options[:incluse_labels] array
+          (issue.labels.map { |label| label.name } & @options[:include_labels]).any?
+        }
+      end
+
+      unless @options[:exclude_labels].nil?
+        filtered_issues = filtered_issues.select { |issue|
+          #delete all labels from @options[:exclude_labels] array
+          !(issue.labels.map { |label| label.name } & @options[:exclude_labels]).any?
+        }
+      end
+
+      if @options[:add_issues_wo_labels]
+        issues_wo_labels = issues.select {
+          # add issues without any labels
+            |issue| !issue.labels.map { |label| label.name }.any?
+        }
+        filtered_issues |= issues_wo_labels
+      end
+
+
+      if @options[:verbose]
+        puts "Filtered issues: #{filtered_issues.count}"
+      end
+
+      filtered_issues
+
+    end
+
+    def fetch_issues_and_pull_requests
       if @options[:verbose]
         print "Fetching closed issues...\r"
       end
@@ -477,31 +596,13 @@ module GitHubChangelogGenerator
       end
 
       # remove pull request from issues:
-      issues.select! { |x|
+     issues_wo_pr = issues.select { |x|
         x.pull_request == nil
       }
-
-      filtered_issues = issues.select { |issue|
-        #compare is there any labels from @options[:labels] array
-        (issue.labels.map { |label| label.name } & @options[:labels]).any?
+      pull_requests = issues.select { |x|
+        x.pull_request != nil
       }
-
-
-      if @options[:add_issues_wo_labels]
-        issues_wo_labels = issues.select {
-          # add issues without any labels
-            |issue| !issue.labels.map { |label| label.name }.any?
-        }
-        filtered_issues.concat(issues_wo_labels)
-      end
-
-
-      if @options[:verbose]
-        puts "Filtered issues with labels #{@options[:labels]}#{@options[:add_issues_wo_labels] ? ' and w/o labels' : ''}: #{filtered_issues.count}"
-      end
-
-      filtered_issues
-
+      return issues_wo_pr, pull_requests
     end
 
     def fetch_event_for_issues(filtered_issues)

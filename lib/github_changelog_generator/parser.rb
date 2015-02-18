@@ -6,7 +6,8 @@ require_relative 'version'
 module GitHubChangelogGenerator
   class Parser
     def self.parse_options
-      options = {:tag1 => nil, :tag2 => nil, :format => '%d/%m/%y', :output => 'CHANGELOG.md', :labels => %w(bug enhancement), :pulls => true, :issues => true, :verbose => true, :add_issues_wo_labels => true, :merge_prefix => '*Merged pull-request:* ', :author => true, :pull_request_labels => nil, :filter_issues_by_milestone => true, :compare_link => true}
+      # :include_labels => %w(bug enhancement),
+      options = {:tag1 => nil, :tag2 => nil, :format => '%Y-%m-%d', :output => 'CHANGELOG.md', :exclude_labels => %w(duplicate question invalid wontfix), :pulls => true, :issues => true, :verbose => true, :add_issues_wo_labels => true, :add_pr_wo_labels => true, :merge_prefix => '*Merged pull-request:* ', :author => true, :filter_issues_by_milestone => true, :compare_link => true, :unreleased => true}
 
       parser = OptionParser.new { |opts|
         opts.banner = 'Usage: changelog_generator [options]'
@@ -31,8 +32,11 @@ module GitHubChangelogGenerator
         opts.on('--[no-]issues', 'Include closed issues to changelog. Default is true') do |v|
           options[:issues] = v
         end
-        opts.on('--[no-]issues-wo-labels', 'Include closed issues without any labels to changelog. Default is true') do |v|
+        opts.on('--[no-]issues-wo-labels', 'Include closed issues without labels to changelog. Default is true') do |v|
           options[:add_issues_wo_labels] = v
+        end
+        opts.on('--[no-]pr-wo-labels', 'Include pull requests without labels to changelog. Default is true') do |v|
+          options[:add_pr_wo_labels] = v
         end
         opts.on('--[no-]pull-requests', 'Include pull-requests to changelog. Default is true') do |v|
           options[:pulls] = v
@@ -41,16 +45,22 @@ module GitHubChangelogGenerator
           options[:filter_issues_by_milestone] = last
         end
         opts.on('--[no-]author', 'Add author of pull-request in the end. Default is true') do |author|
-          options[:last] = author
+          options[:author] = author
+        end
+        opts.on('--unreleased-only', 'Generate log from unreleased closed issues only.') do |v|
+          options[:unreleased_only] = v
+        end
+        opts.on('--[no-]unreleased', 'Add to log unreleased closed issues. Default is true') do |v|
+          options[:unreleased] = v
         end
         opts.on('--[no-]compare-link', 'Include compare link between older version and newer version. Default is true') do |v|
           options[:compare_link] = v
         end
-        opts.on('--labels  x,y,z', Array, 'Issues with that labels will be included to changelog. Default is \'bug,enhancement\'') do |list|
-          options[:labels] = list
+        opts.on('--include-labels  x,y,z', Array, 'Issues only with that labels will be included to changelog. Default is \'bug,enhancement\'') do |list|
+          options[:include_labels] = list
         end
-        opts.on('--labels-pr x,y,z', Array, 'Only pull requests with specified labels will be included to changelog. Default is nil') do |list|
-          options[:pull_request_labels] = list
+        opts.on('--exclude-labels  x,y,z', Array, 'Issues with that labels will be always excluded from changelog. Default is \'duplicate,question,invalid,wontfix\'') do |list|
+          options[:exclude_labels] = list
         end
         opts.on('--github-site [URL]', 'The Enterprise Github site on which your project is hosted.') do |last|
           options[:github_site] = last
