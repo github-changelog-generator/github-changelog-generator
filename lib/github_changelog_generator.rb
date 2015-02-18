@@ -122,40 +122,74 @@ module GitHubChangelogGenerator
     def get_filtered_pull_requests
 
       pull_requests = self.get_all_closed_pull_requests
+      filtered_pull_requests = pull_requests
 
-      unless @options[:pull_request_labels].nil?
 
-        if @options[:verbose]
-          puts 'Filter all pull requests by labels.'
-        end
-
-        filtered_pull_requests = pull_requests.select { |pull_request|
-          #fetch this issue to get labels array
-          issue = @github.issues.get @options[:user], @options[:project], pull_request.number
-
-          #compare is there any labels from @options[:labels] array
-          issue_without_labels = !issue.labels.map { |label| label.name }.any?
-
-          if @options[:verbose]
-            puts "Filter request \##{issue.number}."
-          end
-
-          if @options[:pull_request_labels].any?
-            select_by_label = (issue.labels.map { |label| label.name } & @options[:pull_request_labels]).any?
-          else
-            select_by_label = false
-          end
-
-          select_by_label | issue_without_labels
+      unless @options[:include_labels].nil?
+        filtered_pull_requests = pull_requests.select { |issue|
+          #add all labels from @options[:incluse_labels] array
+          (issue.labels.map { |label| label.name } & @options[:include_labels]).any?
         }
-
-        if @options[:verbose]
-          puts "Filtered pull requests with specified labels and w/o labels: #{filtered_pull_requests.count}"
-        end
-        return filtered_pull_requests
       end
 
-      pull_requests
+      unless @options[:exclude_labels].nil?
+        filtered_pull_requests = filtered_pull_requests.select { |issue|
+          #delete all labels from @options[:exclude_labels] array
+          !(issue.labels.map { |label| label.name } & @options[:exclude_labels]).any?
+        }
+      end
+
+      if @options[:add_issues_wo_labels]
+        issues_wo_labels = pull_requests.select {
+          # add issues without any labels
+            |issue| !issue.labels.map { |label| label.name }.any?
+        }
+        filtered_pull_requests.concat(issues_wo_labels)
+      end
+
+
+      if @options[:verbose]
+        puts "Filtered pull requests: #{filtered_pull_requests.count}"
+      end
+
+      filtered_pull_requests
+      #
+      # #
+      #
+      #
+      # unless @options[:pull_request_labels].nil?
+      #
+      #   if @options[:verbose]
+      #     puts 'Filter all pull requests by labels.'
+      #   end
+      #
+      #   filtered_pull_requests = filtered_pull_requests.select { |pull_request|
+      #     #fetch this issue to get labels array
+      #     issue = @github.issues.get @options[:user], @options[:project], pull_request.number
+      #
+      #     #compare is there any labels from @options[:labels] array
+      #     issue_without_labels = !issue.labels.map { |label| label.name }.any?
+      #
+      #     if @options[:verbose]
+      #       puts "Filter request \##{issue.number}."
+      #     end
+      #
+      #     if @options[:pull_request_labels].any?
+      #       select_by_label = (issue.labels.map { |label| label.name } & @options[:pull_request_labels]).any?
+      #     else
+      #       select_by_label = false
+      #     end
+      #
+      #     select_by_label | issue_without_labels
+      #   }
+      #
+      #   if @options[:verbose]
+      #     puts "Filtered pull requests with specified labels and w/o labels: #{filtered_pull_requests.count}"
+      #   end
+      #   return filtered_pull_requests
+      # end
+      #
+      # filtered_pull_requests
     end
 
     def compund_changelog

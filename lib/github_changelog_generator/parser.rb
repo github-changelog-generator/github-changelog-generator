@@ -6,7 +6,7 @@ require_relative 'version'
 module GitHubChangelogGenerator
   class Parser
     def self.parse_options
-      options = {:tag1 => nil, :tag2 => nil, :format => '%Y-%m-%d', :output => 'CHANGELOG.md', :exclude_labels => %w(duplicate question invalid wontfix), :pulls => true, :issues => true, :verbose => true, :add_issues_wo_labels => true, :add_pr_wo_labels => true, :merge_prefix => '*Merged pull-request:* ', :author => true, :pull_request_labels => nil, :filter_issues_by_milestone => true, :compare_link => true, :unreleased => true}
+      options = {:tag1 => nil, :tag2 => nil, :format => '%Y-%m-%d', :output => 'CHANGELOG.md', :exclude_labels => %w(duplicate question invalid wontfix), :pulls => true, :issues => true, :verbose => true, :add_issues_wo_labels => true, :add_pr_wo_labels => true, :merge_prefix => '*Merged pull-request:* ', :author => true, :filter_issues_by_milestone => true, :compare_link => true, :unreleased => true}
 
       parser = OptionParser.new { |opts|
         opts.banner = 'Usage: changelog_generator [options]'
@@ -60,9 +60,6 @@ module GitHubChangelogGenerator
         end
         opts.on('--exclude-labels  x,y,z', Array, 'Issues with that labels will be always excluded from changelog. Default is \'duplicate,question,invalid,wontfix\'') do |list|
           options[:exclude_labels] = list
-        end
-        opts.on('--labels-pr x,y,z', Array, 'Only pull requests with specified labels will be included to changelog. Default is nil') do |list|
-          options[:pull_request_labels] = list
         end
         opts.on('--github-site [URL]', 'The Enterprise Github site on which your project is hosted.') do |last|
           options[:github_site] = last
