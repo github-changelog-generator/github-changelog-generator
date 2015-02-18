@@ -41,7 +41,10 @@ module GitHubChangelogGenerator
           options[:filter_issues_by_milestone] = last
         end
         opts.on('--[no-]author', 'Add author of pull-request in the end. Default is true') do |author|
-          options[:last] = author
+          options[:author] = author
+        end
+        opts.on('--unreleased', 'Generate log from unreleased closed issues.') do |v|
+          options[:unreleased] = v
         end
         opts.on('--[no-]compare-link', 'Include compare link between older version and newer version. Default is true') do |v|
           options[:compare_link] = v
