@@ -192,8 +192,8 @@ module GitHubChangelogGenerator
 
       output_filename = "#{@options[:output]}"
       File.open(output_filename, 'w') { |file| file.write(log) }
-
-      puts "Done! Generated log placed in #{`pwd`.strip!}/#{output_filename}"
+      puts 'Done!'
+      puts "Generated log placed in #{`pwd`.strip!}/#{output_filename}"
 
     end
 
@@ -201,17 +201,30 @@ module GitHubChangelogGenerator
       log = ''
 
       if @options[:verbose]
-        puts "Fetching tags dates.."
+        print "Fetching tags dates..\r"
       end
 
       # Async fetching tags:
       threads = []
+      i = 0
+      all = @all_tags.count
       @all_tags.each { |tag|
         # explicit set @tag_times_hash to write data safety.
-        threads << Thread.new { self.get_time_of_tag(tag, @tag_times_hash) }
+        threads << Thread.new {
+          self.get_time_of_tag(tag, @tag_times_hash)
+          if @options[:verbose]
+            i+=1
+            print "Fetching tags dates: #{i+1}/#{all}\r"
+          end
+
+        }
       }
+
       threads.each { |thr| thr.join }
 
+      if @options[:verbose]
+        puts 'Fetching tags: Done!'
+      end
       if @options[:verbose]
         puts "Sorting tags.."
       end
