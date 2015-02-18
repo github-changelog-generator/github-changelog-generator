@@ -5,18 +5,14 @@
 
 - *Merged pull-request:* Implement filtering of Pull Requests by milestones [\#50](https://github.com/skywinder/Github-Changelog-Generator/pull/50) ([skywinder](https://github.com/skywinder))
 
-- *Merged pull-request:* Feature/fix 37 [\#49](https://github.com/skywinder/Github-Changelog-Generator/pull/49) ([skywinder](https://github.com/skywinder))
-
-- *Merged pull-request:* Prettify output [\#48](https://github.com/skywinder/Github-Changelog-Generator/pull/48) ([skywinder](https://github.com/skywinder))
-
 - *Implemented enhancement:* Add support for forked repo \(to extend changelog with parent's changes\) [\#21](https://github.com/skywinder/Github-Changelog-Generator/issues/21)
-
-- *Fixed bug:* Sometimes user is NULL during merges [\#41](https://github.com/skywinder/Github-Changelog-Generator/issues/41)
 
 ## [1.2.8](https://github.com/skywinder/Github-Changelog-Generator/tree/1.2.8) (2015-02-17)
 [Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.2.7...1.2.8)
 
 - *Merged pull-request:* Feature/fix 37 [\#49](https://github.com/skywinder/Github-Changelog-Generator/pull/49) ([skywinder](https://github.com/skywinder))
+
+- *Merged pull-request:* Prettify output [\#48](https://github.com/skywinder/Github-Changelog-Generator/pull/48) ([skywinder](https://github.com/skywinder))
 
 - *Closed issue:* Bugs, that closed simultaneously with push not appeared in correct version. [\#37](https://github.com/skywinder/Github-Changelog-Generator/issues/37)
 

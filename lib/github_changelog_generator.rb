@@ -285,14 +285,12 @@ module GitHubChangelogGenerator
       filtered_pull_requests = delete_by_time(@pull_requests, :merged_at, older_tag, newer_tag)
       filtered_issues = delete_by_time(@issues, :actual_date, older_tag, newer_tag)
 
-      unless newer_tag.nil?
-        newer_tag_name = newer_tag['name']
+      newer_tag_name = newer_tag.nil? ? nil : newer_tag['name']
 
-        if @options[:filter_issues_by_milestone]
-          #delete excess irrelevant issues (according milestones)
-          filtered_issues = filter_by_milestone(filtered_issues, newer_tag_name, @issues)
-          filtered_pull_requests = filter_by_milestone(filtered_pull_requests, newer_tag_name, @pull_requests)
-        end
+      if @options[:filter_issues_by_milestone]
+        #delete excess irrelevant issues (according milestones)
+        filtered_issues = filter_by_milestone(filtered_issues, newer_tag_name, @issues)
+        filtered_pull_requests = filter_by_milestone(filtered_pull_requests, newer_tag_name, @pull_requests)
       end
 
       older_tag_name = older_tag.nil? ? nil : older_tag['name']
@@ -302,8 +300,6 @@ module GitHubChangelogGenerator
     end
 
     def filter_by_milestone(filtered_issues, newer_tag_name, src_array)
-
-
       filtered_issues.select! { |issue|
         # leave issues without milestones
         if issue.milestone.nil?
@@ -313,7 +309,6 @@ module GitHubChangelogGenerator
           @all_tags.find { |tag| tag.name == issue.milestone.title }.nil?
         end
       }
-
       unless newer_tag_name.nil?
 
         #add missed issues (according milestones)
@@ -336,6 +331,7 @@ module GitHubChangelogGenerator
 
         filtered_issues |= issues_to_add
       end
+      filtered_issues
     end
 
     def delete_by_time(array, hash_key, older_tag = nil, newer_tag = nil)
