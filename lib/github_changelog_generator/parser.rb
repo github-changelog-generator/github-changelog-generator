@@ -6,6 +6,7 @@ require_relative 'version'
 module GitHubChangelogGenerator
   class Parser
     def self.parse_options
+      # :include_labels => %w(bug enhancement),
       options = {:tag1 => nil, :tag2 => nil, :format => '%Y-%m-%d', :output => 'CHANGELOG.md', :exclude_labels => %w(duplicate question invalid wontfix), :pulls => true, :issues => true, :verbose => true, :add_issues_wo_labels => true, :add_pr_wo_labels => true, :merge_prefix => '*Merged pull-request:* ', :author => true, :filter_issues_by_milestone => true, :compare_link => true, :unreleased => true}
 
       parser = OptionParser.new { |opts|

@@ -38,7 +38,15 @@ module GitHubChangelogGenerator
       @generator = Generator.new(@options)
 
       @all_tags = self.get_all_tags
-      @pull_requests = self.get_filtered_pull_requests
+      @issues, @pull_requests = self.fetch_issues_and_pull_requests
+
+      if @options[:pulls]
+        @pull_requests = self.get_filtered_pull_requests
+        self.fetch_merged_at_pull_requests
+      else
+        @pull_requests = []
+      end
+
       if @options[:issues]
         @issues = self.get_filtered_issues
         fetch_event_for_issues(@issues)
@@ -96,7 +104,7 @@ module GitHubChangelogGenerator
       %x[#{exec_cmd}]
     end
 
-    def get_all_closed_pull_requests
+    def fetch_merged_at_pull_requests
       if @options[:verbose]
         print "Fetching pull requests...\r"
       end
@@ -116,12 +124,17 @@ module GitHubChangelogGenerator
         puts "Received pull requests: #{pull_requests.count}"
       end
 
-      pull_requests
+      @pull_requests.each{|pr|
+        fetched_pr = pull_requests.find{ |fpr|
+          fpr.number == pr.number }
+        pr[:merged_at] = fetched_pr[:merged_at]
+        pull_requests.delete(fetched_pr)
+      }
     end
 
     def get_filtered_pull_requests
 
-      pull_requests = self.get_all_closed_pull_requests
+      pull_requests = @pull_requests
       filtered_pull_requests = pull_requests
 
 
@@ -144,7 +157,7 @@ module GitHubChangelogGenerator
           # add issues without any labels
             |issue| !issue.labels.map { |label| label.name }.any?
         }
-        filtered_pull_requests.concat(issues_wo_labels)
+        filtered_pull_requests |= issues_wo_labels
       end
 
 
@@ -523,7 +536,7 @@ module GitHubChangelogGenerator
 
     def get_filtered_issues
 
-      issues = self.get_all_issues
+      issues = @issues
 
       filtered_issues = issues
 
@@ -546,7 +559,7 @@ module GitHubChangelogGenerator
           # add issues without any labels
             |issue| !issue.labels.map { |label| label.name }.any?
         }
-        filtered_issues.concat(issues_wo_labels)
+        filtered_issues |= issues_wo_labels
       end
 
 
@@ -558,7 +571,7 @@ module GitHubChangelogGenerator
 
     end
 
-    def get_all_issues
+    def fetch_issues_and_pull_requests
       if @options[:verbose]
         print "Fetching closed issues...\r"
       end
@@ -581,10 +594,13 @@ module GitHubChangelogGenerator
       end
 
       # remove pull request from issues:
-      issues.select! { |x|
+     issues_wo_pr = issues.select { |x|
         x.pull_request == nil
       }
-      issues
+      pull_requests = issues.select { |x|
+        x.pull_request != nil
+      }
+      return issues_wo_pr, pull_requests
     end
 
     def fetch_event_for_issues(filtered_issues)

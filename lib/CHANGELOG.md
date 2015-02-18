@@ -76,8 +76,6 @@
 
 - *Merged pull-request:* Add filter for pull-requests labels. \(option --filter-pull-requests\) [\#27](https://github.com/skywinder/Github-Changelog-Generator/pull/27) ([skywinder](https://github.com/skywinder))
 
-- *Merged pull-request:* Test Pull-Request SHOULD NOT APPEAR IN LOG! [\#26](https://github.com/skywinder/Github-Changelog-Generator/pull/26) ([skywinder](https://github.com/skywinder))
-
 - *Merged pull-request:* Add ability to insert authors of pull-requests \(--\[no-\]author option\) [\#25](https://github.com/skywinder/Github-Changelog-Generator/pull/25) ([skywinder](https://github.com/skywinder))
 
 - *Merged pull-request:* Don't receive issues in case of --no-isses flag specied [\#24](https://github.com/skywinder/Github-Changelog-Generator/pull/24) ([skywinder](https://github.com/skywinder))
