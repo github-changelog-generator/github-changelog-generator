@@ -5,8 +5,6 @@
 
 - *Merged pull-request:* Implement filtering of Pull Requests by milestones [\#50](https://github.com/skywinder/Github-Changelog-Generator/pull/50) ([skywinder](https://github.com/skywinder))
 
-- *Implemented enhancement:* Add support for forked repo \(to extend changelog with parent's changes\) [\#21](https://github.com/skywinder/Github-Changelog-Generator/issues/21)
-
 ## [1.2.8](https://github.com/skywinder/Github-Changelog-Generator/tree/1.2.8) (2015-02-17)
 [Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.2.7...1.2.8)
 
@@ -77,8 +75,6 @@
 [Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.1.4...1.2.0)
 
 - *Merged pull-request:* Add filter for pull-requests labels. \(option --filter-pull-requests\) [\#27](https://github.com/skywinder/Github-Changelog-Generator/pull/27) ([skywinder](https://github.com/skywinder))
-
-- *Merged pull-request:* Test Pull-Request SHOULD NOT APPEAR IN LOG! [\#26](https://github.com/skywinder/Github-Changelog-Generator/pull/26) ([skywinder](https://github.com/skywinder))
 
 - *Merged pull-request:* Add ability to insert authors of pull-requests \(--\[no-\]author option\) [\#25](https://github.com/skywinder/Github-Changelog-Generator/pull/25) ([skywinder](https://github.com/skywinder))
 
