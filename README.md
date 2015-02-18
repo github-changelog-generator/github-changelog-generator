@@ -41,15 +41,28 @@ Changelog generation has never been so easy.
 
 
 ###Features and advantages of this project as compared to other:
-- Custom date format supported
 - Automatically split issues by type:
     - 	**Issues** (closed issues w/o any labels)
     - **Merged pull-requests** (all merged pull-requests)
     - **Bug-fixes** (by label `bug` in issue)
     - **Enhancements** (by label `enhancement` in issue)
     - Excluding "questions" from changelog (issues marked as `question` labels)
+- Custom date format supported 
 - Ability to manually specify in which version issue was fixed (in case, when closed date is not match) by setting `milestone` of issue the same name as tag of  required version
 - Ability to exclude some issues from changelog (by labels)
+
+###Alternatives:
+- [https://github.com/piwik/github-changelog-generator](https://github.com/piwik/github-changelog-generator) - just simple list of closed issues 
+    - [example](https://github.com/piwik/github-changelog-generator/blob/master/screenshot.png)
+- [https://github.com/tschaub/github-changelog](https://github.com/tschaub/github-changelog) - generator based on JS
+    - without any links and separation lists 
+    - [example](https://github.com/tschaub/github-changelog/blob/master/changelog.md)
+- [https://github.com/walmartlabs/generator-release](https://github.com/walmartlabs/generator-release) - most advanced, looks very similar to mine, but:
+    - without oath token (so, you can't make more that 50 requests)
+    - no label-filtering and sparate lists and other option.
+    - lack of customisation abilites
+    - buggy, missed some issues
+    - [Example](https://github.com/walmartlabs/generator-release/blob/master/release-notes.md)
 
 ## Usage:
 **It's really simple**: 
