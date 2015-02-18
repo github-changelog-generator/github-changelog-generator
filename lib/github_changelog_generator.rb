@@ -260,12 +260,14 @@ module GitHubChangelogGenerator
         threads << Thread.new {
           self.get_time_of_tag(tag, @tag_times_hash)
           if @options[:verbose]
-            i+=1
             print "Fetching tags dates: #{i+1}/#{all}\r"
+            i+=1
           end
 
         }
       }
+
+      print "                                 \r"
 
       threads.each { |thr| thr.join }
 
