@@ -373,17 +373,19 @@ module GitHubChangelogGenerator
 
       project_url = "#{github_site}/#{@options[:user]}/#{@options[:project]}"
 
+      #Generate date string:
+      time_string = newer_tag_time.strftime @options[:format]
+
       # Generate tag name and link
-      log = "## [#{newer_tag_name}](#{project_url}/tree/#{newer_tag_name})\n"
+      log = "## [#{newer_tag_name}](#{project_url}/tree/#{newer_tag_name}) (#{time_string})\n"
+
 
       if @options[:compare_link] && older_tag_name
         # Generate compare link
-        log += "[Full Changelog](#{project_url}/compare/#{older_tag_name}...#{newer_tag_name})\n"
+        log += "[Full Changelog](#{project_url}/compare/#{older_tag_name}...#{newer_tag_name})\n\n"
+      else
+        log += "\n"
       end
-
-      #Generate date string:
-      time_string = newer_tag_time.strftime @options[:format]
-      log += "#### #{time_string}\n"
 
       if @options[:pulls]
         # Generate pull requests:
