@@ -162,7 +162,7 @@ module GitHubChangelogGenerator
 
       log = "# Changelog\n\n"
 
-      if @options[:unreleased]
+      if @options[:unreleased_only]
         log += self.generate_log_between_tags(self.all_tags[0], nil)
       elsif @options[:tag1] and @options[:tag2]
         tag1 = @options[:tag1]
@@ -220,6 +220,10 @@ module GitHubChangelogGenerator
 
       if @options[:verbose]
         puts "Generating log.."
+      end
+
+      if @options[:unreleased]
+        log += self.generate_log_between_tags(self.all_tags[0], nil)
       end
 
       (1 ... self.all_tags.size).each { |index|

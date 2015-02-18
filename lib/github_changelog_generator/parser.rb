@@ -6,7 +6,7 @@ require_relative 'version'
 module GitHubChangelogGenerator
   class Parser
     def self.parse_options
-      options = {:tag1 => nil, :tag2 => nil, :format => '%Y-%m-%d', :output => 'CHANGELOG.md', :labels => %w(bug enhancement), :pulls => true, :issues => true, :verbose => true, :add_issues_wo_labels => true, :merge_prefix => '*Merged pull-request:* ', :author => true, :pull_request_labels => nil, :filter_issues_by_milestone => true, :compare_link => true}
+      options = {:tag1 => nil, :tag2 => nil, :format => '%Y-%m-%d', :output => 'CHANGELOG.md', :labels => %w(bug enhancement), :pulls => true, :issues => true, :verbose => true, :add_issues_wo_labels => true, :merge_prefix => '*Merged pull-request:* ', :author => true, :pull_request_labels => nil, :filter_issues_by_milestone => true, :compare_link => true, :unreleased => true}
 
       parser = OptionParser.new { |opts|
         opts.banner = 'Usage: changelog_generator [options]'
@@ -43,7 +43,10 @@ module GitHubChangelogGenerator
         opts.on('--[no-]author', 'Add author of pull-request in the end. Default is true') do |author|
           options[:author] = author
         end
-        opts.on('--unreleased', 'Generate log from unreleased closed issues.') do |v|
+        opts.on('--unreleased-only', 'Generate log from unreleased closed issues only.') do |v|
+          options[:unreleased_only] = v
+        end
+        opts.on('--[no-]unreleased', 'Add to log unreleased closed issues. Default is true') do |v|
           options[:unreleased] = v
         end
         opts.on('--[no-]compare-link', 'Include compare link between older version and newer version. Default is true') do |v|
