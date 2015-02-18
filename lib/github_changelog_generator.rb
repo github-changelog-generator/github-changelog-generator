@@ -40,7 +40,7 @@ module GitHubChangelogGenerator
       @all_tags = self.get_all_tags
       @pull_requests = self.get_filtered_pull_requests
       if @options[:issues]
-        @issues = self.get_all_issues
+        @issues = self.get_filtered_issues
         fetch_event_for_issues(@issues)
         detect_actual_closed_dates
       else
@@ -474,33 +474,9 @@ module GitHubChangelogGenerator
       @tag_times_hash[tag_name['name']] = Time.parse(time_string)
     end
 
-    def get_all_issues
+    def get_filtered_issues
 
-      if @options[:verbose]
-        print "Fetching closed issues...\r"
-      end
-
-      response = @github.issues.list user: @options[:user], repo: @options[:project], state: 'closed', filter: 'all', labels: nil
-
-      issues = []
-      page_i = 0
-      count_pages = response.count_pages
-      response.each_page do |page|
-        page_i += PER_PAGE_NUMBER
-        print "Fetching issues... #{page_i}/#{count_pages * PER_PAGE_NUMBER}\r"
-        issues.concat(page)
-      end
-
-      print "                               \r"
-
-      if @options[:verbose]
-        puts "Received issues: #{issues.count}"
-      end
-
-      # remove pull request from issues:
-      issues.select! { |x|
-        x.pull_request == nil
-      }
+      issues = self.get_all_issues
 
       filtered_issues = issues
 
@@ -528,11 +504,40 @@ module GitHubChangelogGenerator
 
 
       if @options[:verbose]
-        puts "Filtered issues with labels #{@options[:include_labels]}#{@options[:add_issues_wo_labels] ? ' and w/o labels' : ''}: #{filtered_issues.count}"
+        puts "Filtered issues: #{filtered_issues.count}"
       end
 
       filtered_issues
 
+    end
+
+    def get_all_issues
+      if @options[:verbose]
+        print "Fetching closed issues...\r"
+      end
+
+      response = @github.issues.list user: @options[:user], repo: @options[:project], state: 'closed', filter: 'all', labels: nil
+
+      issues = []
+      page_i = 0
+      count_pages = response.count_pages
+      response.each_page do |page|
+        page_i += PER_PAGE_NUMBER
+        print "Fetching issues... #{page_i}/#{count_pages * PER_PAGE_NUMBER}\r"
+        issues.concat(page)
+      end
+
+      print "                               \r"
+
+      if @options[:verbose]
+        puts "Received issues: #{issues.count}"
+      end
+
+      # remove pull request from issues:
+      issues.select! { |x|
+        x.pull_request == nil
+      }
+      issues
     end
 
     def fetch_event_for_issues(filtered_issues)

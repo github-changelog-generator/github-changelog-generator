@@ -6,7 +6,7 @@ require_relative 'version'
 module GitHubChangelogGenerator
   class Parser
     def self.parse_options
-      options = {:tag1 => nil, :tag2 => nil, :format => '%Y-%m-%d', :output => 'CHANGELOG.md', :exclude_labels => %w(duplicate question invalid wontfix), :pulls => true, :issues => true, :verbose => true, :add_issues_wo_labels => true, :merge_prefix => '*Merged pull-request:* ', :author => true, :pull_request_labels => nil, :filter_issues_by_milestone => true, :compare_link => true, :unreleased => true}
+      options = {:tag1 => nil, :tag2 => nil, :format => '%Y-%m-%d', :output => 'CHANGELOG.md', :exclude_labels => %w(duplicate question invalid wontfix), :pulls => true, :issues => true, :verbose => true, :add_issues_wo_labels => true, :add_pr_wo_labels => true, :merge_prefix => '*Merged pull-request:* ', :author => true, :pull_request_labels => nil, :filter_issues_by_milestone => true, :compare_link => true, :unreleased => true}
 
       parser = OptionParser.new { |opts|
         opts.banner = 'Usage: changelog_generator [options]'
@@ -31,8 +31,11 @@ module GitHubChangelogGenerator
         opts.on('--[no-]issues', 'Include closed issues to changelog. Default is true') do |v|
           options[:issues] = v
         end
-        opts.on('--[no-]issues-wo-labels', 'Include closed issues without any labels to changelog. Default is true') do |v|
+        opts.on('--[no-]issues-wo-labels', 'Include closed issues without labels to changelog. Default is true') do |v|
           options[:add_issues_wo_labels] = v
+        end
+        opts.on('--[no-]pr-wo-labels', 'Include pull requests without labels to changelog. Default is true') do |v|
+          options[:add_pr_wo_labels] = v
         end
         opts.on('--[no-]pull-requests', 'Include pull-requests to changelog. Default is true') do |v|
           options[:pulls] = v
