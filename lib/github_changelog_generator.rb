@@ -502,7 +502,7 @@ module GitHubChangelogGenerator
         x.pull_request == nil
       }
 
-      filtered_issues = []
+      filtered_issues = issues
 
       unless @options[:include_labels].nil?
         filtered_issues = issues.select { |issue|
