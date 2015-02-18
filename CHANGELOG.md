@@ -35,6 +35,8 @@
 
 - *Fixed bug:* Crash when try generate log for rails [\#35](https://github.com/skywinder/Github-Changelog-Generator/issues/35)
 
+- *Fixed bug:* Sometimes user is NULL during merges [\#41](https://github.com/skywinder/Github-Changelog-Generator/issues/41)
+
 ## [1.2.3](https://github.com/skywinder/Github-Changelog-Generator/tree/1.2.3)
 [Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.2.2...1.2.3)
 #### 16/12/14

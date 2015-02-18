@@ -40,22 +40,6 @@ Changelog generation has never been so easy.
 > - *Closed issue:* No "cancel" button [\#122](https://github.com/skywinder/ActionSheetPicker-3.0/issues/122)
 
 
-###Features and advantages of this project as compared to other:
-- Automatically split issues by type:
-    - 	**Issues** (closed issues w/o any labels)
-    - **Merged pull-requests** (all merged pull-requests)
-    - **Bug-fixes** (by label `bug` in issue)
-    - **Enhancements** (by label `enhancement` in issue)
-    - Excluding "questions" from changelog (issues marked as `question` labels)
-- Custom date format supported 
-- Ability to manually specify in which version issue was fixed (in case, when closed date is not match) by setting `milestone` of issue the same name as tag of  required version
-- Ability to exclude specific issues from changelog (by labels)
-
-###Alternatives:
-Here is a [wikipage list of alternatives](https://github.com/skywinder/Github-Changelog-Generator/wiki/Alternatives), that I found. But no one was satisfy my requirements.
-If you know other projects - feel free to edit this Wiki page!
-
-
 ## Usage:
 **It's really simple**: 
 
@@ -109,7 +93,24 @@ So, if you got error like this:
 
 It's time to create this token or wait for 1 hour before GitHub reset the counter for your IP.
 
-## Projects using this library
+##Features and advantages of this project as compared to other:
+- Automatically split issues by type:
+    - 	**Issues** (closed issues w/o any labels)
+    - **Merged pull-requests** (all merged pull-requests)
+    - **Bug-fixes** (by label `bug` in issue)
+    - **Enhancements** (by label `enhancement` in issue)
+    - Excluding "questions" from changelog (issues marked as `question` labels)
+- Custom date format supported 
+- Ability to manually specify in which version issue was fixed (in case, when closed date is not match) by setting `milestone` of issue the same name as tag of  required version
+- Ability to exclude specific issues from changelog (by labels)
+
+###Alternatives:
+Here is a [wikipage list of alternatives](https://github.com/skywinder/Github-Changelog-Generator/wiki/Alternatives), that I found. But no one was satisfy my requirements.
+
+*If you know other projects - feel free to edit this Wiki page!*
+
+
+### Projects using this library:
 [Wikipage with list of projects](https://github.com/skywinder/Github-Changelog-Generator/wiki/Projects-using-Github-Changelog-Generator) 
 
 *If you are using `github_changelog_generator` for generation changelog in your project or know of project that uses it, please add it to [this] (https://github.com/skywinder/Github-Changelog-Generator/wiki/Projects-using-Github-Changelog-Generator) list.*
