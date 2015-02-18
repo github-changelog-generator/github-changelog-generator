@@ -504,7 +504,7 @@ module GitHubChangelogGenerator
 
       filtered_issues = issues.select { |issue|
         #compare is there any labels from @options[:labels] array
-        (issue.labels.map { |label| label.name } & @options[:labels]).any?
+        (issue.labels.map { |label| label.name } & @options[:include_labels]).any?
       }
 
 
@@ -518,7 +518,7 @@ module GitHubChangelogGenerator
 
 
       if @options[:verbose]
-        puts "Filtered issues with labels #{@options[:labels]}#{@options[:add_issues_wo_labels] ? ' and w/o labels' : ''}: #{filtered_issues.count}"
+        puts "Filtered issues with labels #{@options[:include_labels]}#{@options[:add_issues_wo_labels] ? ' and w/o labels' : ''}: #{filtered_issues.count}"
       end
 
       filtered_issues
