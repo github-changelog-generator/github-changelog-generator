@@ -5,8 +5,6 @@
 
 - *Merged pull-request:* Implement filtering of Pull Requests by milestones [\#50](https://github.com/skywinder/Github-Changelog-Generator/pull/50) ([skywinder](https://github.com/skywinder))
 
-- *Implemented enhancement:* Add support for forked repo \(to extend changelog with parent's changes\) [\#21](https://github.com/skywinder/Github-Changelog-Generator/issues/21)
-
 ## [1.2.8](https://github.com/skywinder/Github-Changelog-Generator/tree/1.2.8) (2015-02-17)
 [Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.2.7...1.2.8)
 

@@ -502,11 +502,21 @@ module GitHubChangelogGenerator
         x.pull_request == nil
       }
 
-      filtered_issues = issues.select { |issue|
-        #compare is there any labels from @options[:labels] array
-        (issue.labels.map { |label| label.name } & @options[:include_labels]).any?
-      }
+      filtered_issues = []
 
+      unless @options[:include_labels].nil?
+        filtered_issues = issues.select { |issue|
+          #add all labels from @options[:incluse_labels] array
+          (issue.labels.map { |label| label.name } & @options[:include_labels]).any?
+        }
+      end
+
+      unless @options[:exclude_labels].nil?
+        filtered_issues = filtered_issues.select { |issue|
+          #delete all labels from @options[:exclude_labels] array
+          !(issue.labels.map { |label| label.name } & @options[:exclude_labels]).any?
+        }
+      end
 
       if @options[:add_issues_wo_labels]
         issues_wo_labels = issues.select {
