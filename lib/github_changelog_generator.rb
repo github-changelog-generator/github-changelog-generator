@@ -124,8 +124,8 @@ module GitHubChangelogGenerator
         puts "Received pull requests: #{pull_requests.count}"
       end
 
-      @pull_requests.each{|pr|
-        fetched_pr = pull_requests.find{ |fpr|
+      @pull_requests.each { |pr|
+        fetched_pr = pull_requests.find { |fpr|
           fpr.number == pr.number }
         pr[:merged_at] = fetched_pr[:merged_at]
         pull_requests.delete(fetched_pr)
@@ -219,7 +219,8 @@ module GitHubChangelogGenerator
 
         if tags_strings.include?(tag1)
           if tags_strings.include?(tag2)
-            hash = Hash[tags_strings.map.with_index.to_a]
+            to_a = tags_strings.map.with_index.to_a
+            hash = Hash[to_a]
             index1 = hash[tag1]
             index2 = hash[tag2]
             log += self.generate_log_between_tags(self.all_tags[index1], self.all_tags[index2])
@@ -449,18 +450,9 @@ module GitHubChangelogGenerator
         newer_tag_name2 = newer_tag_name
       end
 
-      #Generate date string:
-      time_string = newer_tag_time.strftime @options[:format]
+      log = ''
 
-      # Generate tag name and link
-      log = "## [#{newer_tag_name}](#{project_url}/tree/#{newer_tag_name2}) (#{time_string})\n"
-
-      if @options[:compare_link] && older_tag_name
-        # Generate compare link
-        log += "[Full Changelog](#{project_url}/compare/#{older_tag_name}...#{newer_tag_name2})\n\n"
-      else
-        log += "\n"
-      end
+      log = generate_header(log, newer_tag_name, newer_tag_name2, newer_tag_time, older_tag_name, project_url)
 
       if @options[:pulls]
         # Generate pull requests:
@@ -518,6 +510,24 @@ module GitHubChangelogGenerator
         }
       end
 
+      log
+    end
+
+    def generate_header(log, newer_tag_name, newer_tag_name2, newer_tag_time, older_tag_name, project_url)
+
+      #Generate date string:
+      time_string = newer_tag_time.strftime @options[:format]
+
+      # Generate tag name and link
+      log += "## [#{newer_tag_name}](#{project_url}/tree/#{newer_tag_name2}) (#{time_string})\n"
+
+      if @options[:compare_link] && older_tag_name
+        # Generate compare link
+        log += "[Full Changelog](#{project_url}/compare/#{older_tag_name}...#{newer_tag_name2})\n\n"
+      else
+        log += "\n"
+      end
+      
       log
     end
 
@@ -596,7 +606,7 @@ module GitHubChangelogGenerator
       end
 
       # remove pull request from issues:
-     issues_wo_pr = issues.select { |x|
+      issues_wo_pr = issues.select { |x|
         x.pull_request == nil
       }
       pull_requests = issues.select { |x|
