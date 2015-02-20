@@ -61,7 +61,7 @@ module GitHubChangelogGenerator
     def detect_actual_closed_dates
 
       if @options[:verbose]
-        print "Fetching close commit date for issues...\r"
+        print "Fetching events for issues...\r"
       end
 
       threads = []
@@ -73,7 +73,7 @@ module GitHubChangelogGenerator
       threads.each { |thr| thr.join }
 
       if @options[:verbose]
-        puts 'Fetching close commit date for issues: Done!'
+        puts 'Fetching events for issues: Done!'
       end
     end
 
@@ -118,7 +118,7 @@ module GitHubChangelogGenerator
         print "Fetching pull requests... #{page_i}/#{count_pages * PER_PAGE_NUMBER}\r"
         pull_requests.concat(page)
       end
-      print "                               \r"
+      print "                                                   \r"
 
       if @options[:verbose]
         puts "Received pull requests: #{pull_requests.count}"
