@@ -10,7 +10,7 @@ GitHub Changelog Generator
   - [Usage](#usage)
     - [Params](#params)
     - [GitHub token](#github-token)
-  - [Features and advantages of this project as compared to other](#features-and-advantages-of-this-project-as-compared-to-other)
+  - [Features and advantages of this project](#features-and-advantages-of-this-project)
     - [Alternatives](#alternatives)
     - [Projects using this library](#projects-using-this-library)
   - [Am I missed some essential feature?](#am-i-missed-some-essential-feature)
@@ -107,7 +107,7 @@ So, if you got error like this:
 
 It's time to create this token or wait for 1 hour before GitHub reset the counter for your IP.
 
-##Features and advantages of this project as compared to other
+##Features and advantages of this project
 - Generate cannonical changelog file, followed by [keepachangelog.com guidlines](http://keepachangelog.com/)
 - Support **Unreleased** issues (closed issues that have not yet released)
 - Customize issues, that should be added to changelog
