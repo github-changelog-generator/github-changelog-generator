@@ -10,7 +10,7 @@ GitHub Changelog Generator
   - [Usage](#usage)
     - [Params](#params)
     - [GitHub token](#github-token)
-  - [Features and advantages of this project as compared to other](#features-and-advantages-of-this-project-as-compared-to-other)
+  - [Features and advantages of this project](#features-and-advantages-of-this-project)
     - [Alternatives](#alternatives)
     - [Projects using this library](#projects-using-this-library)
   - [Am I missed some essential feature?](#am-i-missed-some-essential-feature)
@@ -107,16 +107,19 @@ So, if you got error like this:
 
 It's time to create this token or wait for 1 hour before GitHub reset the counter for your IP.
 
-##Features and advantages of this project as compared to other
+##Features and advantages of this project
+- Generate cannonical changelog file, followed by [keepachangelog.com guidlines](http://keepachangelog.com/)
+- Support **Unreleased** issues (closed issues that have not yet released)
+- Customize issues, that should be added to changelog
+- Custom date format supported 
+- Ability to manually specify in which version issue was fixed (in case, when closed date is not match) by setting `milestone` of issue the same name as tag of  required version
+- Ability to exclude specific issues from changelog (by labels)
+    - Automatically exclude "questions" - issues marked as `question` labels (and other issues, that should'n be in changelog file: with `duplicate invalid wontfix` labels)
 - Automatically split issues by type
     - 	**Issues** (closed issues w/o any labels)
     - **Merged pull-requests** (all merged pull-requests)
     - **Bug-fixes** (by label `bug` in issue)
     - **Enhancements** (by label `enhancement` in issue)
-    - Excluding "questions" from changelog (issues marked as `question` labels)
-- Custom date format supported 
-- Ability to manually specify in which version issue was fixed (in case, when closed date is not match) by setting `milestone` of issue the same name as tag of  required version
-- Ability to exclude specific issues from changelog (by labels)
 
 ###Alternatives
 Here is a [wikipage list of alternatives](https://github.com/skywinder/Github-Changelog-Generator/wiki/Alternatives), that I found. But no one was satisfy my requirements.
