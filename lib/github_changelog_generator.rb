@@ -207,7 +207,7 @@ module GitHubChangelogGenerator
 
     def compund_changelog
 
-      log = "# Changelog\n\n"
+      log = "# Change Log\n\n"
 
       if @options[:unreleased_only]
         log += self.generate_log_between_tags(self.all_tags[0], nil)
