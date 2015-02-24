@@ -20,7 +20,7 @@ GitHub Changelog Generator
  
 Changelog generation has never been so easy.
 
-**Fully automate changelog generation** - This script automatically generate change-log from your tags, issues and merged pull-requests from your project's **Github issue tracker**.
+**Fully automate changelog generation** - This gem generate change log file based on tags, issues and merged pull requests from **Github issue tracker**. This generator complies all [change log format guidelines](http://keepachangelog.com/).
 
 ## Installation
 
@@ -108,13 +108,13 @@ So, if you got error like this:
 It's time to create this token or wait for 1 hour before GitHub reset the counter for your IP.
 
 ##Features and advantages of this project
-- Generate cannonical changelog file, followed by [keepachangelog.com guidlines](http://keepachangelog.com/)
+- Generate canonical change log file, followed by [keepachangelog.com guidlines](http://keepachangelog.com/)
 - Support **Unreleased** issues (closed issues that have not yet released)
 - Customize issues, that should be added to changelog
 - Custom date format supported 
 - Ability to manually specify in which version issue was fixed (in case, when closed date is not match) by setting `milestone` of issue the same name as tag of  required version
-- Ability to exclude specific issues from changelog (by labels)
-    - Automatically exclude "questions" - issues marked as `question` labels (and other issues, that should'n be in changelog file: with `duplicate invalid wontfix` labels)
+- Ability to exclude specific issues from change log (by labels)
+    - Automatically exclude "questions" - issues marked as `question` labels (and other issues, that should'n be in change log file: with `duplicate invalid wontfix` labels)
 - Automatically split issues by type
     - 	**Issues** (closed issues w/o any labels)
     - **Merged pull-requests** (all merged pull-requests)
@@ -130,7 +130,7 @@ Here is a [wikipage list of alternatives](https://github.com/skywinder/Github-Ch
 ### Projects using this library
 [Wikipage with list of projects](https://github.com/skywinder/Github-Changelog-Generator/wiki/Projects-using-Github-Changelog-Generator) 
 
-*If you are using `github_changelog_generator` for generation changelog in your project or know of project that uses it, please add it to [this] (https://github.com/skywinder/Github-Changelog-Generator/wiki/Projects-using-Github-Changelog-Generator) list.*
+*If you are using `github_changelog_generator` for generation change log in your project or know of project that uses it, please add it to [this] (https://github.com/skywinder/Github-Changelog-Generator/wiki/Projects-using-Github-Changelog-Generator) list.*
 
 ## Am I missed some essential feature?
 
