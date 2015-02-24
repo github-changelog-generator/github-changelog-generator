@@ -116,7 +116,7 @@ It's time to create this token or wait for 1 hour before GitHub reset the counte
     - Custom date format supported 
     - Ability to manually specify in which version issue was fixed (in case, when closed date is not match) by setting `milestone` of issue the same name as tag of  required version
     - Ability to exclude specific issues from change log (by labels)
-        - Automatically exclude "questions" - issues marked as `question` labels (and other issues, that should'n be in change log file: with `duplicate invalid wontfix` labels)
+        - Automatically exclude "questions" - issues marked as `question` labels (and other issues, that shouldn't be in change log file: with `duplicate invalid wontfix` labels)
 - Distinguish bug fixes, enchantments, and closed issues according labels.
     - 	**Issues** (closed issues w/o any labels)
     - **Merged pull-requests** (all merged pull-requests)
