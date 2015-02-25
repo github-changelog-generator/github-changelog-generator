@@ -61,7 +61,7 @@ module GitHubChangelogGenerator
     def detect_actual_closed_dates
 
       if @options[:verbose]
-        print "Fetching events for issues...\r"
+        print "Fetching closed dates for issues...\r"
       end
 
       threads = []
@@ -73,7 +73,7 @@ module GitHubChangelogGenerator
       threads.each { |thr| thr.join }
 
       if @options[:verbose]
-        puts 'Fetching events for issues: Done!'
+        puts 'Fetching closed dates for issues: Done!'
       end
     end
 
@@ -367,6 +367,7 @@ module GitHubChangelogGenerator
       end
 
       if filtered_issues.empty? && filtered_pull_requests.empty? && newer_tag.nil?
+        # do not generate empty unreleased section
         return nil
       end
 
@@ -455,77 +456,68 @@ module GitHubChangelogGenerator
 
       if newer_tag.nil?
         newer_tag_name = 'Unreleased'
-        newer_tag_name2 = 'HEAD'
+        newer_tag_link = 'HEAD'
         newer_tag_time = Time.new
       else
-        newer_tag_name2 = newer_tag_name
+        newer_tag_link = newer_tag_name
       end
 
       log = ''
 
-      log = generate_header(log, newer_tag_name, newer_tag_name2, newer_tag_time, older_tag_name, project_url)
-
-      if @options[:pulls]
-        # Generate pull requests:
-        if options[:simple_list].nil? && pull_requests.any?
-          log += "- #{@options[:merge_prefix]}\n"
-        end
-
-        pull_requests.each { |pull_request|
-          merge_string = @generator.get_string_for_pull_request(pull_request)
-          log += "    - #{merge_string}"
-
-        } if pull_requests
-      end
+      log += generate_header(log, newer_tag_name, newer_tag_link, newer_tag_time, older_tag_name, project_url)
 
       if @options[:issues]
         # Generate issues:
-        if issues
-          issues.sort! { |x, y|
-            if x.labels.any? && y.labels.any?
-              x.labels[0].name <=> y.labels[0].name
-            else
-              if x.labels.any?
-                1
-              else
-                if y.labels.any?
-                  -1
-                else
-                  0
-                end
-              end
-            end
-          }.reverse!
-        end
+        issues_a = []
+        enhancement_a = []
+        bugs_a =[]
+
         issues.each { |dict|
-          is_bug = false
-          is_enhancement = false
+          added = false
           dict.labels.each { |label|
             if label.name == 'bug'
-              is_bug = true
+              bugs_a.push dict
+              added = true
+              next
             end
             if label.name == 'enhancement'
-              is_enhancement = true
+              enhancement_a.push dict
+              added = true
+              next
             end
           }
-
-          intro = 'Closed issue'
-          if is_bug
-            intro = 'Fixed bug'
+          unless added
+            issues_a.push dict
           end
-
-          if is_enhancement
-            intro = 'Implemented enhancement'
-          end
-
-          enc_string = @generator.encapsulate_string dict[:title]
-
-          merge = "*#{intro}:* #{enc_string} [\\##{dict[:number]}](#{dict.html_url})\n\n"
-          log += "- #{merge}"
         }
+
+        log += generate_log_from_array(enhancement_a, @options[:enhancement_prefix])
+        log += generate_log_from_array(bugs_a, @options[:bug_prefix])
+        log += generate_log_from_array(issues_a, @options[:issue_prefix])
+
+        if @options[:pulls]
+          # Generate pull requests:
+          log += generate_log_from_array(pull_requests, @options[:merge_prefix])
+        end
+
       end
 
+      log +="\n"
       log
+    end
+
+    def generate_log_from_array(issues, prefix)
+      log = ''
+      if options[:simple_list].nil? && issues.any?
+        log += "#{prefix}\n\n"
+      end
+
+      issues.each { |issue|
+        merge_string = @generator.get_string_for_issue(issue)
+        log += "- #{merge_string}\n"
+
+      } if issues
+      log +="\n"
     end
 
     def generate_header(log, newer_tag_name, newer_tag_name2, newer_tag_time, older_tag_name, project_url)
@@ -534,13 +526,11 @@ module GitHubChangelogGenerator
       time_string = newer_tag_time.strftime @options[:format]
 
       # Generate tag name and link
-      log += "## [#{newer_tag_name}](#{project_url}/tree/#{newer_tag_name2}) (#{time_string})\n"
+      log += "## [#{newer_tag_name}](#{project_url}/tree/#{newer_tag_name2}) (#{time_string})\n\n"
 
       if @options[:compare_link] && older_tag_name
         # Generate compare link
         log += "[Full Changelog](#{project_url}/compare/#{older_tag_name}...#{newer_tag_name2})\n\n"
-      else
-        log += "\n"
       end
 
       log
