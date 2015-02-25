@@ -246,8 +246,39 @@ module GitHubChangelogGenerator
     end
 
     def generate_log_for_all_tags
+
+      fetch_tags_dates
+
+      if @options[:verbose]
+        puts "Sorting tags.."
+      end
+
+      @all_tags.sort_by! { |x| self.get_time_of_tag(x) }.reverse!
+
+      if @options[:verbose]
+        puts "Generating log.."
+      end
+
+
       log = ''
 
+      if @options[:unreleased]
+        unreleased_log = self.generate_log_between_tags(self.all_tags[0], nil)
+        if unreleased_log
+          log += unreleased_log
+        end
+      end
+
+      (1 ... self.all_tags.size).each { |index|
+        log += self.generate_log_between_tags(self.all_tags[index], self.all_tags[index-1])
+      }
+
+      log += generate_log_between_tags(nil, self.all_tags.last)
+
+      log
+    end
+
+    def fetch_tags_dates
       if @options[:verbose]
         print "Fetching tags dates..\r"
       end
@@ -275,27 +306,6 @@ module GitHubChangelogGenerator
       if @options[:verbose]
         puts 'Fetching tags: Done!'
       end
-      if @options[:verbose]
-        puts "Sorting tags.."
-      end
-
-      @all_tags.sort_by! { |x| self.get_time_of_tag(x) }.reverse!
-
-      if @options[:verbose]
-        puts "Generating log.."
-      end
-
-      if @options[:unreleased]
-        log += self.generate_log_between_tags(self.all_tags[0], nil)
-      end
-
-      (1 ... self.all_tags.size).each { |index|
-        log += self.generate_log_between_tags(self.all_tags[index], self.all_tags[index-1])
-      }
-
-      log += generate_log_between_tags(nil, self.all_tags.last)
-
-      log
     end
 
     def is_megred(number)
@@ -342,13 +352,13 @@ module GitHubChangelogGenerator
 
     end
 
-
     def generate_log_between_tags(older_tag, newer_tag)
-
+      # older_tag nil - means it's first tag, newer_tag nil - means it unreleased section
       filtered_pull_requests = delete_by_time(@pull_requests, :merged_at, older_tag, newer_tag)
       filtered_issues = delete_by_time(@issues, :actual_date, older_tag, newer_tag)
 
       newer_tag_name = newer_tag.nil? ? nil : newer_tag['name']
+      older_tag_name = older_tag.nil? ? nil : older_tag['name']
 
       if @options[:filter_issues_by_milestone]
         #delete excess irrelevant issues (according milestones)
@@ -356,10 +366,11 @@ module GitHubChangelogGenerator
         filtered_pull_requests = filter_by_milestone(filtered_pull_requests, newer_tag_name, @pull_requests)
       end
 
-      older_tag_name = older_tag.nil? ? nil : older_tag['name']
+      if filtered_issues.empty? && filtered_pull_requests.empty? && newer_tag.nil?
+        return nil
+      end
 
       self.create_log(filtered_pull_requests, filtered_issues, newer_tag, older_tag_name)
-
     end
 
     def filter_by_milestone(filtered_issues, newer_tag_name, src_array)
@@ -527,7 +538,7 @@ module GitHubChangelogGenerator
       else
         log += "\n"
       end
-      
+
       log
     end
 
