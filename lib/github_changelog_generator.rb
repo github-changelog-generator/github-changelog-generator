@@ -467,9 +467,13 @@ module GitHubChangelogGenerator
 
       if @options[:pulls]
         # Generate pull requests:
+        if options[:simple_list].nil? && pull_requests.any?
+          log += "- #{@options[:merge_prefix]}\n"
+        end
+
         pull_requests.each { |pull_request|
-          merge = @generator.get_string_for_pull_request(pull_request)
-          log += "- #{merge}"
+          merge_string = @generator.get_string_for_pull_request(pull_request)
+          log += "    - #{merge_string}"
 
         } if pull_requests
       end

@@ -7,7 +7,7 @@ module GitHubChangelogGenerator
   class Parser
     def self.parse_options
       # :include_labels => %w(bug enhancement),
-      options = {:tag1 => nil, :tag2 => nil, :format => '%Y-%m-%d', :output => 'CHANGELOG.md', :exclude_labels => %w(duplicate question invalid wontfix), :pulls => true, :issues => true, :verbose => true, :add_issues_wo_labels => true, :add_pr_wo_labels => true, :merge_prefix => '*Merged pull-request:* ', :author => true, :filter_issues_by_milestone => true, :compare_link => true, :unreleased => true}
+      options = {:tag1 => nil, :tag2 => nil, :format => '%Y-%m-%d', :output => 'CHANGELOG.md', :exclude_labels => %w(duplicate question invalid wontfix), :pulls => true, :issues => true, :verbose => true, :add_issues_wo_labels => true, :add_pr_wo_labels => true, :merge_prefix => '*Merged pull requests:* ', :author => true, :filter_issues_by_milestone => true, :compare_link => true, :unreleased => true}
 
       parser = OptionParser.new { |opts|
         opts.banner = 'Usage: changelog_generator [options]'
@@ -64,6 +64,9 @@ module GitHubChangelogGenerator
         end
         opts.on('--github-api [URL]', 'The enterprise endpoint to use for your Github API.') do |last|
           options[:github_endpoint] = last
+        end
+        opts.on('--simple-list', 'Create simple list from issues and pull requests. Default is false.') do |v|
+          options[:simple_list] = v
         end
         opts.on('--[no-]verbose', 'Run verbosely. Default is true') do |v|
           options[:verbose] = v

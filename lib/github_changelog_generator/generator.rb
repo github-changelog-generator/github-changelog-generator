@@ -8,7 +8,7 @@ module GitHubChangelogGenerator
     def get_string_for_pull_request(pull_request)
       encapsulated_title = self.encapsulate_string pull_request[:title]
 
-      merge = "#{@options[:merge_prefix]}#{encapsulated_title} [\\##{pull_request[:number]}](#{pull_request.html_url})"
+      merge = "#{encapsulated_title} [\\##{pull_request[:number]}](#{pull_request.html_url})"
       if @options[:author]
         if pull_request.user.nil?
           merge += " ({Null user})\n\n"
