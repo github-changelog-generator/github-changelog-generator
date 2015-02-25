@@ -26,9 +26,6 @@ module GitHubChangelogGenerator
         opts.on('-o', '--output [NAME]', 'Output file. Default is CHANGELOG.md') do |last|
           options[:output] = last
         end
-        opts.on('--[no-]verbose', 'Run verbosely. Default is true') do |v|
-          options[:verbose] = v
-        end
         opts.on('--[no-]issues', 'Include closed issues to changelog. Default is true') do |v|
           options[:issues] = v
         end
@@ -53,7 +50,7 @@ module GitHubChangelogGenerator
         opts.on('--[no-]unreleased', 'Add to log unreleased closed issues. Default is true') do |v|
           options[:unreleased] = v
         end
-        opts.on('--[no-]compare-link', 'Include compare link between older version and newer version. Default is true') do |v|
+        opts.on('--[no-]compare-link', 'Include compare link (Full Changelog) between older version and newer version. Default is true') do |v|
           options[:compare_link] = v
         end
         opts.on('--include-labels  x,y,z', Array, 'Issues only with that labels will be included to changelog. Default is \'bug,enhancement\'') do |list|
@@ -67,6 +64,9 @@ module GitHubChangelogGenerator
         end
         opts.on('--github-api [URL]', 'The enterprise endpoint to use for your Github API.') do |last|
           options[:github_endpoint] = last
+        end
+        opts.on('--[no-]verbose', 'Run verbosely. Default is true') do |v|
+          options[:verbose] = v
         end
         opts.on('-v', '--version', 'Print version number') do |v|
           puts "Version: #{GitHubChangelogGenerator::VERSION}"
