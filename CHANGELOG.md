@@ -1,14 +1,18 @@
 # Change Log
 
-## [Unreleased](https://github.com/skywinder/Github-Changelog-Generator/tree/HEAD) (2015-02-26)
+## [1.3.0](https://github.com/skywinder/Github-Changelog-Generator/tree/1.3.0) (2015-02-26)
 
-[Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.2.8...HEAD)
+[Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.2.8...1.3.0)
 
 #### Implemented enhancements:
+
+- Not show `Unreleased` section, when it's empty. [\#55](https://github.com/skywinder/Github-Changelog-Generator/issues/55)
 
 - Separate list exclude and include labels [\#52](https://github.com/skywinder/Github-Changelog-Generator/issues/52)
 
 - Not Released [\#47](https://github.com/skywinder/Github-Changelog-Generator/issues/47)
+
+- Separate by lists: Enhancements, Bugs, Pull requests. [\#31](https://github.com/skywinder/Github-Changelog-Generator/issues/31)
 
 
 #### Fixed bugs:
