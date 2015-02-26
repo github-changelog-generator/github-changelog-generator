@@ -5,20 +5,20 @@ module GitHubChangelogGenerator
       @options = options
     end
 
-    def get_string_for_pull_request(pull_request)
-      encapsulated_title = self.encapsulate_string pull_request[:title]
+    def get_string_for_issue(issue)
+      encapsulated_title = self.encapsulate_string issue[:title]
 
-      merge = "#{@options[:merge_prefix]}#{encapsulated_title} [\\##{pull_request[:number]}](#{pull_request.html_url})"
-      if @options[:author]
-        if pull_request.user.nil?
-          merge += " ({Null user})\n\n"
-        else
-          merge += " ([#{pull_request.user.login}](#{pull_request.user.html_url}))\n\n"
+      merge = "#{encapsulated_title} [\\##{issue[:number]}](#{issue.html_url})"
+      unless issue.pull_request.nil?
+        if @options[:author]
+          if issue.user.nil?
+            merge += " ({Null user})\n\n"
+          else
+            merge += " ([#{issue.user.login}](#{issue.user.html_url}))\n\n"
+          end
         end
-      else
-        merge += "\n\n"
       end
-      merge
+      merge += "\n"
     end
 
     def encapsulate_string(string)
@@ -26,7 +26,7 @@ module GitHubChangelogGenerator
       string.gsub! '\\', '\\\\'
 
       encpas_chars = %w(> * _ \( \) [ ])
-      encpas_chars.each{ |char|
+      encpas_chars.each { |char|
         string.gsub! char, "\\#{char}"
       }
 

@@ -7,7 +7,27 @@ module GitHubChangelogGenerator
   class Parser
     def self.parse_options
       # :include_labels => %w(bug enhancement),
-      options = {:tag1 => nil, :tag2 => nil, :format => '%Y-%m-%d', :output => 'CHANGELOG.md', :exclude_labels => %w(duplicate question invalid wontfix), :pulls => true, :issues => true, :verbose => true, :add_issues_wo_labels => true, :add_pr_wo_labels => true, :merge_prefix => '*Merged pull-request:* ', :author => true, :filter_issues_by_milestone => true, :compare_link => true, :unreleased => true}
+      hash = {
+          :tag1 => nil,
+          :tag2 => nil,
+          :format => '%Y-%m-%d',
+          :output => 'CHANGELOG.md',
+          :exclude_labels => %w(duplicate question invalid wontfix),
+          :pulls => true,
+          :issues => true,
+          :verbose => true,
+          :add_issues_wo_labels => true,
+          :add_pr_wo_labels => true,
+          :merge_prefix => '#### Merged pull requests:',
+          :issue_prefix => '#### Closed issues:',
+          :bug_prefix => '#### Fixed bugs:',
+          :enhancement_prefix => '#### Implemented enhancements:',
+          :author => true,
+          :filter_issues_by_milestone => true,
+          :compare_link => true,
+          :unreleased => true
+      }
+      options = hash
 
       parser = OptionParser.new { |opts|
         opts.banner = 'Usage: changelog_generator [options]'
@@ -25,9 +45,6 @@ module GitHubChangelogGenerator
         end
         opts.on('-o', '--output [NAME]', 'Output file. Default is CHANGELOG.md') do |last|
           options[:output] = last
-        end
-        opts.on('--[no-]verbose', 'Run verbosely. Default is true') do |v|
-          options[:verbose] = v
         end
         opts.on('--[no-]issues', 'Include closed issues to changelog. Default is true') do |v|
           options[:issues] = v
@@ -53,7 +70,7 @@ module GitHubChangelogGenerator
         opts.on('--[no-]unreleased', 'Add to log unreleased closed issues. Default is true') do |v|
           options[:unreleased] = v
         end
-        opts.on('--[no-]compare-link', 'Include compare link between older version and newer version. Default is true') do |v|
+        opts.on('--[no-]compare-link', 'Include compare link (Full Changelog) between older version and newer version. Default is true') do |v|
           options[:compare_link] = v
         end
         opts.on('--include-labels  x,y,z', Array, 'Issues only with that labels will be included to changelog. Default is \'bug,enhancement\'') do |list|
@@ -67,6 +84,12 @@ module GitHubChangelogGenerator
         end
         opts.on('--github-api [URL]', 'The enterprise endpoint to use for your Github API.') do |last|
           options[:github_endpoint] = last
+        end
+        opts.on('--simple-list', 'Create simple list from issues and pull requests. Default is false.') do |v|
+          options[:simple_list] = v
+        end
+        opts.on('--[no-]verbose', 'Run verbosely. Default is true') do |v|
+          options[:verbose] = v
         end
         opts.on('-v', '--version', 'Print version number') do |v|
           puts "Version: #{GitHubChangelogGenerator::VERSION}"
@@ -86,7 +109,7 @@ module GitHubChangelogGenerator
         match = /(?:.+#{Regexp.escape(github_site)}\/)?(.+)\/(.+)/.match(ARGV[0])
 
         begin
-        param = match[2].nil?
+          param = match[2].nil?
         rescue
           puts "Can't detect user and name from first parameter: '#{ARGV[0]}' -> exit'"
           exit
