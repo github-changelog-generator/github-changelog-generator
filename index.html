@@ -1,49 +1,121 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
+    <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Github-changelog-generator by skywinder</title>
-
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="javascripts/scale.fix.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+    <title>Github-changelog-generator by skywinder</title>
   </head>
+
   <body>
-    <div class="wrapper">
-      <header>
-        <h1 class="header">Github-changelog-generator</h1>
-        <p class="header">Automatically generate changelog from your tags, closed issues and merged pull requests.</p>
+    <div id="container">
+      <div class="inner">
 
-        <ul>
-          <li class="download"><a class="buttons" href="https://github.com/skywinder/Github-Changelog-Generator/zipball/master">Download ZIP</a></li>
-          <li class="download"><a class="buttons" href="https://github.com/skywinder/Github-Changelog-Generator/tarball/master">Download TAR</a></li>
-          <li><a class="buttons github" href="https://github.com/skywinder/Github-Changelog-Generator">View On GitHub</a></li>
-        </ul>
+        <header>
+          <h1>Github-changelog-generator</h1>
+          <h2>Automatically generate changelog from your tags, closed issues and merged pull requests.</h2>
+        </header>
 
-        <p class="header">This project is maintained by <a class="header name" href="https://github.com/skywinder">skywinder</a></p>
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/skywinder/Github-Changelog-Generator/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/skywinder/Github-Changelog-Generator/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/skywinder/Github-Changelog-Generator" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
 
+        <hr>
 
-      </header>
-      <section>
-        <h1>
+        <section id="main_content">
+          <p><a href="http://badge.fury.io/rb/github_changelog_generator"><img src="https://badge.fury.io/rb/github_changelog_generator.svg" alt="Gem Version"></a>
+<a href="https://travis-ci.org/skywinder/Github-Changelog-Generator"><img src="https://travis-ci.org/skywinder/Github-Changelog-Generator.svg?branch=master" alt="Build Status"></a></p>
+
+<h1>
 <a id="github-changelog-generator" class="anchor" href="#github-changelog-generator" aria-hidden="true"><span class="octicon octicon-link"></span></a>GitHub Changelog Generator</h1>
 
-<p><a href="http://badge.fury.io/rb/github_changelog_generator"><img src="https://badge.fury.io/rb/github_changelog_generator.svg" alt="Gem Version"></a></p>
+<ul>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#output-example">Output example</a></li>
+<li>
+<a href="#usage">Usage</a>
+
+<ul>
+<li><a href="#params">Params</a></li>
+<li><a href="#github-token">GitHub token</a></li>
+</ul>
+</li>
+<li>
+<a href="#features-and-advantages-of-this-project">Features and advantages of this project</a>
+
+<ul>
+<li><a href="#alternatives">Alternatives</a></li>
+<li><a href="#projects-using-this-library">Projects using this library</a></li>
+</ul>
+</li>
+<li><a href="#am-i-missed-some-essential-feature">Am I missed some essential feature?</a></li>
+<li><a href="#contributing">Contributing</a></li>
+<li><a href="#license">License</a></li>
+</ul>
 
 <p>Changelog generation has never been so easy.</p>
 
-<p>This script automatically generate change-log from your tags and merged pull-requests.</p>
+<p><strong>Fully automate changelog generation</strong> - This gem generate change log file based on tags, issues and merged pull requests from <strong>Github issue tracker</strong>. This generator complies all <a href="http://keepachangelog.com/">change log format guidelines</a>.</p>
 
 <h2>
-<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation:</h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
 
 <pre><code>[sudo] gem install github_changelog_generator
 </code></pre>
+
+<h2>
+<a id="output-example" class="anchor" href="#output-example" aria-hidden="true"><span class="octicon octicon-link"></span></a>Output example</h2>
+
+<ul>
+<li>Look at <strong><a href="https://github.com/skywinder/Github-Changelog-Generator/blob/master/CHANGELOG.md">CHANGELOG.md</a></strong> for this project</li>
+<li>
+<p><a href="https://github.com/skywinder/ActionSheetPicker-3.0/blob/master/CHANGELOG.md">ActionSheetPicker-3.0/CHANGELOG.md</a>  was generated by command:</p>
+
+<pre><code>github_changelog_generator -u skywinder -p ActionSheetPicker-3.0
+</code></pre>
+</li>
+<li><p>In general it looks like this:</p></li>
+</ul>
+
+<blockquote>
+<h2>
+<a id="125-2015-01-15" class="anchor" href="#125-2015-01-15" aria-hidden="true"><span class="octicon octicon-link"></span></a>
+<a href="https://github.com/skywinder/Github-Changelog-Generator/tree/1.2.5">1.2.5</a> (2015-01-15)</h2>
+
+<p><a href="https://github.com/skywinder/Github-Changelog-Generator/compare/1.2.4...1.2.5">Full Changelog</a></p>
+
+<h4>
+<a id="implemented-enhancements" class="anchor" href="#implemented-enhancements" aria-hidden="true"><span class="octicon octicon-link"></span></a>Implemented enhancements:</h4>
+
+<ul>
+<li>Use milestone to specify in which version bug was fixed <a href="https://github.com/skywinder/Github-Changelog-Generator/issues/22">#22</a>
+</li>
+</ul>
+
+<h4>
+<a id="fixed-bugs" class="anchor" href="#fixed-bugs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Fixed bugs:</h4>
+
+<ul>
+<li>Error when trying to generate log for repo without tags <a href="https://github.com/skywinder/Github-Changelog-Generator/issues/32">#32</a>
+</li>
+</ul>
+
+<h4>
+<a id="merged-pull-requests" class="anchor" href="#merged-pull-requests" aria-hidden="true"><span class="octicon octicon-link"></span></a>Merged pull requests:</h4>
+
+<ul>
+<li><p>PrettyPrint class is included using lowercase 'pp' <a href="https://github.com/skywinder/Github-Changelog-Generator/pull/43">#43</a> (<a href="https://github.com/schwing">schwing</a>)</p></li>
+<li><p>support enterprise github via command line options <a href="https://github.com/skywinder/Github-Changelog-Generator/pull/42">#42</a> (<a href="https://github.com/glenlovett">glenlovett</a>)</p></li>
+</ul>
+</blockquote>
 
 <h2>
 <a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
@@ -52,56 +124,52 @@
 
 <ul>
 <li>
-<p><code>cd</code> to your Project folder with configured git and just type:</p>
+<p>If your <strong>git remote</strong> <code>origin</code> refer to your GitHub repo, then just go to your project folder and run:</p>
 
 <pre><code>github_changelog_generator
 </code></pre>
 </li>
 <li>
-<p>from anywhere:</p>
+<p>or from anywhere:</p>
 
-<pre><code>github_changelog_generator -u github-username -p github-project
+<pre><code>github_changelog_generator -u github_username -p github_project
 </code></pre>
 </li>
 </ul>
 
-<p>As output you will get <code>CHANGELOG.md</code> file with <em>pretty Markdown-formatted</em> changelog.</p>
+<p>As output you will get <code>CHANGELOG.md</code> file with pretty <em>Markdown-formatted</em> changelog.</p>
 
-<h2>
-<a id="params" class="anchor" href="#params" aria-hidden="true"><span class="octicon octicon-link"></span></a>Params:</h2>
+<h3>
+<a id="params" class="anchor" href="#params" aria-hidden="true"><span class="octicon octicon-link"></span></a>Params</h3>
 
 <p>Type <code>github_changelog_generator --help</code> for detailed usage.</p>
 
 <pre><code>Usage: changelog_generator [options]
 -u, --user [USER]                Username of the owner of target GitHub repo
 -p, --project [PROJECT]          Name of project on GitHub
--t, --token [TOKEN]              To make more than 50 requests this script required your OAuth token for GitHub. You can generate it on https://github.com/settings/applications
--h, --help                       Displays Help
--v, --[no-]verbose               Run verbosely. Default is true
-    --[no-]issues                Include closed issues to changelog. Default is true
-    --[no-]issues-without-labels Include closed issues without any labels to changelog. Default is true
-    --[no-]pull-requests         Include pull-requests to changelog. Default is true
--l, --last-changes               Generate log between last 2 tags only
+-t, --token [TOKEN]              To make more than 50 requests per hour your GitHub token required. You can generate it here: https://github.com/settings/tokens/new
 -f, --date-format [FORMAT]       Date format. Default is %d/%m/%y
 -o, --output [NAME]              Output file. Default is CHANGELOG.md
-    --labels  x,y,z              List of labels. Issues with that labels will be included to changelog. Default is 'bug,enhancement'
+    --[no-]verbose               Run verbosely. Default is true
+    --[no-]issues                Include closed issues to changelog. Default is true
+    --[no-]issues-wo-labels      Include closed issues without labels to changelog. Default is true
+    --[no-]pr-wo-labels          Include pull requests without labels to changelog. Default is true
+    --[no-]pull-requests         Include pull-requests to changelog. Default is true
+    --[no-]filter-by-milestone   Use milestone to detect when issue was resolved. Default is true
+    --[no-]author                Add author of pull-request in the end. Default is true
+    --unreleased-only            Generate log from unreleased closed issues only.
+    --[no-]unreleased            Add to log unreleased closed issues. Default is true
+    --[no-]compare-link          Include compare link between older version and newer version. Default is true
+    --include-labels  x,y,z      Issues only with that labels will be included to changelog. Default is 'bug,enhancement'
+    --exclude-labels  x,y,z      Issues with that labels will be always excluded from changelog. Default is 'duplicate,question,invalid,wontfix'
+    --github-site [URL]          The Enterprise Github site on which your project is hosted.
+    --github-api [URL]           The enterprise endpoint to use for your Github API.
+-v, --version                    Print version number
+-h, --help                       Displays Help
 </code></pre>
 
-<h2>
-<a id="examples" class="anchor" href="#examples" aria-hidden="true"><span class="octicon octicon-link"></span></a>Examples:</h2>
-
-<ul>
-<li>Look at changelog for <strong><a href="https://github.com/skywinder/Github-Changelog-Generator/blob/master/CHANGELOG.md">CHANGELOG.md</a></strong> for this project</li>
-<li>
-<p>This changelog: <a href="https://github.com/skywinder/ActionSheetPicker-3.0/blob/master/CHANGELOG.md">ActionSheetPicker-3.0/CHANGELOG.md</a>  was generated by command:</p>
-
-<pre><code>github_changelog_generator -u skywinder -p ActionSheetPicker-3.0
-</code></pre>
-</li>
-</ul>
-
-<h2>
-<a id="faq" class="anchor" href="#faq" aria-hidden="true"><span class="octicon octicon-link"></span></a>FAQ:</h2>
+<h3>
+<a id="github-token" class="anchor" href="#github-token" aria-hidden="true"><span class="octicon octicon-link"></span></a>GitHub token</h3>
 
 <p>Since GitHub allow to make only 50 requests without authentication it's recommended to run this script with token</p>
 
@@ -110,11 +178,14 @@
 <p>And:</p>
 
 <ul>
-<li>Run with key <code>-t [your-16-digit-token]</code> that </li>
+<li>Run with key <code>-t [your-16-digit-token]</code> </li>
 <li>
 <p>Or set environment variable <code>CHANGELOG_GITHUB_TOKEN</code> and specify there your token. </p>
 
-<p>i.e. add to your <code>~/.bash_profile</code> or <code>~/.zshrc</code> or any other place to load ENV variables string <code>export CHANGELOG_GITHUB_TOKEN="your-40-digit-github-token"'</code></p>
+<p>i.e. add to your <code>~/.bash_profile</code> or <code>~/.zshrc</code> or any other place to load ENV variables string :</p>
+
+<pre><code>export CHANGELOG_GITHUB_TOKEN="your-40-digit-github-token"
+</code></pre>
 </li>
 </ul>
 
@@ -127,9 +198,61 @@
 <p>It's time to create this token or wait for 1 hour before GitHub reset the counter for your IP.</p>
 
 <h2>
+<a id="features-and-advantages-of-this-project" class="anchor" href="#features-and-advantages-of-this-project" aria-hidden="true"><span class="octicon octicon-link"></span></a>Features and advantages of this project</h2>
+
+<ul>
+<li>Generate canonical change log file, followed by <a href="http://keepachangelog.com/">keepachangelog.com guidlines</a>
+</li>
+<li>Simply add links for all closed issues and merged pull requests</li>
+<li>Possible to generate <strong>Unreleased</strong> changes (closed issues that have not released yet)</li>
+<li>Flexible format customisation:
+
+<ul>
+<li>Customize issues, that should be added to changelog</li>
+<li>Custom date format supported </li>
+<li>Ability to manually specify in which version issue was fixed (in case, when closed date is not match) by setting <code>milestone</code> of issue the same name as tag of  required version</li>
+<li>Ability to exclude specific issues from change log (by labels)
+
+<ul>
+<li>Automatically exclude "questions" - issues marked as <code>question</code> labels (and other issues, that shouldn't be in change log file: with <code>duplicate invalid wontfix</code> labels)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Distinguish bug fixes, enchantments, and closed issues according labels.
+
+<ul>
+<li>  <strong>Issues</strong> (closed issues w/o any labels)</li>
+<li>
+<strong>Merged pull-requests</strong> (all merged pull-requests)</li>
+<li>
+<strong>Bug-fixes</strong> (by label <code>bug</code> in issue)</li>
+<li>
+<strong>Enhancements</strong> (by label <code>enhancement</code> in issue)</li>
+</ul>
+</li>
+</ul>
+
+<h3>
+<a id="alternatives" class="anchor" href="#alternatives" aria-hidden="true"><span class="octicon octicon-link"></span></a>Alternatives</h3>
+
+<p>Here is a <a href="https://github.com/skywinder/Github-Changelog-Generator/wiki/Alternatives">wikipage list of alternatives</a>, that I found. But no one was satisfy my requirements.</p>
+
+<p><em>If you know other projects - feel free to edit this Wiki page!</em></p>
+
+<h3>
+<a id="projects-using-this-library" class="anchor" href="#projects-using-this-library" aria-hidden="true"><span class="octicon octicon-link"></span></a>Projects using this library</h3>
+
+<p><a href="https://github.com/skywinder/Github-Changelog-Generator/wiki/Projects-using-Github-Changelog-Generator">Wikipage with list of projects</a> </p>
+
+<p><em>If you are using <code>github_changelog_generator</code> for generation change log in your project or know of project that uses it, please add it to <a href="https://github.com/skywinder/Github-Changelog-Generator/wiki/Projects-using-Github-Changelog-Generator">this</a> list.</em></p>
+
+<h2>
 <a id="am-i-missed-some-essential-feature" class="anchor" href="#am-i-missed-some-essential-feature" aria-hidden="true"><span class="octicon octicon-link"></span></a>Am I missed some essential feature?</h2>
 
-<p><strong>Nothing is impossible!</strong> Open an <a href="https://github.com/skywinder/Github-Changelog-Generator/issues/new">issue</a> and let's make generator better together!</p>
+<p><strong>Nothing is impossible!</strong> </p>
+
+<p>Open an <a href="https://github.com/skywinder/Github-Changelog-Generator/issues/new">issue</a> and let's make generator better together!</p>
 
 <p><em>Bug reports, feature requests, patches, well-wishes are always welcome!</em></p>
 
@@ -149,13 +272,14 @@
 <a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h2>
 
 <p>Github Changelog Generator is released under the <a href="http://www.opensource.org/licenses/MIT">MIT License</a>.</p>
-      </section>
-      <footer>
-        <p><small>Hosted on <a href="http://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
-      </footer>
-    </div>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-		          <script type="text/javascript">
+        </section>
+
+        <footer>
+          Github-changelog-generator is maintained by <a href="https://github.com/skywinder">skywinder</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+                  <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
           </script>
@@ -166,5 +290,7 @@
             } catch(err) {}
           </script>
 
+      </div>
+    </div>
   </body>
 </html>
