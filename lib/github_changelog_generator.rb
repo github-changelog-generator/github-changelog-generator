@@ -502,7 +502,6 @@ module GitHubChangelogGenerator
 
       end
 
-      log +="\n"
       log
     end
 
@@ -512,12 +511,13 @@ module GitHubChangelogGenerator
         log += "#{prefix}\n\n"
       end
 
-      issues.each { |issue|
-        merge_string = @generator.get_string_for_issue(issue)
-        log += "- #{merge_string}\n"
-
-      } if issues
-      log +="\n"
+      if issues.any?
+        issues.each { |issue|
+          merge_string = @generator.get_string_for_issue(issue)
+          log += "- #{merge_string}\n\n"
+        }
+      end
+      log
     end
 
     def generate_header(log, newer_tag_name, newer_tag_name2, newer_tag_time, older_tag_name, project_url)

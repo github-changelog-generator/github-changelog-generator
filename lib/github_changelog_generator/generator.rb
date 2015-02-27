@@ -8,17 +8,18 @@ module GitHubChangelogGenerator
     def get_string_for_issue(issue)
       encapsulated_title = self.encapsulate_string issue[:title]
 
-      merge = "#{encapsulated_title} [\\##{issue[:number]}](#{issue.html_url})"
+      title_with_number = "#{encapsulated_title} [\\##{issue[:number]}](#{issue.html_url})"
+
       unless issue.pull_request.nil?
         if @options[:author]
           if issue.user.nil?
-            merge += " ({Null user})\n\n"
+            title_with_number += " ({Null user})"
           else
-            merge += " ([#{issue.user.login}](#{issue.user.html_url}))\n\n"
+            title_with_number += " ([#{issue.user.login}](#{issue.user.html_url}))"
           end
         end
       end
-      merge += "\n"
+      title_with_number
     end
 
     def encapsulate_string(string)
