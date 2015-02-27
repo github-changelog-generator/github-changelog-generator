@@ -35,23 +35,23 @@ Changelog generation has never been so easy.
 
 - In general it looks like this:
 
-> ## [1.3.10](https://github.com/skywinder/ActionSheetPicker-3.0/tree/1.3.10)
-> #### 09/01/15
-> - *Merged pull-request:* add header file to public [\#115](https://github.com/skywinder/ActionSheetPicker-3.0/pull/115)
-> ([skywinder](https://github.com/skywinder))
+> ## [1.2.5](https://github.com/skywinder/Github-Changelog-Generator/tree/1.2.5) (2015-01-15)
 > 
-> - *Merged pull-request:* Fix bad interaction with Git submodules.
-> [\#112](https://github.com/skywinder/ActionSheetPicker-3.0/pull/112)
-> ([JimDabell](https://github.com/JimDabell))
+> [Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.2.4...1.2.5)
 > 
-> - *Implemented enhancement:* Should have minimum/maximum date property exposed
-> [\#97](https://github.com/skywinder/ActionSheetPicker-3.0/issues/97)
+> #### Implemented enhancements:
 > 
-> ## [1.3.9](https://github.com/skywinder/ActionSheetPicker-3.0/tree/1.3.9)
-> #### 11/12/14
-> - *Closed issue:* Bad interaction with submodules [\#111](https://github.com/skywinder/ActionSheetPicker-3.0/issues/111)
+> - Use milestone to specify in which version bug was fixed [\#22](https://github.com/skywinder/Github-Changelog-Generator/issues/22)
 > 
-> - *Closed issue:* No "cancel" button [\#122](https://github.com/skywinder/ActionSheetPicker-3.0/issues/122)
+> #### Fixed bugs:
+> 
+> - Error when trying to generate log for repo without tags [\#32](https://github.com/skywinder/Github-Changelog-Generator/issues/32)
+> 
+> #### Merged pull requests:
+> 
+> - PrettyPrint class is included using lowercase 'pp' [\#43](https://github.com/skywinder/Github-Changelog-Generator/pull/43) ([schwing](https://github.com/schwing))
+> 
+> - support enterprise github via command line options [\#42](https://github.com/skywinder/Github-Changelog-Generator/pull/42) ([glenlovett](https://github.com/glenlovett))
 
 
 ## Usage
