@@ -39,15 +39,15 @@ Changelog generation has never been so easy.
 > 
 > [Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.2.4...1.2.5)
 > 
-> #### Implemented enhancements:
+> **Implemented enhancements:**
 > 
 > - Use milestone to specify in which version bug was fixed [\#22](https://github.com/skywinder/Github-Changelog-Generator/issues/22)
 > 
-> #### Fixed bugs:
+> **Fixed bugs:**
 > 
 > - Error when trying to generate log for repo without tags [\#32](https://github.com/skywinder/Github-Changelog-Generator/issues/32)
 > 
-> #### Merged pull requests:
+> **Merged pull requests:**
 > 
 > - PrettyPrint class is included using lowercase 'pp' [\#43](https://github.com/skywinder/Github-Changelog-Generator/pull/43) ([schwing](https://github.com/schwing))
 > 
