@@ -1,6 +1,6 @@
 # Change Log
 
-## [Unreleased](https://github.com/skywinder/Github-Changelog-Generator/tree/HEAD) (2015-03-03)
+## [Unreleased](https://github.com/skywinder/Github-Changelog-Generator/tree/HEAD)
 
 [Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.3.2...HEAD)
 
