@@ -499,12 +499,11 @@ module GitHubChangelogGenerator
         log += generate_log_from_array(enhancement_a, @options[:enhancement_prefix])
         log += generate_log_from_array(bugs_a, @options[:bug_prefix])
         log += generate_log_from_array(issues_a, @options[:issue_prefix])
+      end
 
-        if @options[:pulls]
-          # Generate pull requests:
-          log += generate_log_from_array(pull_requests, @options[:merge_prefix])
-        end
-
+      if @options[:pulls]
+        # Generate pull requests:
+        log += generate_log_from_array(pull_requests, @options[:merge_prefix])
       end
 
       log
