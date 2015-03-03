@@ -13,8 +13,8 @@ Gem::Specification.new do |spec|
   spec.authors = ["Petr Korolev"]
   spec.email = %q{sky4winder+github_changelog_generator@gmail.com}
   spec.date = `date +"%Y-%m-%d"`.strip!
-  spec.summary = %q{Script, that automatically generate change-log from your tags and pull-requests.}
-  spec.description = %q{Script, that automatically generate change-log from your tags and pull-requests}
+  spec.summary = %q{Script, that automatically generate changelog from your tags, issues, labels and pull requests.}
+  spec.description = %q{Script, that automatically generate changelog from your tags, issues, labels and pull requests.}
   spec.homepage = %q{https://github.com/skywinder/Github-Changelog-Generator}
   spec.license       = "MIT"
 
