@@ -1,5 +1,13 @@
 # Change Log
 
+## [Unreleased](https://github.com/skywinder/Github-Changelog-Generator/tree/HEAD) (2015-03-03)
+
+[Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.3.2...HEAD)
+
+**Closed issues:**
+
+- Add \# character to wrapping list. [\#58](https://github.com/skywinder/Github-Changelog-Generator/issues/58)
+
 ## [1.3.2](https://github.com/skywinder/Github-Changelog-Generator/tree/1.3.2) (2015-03-03)
 
 [Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.3.1...1.3.2)
