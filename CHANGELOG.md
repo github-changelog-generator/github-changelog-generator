@@ -1,8 +1,8 @@
 # Change Log
 
-## [Unreleased](https://github.com/skywinder/Github-Changelog-Generator/tree/HEAD)
+## [1.3.3](https://github.com/skywinder/Github-Changelog-Generator/tree/1.3.3) (2015-03-03)
 
-[Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.3.2...HEAD)
+[Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.3.2...1.3.3)
 
 **Closed issues:**
 
