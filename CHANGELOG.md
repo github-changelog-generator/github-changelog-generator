@@ -1,5 +1,13 @@
 # Change Log
 
+## [1.3.2](https://github.com/skywinder/Github-Changelog-Generator/tree/1.3.2) (2015-03-03)
+
+[Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.3.1...1.3.2)
+
+**Fixed bugs:**
+
+- generation failed if github commit api return `404 Not Found` [\#57](https://github.com/skywinder/Github-Changelog-Generator/issues/57)
+
 ## [1.3.1](https://github.com/skywinder/Github-Changelog-Generator/tree/1.3.1) (2015-02-27)
 
 [Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.3.0...1.3.1)
