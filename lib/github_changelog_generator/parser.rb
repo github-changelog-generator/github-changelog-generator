@@ -25,7 +25,8 @@ module GitHubChangelogGenerator
           :author => true,
           :filter_issues_by_milestone => true,
           :compare_link => true,
-          :unreleased => true
+          :unreleased => true,
+          :unreleased_label => 'Unreleased'
       }
       options = hash
 
@@ -69,6 +70,9 @@ module GitHubChangelogGenerator
         end
         opts.on('--[no-]unreleased', 'Add to log unreleased closed issues. Default is true') do |v|
           options[:unreleased] = v
+        end
+        opts.on('--unreleased-label [label]', 'Add to log unreleased closed issues. Default is true') do |v|
+          options[:unreleased_label] = v
         end
         opts.on('--[no-]compare-link', 'Include compare link (Full Changelog) between older version and newer version. Default is true') do |v|
           options[:compare_link] = v
