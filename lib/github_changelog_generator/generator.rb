@@ -26,7 +26,7 @@ module GitHubChangelogGenerator
 
       string.gsub! '\\', '\\\\'
 
-      encpas_chars = %w(> * _ \( \) [ ])
+      encpas_chars = %w(> * _ \( \) [ ] #)
       encpas_chars.each { |char|
         string.gsub! char, "\\#{char}"
       }
