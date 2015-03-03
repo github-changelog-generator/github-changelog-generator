@@ -85,8 +85,13 @@ module GitHubChangelogGenerator
             if event[:commit_id].nil?
               issue[:actual_date] = issue[:closed_at]
             else
-              commit = @github.git_data.commits.get @options[:user], @options[:project], event[:commit_id]
-              issue[:actual_date] = commit[:author][:date]
+              begin
+                commit = @github.git_data.commits.get @options[:user], @options[:project], event[:commit_id]
+                issue[:actual_date] = commit[:author][:date]
+              rescue
+                puts "Warning: can't fetch commit #{event[:commit_id]} probably it referenced from another repo."
+                issue[:actual_date] = issue[:closed_at]
+              end
             end
             break
           end
