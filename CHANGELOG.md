@@ -36,7 +36,7 @@
 
 **Fixed bugs:**
 
-- Test pull request with invalid label \(#26\) in changelog appeared. [\#44](https://github.com/skywinder/Github-Changelog-Generator/issues/44)
+- Test pull request with invalid label \(\#26\) in changelog appeared. [\#44](https://github.com/skywinder/Github-Changelog-Generator/issues/44)
 
 **Merged pull requests:**
 

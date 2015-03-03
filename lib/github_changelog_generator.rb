@@ -460,7 +460,7 @@ module GitHubChangelogGenerator
       project_url = "#{github_site}/#{@options[:user]}/#{@options[:project]}"
 
       if newer_tag.nil?
-        newer_tag_name = 'Unreleased'
+        newer_tag_name = @options[:unreleased_label]
         newer_tag_link = 'HEAD'
         newer_tag_time = Time.new
       else
@@ -531,7 +531,11 @@ module GitHubChangelogGenerator
       time_string = newer_tag_time.strftime @options[:format]
 
       # Generate tag name and link
-      log += "## [#{newer_tag_name}](#{project_url}/tree/#{newer_tag_name2}) (#{time_string})\n\n"
+      if newer_tag_name.equal? @options[:unreleased_label]
+        log += "## [#{newer_tag_name}](#{project_url}/tree/#{newer_tag_name2})\n\n"
+      else
+        log += "## [#{newer_tag_name}](#{project_url}/tree/#{newer_tag_name2}) (#{time_string})\n\n"
+      end
 
       if @options[:compare_link] && older_tag_name
         # Generate compare link
