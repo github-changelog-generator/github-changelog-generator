@@ -1,24 +1,22 @@
 # Change Log
 
-## [Unreleased](https://github.com/nantas/changelog_test/tree/HEAD) (2015-03-03)
+## [v0.0.3](https://github.com/skywinder/changelog_test/tree/v0.0.3) (2015-03-04)
 
-[Full Changelog](https://github.com/nantas/changelog_test/compare/v0.0.1...HEAD)
+[Full Changelog](https://github.com/skywinder/changelog_test/compare/v0.0.2...v0.0.3)
 
-**Fixed bugs:**
+**Merged pull requests:**
 
-- test issue closed by a commit that will be gone [\#3](https://github.com/nantas/changelog_test/issues/3)
+- fix \#3. hotfix. Should appear in v0.0.3 [\#4](https://github.com/skywinder/changelog_test/pull/4) ([skywinder](https://github.com/skywinder))
 
-**Closed issues:**
+## [v0.0.2](https://github.com/skywinder/changelog_test/tree/v0.0.2) (2015-03-04)
 
-- test issue that will be closed in another repo [\#4](https://github.com/nantas/changelog_test/issues/4)
+[Full Changelog](https://github.com/skywinder/changelog_test/compare/v0.0.1...v0.0.2)
 
-## [v0.0.1](https://github.com/nantas/changelog_test/tree/v0.0.1) (2015-03-02)
+**Merged pull requests:**
 
-**Fixed bugs:**
+- Here is a test hotfix should appear in v.0.0.2 [\#2](https://github.com/skywinder/changelog_test/pull/2) ([skywinder](https://github.com/skywinder))
 
-- test issue that will be closed by a commit [\#2](https://github.com/nantas/changelog_test/issues/2)
-
-- test issue that will close normally [\#1](https://github.com/nantas/changelog_test/issues/1)
+## [v0.0.1](https://github.com/skywinder/changelog_test/tree/v0.0.1) (2015-03-02)
 
 
 
