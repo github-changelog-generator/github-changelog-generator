@@ -31,7 +31,7 @@ module GitHubChangelogGenerator
       options = hash
 
       parser = OptionParser.new { |opts|
-        opts.banner = 'Usage: changelog_generator [options]'
+        opts.banner = 'Usage: github_changelog_generator [options]'
         opts.on('-u', '--user [USER]', 'Username of the owner of target GitHub repo') do |last|
           options[:user] = last
         end
