@@ -49,12 +49,12 @@ module GitHubChangelogGenerator
 
       if @options[:issues]
         @issues = self.get_filtered_issues
-        fetch_event_for_issues(@issues)
-        detect_actual_closed_dates
       else
         @issues = []
       end
 
+      fetch_event_for_issues_and_pr
+      detect_actual_closed_dates
       @tag_times_hash = {}
     end
 
@@ -65,9 +65,16 @@ module GitHubChangelogGenerator
       end
 
       threads = []
+
       @issues.each { |issue|
         threads << Thread.new {
           find_closed_date_by_commit(issue)
+        }
+      }
+
+      @pull_requests.each { |pull_request|
+        threads << Thread.new {
+          find_closed_date_by_commit(pull_request)
         }
       }
       threads.each { |thr| thr.join }
@@ -79,9 +86,11 @@ module GitHubChangelogGenerator
 
     def find_closed_date_by_commit(issue)
       unless issue['events'].nil?
+        #if it's PR -> then find "merged event", in case of usual issue -> fond closed date
+        compare_string = issue[:merged_at].nil? ? 'closed' : 'merged'
         # reverse! - to find latest closed event. (event goes in date order)
         issue['events'].reverse!.each { |event|
-          if event[:event].eql? 'closed'
+          if event[:event].eql? compare_string
             if event[:commit_id].nil?
               issue[:actual_date] = issue[:closed_at]
             else
@@ -111,7 +120,7 @@ module GitHubChangelogGenerator
 
     def fetch_merged_at_pull_requests
       if @options[:verbose]
-        print "Fetching pull requests...\r"
+        print "Fetching merged dates...\r"
       end
       response = @github.pull_requests.list @options[:user], @options[:project], :state => 'closed'
 
@@ -120,14 +129,10 @@ module GitHubChangelogGenerator
       response.each_page do |page|
         page_i += PER_PAGE_NUMBER
         count_pages = response.count_pages
-        print "Fetching pull requests... #{page_i}/#{count_pages * PER_PAGE_NUMBER}\r"
+        print "Fetching merged dates... #{page_i}/#{count_pages * PER_PAGE_NUMBER}\r"
         pull_requests.concat(page)
       end
       print "                                                   \r"
-
-      if @options[:verbose]
-        puts "Received pull requests: #{pull_requests.count}"
-      end
 
       @pull_requests.each { |pr|
         fetched_pr = pull_requests.find { |fpr|
@@ -135,6 +140,11 @@ module GitHubChangelogGenerator
         pr[:merged_at] = fetched_pr[:merged_at]
         pull_requests.delete(fetched_pr)
       }
+
+      if @options[:verbose]
+        puts 'Fetching merged dates... Done!'
+      end
+
     end
 
     def get_filtered_pull_requests
@@ -171,43 +181,6 @@ module GitHubChangelogGenerator
       end
 
       filtered_pull_requests
-      #
-      # #
-      #
-      #
-      # unless @options[:pull_request_labels].nil?
-      #
-      #   if @options[:verbose]
-      #     puts 'Filter all pull requests by labels.'
-      #   end
-      #
-      #   filtered_pull_requests = filtered_pull_requests.select { |pull_request|
-      #     #fetch this issue to get labels array
-      #     issue = @github.issues.get @options[:user], @options[:project], pull_request.number
-      #
-      #     #compare is there any labels from @options[:labels] array
-      #     issue_without_labels = !issue.labels.map { |label| label.name }.any?
-      #
-      #     if @options[:verbose]
-      #       puts "Filter request \##{issue.number}."
-      #     end
-      #
-      #     if @options[:pull_request_labels].any?
-      #       select_by_label = (issue.labels.map { |label| label.name } & @options[:pull_request_labels]).any?
-      #     else
-      #       select_by_label = false
-      #     end
-      #
-      #     select_by_label | issue_without_labels
-      #   }
-      #
-      #   if @options[:verbose]
-      #     puts "Filtered pull requests with specified labels and w/o labels: #{filtered_pull_requests.count}"
-      #   end
-      #   return filtered_pull_requests
-      # end
-      #
-      # filtered_pull_requests
     end
 
     def compund_changelog
@@ -359,7 +332,7 @@ module GitHubChangelogGenerator
 
     def generate_log_between_tags(older_tag, newer_tag)
       # older_tag nil - means it's first tag, newer_tag nil - means it unreleased section
-      filtered_pull_requests = delete_by_time(@pull_requests, :merged_at, older_tag, newer_tag)
+      filtered_pull_requests = delete_by_time(@pull_requests, :actual_date, older_tag, newer_tag)
       filtered_issues = delete_by_time(@issues, :actual_date, older_tag, newer_tag)
 
       newer_tag_name = newer_tag.nil? ? nil : newer_tag['name']
@@ -628,27 +601,41 @@ module GitHubChangelogGenerator
       return issues_wo_pr, pull_requests
     end
 
-    def fetch_event_for_issues(filtered_issues)
+    def fetch_event_for_issues_and_pr
       if @options[:verbose]
-        print "Fetching events for issues: 0/#{filtered_issues.count}\r"
+        print "Fetching events for issues and PR: 0/#{@issues.count + @pull_requests.count}\r"
       end
 
       # Async fetching events:
       threads = []
 
       i = 0
-      filtered_issues.each { |issue|
+
+      @issues.each { |issue|
         threads << Thread.new {
           obj = @github.issues.events.list user: @options[:user], repo: @options[:project], issue_number: issue['number']
           issue[:events] = obj.body
-          print "Fetching events for issues: #{i+1}/#{filtered_issues.count}\r"
+          print "Fetching events for issues and PR: #{i+1}/#{@issues.count + @pull_requests.count}\r"
           i +=1
         }
       }
+
+      @pull_requests.each { |pull_request|
+        threads << Thread.new {
+          obj = @github.issues.events.list user: @options[:user], repo: @options[:project], issue_number: pull_request['number']
+          pull_request[:events] = obj.body
+          print "Fetching events for issues and PR: #{i+1}/#{@issues.count + @pull_requests.count}\r"
+          i +=1
+        }
+      }
+
       threads.each { |thr| thr.join }
 
+      #to clear line from prev print
+      print "                                                            \r"
+
       if @options[:verbose]
-        puts "Fetching events for issues: Done!"
+        puts "Fetching events for issues and PR: Done! #{i}/#{@issues.count + @pull_requests.count}"
       end
     end
 
