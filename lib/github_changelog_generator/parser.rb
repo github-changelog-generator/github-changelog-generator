@@ -26,7 +26,8 @@ module GitHubChangelogGenerator
           :filter_issues_by_milestone => true,
           :compare_link => true,
           :unreleased => true,
-          :unreleased_label => 'Unreleased'
+          :unreleased_label => 'Unreleased',
+          :branch => 'origin'
       }
 
       parser = OptionParser.new { |opts|
@@ -129,11 +130,20 @@ module GitHubChangelogGenerator
 
       if !options[:user] && !options[:project]
         remote = `git remote -vv`.split("\n")
-        match = /.*(?:[:\/])((?:-|\w|\.)*)\/((?:-|\w|\.)*)?(?:\.git).*/.match(remote[0])
+        # try to find repo in format: origin	git@github.com:skywinder/Github-Changelog-Generator.git (fetch)
+        remote.select { |v| v.include? options[:branch] }
+        match = /.*(?:[:\/])((?:-|\w|\.)*)\/((?:-|\w|\.)*)(?:\.git).*/.match(remote[0])
 
         if match && match[1] && match[2]
           puts "Detected user:#{match[1]}, project:#{match[2]}"
           options[:user], options[:project] = match[1], match[2]
+        else
+        # try to find repo in format: origin	https://github.com/skywinder/ChangelogMerger (fetch)
+          match = /.*\/((?:-|\w|\.)*)\/((?:-|\w|\.)*).*/.match(remote[0])
+          if match && match[1] && match[2]
+            puts "Detected user:#{match[1]}, project:#{match[2]}"
+            options[:user], options[:project] = match[1], match[2]
+          end
         end
       end
 
