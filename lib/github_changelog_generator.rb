@@ -20,13 +20,7 @@ module GitHubChangelogGenerator
 
       @options = Parser.parse_options
 
-      if options[:verbose]
-        puts 'Input options:'
-        pp options
-        puts ''
-      end
-
-      github_token
+      fetch_github_token
 
       github_options = {per_page: PER_PAGE_NUMBER}
       github_options[:oauth_token] = @github_token unless @github_token.nil?
@@ -111,11 +105,6 @@ module GitHubChangelogGenerator
 
     def print_json(json)
       puts JSON.pretty_generate(json)
-    end
-
-    def exec_command(cmd)
-      exec_cmd = "cd #{$project_path} and #{cmd}"
-      %x[#{exec_cmd}]
     end
 
     def fetch_merged_at_pull_requests
@@ -240,7 +229,7 @@ module GitHubChangelogGenerator
 
       log = ''
 
-      if @options[:unreleased]
+      if @options[:unreleased] && @all_tags.count != 0
         unreleased_log = self.generate_log_between_tags(self.all_tags[0], nil)
         if unreleased_log
           log += unreleased_log
@@ -250,8 +239,9 @@ module GitHubChangelogGenerator
       (1 ... self.all_tags.size).each { |index|
         log += self.generate_log_between_tags(self.all_tags[index], self.all_tags[index-1])
       }
-
-      log += generate_log_between_tags(nil, self.all_tags.last)
+      if @all_tags.count != 0
+        log += generate_log_between_tags(nil, self.all_tags.last)
+      end
 
       log
     end
@@ -314,12 +304,8 @@ module GitHubChangelogGenerator
       tags
     end
 
-    def github_token
-      if @options[:token]
-        return @github_token ||= @options[:token]
-      end
-
-      env_var = ENV.fetch 'CHANGELOG_GITHUB_TOKEN', nil
+    def fetch_github_token
+      env_var = @options[:token] ? @options[:token] : (ENV.fetch 'CHANGELOG_GITHUB_TOKEN', nil)
 
       unless env_var
         puts "Warning: No token provided (-t option) and variable $CHANGELOG_GITHUB_TOKEN was not found.".yellow
@@ -389,7 +375,7 @@ module GitHubChangelogGenerator
 
     def delete_by_time(array, hash_key, older_tag = nil, newer_tag = nil)
 
-      raise 'At least on of the tags should be not nil!' if (older_tag.nil? && newer_tag.nil?)
+      raise 'At least one of the tags should be not nil!' if (older_tag.nil? && newer_tag.nil?)
 
       newer_tag_time = self.get_time_of_tag(newer_tag)
       older_tag_time = self.get_time_of_tag(older_tag)
