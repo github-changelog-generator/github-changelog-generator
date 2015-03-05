@@ -4,6 +4,10 @@
 
 [Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.3.6...1.3.8)
 
+**Merged pull requests:**
+
+- Fix `git remote` parsing in case, when script running without parameters inside destination directory [\#61](https://github.com/skywinder/Github-Changelog-Generator/pull/61) ([skywinder](https://github.com/skywinder))
+
 ## [1.3.6](https://github.com/skywinder/Github-Changelog-Generator/tree/1.3.6) (2015-03-05)
 
 [Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.3.5...1.3.6)
