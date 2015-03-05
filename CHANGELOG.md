@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.3.8](https://github.com/skywinder/Github-Changelog-Generator/tree/1.3.8) (2015-03-05)
+
+[Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.3.6...1.3.8)
+
 ## [1.3.6](https://github.com/skywinder/Github-Changelog-Generator/tree/1.3.6) (2015-03-05)
 
 [Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.3.5...1.3.6)
