@@ -6,8 +6,8 @@ require_relative 'version'
 module GitHubChangelogGenerator
   class Parser
     def self.parse_options
-      # :include_labels => %w(bug enhancement),
-      hash = {
+
+      options = {
           :tag1 => nil,
           :tag2 => nil,
           :format => '%Y-%m-%d',
@@ -28,7 +28,6 @@ module GitHubChangelogGenerator
           :unreleased => true,
           :unreleased_label => 'Unreleased'
       }
-      options = hash
 
       parser = OptionParser.new { |opts|
         opts.banner = 'Usage: github_changelog_generator [options]'
@@ -147,6 +146,12 @@ module GitHubChangelogGenerator
       if ARGV[1]
         options[:tag1] = ARGV[0]
         options[:tag2] = ARGV[1]
+      end
+
+      if options[:verbose]
+        puts 'Performing task with options:'
+        pp options
+        puts ''
       end
 
       options

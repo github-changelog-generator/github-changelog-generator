@@ -20,13 +20,7 @@ module GitHubChangelogGenerator
 
       @options = Parser.parse_options
 
-      if options[:verbose]
-        puts 'Input options:'
-        pp options
-        puts ''
-      end
-
-      github_token
+      fetch_github_token
 
       github_options = {per_page: PER_PAGE_NUMBER}
       github_options[:oauth_token] = @github_token unless @github_token.nil?
@@ -111,11 +105,6 @@ module GitHubChangelogGenerator
 
     def print_json(json)
       puts JSON.pretty_generate(json)
-    end
-
-    def exec_command(cmd)
-      exec_cmd = "cd #{$project_path} and #{cmd}"
-      %x[#{exec_cmd}]
     end
 
     def fetch_merged_at_pull_requests
@@ -314,12 +303,8 @@ module GitHubChangelogGenerator
       tags
     end
 
-    def github_token
-      if @options[:token]
-        return @github_token ||= @options[:token]
-      end
-
-      env_var = ENV.fetch 'CHANGELOG_GITHUB_TOKEN', nil
+    def fetch_github_token
+      env_var = @options[:token] ? @options[:token] : (ENV.fetch 'CHANGELOG_GITHUB_TOKEN', nil)
 
       unless env_var
         puts "Warning: No token provided (-t option) and variable $CHANGELOG_GITHUB_TOKEN was not found.".yellow
