@@ -229,7 +229,7 @@ module GitHubChangelogGenerator
 
       log = ''
 
-      if @options[:unreleased]
+      if @options[:unreleased] && @all_tags.count != 0
         unreleased_log = self.generate_log_between_tags(self.all_tags[0], nil)
         if unreleased_log
           log += unreleased_log
@@ -239,8 +239,9 @@ module GitHubChangelogGenerator
       (1 ... self.all_tags.size).each { |index|
         log += self.generate_log_between_tags(self.all_tags[index], self.all_tags[index-1])
       }
-
-      log += generate_log_between_tags(nil, self.all_tags.last)
+      if @all_tags.count != 0
+        log += generate_log_between_tags(nil, self.all_tags.last)
+      end
 
       log
     end
@@ -374,7 +375,7 @@ module GitHubChangelogGenerator
 
     def delete_by_time(array, hash_key, older_tag = nil, newer_tag = nil)
 
-      raise 'At least on of the tags should be not nil!' if (older_tag.nil? && newer_tag.nil?)
+      raise 'At least one of the tags should be not nil!' if (older_tag.nil? && newer_tag.nil?)
 
       newer_tag_time = self.get_time_of_tag(newer_tag)
       older_tag_time = self.get_time_of_tag(older_tag)
