@@ -139,7 +139,7 @@ Here is a [wikipage list of alternatives](https://github.com/skywinder/Github-Ch
 ### Projects using this library
 [Wikipage with list of projects](https://github.com/skywinder/Github-Changelog-Generator/wiki/Projects-using-Github-Changelog-Generator) 
 
-*If you are using `github_changelog_generator` for generation change log in your project or know of project that uses it, please add it to [this] (https://github.com/skywinder/Github-Changelog-Generator/wiki/Projects-using-Github-Changelog-Generator) list.*
+*If you are using `github_changelog_generator` for generation change log in your project or know another project that uses it, please add it to [this] (https://github.com/skywinder/Github-Changelog-Generator/wiki/Projects-using-Github-Changelog-Generator) list.*
 
 ## Am I missed some essential feature?
 

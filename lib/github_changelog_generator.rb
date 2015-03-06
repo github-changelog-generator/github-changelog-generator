@@ -606,7 +606,7 @@ module GitHubChangelogGenerator
 
     def fetch_events_async(issues)
       i = 0
-      max_thread_number = 10
+      max_thread_number = 50
       threads = []
       issues.each_slice(max_thread_number) { |issues_slice|
         issues_slice.each { |issue|
