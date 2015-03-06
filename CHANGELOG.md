@@ -1,5 +1,17 @@
 # Change Log
 
+## [1.3.9](https://github.com/skywinder/Github-Changelog-Generator/tree/1.3.9) (2015-03-06)
+
+[Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.3.8...1.3.9)
+
+**Implemented enhancements:**
+
+- Improve method of detecting owner and repository [\#63](https://github.com/skywinder/Github-Changelog-Generator/issues/63)
+
+**Merged pull requests:**
+
+- Concurrency problem in case of issues \> 2048 [\#65](https://github.com/skywinder/Github-Changelog-Generator/pull/65) ([skywinder](https://github.com/skywinder))
+
 ## [1.3.8](https://github.com/skywinder/Github-Changelog-Generator/tree/1.3.8) (2015-03-05)
 
 [Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.3.6...1.3.8)
