@@ -593,36 +593,33 @@ module GitHubChangelogGenerator
       end
 
       # Async fetching events:
-      threads = []
 
-      i = 0
-
-      @issues.each { |issue|
-        threads << Thread.new {
-          obj = @github.issues.events.list user: @options[:user], repo: @options[:project], issue_number: issue['number']
-          issue[:events] = obj.body
-          print "Fetching events for issues and PR: #{i+1}/#{@issues.count + @pull_requests.count}\r"
-          i +=1
-        }
-      }
-
-      @pull_requests.each { |pull_request|
-        threads << Thread.new {
-          obj = @github.issues.events.list user: @options[:user], repo: @options[:project], issue_number: pull_request['number']
-          pull_request[:events] = obj.body
-          print "Fetching events for issues and PR: #{i+1}/#{@issues.count + @pull_requests.count}\r"
-          i +=1
-        }
-      }
-
-      threads.each { |thr| thr.join }
+      fetch_events_async(@issues + @pull_requests)
 
       #to clear line from prev print
       print "                                                            \r"
 
       if @options[:verbose]
-        puts "Fetching events for issues and PR: Done! #{i}/#{@issues.count + @pull_requests.count}"
+        puts 'Fetching events for issues and PR: Done!'
       end
+    end
+
+    def fetch_events_async(issues)
+      i = 0
+      max_thread_number = 10
+      threads = []
+      issues.each_slice(max_thread_number) { |issues_slice|
+        issues_slice.each { |issue|
+          threads << Thread.new {
+            obj = @github.issues.events.list user: @options[:user], repo: @options[:project], issue_number: issue['number']
+            issue[:events] = obj.body
+            print "Fetching events for issues and PR: #{i+1}/#{@issues.count + @pull_requests.count}\r"
+            i +=1
+          }
+        }
+        threads.each { |thr| thr.join }
+        threads = []
+      }
     end
 
   end
