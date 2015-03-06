@@ -129,17 +129,20 @@ module GitHubChangelogGenerator
       end
 
       if !options[:user] && !options[:project]
-        remote = `git remote -vv`.split("\n")
-        # try to find repo in format: origin	git@github.com:skywinder/Github-Changelog-Generator.git (fetch)
-        remote.select { |v| v.include? options[:branch] }
-        match = /.*(?:[:\/])((?:-|\w|\.)*)\/((?:-|\w|\.)*)(?:\.git).*/.match(remote[0])
+        remote = `git config --get remote.#{options[:branch]}.url`
+        # try to find repo in format:
+        # origin	git@github.com:skywinder/Github-Changelog-Generator.git (fetch)
+        # git@github.com:skywinder/Github-Changelog-Generator.git
+        match = /.*(?:[:\/])((?:-|\w|\.)*)\/((?:-|\w|\.)*)(?:\.git).*/.match(remote)
 
         if match && match[1] && match[2]
           puts "Detected user:#{match[1]}, project:#{match[2]}"
           options[:user], options[:project] = match[1], match[2]
         else
-        # try to find repo in format: origin	https://github.com/skywinder/ChangelogMerger (fetch)
-          match = /.*\/((?:-|\w|\.)*)\/((?:-|\w|\.)*).*/.match(remote[0])
+        # try to find repo in format:
+        # origin	https://github.com/skywinder/ChangelogMerger (fetch)
+        # https://github.com/skywinder/ChangelogMerger
+          match = /.*\/((?:-|\w|\.)*)\/((?:-|\w|\.)*).*/.match(remote)
           if match && match[1] && match[2]
             puts "Detected user:#{match[1]}, project:#{match[2]}"
             options[:user], options[:project] = match[1], match[2]
