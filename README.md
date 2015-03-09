@@ -62,8 +62,8 @@ Changelog generation has never been so easy.
 		github_changelog_generator
 
 -  or from anywhere:
-
-		github_changelog_generator -u github_username -p github_project
+    - `github_changelog_generator -u github_username -p github_project`
+    - `github_changelog_generator  github_username/github_project`
      
 As output you will get `CHANGELOG.md` file with pretty *Markdown-formatted* changelog.
 
