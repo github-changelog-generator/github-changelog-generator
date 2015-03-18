@@ -152,11 +152,11 @@ Here is a [wikipage list of alternatives](https://github.com/skywinder/Github-Ch
 
 ## Am I missed some essential feature?
 
-**Nothing is impossible!** 
+- **Nothing is impossible!** 
 
-Open an [issue](https://github.com/skywinder/Github-Changelog-Generator/issues/new) and let's make generator better together! 
+- Open an [issue](https://github.com/skywinder/Github-Changelog-Generator/issues/new) and let's make generator better together! 
 
-*Bug reports, feature requests, patches, well-wishes are always welcome* :heavy_exclamation_mark:
+- *Bug reports, feature requests, patches, well-wishes are always welcome* :heavy_exclamation_mark:
 
 ## Contributing
 
