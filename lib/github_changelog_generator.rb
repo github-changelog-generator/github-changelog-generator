@@ -332,7 +332,7 @@ module GitHubChangelogGenerator
 
       if filtered_issues.empty? && filtered_pull_requests.empty? && newer_tag.nil?
         # do not generate empty unreleased section
-        return nil
+        return ''
       end
 
       self.create_log(filtered_pull_requests, filtered_issues, newer_tag, older_tag_name)
