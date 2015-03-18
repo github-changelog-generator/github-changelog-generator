@@ -24,8 +24,12 @@ GitHub Changelog Generator
 
 Since now you don't have to fill your `CHANGELOG.md` manually: just run script, relax and take a cup of :coffee: before your next release! :tada:
 
-### *What’s the point of a change log?*
+>### *What’s the point of a change log?*
 To make it easier for users and contributors to see precisely what notable changes have been made between each release (or version) of the project.
+### *Why should I care?*
+Because software tools are for people. If you don’t care, why are you contributing to open source? Surely, there must be a kernel (ha!) of care somewhere in that lovely little brain of yours.
+
+>(c) *[http://keepachangelog.com](http://keepachangelog.com/)*
 
 ## Installation
 
