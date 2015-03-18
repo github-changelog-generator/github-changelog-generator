@@ -36,7 +36,6 @@ module GitHubChangelogGenerator
 
       if @options[:pulls]
         @pull_requests = self.get_filtered_pull_requests
-        self.fetch_merged_at_pull_requests
       else
         @pull_requests = []
       end
@@ -138,12 +137,12 @@ module GitHubChangelogGenerator
 
     def get_filtered_pull_requests
 
-      pull_requests = @pull_requests
-      filtered_pull_requests = pull_requests
+      self.fetch_merged_at_pull_requests
 
+      filtered_pull_requests = @pull_requests.select {|pr| pr[:merged_at] != nil }
 
       unless @options[:include_labels].nil?
-        filtered_pull_requests = pull_requests.select { |issue|
+        filtered_pull_requests = @pull_requests.select { |issue|
           #add all labels from @options[:incluse_labels] array
           (issue.labels.map { |label| label.name } & @options[:include_labels]).any?
         }
@@ -157,7 +156,7 @@ module GitHubChangelogGenerator
       end
 
       if @options[:add_issues_wo_labels]
-        issues_wo_labels = pull_requests.select {
+        issues_wo_labels = @pull_requests.select {
           # add issues without any labels
             |issue| !issue.labels.map { |label| label.name }.any?
         }
@@ -332,7 +331,7 @@ module GitHubChangelogGenerator
 
       if filtered_issues.empty? && filtered_pull_requests.empty? && newer_tag.nil?
         # do not generate empty unreleased section
-        return nil
+        return ''
       end
 
       self.create_log(filtered_pull_requests, filtered_issues, newer_tag, older_tag_name)
