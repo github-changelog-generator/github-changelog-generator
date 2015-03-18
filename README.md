@@ -134,7 +134,9 @@ It's time to create this token or wait for 1 hour before GitHub reset the counte
     - Bug-fixes (by label `bug` in issue) :beetle:
     - Enhancements (by label `enhancement` in issue) :star2:
     - 	Issues (closed issues w/o any labels) :non-potable_water:
-- You manualy can set which labels should be included/excluded and apply a lot of other customisations, to fit changelog for your personal style :tophat: (*look `github_changelog_generator --help`  for details)*
+- You manually can set which labels should be included/excluded. :wrench:
+- Apply a lot of other customisations, to fit changelog for your personal style :tophat: 
+(*look `github_changelog_generator --help`  for details)*
 
 
 ###Alternatives
