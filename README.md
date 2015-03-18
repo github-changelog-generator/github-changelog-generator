@@ -126,10 +126,8 @@ It's time to create this token or wait for 1 hour before GitHub reset the counte
 - Flexible format **customisation**:
     - **Customize** issues, that **should be added** to changelog :eight_spoked_asterisk:
     - **Custom date format** supported :date:
-    - Ability to manually specify in which version issue was fixed (in case, when closed date is not match) by setting `milestone` of issue the same name as tag of  required version
-    - Ability to **exclude specific issues** from change log (by labels) :negative_squared_cross_mark:
-    - **Automatically exclude "questions"** - issues marked as `question` labels (and other issues, that shouldn't be in change log file: with `duplicate invalid wontfix` labels)  :scissors:
-
+    - Ability to manually specify in which version issue was fixed (in case, when closed date is not match) by setting `milestone` of issue the same name as tag of  required version :pushpin:
+    - Automatically **exclude specific issues**, not-related to change log (any issue, that has label `question` `duplicate` `invalid` `wontfix`by default)  :scissors:
 - **Distinguish** issues **according labels**. :mag_right:
     - Merged pull requests (all `merged` pull-requests) :twisted_rightwards_arrows:
     - Bug fixes (by label `bug` in issue) :beetle:
