@@ -29,7 +29,7 @@ To make it easier for users and contributors to see precisely what notable chang
 ### *Why should I care?*
 Because software tools are for people. If you don’t care, why are you contributing to open source? Surely, there must be a kernel (ha!) of care somewhere in that lovely little brain of yours.
 
->(c) *[http://keepachangelog.com](http://keepachangelog.com/)*
+> :copyright: *[http://keepachangelog.com](http://keepachangelog.com/)*
 
 ## Installation
 
