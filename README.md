@@ -129,7 +129,7 @@ It's time to create this token or wait for 1 hour before GitHub reset the counte
 - **GitHub Enterprise support** via command line options! :factory:
 - Flexible format **customisation**:
     - **Customize** issues, that **should be added** to changelog :eight_spoked_asterisk:
-    - **Custom date format** supported (but don't forget about [standards](http://xkcd.com/1179/)  :date:
+    - **Custom date format** supported (but get in mind [ISO 8601](http://xkcd.com/1179/) ) :date:
     - Ability to manually specify in which version issue was fixed (in case, when closed date is not match) by setting `milestone` of issue the same name as tag of  required version :pushpin:
     - Automatically **exclude specific issues**, not-related to change log (any issue, that has label `question` `duplicate` `invalid` `wontfix`by default)  :scissors:
 - **Distinguish** issues **according labels**. :mag_right:
