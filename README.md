@@ -1,6 +1,6 @@
 
 [![Gem Version](https://badge.fury.io/rb/github_changelog_generator.svg)](http://badge.fury.io/rb/github_changelog_generator)
-[![Build Status](https://travis-ci.org/skywinder/Github-Changelog-Generator.svg?branch=master)](https://travis-ci.org/skywinder/Github-Changelog-Generator)
+[![Build Status](https://travis-ci.org/skywinder/github-changelog-generator.svg?branch=master)](https://travis-ci.org/skywinder/github-changelog-generator)
 
 GitHub Changelog Generator
 ==================
