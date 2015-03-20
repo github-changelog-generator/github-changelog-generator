@@ -1,8 +1,7 @@
-
 [![Gem Version](https://badge.fury.io/rb/github_changelog_generator.svg)](http://badge.fury.io/rb/github_changelog_generator)
 [![Build Status](https://travis-ci.org/skywinder/github-changelog-generator.svg?branch=master)](https://travis-ci.org/skywinder/github-changelog-generator)
 
-GitHub Changelog Generator
+GitHub Changelog Generator ![GitHub Logo](../master/images/logo.jpg)
 ==================
 
   - [Installation](#installation)
