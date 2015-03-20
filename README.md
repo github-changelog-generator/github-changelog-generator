@@ -1,6 +1,6 @@
 
 [![Gem Version](https://badge.fury.io/rb/github_changelog_generator.svg)](http://badge.fury.io/rb/github_changelog_generator)
-[![Build Status](https://travis-ci.org/skywinder/Github-Changelog-Generator.svg?branch=master)](https://travis-ci.org/skywinder/Github-Changelog-Generator)
+[![Build Status](https://travis-ci.org/skywinder/github-changelog-generator.svg?branch=master)](https://travis-ci.org/skywinder/github-changelog-generator)
 
 GitHub Changelog Generator
 ==================
@@ -13,19 +13,23 @@ GitHub Changelog Generator
   - [Features and advantages of this project](#features-and-advantages-of-this-project)
     - [Alternatives](#alternatives)
     - [Projects using this library](#projects-using-this-library)
-  - [Am I missed some essential feature?](#am-i-missed-some-essential-feature)
+  - [Am I missing some essential feature?](#am-i-missing-some-essential-feature)
   - [Contributing](#contributing)
   - [License](#license)
 
  
 ### Changelog generation has never been so easy:
 
-**Fully automate changelog generation** - This gem generate change log file based on **tags**, **issues** and merged **pull requests** (and split them to separate lists according labels) from :octocat: GitHub Issue Tracker.
+**Fully automate changelog generation** - This gem generates change log file based on **tags**, **issues** and merged **pull requests** (and splits them into separate lists according labels) from :octocat: GitHub Issue Tracker.
 
-Since now you don't have to fill your `CHANGELOG.md` manually: just run script, relax and take a cup of :coffee: before your next release!
+Since now you don't have to fill your `CHANGELOG.md` manually: just run the script, relax and take a cup of :coffee: before your next release! :tada:
 
-### *What’s the point of a change log?*
+>### *What’s the point of a change log?*
 To make it easier for users and contributors to see precisely what notable changes have been made between each release (or version) of the project.
+### *Why should I care?*
+Because software tools are for people. If you don’t care, why are you contributing to open source? Surely, there must be a kernel (ha!) of care somewhere in that lovely little brain of yours.
+
+> :copyright: *[http://keepachangelog.com](http://keepachangelog.com/)*
 
 ## Installation
 
@@ -62,7 +66,7 @@ To make it easier for users and contributors to see precisely what notable chang
 ## Usage
 **It's really simple**: 
 
-- If your **git remote** `origin` refer to your GitHub repo, then just go to your project folder and run:
+- If your **git remote** `origin` refers to your GitHub repo, then just go to your project folder and run:
 
 		github_changelog_generator
 
@@ -101,7 +105,7 @@ Type `github_changelog_generator --help` for detailed usage.
 
 ### GitHub token
 
-Since GitHub allow to make only 50 requests without authentication it's recommended to run this script with token
+Since GitHub allows you to make only 50 requests without authentication it's recommended to run this script with a token (`-t, --token` option)
 
 **You can easily [generate it here](https://github.com/settings/applications)**.
 
@@ -121,24 +125,26 @@ It's time to create this token or wait for 1 hour before GitHub reset the counte
 
 ##Features and advantages of this project
 - Generate canonical, neat change log file, followed by [basic change log guidlines](http://keepachangelog.com/) :gem:
-- Possible to generate **Unreleased** changes (closed issues that have not released yet)
-- **GitHub Enterprise support** via command line options!
+- Possible to generate **Unreleased** changes (closed issues that have not released yet) :dizzy:
+- **GitHub Enterprise support** via command line options! :factory:
 - Flexible format **customisation**:
-    - **Customize** issues, that **should be added** to changelog
-    - **Custom date format** supported 
-    - Ability to manually specify in which version issue was fixed (in case, when closed date is not match) by setting `milestone` of issue the same name as tag of  required version
-    - Ability to **exclude specific issues** from change log (by labels)
-    - **Automatically exclude "questions"** - issues marked as `question` labels (and other issues, that shouldn't be in change log file: with `duplicate invalid wontfix` labels)  :scissors:
-- **Distinguish** bug fixes, enchantments, and closed issues **according labels**.
-    - Merged pull-requests (all merged pull-requests)
-    - Bug-fixes (by label `bug` in issue)
-    - Enhancements (by label `enhancement` in issue)
-    - 	Issues (closed issues w/o any labels)
-- You manualy can set which labels should be included/excluded and apply a lot of other customisations, to fit changelog for your personal style :tophat: (*look `github_changelog_generator --help`  for details)*
+    - **Customize** issues, that **should be added** to changelog :eight_spoked_asterisk:
+    - **Custom date format** supported (but get in mind [ISO 8601](http://xkcd.com/1179/) ) :date:
+    - Ability to manually specify in which version issue was fixed (in case, when closed date is not match) by setting `milestone` of issue the same name as tag of  required version :pushpin:
+    - Automatically **exclude specific issues**, not-related to change log (any issue, that has label `question` `duplicate` `invalid` `wontfix`by default)  :scissors:
+- **Distinguish** issues **according labels**. :mag_right:
+    - Merged pull requests (all `merged` pull-requests) :twisted_rightwards_arrows:
+    - Bug fixes (by label `bug` in issue) :beetle:
+    - Enhancements (by label `enhancement` in issue) :star2:
+    - 	Issues (closed issues `w/o any labels`) :non-potable_water:    
+
+- You can manually set which labels should be included/excluded. :wrench:
+- Apply a lot of other customisations, to fit changelog for your personal style :tophat: 
+(*look `github_changelog_generator --help`  for details)*
 
 
 ###Alternatives
-Here is a [wikipage list of alternatives](https://github.com/skywinder/Github-Changelog-Generator/wiki/Alternatives), that I found. But no one was satisfy my requirements.
+Here is a [wikipage list of alternatives](https://github.com/skywinder/Github-Changelog-Generator/wiki/Alternatives), that I found. But none satisfied my requirements.
 
 *If you know other projects - feel free to edit this Wiki page!*
 
@@ -148,13 +154,38 @@ Here is a [wikipage list of alternatives](https://github.com/skywinder/Github-Ch
 
 *If you are using `github_changelog_generator` for generation change log in your project or know another project that uses it, please add it to [this] (https://github.com/skywinder/Github-Changelog-Generator/wiki/Projects-using-Github-Changelog-Generator) list.*
 
-## Am I missed some essential feature?
+## Am I missing some essential feature?
 
-**Nothing is impossible!** 
+- **Nothing is impossible!** 
 
-Open an [issue](https://github.com/skywinder/Github-Changelog-Generator/issues/new) and let's make generator better together!
+- Open an [issue](https://github.com/skywinder/Github-Changelog-Generator/issues/new) and let's make generator better together! 
 
-*Bug reports, feature requests, patches, well-wishes are always welcome!*
+- *Bug reports, feature requests, patches, well-wishes are always welcome* :heavy_exclamation_mark:
+
+## FAQ
+
+- ***I already use GitHub Releases. Why do I need this?***
+
+GitHub Releases is a very good thing. And it's very good practice to maintain it (not so much people using it yet)! :congratulations:
+
+*BDW: I would like to support GitHub Releases in [next releases](https://github.com/skywinder/github-changelog-generator/issues/56) ;)*
+
+I'm not try to compare quality of auto-generated and manually generated logs.. but:
+
+The auto generated Changelog really helps even if you manually fill Releases notes!
+
+For example:
+
+When I found a closed bug - it's very useful to understand, in which release it was fixed. In that case you can easily find this issue by \# in `CHANGELOG.md`.
+
+- it's not so quite easy to find it in manually filled Releases notes.
+- this file can also help you to build your Release note and not miss features in manually-filled list.
+
+In the end:
+
+I think, that GitHub Releases is more for end-users.
+But `CHANGELOG.md` could stay in the repo for developers with detailed list of changes.
+And it's nothing bad to combine GitHub Releases and `CHANGELOG.md` file together in that manner.
 
 ## Contributing
 
@@ -164,6 +195,7 @@ Open an [issue](https://github.com/skywinder/Github-Changelog-Generator/issues/n
 4. Commit your changes (`git commit -am 'Add some feature'`)
 5. Push to the branch (`git push origin my-new-feature`)
 6. Create a new Pull Request
+7. Profit! :white_check_mark:
 
 ## License
 
