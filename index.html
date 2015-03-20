@@ -23,9 +23,9 @@
         </header>
 
         <section id="downloads" class="clearfix">
-          <a href="https://github.com/skywinder/Github-Changelog-Generator/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
-          <a href="https://github.com/skywinder/Github-Changelog-Generator/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
-          <a href="https://github.com/skywinder/Github-Changelog-Generator" id="view-on-github" class="button"><span>View on GitHub</span></a>
+          <a href="https://github.com/skywinder/github-changelog-generator/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/skywinder/github-changelog-generator/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/skywinder/github-changelog-generator" id="view-on-github" class="button"><span>View on GitHub</span></a>
         </section>
 
         <hr>
@@ -61,9 +61,28 @@
 <li><a href="#license">License</a></li>
 </ul>
 
-<p>Changelog generation has never been so easy.</p>
+<h3>
+<a id="changelog-generation-has-never-been-so-easy" class="anchor" href="#changelog-generation-has-never-been-so-easy" aria-hidden="true"><span class="octicon octicon-link"></span></a>Changelog generation has never been so easy:</h3>
 
-<p><strong>Fully automate changelog generation</strong> - This gem generate change log file based on tags, issues and merged pull requests from <strong>Github issue tracker</strong>. This generator complies all <a href="http://keepachangelog.com/">change log format guidelines</a>.</p>
+<p><strong>Fully automate changelog generation</strong> - This gem generate change log file based on <strong>tags</strong>, <strong>issues</strong> and merged <strong>pull requests</strong> (and split them to separate lists according labels) from <img class="emoji" title=":octocat:" alt=":octocat:" src="https://assets-cdn.github.com/images/icons/emoji/octocat.png" height="20" width="20" align="absmiddle"> GitHub Issue Tracker.</p>
+
+<p>Since now you don't have to fill your <code>CHANGELOG.md</code> manually: just run script, relax and take a cup of <img class="emoji" title=":coffee:" alt=":coffee:" src="https://assets-cdn.github.com/images/icons/emoji/unicode/2615.png" height="20" width="20" align="absmiddle"> before your next release! <img class="emoji" title=":tada:" alt=":tada:" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f389.png" height="20" width="20" align="absmiddle"></p>
+
+<blockquote>
+<h3>
+<a id="whats-the-point-of-a-change-log" class="anchor" href="#whats-the-point-of-a-change-log" aria-hidden="true"><span class="octicon octicon-link"></span></a><em>What’s the point of a change log?</em>
+</h3>
+
+<p>To make it easier for users and contributors to see precisely what notable changes have been made between each release (or version) of the project.</p>
+
+<h3>
+<a id="why-should-i-care" class="anchor" href="#why-should-i-care" aria-hidden="true"><span class="octicon octicon-link"></span></a><em>Why should I care?</em>
+</h3>
+
+<p>Because software tools are for people. If you don’t care, why are you contributing to open source? Surely, there must be a kernel (ha!) of care somewhere in that lovely little brain of yours.</p>
+
+<p><img class="emoji" title=":copyright:" alt=":copyright:" src="https://assets-cdn.github.com/images/icons/emoji/unicode/00a9.png" height="20" width="20" align="absmiddle"> <em><a href="http://keepachangelog.com/">http://keepachangelog.com</a></em></p>
+</blockquote>
 
 <h2>
 <a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
@@ -92,24 +111,21 @@
 
 <p><a href="https://github.com/skywinder/Github-Changelog-Generator/compare/1.2.4...1.2.5">Full Changelog</a></p>
 
-<h4>
-<a id="implemented-enhancements" class="anchor" href="#implemented-enhancements" aria-hidden="true"><span class="octicon octicon-link"></span></a>Implemented enhancements:</h4>
+<p><strong>Implemented enhancements:</strong></p>
 
 <ul>
 <li>Use milestone to specify in which version bug was fixed <a href="https://github.com/skywinder/Github-Changelog-Generator/issues/22">#22</a>
 </li>
 </ul>
 
-<h4>
-<a id="fixed-bugs" class="anchor" href="#fixed-bugs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Fixed bugs:</h4>
+<p><strong>Fixed bugs:</strong></p>
 
 <ul>
 <li>Error when trying to generate log for repo without tags <a href="https://github.com/skywinder/Github-Changelog-Generator/issues/32">#32</a>
 </li>
 </ul>
 
-<h4>
-<a id="merged-pull-requests" class="anchor" href="#merged-pull-requests" aria-hidden="true"><span class="octicon octicon-link"></span></a>Merged pull requests:</h4>
+<p><strong>Merged pull requests:</strong></p>
 
 <ul>
 <li><p>PrettyPrint class is included using lowercase 'pp' <a href="https://github.com/skywinder/Github-Changelog-Generator/pull/43">#43</a> (<a href="https://github.com/schwing">schwing</a>)</p></li>
@@ -132,8 +148,10 @@
 <li>
 <p>or from anywhere:</p>
 
-<pre><code>github_changelog_generator -u github_username -p github_project
-</code></pre>
+<ul>
+<li><code>github_changelog_generator -u github_username -p github_project</code></li>
+<li><code>github_changelog_generator  github_username/github_project</code></li>
+</ul>
 </li>
 </ul>
 
@@ -171,7 +189,7 @@
 <h3>
 <a id="github-token" class="anchor" href="#github-token" aria-hidden="true"><span class="octicon octicon-link"></span></a>GitHub token</h3>
 
-<p>Since GitHub allow to make only 50 requests without authentication it's recommended to run this script with token</p>
+<p>Since GitHub allow to make only 50 requests without authentication it's recommended to run this script with token (<code>-t, --token</code> option)</p>
 
 <p><strong>You can easily <a href="https://github.com/settings/applications">generate it here</a></strong>.</p>
 
@@ -201,35 +219,45 @@
 <a id="features-and-advantages-of-this-project" class="anchor" href="#features-and-advantages-of-this-project" aria-hidden="true"><span class="octicon octicon-link"></span></a>Features and advantages of this project</h2>
 
 <ul>
-<li>Generate canonical change log file, followed by <a href="http://keepachangelog.com/">keepachangelog.com guidlines</a>
+<li>Generate canonical, neat change log file, followed by <a href="http://keepachangelog.com/">basic change log guidlines</a> <img class="emoji" title=":gem:" alt=":gem:" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f48e.png" height="20" width="20" align="absmiddle">
 </li>
-<li>Simply add links for all closed issues and merged pull requests</li>
-<li>Possible to generate <strong>Unreleased</strong> changes (closed issues that have not released yet)</li>
-<li>Flexible format customisation:
+<li>Possible to generate <strong>Unreleased</strong> changes (closed issues that have not released yet) <img class="emoji" title=":dizzy:" alt=":dizzy:" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f4ab.png" height="20" width="20" align="absmiddle">
+</li>
+<li>
+<strong>GitHub Enterprise support</strong> via command line options! <img class="emoji" title=":factory:" alt=":factory:" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f3ed.png" height="20" width="20" align="absmiddle">
+</li>
+<li>Flexible format <strong>customisation</strong>:
 
 <ul>
-<li>Customize issues, that should be added to changelog</li>
-<li>Custom date format supported </li>
-<li>Ability to manually specify in which version issue was fixed (in case, when closed date is not match) by setting <code>milestone</code> of issue the same name as tag of  required version</li>
-<li>Ability to exclude specific issues from change log (by labels)
-
-<ul>
-<li>Automatically exclude "questions" - issues marked as <code>question</code> labels (and other issues, that shouldn't be in change log file: with <code>duplicate invalid wontfix</code> labels)</li>
-</ul>
+<li>
+<strong>Customize</strong> issues, that <strong>should be added</strong> to changelog <img class="emoji" title=":eight_spoked_asterisk:" alt=":eight_spoked_asterisk:" src="https://assets-cdn.github.com/images/icons/emoji/unicode/2733.png" height="20" width="20" align="absmiddle">
+</li>
+<li>
+<strong>Custom date format</strong> supported <img class="emoji" title=":date:" alt=":date:" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f4c5.png" height="20" width="20" align="absmiddle">
+</li>
+<li>Ability to manually specify in which version issue was fixed (in case, when closed date is not match) by setting <code>milestone</code> of issue the same name as tag of  required version <img class="emoji" title=":pushpin:" alt=":pushpin:" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f4cc.png" height="20" width="20" align="absmiddle">
+</li>
+<li>Automatically <strong>exclude specific issues</strong>, not-related to change log (any issue, that has label <code>question</code> <code>duplicate</code> <code>invalid</code> <code>wontfix</code>by default)  <img class="emoji" title=":scissors:" alt=":scissors:" src="https://assets-cdn.github.com/images/icons/emoji/unicode/2702.png" height="20" width="20" align="absmiddle">
 </li>
 </ul>
 </li>
-<li>Distinguish bug fixes, enchantments, and closed issues according labels.
+<li>
+<p><strong>Distinguish</strong> issues <strong>according labels</strong>. <img class="emoji" title=":mag_right:" alt=":mag_right:" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f50e.png" height="20" width="20" align="absmiddle"></p>
 
 <ul>
-<li>  <strong>Issues</strong> (closed issues w/o any labels)</li>
-<li>
-<strong>Merged pull-requests</strong> (all merged pull-requests)</li>
-<li>
-<strong>Bug-fixes</strong> (by label <code>bug</code> in issue)</li>
-<li>
-<strong>Enhancements</strong> (by label <code>enhancement</code> in issue)</li>
+<li>Merged pull requests (all <code>merged</code> pull-requests) <img class="emoji" title=":twisted_rightwards_arrows:" alt=":twisted_rightwards_arrows:" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f500.png" height="20" width="20" align="absmiddle">
+</li>
+<li>Bug fixes (by label <code>bug</code> in issue) <img class="emoji" title=":beetle:" alt=":beetle:" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f41e.png" height="20" width="20" align="absmiddle">
+</li>
+<li>Enhancements (by label <code>enhancement</code> in issue) <img class="emoji" title=":star2:" alt=":star2:" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f31f.png" height="20" width="20" align="absmiddle">
+</li>
+<li>  Issues (closed issues <code>w/o any labels</code>) <img class="emoji" title=":non-potable_water:" alt=":non-potable_water:" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f6b1.png" height="20" width="20" align="absmiddle"><br>
+</li>
 </ul>
+</li>
+<li><p>You manually can set which labels should be included/excluded. <img class="emoji" title=":wrench:" alt=":wrench:" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f527.png" height="20" width="20" align="absmiddle"></p></li>
+<li>Apply a lot of other customisations, to fit changelog for your personal style <img class="emoji" title=":tophat:" alt=":tophat:" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f3a9.png" height="20" width="20" align="absmiddle"> 
+(<em>look <code>github_changelog_generator --help</code>  for details)</em>
 </li>
 </ul>
 
@@ -245,16 +273,42 @@
 
 <p><a href="https://github.com/skywinder/Github-Changelog-Generator/wiki/Projects-using-Github-Changelog-Generator">Wikipage with list of projects</a> </p>
 
-<p><em>If you are using <code>github_changelog_generator</code> for generation change log in your project or know of project that uses it, please add it to <a href="https://github.com/skywinder/Github-Changelog-Generator/wiki/Projects-using-Github-Changelog-Generator">this</a> list.</em></p>
+<p><em>If you are using <code>github_changelog_generator</code> for generation change log in your project or know another project that uses it, please add it to <a href="https://github.com/skywinder/Github-Changelog-Generator/wiki/Projects-using-Github-Changelog-Generator">this</a> list.</em></p>
 
 <h2>
 <a id="am-i-missed-some-essential-feature" class="anchor" href="#am-i-missed-some-essential-feature" aria-hidden="true"><span class="octicon octicon-link"></span></a>Am I missed some essential feature?</h2>
 
-<p><strong>Nothing is impossible!</strong> </p>
+<ul>
+<li><p><strong>Nothing is impossible!</strong> </p></li>
+<li><p>Open an <a href="https://github.com/skywinder/Github-Changelog-Generator/issues/new">issue</a> and let's make generator better together! </p></li>
+<li><p><em>Bug reports, feature requests, patches, well-wishes are always welcome</em> <img class="emoji" title=":heavy_exclamation_mark:" alt=":heavy_exclamation_mark:" src="https://assets-cdn.github.com/images/icons/emoji/unicode/2757.png" height="20" width="20" align="absmiddle"></p></li>
+</ul>
 
-<p>Open an <a href="https://github.com/skywinder/Github-Changelog-Generator/issues/new">issue</a> and let's make generator better together!</p>
+<h2>
+<a id="faq" class="anchor" href="#faq" aria-hidden="true"><span class="octicon octicon-link"></span></a>FAQ</h2>
 
-<p><em>Bug reports, feature requests, patches, well-wishes are always welcome!</em></p>
+<ul>
+<li><strong><em>I already use GitHub Releases. Why do I need this?</em></strong></li>
+</ul>
+
+<p>GitHub Releases is a very good thing. And it's very good practice to maintain it (not so much people using it yet)! <img class="emoji" title=":congratulations:" alt=":congratulations:" src="https://assets-cdn.github.com/images/icons/emoji/unicode/3297.png" height="20" width="20" align="absmiddle">  </p>
+
+<p>I'm not try to compare quality of auto-generated and manually generated logs.</p>
+
+<p>The Changelog like this sometimes really helps. For example:</p>
+
+<p>When I found a closed bug - it's very useful to understand, in which release it was fixed. In that case you can easily find this issue by # in <code>CHANGELOG.md</code>.</p>
+
+<ul>
+<li>it's not so quite easy to find it in manually filled Releases notes.</li>
+<li>this file can also help you to build your Release note and not miss features in manually-filled list.</li>
+</ul>
+
+<p>In the end:</p>
+
+<p>I think, that GitHub Releases is more for end-users.
+But <code>CHANGELOG.md</code> could stay in the repo for developers with detailed list of changes.
+And it's nothing bad to combine GitHub Releases and <code>CHANGELOG.md</code> file together in that manner.</p>
 
 <h2>
 <a id="contributing" class="anchor" href="#contributing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contributing</h2>
@@ -266,6 +320,8 @@
 <li>Commit your changes (<code>git commit -am 'Add some feature'</code>)</li>
 <li>Push to the branch (<code>git push origin my-new-feature</code>)</li>
 <li>Create a new Pull Request</li>
+<li>Profit! <img class="emoji" title=":white_check_mark:" alt=":white_check_mark:" src="https://assets-cdn.github.com/images/icons/emoji/unicode/2705.png" height="20" width="20" align="absmiddle">
+</li>
 </ol>
 
 <h2>
@@ -276,7 +332,7 @@
 
         <footer>
           Github-changelog-generator is maintained by <a href="https://github.com/skywinder">skywinder</a><br>
-          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+          This page was generated by <a href="https://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
         </footer>
 
                   <script type="text/javascript">
