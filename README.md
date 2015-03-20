@@ -162,6 +162,27 @@ Here is a [wikipage list of alternatives](https://github.com/skywinder/Github-Ch
 
 - *Bug reports, feature requests, patches, well-wishes are always welcome* :heavy_exclamation_mark:
 
+## FAQ
+
+- ***I already use GitHub Releases. Why do I need this?***
+
+GitHub Releases is a very good thing. And it's very good practice to maintain it (not so much people using it yet)! :congratulations:  
+
+I'm not try to compare quality of auto-generated and manually generated logs.
+
+The Changelog like this sometimes really helps. For example:
+
+When I found a closed bug - it's very useful to understand, in which release it was fixed. In that case you can easily find this issue by \# in `CHANGELOG.md`.
+
+- it's not so quite easy to find it in manually filled Releases notes.
+- this file can also help you to build your Release note and not miss features in manually-filled list.
+
+In the end:
+
+I think, that GitHub Releases is more for end-users.
+But `CHANGELOG.md` could stay in the repo for developers with detailed list of changes.
+And it's nothing bad to combine GitHub Releases and `CHANGELOG.md` file together in that manner.
+
 ## Contributing
 
 1. Create an issue to discuss about your idea
