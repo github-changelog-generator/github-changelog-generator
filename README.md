@@ -13,16 +13,16 @@ GitHub Changelog Generator
   - [Features and advantages of this project](#features-and-advantages-of-this-project)
     - [Alternatives](#alternatives)
     - [Projects using this library](#projects-using-this-library)
-  - [Am I missed some essential feature?](#am-i-missed-some-essential-feature)
+  - [Am I missing some essential feature?](#am-i-missing-some-essential-feature)
   - [Contributing](#contributing)
   - [License](#license)
 
  
 ### Changelog generation has never been so easy:
 
-**Fully automate changelog generation** - This gem generate change log file based on **tags**, **issues** and merged **pull requests** (and split them to separate lists according labels) from :octocat: GitHub Issue Tracker.
+**Fully automate changelog generation** - This gem generates change log file based on **tags**, **issues** and merged **pull requests** (and splits them into separate lists according labels) from :octocat: GitHub Issue Tracker.
 
-Since now you don't have to fill your `CHANGELOG.md` manually: just run script, relax and take a cup of :coffee: before your next release! :tada:
+Since now you don't have to fill your `CHANGELOG.md` manually: just run the script, relax and take a cup of :coffee: before your next release! :tada:
 
 >### *What’s the point of a change log?*
 To make it easier for users and contributors to see precisely what notable changes have been made between each release (or version) of the project.
@@ -66,7 +66,7 @@ Because software tools are for people. If you don’t care, why are you contribu
 ## Usage
 **It's really simple**: 
 
-- If your **git remote** `origin` refer to your GitHub repo, then just go to your project folder and run:
+- If your **git remote** `origin` refers to your GitHub repo, then just go to your project folder and run:
 
 		github_changelog_generator
 
@@ -105,7 +105,7 @@ Type `github_changelog_generator --help` for detailed usage.
 
 ### GitHub token
 
-Since GitHub allow to make only 50 requests without authentication it's recommended to run this script with token (`-t, --token` option)
+Since GitHub allows you to make only 50 requests without authentication it's recommended to run this script with a token (`-t, --token` option)
 
 **You can easily [generate it here](https://github.com/settings/applications)**.
 
@@ -138,13 +138,13 @@ It's time to create this token or wait for 1 hour before GitHub reset the counte
     - Enhancements (by label `enhancement` in issue) :star2:
     - 	Issues (closed issues `w/o any labels`) :non-potable_water:    
 
-- You manually can set which labels should be included/excluded. :wrench:
+- You can manually set which labels should be included/excluded. :wrench:
 - Apply a lot of other customisations, to fit changelog for your personal style :tophat: 
 (*look `github_changelog_generator --help`  for details)*
 
 
 ###Alternatives
-Here is a [wikipage list of alternatives](https://github.com/skywinder/Github-Changelog-Generator/wiki/Alternatives), that I found. But no one was satisfy my requirements.
+Here is a [wikipage list of alternatives](https://github.com/skywinder/Github-Changelog-Generator/wiki/Alternatives), that I found. But none satisfied my requirements.
 
 *If you know other projects - feel free to edit this Wiki page!*
 
@@ -154,7 +154,7 @@ Here is a [wikipage list of alternatives](https://github.com/skywinder/Github-Ch
 
 *If you are using `github_changelog_generator` for generation change log in your project or know another project that uses it, please add it to [this] (https://github.com/skywinder/Github-Changelog-Generator/wiki/Projects-using-Github-Changelog-Generator) list.*
 
-## Am I missed some essential feature?
+## Am I missing some essential feature?
 
 - **Nothing is impossible!** 
 
