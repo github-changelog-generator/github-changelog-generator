@@ -166,11 +166,15 @@ Here is a [wikipage list of alternatives](https://github.com/skywinder/Github-Ch
 
 - ***I already use GitHub Releases. Why do I need this?***
 
-GitHub Releases is a very good thing. And it's very good practice to maintain it (not so much people using it yet)! :congratulations:  
+GitHub Releases is a very good thing. And it's very good practice to maintain it (not so much people using it yet)! :congratulations:
 
-I'm not try to compare quality of auto-generated and manually generated logs.
+*BDW: I would like to support GitHub Releases in [next releases](https://github.com/skywinder/github-changelog-generator/issues/56) ;)*
 
-The Changelog like this sometimes really helps. For example:
+I'm not try to compare quality of auto-generated and manually generated logs.. but:
+
+The auto generated Changelog really helps even if you manually fill Releases notes!
+
+For example:
 
 When I found a closed bug - it's very useful to understand, in which release it was fixed. In that case you can easily find this issue by \# in `CHANGELOG.md`.
 
