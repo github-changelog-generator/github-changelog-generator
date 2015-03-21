@@ -27,7 +27,11 @@ module GitHubChangelogGenerator
       github_options[:endpoint] = options[:github_endpoint] unless options[:github_endpoint].nil?
       github_options[:site] = options[:github_endpoint] unless options[:github_site].nil?
 
-      @github = Github.new github_options
+begin
+         @github = Github.new github_options
+rescue
+         puts "Warning: GitHub API rate limit exceed (5000 per hour), change log may not contain some issues.".yellow
+ end
 
       @generator = Generator.new(@options)
 
@@ -88,7 +92,11 @@ module GitHubChangelogGenerator
               issue[:actual_date] = issue[:closed_at]
             else
               begin
-                commit = @github.git_data.commits.get @options[:user], @options[:project], event[:commit_id]
+begin
+                   commit = @github.git_data.commits.get @options[:user], @options[:project], event[:commit_id]
+rescue
+         puts "Warning: GitHub API rate limit exceed (5000 per hour), change log may not contain some issues.".yellow
+ end
                 issue[:actual_date] = commit[:author][:date]
               rescue
                 puts "Warning: can't fetch commit #{event[:commit_id]} probably it referenced from another repo."
@@ -110,16 +118,22 @@ module GitHubChangelogGenerator
       if @options[:verbose]
         print "Fetching merged dates...\r"
       end
-      response = @github.pull_requests.list @options[:user], @options[:project], :state => 'closed'
-
       pull_requests = []
-      page_i = 0
-      response.each_page do |page|
-        page_i += PER_PAGE_NUMBER
-        count_pages = response.count_pages
-        print "Fetching merged dates... #{page_i}/#{count_pages * PER_PAGE_NUMBER}\r"
-        pull_requests.concat(page)
-      end
+begin
+         response = @github.pull_requests.list @options[:user], @options[:project], :state => 'closed'
+         page_i = 0
+         response.each_page do |page|
+           page_i += PER_PAGE_NUMBER
+           count_pages = response.count_pages
+           print "Fetching merged dates... #{page_i}/#{count_pages * PER_PAGE_NUMBER}\r"
+           pull_requests.concat(page)
+         end
+rescue
+         puts "Warning: GitHub API rate limit exceed (5000 per hour), change log may not contain some issues.".yellow
+ end
+
+
+
       print "                                                   \r"
 
       @pull_requests.each { |pr|
@@ -276,7 +290,11 @@ module GitHubChangelogGenerator
     end
 
     def is_megred(number)
-      @github.pull_requests.merged? @options[:user], @options[:project], number
+begin
+         @github.pull_requests.merged? @options[:user], @options[:project], number
+rescue
+         puts "Warning: GitHub API rate limit exceed (5000 per hour), change log may not contain some issues.".yellow
+ end
     end
 
     def get_all_tags
@@ -285,20 +303,26 @@ module GitHubChangelogGenerator
         print "Fetching tags...\r"
       end
 
-      response = @github.repos.tags @options[:user], @options[:project]
-
       tags = []
-      page_i = 0
-      count_pages = response.count_pages
-      response.each_page do |page|
-        page_i += PER_PAGE_NUMBER
-        print "Fetching tags... #{page_i}/#{count_pages * PER_PAGE_NUMBER}\r"
-        tags.concat(page)
-      end
-      print "                               \r"
-      if @options[:verbose]
-        puts "Found #{tags.count} tags"
-      end
+
+      begin
+         response = @github.repos.tags @options[:user], @options[:project]
+         page_i = 0
+         count_pages = response.count_pages
+         response.each_page do |page|
+           page_i += PER_PAGE_NUMBER
+           print "Fetching tags... #{page_i}/#{count_pages * PER_PAGE_NUMBER}\r"
+           tags.concat(page)
+         end
+         print "                               \r"
+         if @options[:verbose]
+           puts "Found #{tags.count} tags"
+         end
+rescue
+         puts "Warning: GitHub API rate limit exceed (5000 per hour), change log may not contain some issues.".yellow
+ end
+
+
 
       tags
     end
@@ -512,7 +536,11 @@ module GitHubChangelogGenerator
         return @tag_times_hash[tag_name['name']]
       end
 
-      github_git_data_commits_get = @github.git_data.commits.get @options[:user], @options[:project], tag_name['commit']['sha']
+begin
+         github_git_data_commits_get = @github.git_data.commits.get @options[:user], @options[:project], tag_name['commit']['sha']
+rescue
+         puts "Warning: GitHub API rate limit exceed (5000 per hour), change log may not contain some issues.".yellow
+ end
       time_string = github_git_data_commits_get['committer']['date']
       @tag_times_hash[tag_name['name']] = Time.parse(time_string)
     end
@@ -558,17 +586,22 @@ module GitHubChangelogGenerator
       if @options[:verbose]
         print "Fetching closed issues...\r"
       end
-
-      response = @github.issues.list user: @options[:user], repo: @options[:project], state: 'closed', filter: 'all', labels: nil
-
       issues = []
-      page_i = 0
-      count_pages = response.count_pages
-      response.each_page do |page|
-        page_i += PER_PAGE_NUMBER
-        print "Fetching issues... #{page_i}/#{count_pages * PER_PAGE_NUMBER}\r"
-        issues.concat(page)
-      end
+
+begin
+         response = @github.issues.list user: @options[:user], repo: @options[:project], state: 'closed', filter: 'all', labels: nil
+         page_i = 0
+         count_pages = response.count_pages
+         response.each_page do |page|
+           page_i += PER_PAGE_NUMBER
+           print "Fetching issues... #{page_i}/#{count_pages * PER_PAGE_NUMBER}\r"
+           issues.concat(page)
+         end
+rescue
+         puts "Warning: GitHub API rate limit exceed (5000 per hour), change log may not contain some issues.".yellow
+ end
+
+
 
       print "                               \r"
 
@@ -610,7 +643,11 @@ module GitHubChangelogGenerator
       issues.each_slice(max_thread_number) { |issues_slice|
         issues_slice.each { |issue|
           threads << Thread.new {
-            obj = @github.issues.events.list user: @options[:user], repo: @options[:project], issue_number: issue['number']
+begin
+               obj = @github.issues.events.list user: @options[:user], repo: @options[:project], issue_number: issue['number']
+rescue
+         puts "Warning: GitHub API rate limit exceed (5000 per hour), change log may not contain some issues.".yellow
+ end
             issue[:events] = obj.body
             print "Fetching events for issues and PR: #{i+1}/#{@issues.count + @pull_requests.count}\r"
             i +=1
