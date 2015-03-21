@@ -96,6 +96,7 @@ Type `github_changelog_generator --help` for detailed usage.
         --[no-]compare-link          Include compare link between older version and newer version. Default is true
         --include-labels  x,y,z      Issues only with that labels will be included to changelog. Default is 'bug,enhancement'
         --exclude-labels  x,y,z      Issues with that labels will be always excluded from changelog. Default is 'duplicate,question,invalid,wontfix'
+        --max-issues [NUMBER]        Max number of issues to fetch from GitHub. Default is 500.
         --github-site [URL]          The Enterprise Github site on which your project is hosted.
         --github-api [URL]           The enterprise endpoint to use for your Github API.
     -v, --version                    Print version number
