@@ -596,6 +596,7 @@ begin
            page_i += PER_PAGE_NUMBER
            print "Fetching issues... #{page_i}/#{count_pages * PER_PAGE_NUMBER}\r"
            issues.concat(page)
+           break if issues.length >= @options[:max_issues]
          end
 rescue
          puts "Warning: GitHub API rate limit exceed (5000 per hour), change log may not contain some issues.".yellow
