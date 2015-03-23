@@ -24,7 +24,7 @@ module GitHubChangelogGenerator
           :enhancement_prefix => '**Implemented enhancements:**',
           :author => true,
           :filter_issues_by_milestone => true,
-          :max_issues => 500,
+          :max_issues => nil,
           :compare_link => true,
           :unreleased => true,
           :unreleased_label => 'Unreleased',
@@ -84,7 +84,7 @@ module GitHubChangelogGenerator
         opts.on('--exclude-labels  x,y,z', Array, 'Issues with that labels will be always excluded from changelog. Default is \'duplicate,question,invalid,wontfix\'') do |list|
           options[:exclude_labels] = list
         end
-        opts.on('--max-issues [NUMBER]', Integer, 'Max number of issues to fetch from GitHub. Default is 500') do |max|
+        opts.on('--max-issues [NUMBER]', Integer, 'Max number of issues to fetch from GitHub. Default is unlimited') do |max|
           options[:max_issues] = max
         end
         opts.on('--github-site [URL]', 'The Enterprise Github site on which your project is hosted.') do |last|
