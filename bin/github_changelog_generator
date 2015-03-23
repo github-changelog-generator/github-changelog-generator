@@ -1,4 +1,4 @@
 #! /usr/bin/env ruby
 
-require 'github_changelog_generator'
+require_relative '../lib/github_changelog_generator'
 GitHubChangelogGenerator::ChangelogGenerator.new.compund_changelog
