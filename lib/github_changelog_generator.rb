@@ -94,11 +94,7 @@ module GitHubChangelogGenerator
               issue[:actual_date] = issue[:closed_at]
             else
               begin
-                begin
-                  commit = @github.git_data.commits.get @options[:user], @options[:project], event[:commit_id]
-                rescue
-                  puts GH_RATE_LIMIT_EXCEEDED_MSG.yellow
-                end
+                commit = @github.git_data.commits.get @options[:user], @options[:project], event[:commit_id]
                 issue[:actual_date] = commit[:author][:date]
               rescue
                 puts "Warning: can't fetch commit #{event[:commit_id]} probably it referenced from another repo.".yellow
