@@ -96,6 +96,7 @@ Type `github_changelog_generator --help` for detailed usage.
         --[no-]compare-link          Include compare link between older version and newer version. Default is true
         --include-labels  x,y,z      Issues only with that labels will be included to changelog. Default is 'bug,enhancement'
         --exclude-labels  x,y,z      Issues with that labels will be always excluded from changelog. Default is 'duplicate,question,invalid,wontfix'
+        --max-issues [NUMBER]        Max number of issues to fetch from GitHub. Default is unlimited.
         --github-site [URL]          The Enterprise Github site on which your project is hosted.
         --github-api [URL]           The enterprise endpoint to use for your Github API.
     -v, --version                    Print version number
@@ -185,6 +186,15 @@ In the end:
 I think, that GitHub Releases is more for end-users.
 But `CHANGELOG.md` could stay in the repo for developers with detailed list of changes.
 And it's nothing bad to combine GitHub Releases and `CHANGELOG.md` file together in that manner.
+
+- ***I received a warning: GitHub API rate limit exceed, what does this mean?***
+
+GitHub [limits the number of API requests](https://developer.github.com/v3/#rate-limiting) you can make in an hour. You can make up to 5,000 requests per hour. For unauthenticated requests, the rate limit allows you to make up to 60 requests per hour. Unauthenticated requests are associated with your IP address, and not the user making requests.
+
+If you're seeing this warning:
+
+1. Make sure you're providing an OAuth token so you're not anonymously making requests. This will increase the number of requests from 60 to 5000 per hour.
+2. You probably have a large repo with lots of issues/PRs. You can use the `--max-issues NUM` argument to limit the number of issues that are pulled back. For example: `--max-issues 1000`
 
 ## Contributing
 
