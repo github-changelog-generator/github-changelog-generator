@@ -1,0 +1,74 @@
+#
+# Author:: Enrico Stahn <mail@enricostahn.com>
+#
+# Copyright 2014, Zanui, <engineering@zanui.com.au>
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+module GitHubChangelogGenerator
+  # A Reader to read an existing ChangeLog file and return a structured object
+  #
+  # Example:
+  #   reader = GitHubChangelogGenerator::Reader.new
+  #   content = reader.read('./CHANGELOG.md')
+  class Reader
+    # Parse a single heading and return a Hash
+    #
+    # The following heading structures are currently valid:
+    # - ## [v1.0.2](https://github.com/zanui/chef-thumbor/tree/v1.0.1) (2015-03-24)
+    # - ## [v1.0.2](https://github.com/zanui/chef-thumbor/tree/v1.0.1)
+    # - ## v1.0.2 (2015-03-24)
+    # - ## v1.0.2
+    #
+    # @param [String] heading Heading from the ChangeLog File
+    # @return [Hash] Returns a structured Hash with version, url and date
+    def parse_heading(heading)
+      structures = [
+          /^## \[(?<version>v.+?)\]\((?<url>.+?)\)( \((?<date>.+?)\))?$/,
+          /^## (?<version>v.+?)( \((?<date>.+?)\))?$/,
+      ]
+
+      captures = {'version' => nil, 'url' => nil, 'date' => nil}
+
+      structures.each do |regexp|
+        matches = Regexp.new(regexp).match(heading)
+        captures.merge!(Hash[matches.names.map.zip(matches.captures)]) unless matches.nil?
+      end
+
+      captures
+    end
+
+    # Parse the given ChangeLog data into a Hash
+    #
+    # @param [String] data File data from the ChangeLog.md
+    # @return [Hash] Parsed data, e.g. [{ 'version' => ..., 'url' => ..., 'date' => ..., 'content' => ...}, ...]
+    def parse(data)
+      sections = data.split(/^## .+?$/)
+      headings = data.scan(/^## .+?$/)
+      changelog = []
+
+      headings.each_with_index do |heading, index|
+        captures = parse_heading(heading)
+        captures['content'] = sections.at(index + 1)
+        changelog.push captures
+      end
+
+      changelog
+    end
+
+    def read(file_path)
+      parse File.read(file_path)
+    end
+  end
+end
