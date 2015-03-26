@@ -6,6 +6,6 @@ gem 'github_api'
 gem 'colorize'
 
 group :test do
-    gem 'rspec'
-    gem 'rubocop'
+  gem 'rspec'
+  gem 'rubocop'
 end
