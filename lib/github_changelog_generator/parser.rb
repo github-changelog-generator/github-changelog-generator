@@ -28,7 +28,8 @@ module GitHubChangelogGenerator
         compare_link: true,
         unreleased: true,
         unreleased_label: 'Unreleased',
-        branch: 'origin'
+        branch: 'origin',
+        simple_list: false
       }
 
       parser = OptionParser.new do |opts|
