@@ -15,8 +15,8 @@ module GitHubChangelogGenerator
     attr_accessor :options, :all_tags, :github
 
     PER_PAGE_NUMBER = 30
-    GH_RATE_LIMIT_EXCEEDED_MSG = "Warning: GitHub API rate limit (5000 per hour) exceeded, change log may be " \
-        "missing some issues. You can limit the number of issues fetched using the `--max-issues NUM` argument."
+    GH_RATE_LIMIT_EXCEEDED_MSG = 'Warning: GitHub API rate limit (5000 per hour) exceeded, change log may be ' \
+        'missing some issues. You can limit the number of issues fetched using the `--max-issues NUM` argument.'
 
     def initialize
       @options = Parser.parse_options
@@ -139,7 +139,7 @@ module GitHubChangelogGenerator
       }
 
       if @options[:verbose]
-        puts "Fetching merged dates: Done!"
+        puts 'Fetching merged dates: Done!'
       end
     end
 
@@ -210,7 +210,7 @@ module GitHubChangelogGenerator
 
       output_filename = "#{@options[:output]}"
       File.open(output_filename, 'w') { |file| file.write(log) }
-      puts "Done!"
+      puts 'Done!'
       puts "Generated log placed in #{`pwd`.strip!}/#{output_filename}"
     end
 
@@ -218,13 +218,13 @@ module GitHubChangelogGenerator
       fetch_tags_dates
 
       if @options[:verbose]
-        puts "Sorting tags..."
+        puts 'Sorting tags...'
       end
 
       @all_tags.sort_by! { |x| get_time_of_tag(x) }.reverse!
 
       if @options[:verbose]
-        puts "Generating log..."
+        puts 'Generating log...'
       end
 
       log = ''
@@ -310,8 +310,8 @@ module GitHubChangelogGenerator
       env_var = @options[:token] ? @options[:token] : (ENV.fetch 'CHANGELOG_GITHUB_TOKEN', nil)
 
       unless env_var
-        puts "Warning: No token provided (-t option) and variable $CHANGELOG_GITHUB_TOKEN was not found.".yellow
-        puts "This script can make only 50 requests per hour to GitHub API without a token!".yellow
+        puts 'Warning: No token provided (-t option) and variable $CHANGELOG_GITHUB_TOKEN was not found.'.yellow
+        puts 'This script can make only 50 requests per hour to GitHub API without a token!'.yellow
       end
 
       @github_token ||= env_var
@@ -375,7 +375,7 @@ module GitHubChangelogGenerator
     end
 
     def delete_by_time(array, hash_key, older_tag = nil, newer_tag = nil)
-      fail "At least one of the tags should be not nil!" if older_tag.nil? && newer_tag.nil?
+      fail 'At least one of the tags should be not nil!' if older_tag.nil? && newer_tag.nil?
 
       newer_tag_time = get_time_of_tag(newer_tag)
       older_tag_time = get_time_of_tag(older_tag)
