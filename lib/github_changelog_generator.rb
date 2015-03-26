@@ -275,12 +275,6 @@ module GitHubChangelogGenerator
       end
     end
 
-    def is_megred(number)
-      @github.pull_requests.merged? @options[:user], @options[:project], number
-    rescue
-      puts GH_RATE_LIMIT_EXCEEDED_MSG.yellow
-    end
-
     def get_all_tags
       if @options[:verbose]
         print "Fetching tags...\r"
