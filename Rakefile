@@ -1,9 +1,7 @@
-require "rake/testtask"
+require 'rubocop/rake_task'
+require 'rspec/core/rake_task'
 
-task :default => [:test]
+RuboCop::RakeTask.new
+RSpec::Core::RakeTask.new(:rspec)
 
-Rake::TestTask.new do |t|
-  t.verbose = true
-  t.libs.push("demo", "test")
-  t.pattern = "test/**/*_test.rb"
-end
+task default: [:rubocop, :rspec]

@@ -6,32 +6,31 @@ require_relative 'version'
 module GitHubChangelogGenerator
   class Parser
     def self.parse_options
-
       options = {
-          :tag1 => nil,
-          :tag2 => nil,
-          :format => '%Y-%m-%d',
-          :output => 'CHANGELOG.md',
-          :exclude_labels => %w(duplicate question invalid wontfix),
-          :pulls => true,
-          :issues => true,
-          :verbose => true,
-          :add_issues_wo_labels => true,
-          :add_pr_wo_labels => true,
-          :merge_prefix => '**Merged pull requests:**',
-          :issue_prefix => '**Closed issues:**',
-          :bug_prefix => '**Fixed bugs:**',
-          :enhancement_prefix => '**Implemented enhancements:**',
-          :author => true,
-          :filter_issues_by_milestone => true,
-          :max_issues => nil,
-          :compare_link => true,
-          :unreleased => true,
-          :unreleased_label => 'Unreleased',
-          :branch => 'origin'
+        tag1: nil,
+        tag2: nil,
+        format: '%Y-%m-%d',
+        output: 'CHANGELOG.md',
+        exclude_labels: %w(duplicate question invalid wontfix),
+        pulls: true,
+        issues: true,
+        verbose: true,
+        add_issues_wo_labels: true,
+        add_pr_wo_labels: true,
+        merge_prefix: '**Merged pull requests:**',
+        issue_prefix: '**Closed issues:**',
+        bug_prefix: '**Fixed bugs:**',
+        enhancement_prefix: '**Implemented enhancements:**',
+        author: true,
+        filter_issues_by_milestone: true,
+        max_issues: nil,
+        compare_link: true,
+        unreleased: true,
+        unreleased_label: 'Unreleased',
+        branch: 'origin'
       }
 
-      parser = OptionParser.new { |opts|
+      parser = OptionParser.new do |opts|
         opts.banner = 'Usage: github_changelog_generator [options]'
         opts.on('-u', '--user [USER]', 'Username of the owner of target GitHub repo') do |last|
           options[:user] = last
@@ -99,7 +98,7 @@ module GitHubChangelogGenerator
         opts.on('--[no-]verbose', 'Run verbosely. Default is true') do |v|
           options[:verbose] = v
         end
-        opts.on('-v', '--version', 'Print version number') do |v|
+        opts.on('-v', '--version', 'Print version number') do |_v|
           puts "Version: #{GitHubChangelogGenerator::VERSION}"
           exit
         end
@@ -107,7 +106,7 @@ module GitHubChangelogGenerator
           puts opts
           exit
         end
-      }
+      end
 
       parser.parse!
 
@@ -126,9 +125,8 @@ module GitHubChangelogGenerator
           exit
         else
           options[:user] = match[1]
-          options[:project]= match[2]
+          options[:project] = match[2]
         end
-
 
       end
 
@@ -143,9 +141,9 @@ module GitHubChangelogGenerator
           puts "Detected user:#{match[1]}, project:#{match[2]}"
           options[:user], options[:project] = match[1], match[2]
         else
-        # try to find repo in format:
-        # origin	https://github.com/skywinder/ChangelogMerger (fetch)
-        # https://github.com/skywinder/ChangelogMerger
+          # try to find repo in format:
+          # origin	https://github.com/skywinder/ChangelogMerger (fetch)
+          # https://github.com/skywinder/ChangelogMerger
           match = /.*\/((?:-|\w|\.)*)\/((?:-|\w|\.)*).*/.match(remote)
           if match && match[1] && match[2]
             puts "Detected user:#{match[1]}, project:#{match[2]}"
@@ -153,7 +151,6 @@ module GitHubChangelogGenerator
           end
         end
       end
-
 
       if !options[:user] || !options[:project]
         puts parser.banner

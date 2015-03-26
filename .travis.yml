@@ -1,11 +1,13 @@
+---
+sudo: false
+cache: bundler
 language: ruby
-before_install:
-  - gem update --system
-  - gem --version
+
 rvm:
   - 2.1.0
-gemfile:
-  - Gemfile
+
+script:
+  - bundle exec rake
 
 notifications:
   email:
