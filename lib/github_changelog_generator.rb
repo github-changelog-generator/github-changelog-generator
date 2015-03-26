@@ -417,9 +417,7 @@ module GitHubChangelogGenerator
       github_site = options[:github_site] || 'https://github.com'
       project_url = "#{github_site}/#{@options[:user]}/#{@options[:project]}"
 
-      log = ''
-
-      log += generate_header(log, newer_tag_name, newer_tag_link, newer_tag_time, older_tag_name, project_url)
+      log = generate_header(newer_tag_name, newer_tag_link, newer_tag_time, older_tag_name, project_url)
 
       if @options[:issues]
         # Generate issues:
@@ -474,7 +472,9 @@ module GitHubChangelogGenerator
       log
     end
 
-    def generate_header(log, newer_tag_name, newer_tag_name2, newer_tag_time, older_tag_name, project_url)
+    def generate_header(newer_tag_name, newer_tag_name2, newer_tag_time, older_tag_name, project_url)
+      log = ''
+
       # Generate date string:
       time_string = newer_tag_time.strftime @options[:format]
 
