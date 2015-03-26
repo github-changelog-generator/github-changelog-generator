@@ -94,3 +94,6 @@ Style/RegexpLiteral:
 # Cop supports --auto-correct.
 Style/SpecialGlobalVars:
   Enabled: false
+
+Metrics/LineLength:
+  Enabled: false
