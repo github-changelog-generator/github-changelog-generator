@@ -7,7 +7,7 @@ SPEC_TYPE = 'gemspec'
 :minor
 :patch
 
-@options = {:dry_run => false, :bump_number => :patch}
+@options = { dry_run: false, bump_number: :patch }
 
 OptionParser.new { |opts|
   opts.banner = 'Usage: bump.rb [options]'
@@ -15,13 +15,13 @@ OptionParser.new { |opts|
   opts.on('-d', '--dry-run', 'Dry run') do |v|
     @options[:dry_run] = v
   end
-  opts.on('-a', '--major', 'Bump major version') do |v|
+  opts.on('-a', '--major', 'Bump major version') do |_v|
     @options[:bump_number] = :major
   end
-  opts.on('-m', '--minor', 'Bump minor version') do |v|
+  opts.on('-m', '--minor', 'Bump minor version') do |_v|
     @options[:bump_number] = :minor
   end
-  opts.on('-p', '--patch', 'Bump patch version') do |v|
+  opts.on('-p', '--patch', 'Bump patch version') do |_v|
     @options[:bump_number] = :patch
   end
   opts.on('-r', '--revert', 'Revert last bump') do |v|
@@ -32,7 +32,7 @@ OptionParser.new { |opts|
 p @options
 
 def check_repo_is_clean_or_dry_run
-  value =%x[#{'git status --porcelain'}]
+  value = `#{'git status --porcelain'}`
 
   if value.empty?
     puts 'Repo is clean -> continue'
@@ -45,7 +45,6 @@ def check_repo_is_clean_or_dry_run
     end
   end
 end
-
 
 def find_spec_file
   list_of_specs = execute_line("find . -name '*.#{SPEC_TYPE}'")
@@ -61,18 +60,17 @@ def find_spec_file
       spec_file = arr[0]
     else
       puts 'Which spec should be used?'
-      arr.each_with_index { |file, index| puts "#{index+1}. #{file}" }
+      arr.each_with_index { |file, index| puts "#{index + 1}. #{file}" }
       input_index = Integer(gets.chomp)
-      spec_file = arr[input_index-1]
+      spec_file = arr[input_index - 1]
   end
 
-  if spec_file == nil
+  if spec_file.nil?
     puts "Can't find specified spec file -> exit"
     exit
   end
 
   spec_file.sub('./', '')
-
 end
 
 def find_current_gem_file
@@ -89,24 +87,23 @@ def find_current_gem_file
       spec_file = arr[0]
     else
       puts 'Which spec should be used?'
-      arr.each_with_index { |file, index| puts "#{index+1}. #{file}" }
+      arr.each_with_index { |file, index| puts "#{index + 1}. #{file}" }
       input_index = Integer(gets.chomp)
-      spec_file = arr[input_index-1]
+      spec_file = arr[input_index - 1]
   end
 
-  if spec_file == nil
+  if spec_file.nil?
     puts "Can't find specified spec file -> exit"
     exit
   end
 
   spec_file.sub('./', '')
-
 end
 
 def find_version_in_podspec(podspec)
   readme = File.read(podspec)
 
-  #try to find version in format 1.22.333
+  # try to find version in format 1.22.333
   re = /(\d+)\.(\d+)\.(\d+)/m
 
   match_result = re.match(readme)
@@ -117,12 +114,12 @@ def find_version_in_podspec(podspec)
   end
 
   puts "Found version #{match_result[0]}"
-  return match_result[0], match_result.captures
+  [match_result[0], match_result.captures]
 end
 
 def bump_version(versions_array)
   bumped_result = versions_array.dup
-  bumped_result.map! { |x| x.to_i }
+  bumped_result.map!(&:to_i)
 
   case @options[:bump_number]
     when :major
@@ -135,9 +132,8 @@ def bump_version(versions_array)
     when :patch
       bumped_result[2] += 1
     else
-      raise('unknown bump_number')
+      fail('unknown bump_number')
   end
-
 
   bumped_version = bumped_result.join('.')
   puts "Bump version: #{versions_array.join('.')} -> #{bumped_version}"
@@ -157,7 +153,7 @@ def execute_line_if_not_dry_run(line)
     nil
   else
     puts line
-    value = %x[#{line}]
+    value = `#{line}`
     puts value
     check_exit_status(value)
     value
@@ -165,14 +161,13 @@ def execute_line_if_not_dry_run(line)
 end
 
 def check_exit_status(output)
-  if $?.exitstatus != 0
-    puts "Output:\n#{output}\nExit status = #{$?.exitstatus} ->Terminate script."
+  if $CHILD_STATUS.exitstatus != 0
+    puts "Output:\n#{output}\nExit status = #{$CHILD_STATUS.exitstatus} ->Terminate script."
     exit
   end
 end
 
 def run_bumping_script
-
   check_repo_is_clean_or_dry_run
   spec_file = find_spec_file
   result, versions_array = find_version_in_podspec(spec_file)
@@ -198,7 +193,6 @@ def run_bumping_script
   gem = find_current_gem_file
   execute_line_if_not_dry_run("gem push #{gem}")
   # execute_line_if_not_dry_run("pod trunk push #{spec_file}")
-
 end
 
 def revert_last_bump
@@ -216,7 +210,7 @@ def revert_last_bump
   execute_line_if_not_dry_run("git push --delete origin #{result}")
 end
 
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
 
   if @options[:revert]
     revert_last_bump

@@ -1,4 +1,11 @@
 source 'https://rubygems.org'
+
+gem 'rake'
+
 gem 'github_api'
 gem 'colorize'
-gem 'rake'
+
+group :test do
+  gem 'rspec'
+  gem 'rubocop'
+end
