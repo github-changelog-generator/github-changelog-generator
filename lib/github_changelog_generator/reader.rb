@@ -23,6 +23,21 @@ module GitHubChangelogGenerator
   #   reader = GitHubChangelogGenerator::Reader.new
   #   content = reader.read('./CHANGELOG.md')
   class Reader
+    def initialize(options = {})
+      defaults = {
+        heading_level: '##',
+        heading_structures: [
+          /^## \[(?<version>.+?)\]\((?<url>.+?)\)( \((?<date>.+?)\))?$/,
+          /^## (?<version>.+?)( \((?<date>.+?)\))?$/
+        ]
+      }
+
+      @options = options.merge(defaults)
+
+      @heading_level = @options[:heading_level]
+      @heading_structures = @options[:heading_structures]
+    end
+
     # Parse a single heading and return a Hash
     #
     # The following heading structures are currently valid:
@@ -34,16 +49,14 @@ module GitHubChangelogGenerator
     # @param [String] heading Heading from the ChangeLog File
     # @return [Hash] Returns a structured Hash with version, url and date
     def parse_heading(heading)
-      structures = [
-          /^## \[(?<version>v.+?)\]\((?<url>.+?)\)( \((?<date>.+?)\))?$/,
-          /^## (?<version>v.+?)( \((?<date>.+?)\))?$/,
-      ]
+      captures = { 'version' => nil, 'url' => nil, 'date' => nil }
 
-      captures = {'version' => nil, 'url' => nil, 'date' => nil}
-
-      structures.each do |regexp|
+      @heading_structures.each do |regexp|
         matches = Regexp.new(regexp).match(heading)
         captures.merge!(Hash[matches.names.map.zip(matches.captures)]) unless matches.nil?
+
+        # Try Regular Expressions until you find one that delivers results
+        break unless matches.nil?
       end
 
       captures
