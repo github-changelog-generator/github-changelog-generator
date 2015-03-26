@@ -17,7 +17,7 @@ module GitHubChangelogGenerator
 
     PER_PAGE_NUMBER = 30
     GH_RATE_LIMIT_EXCEEDED_MSG = 'Warning: GitHub API rate limit exceed (5000 per hour), change log may not ' +
-      'contain some issues. You can limit the number of issues fetched using the `--max-issues NUM` argument'
+        'contain some issues. You can limit the number of issues fetched using the `--max-issues NUM` argument'
 
     def initialize
 
@@ -95,14 +95,10 @@ module GitHubChangelogGenerator
               issue[:actual_date] = issue[:closed_at]
             else
               begin
-                begin
-                  commit = @github.git_data.commits.get @options[:user], @options[:project], event[:commit_id]
-                rescue
-                  puts GH_RATE_LIMIT_EXCEEDED_MSG.yellow
-                end
+                commit = @github.git_data.commits.get @options[:user], @options[:project], event[:commit_id]
                 issue[:actual_date] = commit[:author][:date]
               rescue
-                puts "Warning: can't fetch commit #{event[:commit_id]} probably it referenced from another repo."
+                puts "Warning: can't fetch commit #{event[:commit_id]} probably it referenced from another repo.".yellow
                 issue[:actual_date] = issue[:closed_at]
               end
             end
@@ -154,7 +150,7 @@ module GitHubChangelogGenerator
 
       self.fetch_merged_at_pull_requests
 
-      filtered_pull_requests = @pull_requests.select {|pr| pr[:merged_at] != nil }
+      filtered_pull_requests = @pull_requests.select { |pr| pr[:merged_at] != nil }
 
       unless @options[:include_labels].nil?
         filtered_pull_requests = @pull_requests.select { |issue|
@@ -286,7 +282,7 @@ module GitHubChangelogGenerator
       threads.each { |thr| thr.join }
 
       if @options[:verbose]
-        puts 'Fetching tags: Done!'
+        puts "Fetching tags dates: #{i} Done!"
       end
     end
 
@@ -317,6 +313,11 @@ module GitHubChangelogGenerator
         if @options[:verbose]
           puts "Found #{tags.count} tags"
         end
+
+        if tags.count == 0
+          puts "Warning: Can't find any tags in repo. Make sure, that you push tags to remote repo via 'git push --tags'".yellow
+        end
+
       rescue
         puts GH_RATE_LIMIT_EXCEEDED_MSG.yellow
       end
@@ -624,12 +625,7 @@ module GitHubChangelogGenerator
 
       fetch_events_async(@issues + @pull_requests)
 
-      #to clear line from prev print
-      print "                                                            \r"
 
-      if @options[:verbose]
-        puts 'Fetching events for issues and PR: Done!'
-      end
     end
 
     def fetch_events_async(issues)
@@ -652,6 +648,14 @@ module GitHubChangelogGenerator
         threads.each { |thr| thr.join }
         threads = []
       }
+
+      #to clear line from prev print
+      print "                                                            \r"
+
+      if @options[:verbose]
+        puts "Fetching events for issues and PR: #{i} Done!"
+      end
+
     end
 
   end
