@@ -11,25 +11,26 @@ module GitHubChangelogGenerator
         tag2: nil,
         format: '%Y-%m-%d',
         output: 'CHANGELOG.md',
-        include_labels: %w(bug enhancement),
-        exclude_labels: %w(duplicate question invalid wontfix),
-        pulls: true,
         issues: true,
-        verbose: true,
         add_issues_wo_labels: true,
         add_pr_wo_labels: true,
+        pulls: true,
+        filter_issues_by_milestone: true,
+        author: true,
+        unreleased: true,
+        unreleased_label: 'Unreleased',
+        compare_link: true,
+        include_labels: %w(bug enhancement),
+        exclude_labels: %w(duplicate question invalid wontfix),
+        max_issues: nil,
+        simple_list: false,
+        verbose: true,
+
         merge_prefix: '**Merged pull requests:**',
         issue_prefix: '**Closed issues:**',
         bug_prefix: '**Fixed bugs:**',
         enhancement_prefix: '**Implemented enhancements:**',
-        author: true,
-        filter_issues_by_milestone: true,
-        max_issues: nil,
-        compare_link: true,
-        unreleased: true,
-        unreleased_label: 'Unreleased',
-        branch: 'origin',
-        simple_list: false
+        branch: 'origin'
       }
 
       parser = OptionParser.new do |opts|
