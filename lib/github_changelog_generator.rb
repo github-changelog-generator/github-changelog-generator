@@ -292,12 +292,11 @@ module GitHubChangelogGenerator
           tags.concat(page)
         end
         print "                               \r"
-        if @options[:verbose]
-          puts "Found #{tags.count} tags"
-        end
 
         if tags.count == 0
           puts "Warning: Can't find any tags in repo. Make sure, that you push tags to remote repo via 'git push --tags'".yellow
+        elsif @options[:verbose]
+          puts "Found #{tags.count} tags"
         end
 
       rescue
