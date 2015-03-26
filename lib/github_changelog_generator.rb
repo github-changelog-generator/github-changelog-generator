@@ -8,6 +8,7 @@ require 'benchmark'
 require_relative 'github_changelog_generator/parser'
 require_relative 'github_changelog_generator/generator'
 require_relative 'github_changelog_generator/version'
+require_relative 'github_changelog_generator/reader'
 
 module GitHubChangelogGenerator
   class ChangelogGenerator
