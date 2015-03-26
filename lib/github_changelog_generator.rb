@@ -476,7 +476,7 @@ module GitHubChangelogGenerator
       log = ''
 
       # Generate date string:
-      time_string = newer_tag_time.strftime @options[:format]
+      time_string = newer_tag_time.strftime @options[:dateformat]
 
       # Generate tag name and link
       if newer_tag_name.equal? @options[:unreleased_label]

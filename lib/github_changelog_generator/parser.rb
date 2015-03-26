@@ -9,7 +9,7 @@ module GitHubChangelogGenerator
       options = {
         tag1: nil,
         tag2: nil,
-        format: '%Y-%m-%d',
+        dateformat: '%Y-%m-%d',
         output: 'CHANGELOG.md',
         issues: true,
         add_issues_wo_labels: true,
@@ -45,7 +45,7 @@ module GitHubChangelogGenerator
           options[:token] = last
         end
         opts.on('-f', '--date-format [FORMAT]', 'Date format. Default is %Y-%m-%d') do |last|
-          options[:format] = last
+          options[:dateformat] = last
         end
         opts.on('-o', '--output [NAME]', 'Output file. Default is CHANGELOG.md') do |last|
           options[:output] = last
