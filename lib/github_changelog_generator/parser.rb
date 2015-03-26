@@ -38,25 +38,25 @@ module GitHubChangelogGenerator
         opts.on('-p', '--project [PROJECT]', 'Name of project on GitHub') do |last|
           options[:project] = last
         end
-        opts.on('-t', '--token [TOKEN]', 'To make more than 50 requests per hour your GitHub token required. You can generate it here: https://github.com/settings/tokens/new') do |last|
+        opts.on('-t', '--token [TOKEN]', 'To make more than 50 requests per hour your GitHub token is required. You can generate it at: https://github.com/settings/tokens/new') do |last|
           options[:token] = last
         end
-        opts.on('-f', '--date-format [FORMAT]', 'Date format. Default is %d/%m/%y') do |last|
+        opts.on('-f', '--date-format [FORMAT]', 'Date format. Default is %Y-%m-%d') do |last|
           options[:format] = last
         end
         opts.on('-o', '--output [NAME]', 'Output file. Default is CHANGELOG.md') do |last|
           options[:output] = last
         end
-        opts.on('--[no-]issues', 'Include closed issues to changelog. Default is true') do |v|
+        opts.on('--[no-]issues', 'Include closed issues in changelog. Default is true') do |v|
           options[:issues] = v
         end
-        opts.on('--[no-]issues-wo-labels', 'Include closed issues without labels to changelog. Default is true') do |v|
+        opts.on('--[no-]issues-wo-labels', 'Include closed issues without labels in changelog. Default is true') do |v|
           options[:add_issues_wo_labels] = v
         end
-        opts.on('--[no-]pr-wo-labels', 'Include pull requests without labels to changelog. Default is true') do |v|
+        opts.on('--[no-]pr-wo-labels', 'Include pull requests without labels in changelog. Default is true') do |v|
           options[:add_pr_wo_labels] = v
         end
-        opts.on('--[no-]pull-requests', 'Include pull-requests to changelog. Default is true') do |v|
+        opts.on('--[no-]pull-requests', 'Include pull-requests in changelog. Default is true') do |v|
           options[:pulls] = v
         end
         opts.on('--[no-]filter-by-milestone', 'Use milestone to detect when issue was resolved. Default is true') do |last|
@@ -77,10 +77,10 @@ module GitHubChangelogGenerator
         opts.on('--[no-]compare-link', 'Include compare link (Full Changelog) between older version and newer version. Default is true') do |v|
           options[:compare_link] = v
         end
-        opts.on('--include-labels  x,y,z', Array, 'Issues only with that labels will be included to changelog. Default is \'bug,enhancement\'') do |list|
+        opts.on('--include-labels  x,y,z', Array, 'Only issues with the specified labels will be included in the changelog. Default is \'bug,enhancement\'') do |list|
           options[:include_labels] = list
         end
-        opts.on('--exclude-labels  x,y,z', Array, 'Issues with that labels will be always excluded from changelog. Default is \'duplicate,question,invalid,wontfix\'') do |list|
+        opts.on('--exclude-labels  x,y,z', Array, 'Issues with the specified labels will be always excluded from changelog. Default is \'duplicate,question,invalid,wontfix\'') do |list|
           options[:exclude_labels] = list
         end
         opts.on('--max-issues [NUMBER]', Integer, 'Max number of issues to fetch from GitHub. Default is unlimited') do |max|
