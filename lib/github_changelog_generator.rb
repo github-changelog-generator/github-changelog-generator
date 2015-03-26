@@ -410,19 +410,12 @@ module GitHubChangelogGenerator
     # @param [String] older_tag_name
     # @return [String]
     def create_log(pull_requests, issues, newer_tag, older_tag_name = nil)
-      newer_tag_time = newer_tag.nil? ? nil : get_time_of_tag(newer_tag)
-      newer_tag_name = newer_tag.nil? ? nil : newer_tag['name']
+      newer_tag_time = newer_tag.nil? ? Time.new                    : get_time_of_tag(newer_tag)
+      newer_tag_name = newer_tag.nil? ? @options[:unreleased_label] : newer_tag['name']
+      newer_tag_link = newer_tag.nil? ? 'HEAD'                      : newer_tag_name
 
       github_site = options[:github_site] || 'https://github.com'
       project_url = "#{github_site}/#{@options[:user]}/#{@options[:project]}"
-
-      if newer_tag.nil?
-        newer_tag_name = @options[:unreleased_label]
-        newer_tag_link = 'HEAD'
-        newer_tag_time = Time.new
-      else
-        newer_tag_link = newer_tag_name
-      end
 
       log = ''
 
