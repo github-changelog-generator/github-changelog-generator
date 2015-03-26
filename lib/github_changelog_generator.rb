@@ -36,7 +36,7 @@ module GitHubChangelogGenerator
 
       @generator = Generator.new(@options)
 
-      @all_tags = get_all_tags
+      @all_tags = get_filtered_tags
       @issues, @pull_requests = fetch_issues_and_pull_requests
 
       if @options[:pulls]
@@ -54,6 +54,23 @@ module GitHubChangelogGenerator
       fetch_event_for_issues_and_pr
       detect_actual_closed_dates
       @tag_times_hash = {}
+    end
+
+    # Return tags after filtering tags in lists provided by option: --between-tags & --exclude-tags
+    #
+    # @return [Array]
+    def get_filtered_tags
+      all_tags = get_all_tags
+      filtered_tags = []
+      if @options[:between_tags]
+        @options[:between_tags].each do |tag|
+          unless all_tags.include? tag
+            puts "Warning: can't find tag #{tag}, specified with --between-tags option.".yellow
+          end
+        end
+        filtered_tags = all_tags.select { |tag| @options[:between_tags].include? tag }
+      end
+      filtered_tags
     end
 
     def detect_actual_closed_dates
