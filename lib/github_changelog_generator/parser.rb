@@ -11,6 +11,7 @@ module GitHubChangelogGenerator
         tag2: nil,
         format: '%Y-%m-%d',
         output: 'CHANGELOG.md',
+        include_labels: %w(bug enhancement),
         exclude_labels: %w(duplicate question invalid wontfix),
         pulls: true,
         issues: true,

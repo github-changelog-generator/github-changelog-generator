@@ -150,7 +150,7 @@ module GitHubChangelogGenerator
 
       unless @options[:include_labels].nil?
         filtered_pull_requests = @pull_requests.select { |issue|
-          # add all labels from @options[:incluse_labels] array
+          # add all labels from @options[:include_labels] array
           (issue.labels.map(&:name) & @options[:include_labels]).any?
         }
       end
@@ -518,7 +518,7 @@ module GitHubChangelogGenerator
 
       unless @options[:include_labels].nil?
         filtered_issues = issues.select { |issue|
-          # add all labels from @options[:incluse_labels] array
+          # add all labels from @options[:include_labels] array
           (issue.labels.map(&:name) & @options[:include_labels]).any?
         }
       end
