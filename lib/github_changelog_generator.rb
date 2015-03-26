@@ -176,7 +176,7 @@ module GitHubChangelogGenerator
       filtered_pull_requests
     end
 
-    def compund_changelog
+    def compound_changelog
       log = "# Change Log\n\n"
 
       if @options[:unreleased_only]
@@ -635,6 +635,6 @@ module GitHubChangelogGenerator
   end
 
   if __FILE__ == $PROGRAM_NAME
-    GitHubChangelogGenerator::ChangelogGenerator.new.compund_changelog
+    GitHubChangelogGenerator::ChangelogGenerator.new.compound_changelog
   end
 end
