@@ -4,6 +4,13 @@ module GitHubChangelogGenerator
       @options = options
     end
 
+    # Parse issue and generate single line formatted issue line.
+    #
+    # Example output:
+    # - Add coveralls integration [\#223](https://github.com/skywinder/github-changelog-generator/pull/223) ([skywinder](https://github.com/skywinder))
+    #
+    # @param [Hash] issue Fetched issue from GitHub
+    # @return [String] Markdown-formatted single issue
     def get_string_for_issue(issue)
       encapsulated_title = encapsulate_string issue[:title]
 
