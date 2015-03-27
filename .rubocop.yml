@@ -1,4 +1,14 @@
 inherit_from: .rubocop_todo.yml
 
+AllCops:
+  Excludes:
+    - bin/**
+    - db/**
+    - config/**
+
 Metrics/LineLength:
   Enabled: false
+
+#http://viget.com/extend/just-use-double-quoted-ruby-strings
+#Style/StringLiterals:
+#  EnforcedStyle: double_quotes
