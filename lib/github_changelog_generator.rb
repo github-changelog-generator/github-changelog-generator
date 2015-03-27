@@ -15,8 +15,8 @@ module GitHubChangelogGenerator
     attr_accessor :options, :all_tags, :github
 
     PER_PAGE_NUMBER = 30
-    GH_RATE_LIMIT_EXCEEDED_MSG = 'Warning: GitHub API rate limit exceed (5000 per hour), change log may not ' \
-        'contain some issues. You can limit the number of issues fetched using the `--max-issues NUM` argument'
+    GH_RATE_LIMIT_EXCEEDED_MSG = 'Warning: GitHub API rate limit (5000 per hour) exceeded, change log may be ' \
+        'missing some issues. You can limit the number of issues fetched using the `--max-issues NUM` argument.'
 
     def initialize
       @options = Parser.parse_options
@@ -95,7 +95,7 @@ module GitHubChangelogGenerator
                 commit = @github.git_data.commits.get @options[:user], @options[:project], event[:commit_id]
                 issue[:actual_date] = commit[:author][:date]
               rescue
-                puts "Warning: can't fetch commit #{event[:commit_id]} probably it referenced from another repo.".yellow
+                puts "Warning: Can't fetch commit #{event[:commit_id]}. It is probably referenced from another repo.".yellow
                 issue[:actual_date] = issue[:closed_at]
               end
             end
@@ -139,7 +139,7 @@ module GitHubChangelogGenerator
       }
 
       if @options[:verbose]
-        puts 'Fetching merged dates... Done!'
+        puts 'Fetching merged dates: Done!'
       end
     end
 
@@ -150,7 +150,7 @@ module GitHubChangelogGenerator
 
       unless @options[:include_labels].nil?
         filtered_pull_requests = @pull_requests.select { |issue|
-          # add all labels from @options[:incluse_labels] array
+          # add all labels from @options[:include_labels] array
           (issue.labels.map(&:name) & @options[:include_labels]).any?
         }
       end
@@ -176,7 +176,7 @@ module GitHubChangelogGenerator
       filtered_pull_requests
     end
 
-    def compund_changelog
+    def compound_changelog
       log = "# Change Log\n\n"
 
       if @options[:unreleased_only]
@@ -218,13 +218,13 @@ module GitHubChangelogGenerator
       fetch_tags_dates
 
       if @options[:verbose]
-        puts 'Sorting tags..'
+        puts 'Sorting tags...'
       end
 
       @all_tags.sort_by! { |x| get_time_of_tag(x) }.reverse!
 
       if @options[:verbose]
-        puts 'Generating log..'
+        puts 'Generating log...'
       end
 
       log = ''
@@ -248,7 +248,7 @@ module GitHubChangelogGenerator
 
     def fetch_tags_dates
       if @options[:verbose]
-        print "Fetching tags dates..\r"
+        print "Fetching tag dates...\r"
       end
 
       # Async fetching tags:
@@ -275,12 +275,6 @@ module GitHubChangelogGenerator
       end
     end
 
-    def is_megred(number)
-      @github.pull_requests.merged? @options[:user], @options[:project], number
-    rescue
-      puts GH_RATE_LIMIT_EXCEEDED_MSG.yellow
-    end
-
     def get_all_tags
       if @options[:verbose]
         print "Fetching tags...\r"
@@ -298,12 +292,11 @@ module GitHubChangelogGenerator
           tags.concat(page)
         end
         print "                               \r"
-        if @options[:verbose]
-          puts "Found #{tags.count} tags"
-        end
 
         if tags.count == 0
           puts "Warning: Can't find any tags in repo. Make sure, that you push tags to remote repo via 'git push --tags'".yellow
+        elsif @options[:verbose]
+          puts "Found #{tags.count} tags"
         end
 
       rescue
@@ -318,7 +311,7 @@ module GitHubChangelogGenerator
 
       unless env_var
         puts 'Warning: No token provided (-t option) and variable $CHANGELOG_GITHUB_TOKEN was not found.'.yellow
-        puts 'This script can make only 50 requests to GitHub API per hour without token!'.yellow
+        puts 'This script can make only 50 requests per hour to GitHub API without a token!'.yellow
       end
 
       @github_token ||= env_var
@@ -417,23 +410,14 @@ module GitHubChangelogGenerator
     # @param [String] older_tag_name
     # @return [String]
     def create_log(pull_requests, issues, newer_tag, older_tag_name = nil)
-      newer_tag_time = newer_tag.nil? ? nil : get_time_of_tag(newer_tag)
-      newer_tag_name = newer_tag.nil? ? nil : newer_tag['name']
+      newer_tag_time = newer_tag.nil? ? Time.new                    : get_time_of_tag(newer_tag)
+      newer_tag_name = newer_tag.nil? ? @options[:unreleased_label] : newer_tag['name']
+      newer_tag_link = newer_tag.nil? ? 'HEAD'                      : newer_tag_name
 
       github_site = options[:github_site] || 'https://github.com'
       project_url = "#{github_site}/#{@options[:user]}/#{@options[:project]}"
 
-      if newer_tag.nil?
-        newer_tag_name = @options[:unreleased_label]
-        newer_tag_link = 'HEAD'
-        newer_tag_time = Time.new
-      else
-        newer_tag_link = newer_tag_name
-      end
-
-      log = ''
-
-      log += generate_header(log, newer_tag_name, newer_tag_link, newer_tag_time, older_tag_name, project_url)
+      log = generate_header(newer_tag_name, newer_tag_link, newer_tag_time, older_tag_name, project_url)
 
       if @options[:issues]
         # Generate issues:
@@ -488,9 +472,11 @@ module GitHubChangelogGenerator
       log
     end
 
-    def generate_header(log, newer_tag_name, newer_tag_name2, newer_tag_time, older_tag_name, project_url)
+    def generate_header(newer_tag_name, newer_tag_name2, newer_tag_time, older_tag_name, project_url)
+      log = ''
+
       # Generate date string:
-      time_string = newer_tag_time.strftime @options[:format]
+      time_string = newer_tag_time.strftime @options[:dateformat]
 
       # Generate tag name and link
       if newer_tag_name.equal? @options[:unreleased_label]
@@ -532,7 +518,7 @@ module GitHubChangelogGenerator
 
       unless @options[:include_labels].nil?
         filtered_issues = issues.select { |issue|
-          # add all labels from @options[:incluse_labels] array
+          # add all labels from @options[:include_labels] array
           (issue.labels.map(&:name) & @options[:include_labels]).any?
         }
       end
@@ -635,6 +621,6 @@ module GitHubChangelogGenerator
   end
 
   if __FILE__ == $PROGRAM_NAME
-    GitHubChangelogGenerator::ChangelogGenerator.new.compund_changelog
+    GitHubChangelogGenerator::ChangelogGenerator.new.compound_changelog
   end
 end
