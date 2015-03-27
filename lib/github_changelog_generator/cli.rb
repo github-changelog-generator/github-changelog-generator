@@ -23,10 +23,10 @@ module GitHubChangelogGenerator
     default_task :generate
 
     desc 'generate', 'Generates the CHANGELOG.md based on the given options'
-    option :user, :aliases => '-u', :type => :string, :desc => 'Username of the owner of target GitHub repo'
-    option :project, :aliases => '-p', :type => :string, :desc => 'Username of the owner of target GitHub repo'
-    option :token, :aliases => '-t', :type => :string, :desc => 'To make more than 50 requests per hour your GitHub token required. You can generate it here: https://github.com/settings/tokens/new'
-    option :issues_wo_labels, :type => :boolean, :default => true, :desc => 'Include closed issues without labels to changelog.'
+    option :user, aliases: '-u', type: :string, desc: 'Username of the owner of target GitHub repo'
+    option :project, aliases: '-p', type: :string, desc: 'Username of the owner of target GitHub repo'
+    option :token, aliases: '-t', type: :string, desc: 'To make more than 50 requests per hour your GitHub token required. You can generate it here: https://github.com/settings/tokens/new'
+    option :issues_wo_labels, type: :boolean, default: true, desc: 'Include closed issues without labels to changelog.'
 
     def generate
       print_table([['Project:', 'zanui/chef-thumbor'], ['Username:', 'estahn']])
