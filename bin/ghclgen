@@ -1,0 +1,3 @@
+#!/usr/bin/env ruby -U
+require 'github_changelog_generator'
+GitHubChangelogGenerator::CLI.start(ARGV)

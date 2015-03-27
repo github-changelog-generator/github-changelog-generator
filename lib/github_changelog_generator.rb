@@ -5,10 +5,11 @@ require 'json'
 require 'colorize'
 require 'benchmark'
 
-require_relative 'github_changelog_generator/parser'
-require_relative 'github_changelog_generator/generator'
-require_relative 'github_changelog_generator/version'
-require_relative 'github_changelog_generator/reader'
+require 'github_changelog_generator/parser'
+require 'github_changelog_generator/generator'
+require 'github_changelog_generator/version'
+require 'github_changelog_generator/reader'
+require 'github_changelog_generator/cli'
 
 module GitHubChangelogGenerator
   class ChangelogGenerator
