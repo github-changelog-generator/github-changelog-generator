@@ -447,22 +447,26 @@ module GitHubChangelogGenerator
           end
         }
 
-        log += generate_log_from_array(enhancement_a, @options[:enhancement_prefix])
-        log += generate_log_from_array(bugs_a, @options[:bug_prefix])
-        log += generate_log_from_array(issues_a, @options[:issue_prefix])
+        log += generate_sub_section(enhancement_a, @options[:enhancement_prefix])
+        log += generate_sub_section(bugs_a, @options[:bug_prefix])
+        log += generate_sub_section(issues_a, @options[:issue_prefix])
       end
 
       if @options[:pulls]
         # Generate pull requests:
-        log += generate_log_from_array(pull_requests, @options[:merge_prefix])
+        log += generate_sub_section(pull_requests, @options[:merge_prefix])
       end
 
       log
     end
 
-    def generate_log_from_array(issues, prefix)
+    # @param [Array] issues List of issues on sub-section
+    # @param [String] prefix Nae of sub-section
+    # @return [String] Generate ready-to-go sub-section
+    def generate_sub_section(issues, prefix)
       log = ''
-      if options[:simple_list].nil? && issues.any?
+
+      if options[:simple_list] != true && issues.any?
         log += "#{prefix}\n\n"
       end
 
