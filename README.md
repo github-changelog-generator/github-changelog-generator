@@ -1,3 +1,4 @@
+[![Gem Version](https://badge.fury.io/rb/github_changelog_generator.svg)](http://badge.fury.io/rb/github_changelog_generator)
 [![Dependency Status](https://gemnasium.com/skywinder/github-changelog-generator.svg)](https://gemnasium.com/skywinder/github-changelog-generator)
 [![Build Status](https://travis-ci.org/skywinder/github-changelog-generator.svg?branch=master)](https://travis-ci.org/skywinder/github-changelog-generator)
 [![Coverage Status](http://img.shields.io/coveralls/skywinder/github-changelog-generator/master.svg)](https://coveralls.io/r/skywinder/github-changelog-generator)
