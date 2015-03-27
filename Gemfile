@@ -8,4 +8,5 @@ gem 'colorize'
 group :test do
   gem 'rspec'
   gem 'rubocop'
+  gem 'coveralls', require: false
 end
