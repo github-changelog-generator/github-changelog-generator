@@ -1,10 +1,8 @@
 inherit_from: .rubocop_todo.yml
 
 AllCops:
-  Excludes:
-    - bin/**
-    - db/**
-    - config/**
+  Exclude:
+    - 'bin/**'
 
 Metrics/LineLength:
   Enabled: false
