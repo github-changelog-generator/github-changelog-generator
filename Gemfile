@@ -9,4 +9,5 @@ group :test do
   gem 'rspec'
   gem 'rubocop'
   gem 'coveralls', require: false
+  gem "codeclimate-test-reporter", require: nil
 end
