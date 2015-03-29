@@ -16,7 +16,12 @@
 # limitations under the License.
 #
 require 'coveralls'
-Coveralls.wear!
+require 'simplecov'
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
+  SimpleCov::Formatter::HTMLFormatter,
+  Coveralls::SimpleCov::Formatter
+]
+SimpleCov.start
 
 require 'github_changelog_generator'
 
