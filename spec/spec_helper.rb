@@ -15,8 +15,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+require 'codeclimate-test-reporter'
+require 'simplecov'
 require 'coveralls'
-Coveralls.wear!
+
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
+  Coveralls::SimpleCov::Formatter,
+  SimpleCov::Formatter::HTMLFormatter,
+  CodeClimate::TestReporter::Formatter
+]
+SimpleCov.start
 
 require 'github_changelog_generator'
 
