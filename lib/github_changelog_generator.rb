@@ -405,10 +405,13 @@ module GitHubChangelogGenerator
       }
     end
 
-    # @param [Array] pull_requests
-    # @param [Array] issues
-    # @param [String] older_tag_name
-    # @return [String]
+    # Generates log for section with header and body
+    #
+    # @param [Array] pull_requests List or PR's in new section
+    # @param [Array] issues List of issues in new section
+    # @param [String] newer_tag Name of the newer tag. Could be nil for `Unreleased` section
+    # @param [String] older_tag_name Older tag, used for the links. Could be nil for last tag.
+    # @return [String] Ready and parsed section
     def create_log(pull_requests, issues, newer_tag, older_tag_name = nil)
       newer_tag_time = newer_tag.nil? ? Time.new                    : get_time_of_tag(newer_tag)
       newer_tag_name = newer_tag.nil? ? @options[:unreleased_label] : newer_tag['name']
@@ -444,22 +447,26 @@ module GitHubChangelogGenerator
           end
         }
 
-        log += generate_log_from_array(enhancement_a, @options[:enhancement_prefix])
-        log += generate_log_from_array(bugs_a, @options[:bug_prefix])
-        log += generate_log_from_array(issues_a, @options[:issue_prefix])
+        log += generate_sub_section(enhancement_a, @options[:enhancement_prefix])
+        log += generate_sub_section(bugs_a, @options[:bug_prefix])
+        log += generate_sub_section(issues_a, @options[:issue_prefix])
       end
 
       if @options[:pulls]
         # Generate pull requests:
-        log += generate_log_from_array(pull_requests, @options[:merge_prefix])
+        log += generate_sub_section(pull_requests, @options[:merge_prefix])
       end
 
       log
     end
 
-    def generate_log_from_array(issues, prefix)
+    # @param [Array] issues List of issues on sub-section
+    # @param [String] prefix Nae of sub-section
+    # @return [String] Generate ready-to-go sub-section
+    def generate_sub_section(issues, prefix)
       log = ''
-      if options[:simple_list].nil? && issues.any?
+
+      if options[:simple_list] != true && issues.any?
         log += "#{prefix}\n\n"
       end
 
@@ -472,7 +479,15 @@ module GitHubChangelogGenerator
       log
     end
 
-    def generate_header(newer_tag_name, newer_tag_name2, newer_tag_time, older_tag_name, project_url)
+    # It generate one header for section with specific parameters.
+    #
+    # @param [String] newer_tag_name - name of newer tag
+    # @param [String] newer_tag_link - used for links. Could be same as #newer_tag_name or some specific value, like HEAD
+    # @param [Time] newer_tag_time - time, when newer tag created
+    # @param [String] older_tag_link - tag name, used for links.
+    # @param [String] project_url - url for current project.
+    # @return [String] - Generate one ready-to-add section.
+    def generate_header(newer_tag_name, newer_tag_link, newer_tag_time, older_tag_link, project_url)
       log = ''
 
       # Generate date string:
@@ -480,14 +495,14 @@ module GitHubChangelogGenerator
 
       # Generate tag name and link
       if newer_tag_name.equal? @options[:unreleased_label]
-        log += "## [#{newer_tag_name}](#{project_url}/tree/#{newer_tag_name2})\n\n"
+        log += "## [#{newer_tag_name}](#{project_url}/tree/#{newer_tag_link})\n\n"
       else
-        log += "## [#{newer_tag_name}](#{project_url}/tree/#{newer_tag_name2}) (#{time_string})\n\n"
+        log += "## [#{newer_tag_name}](#{project_url}/tree/#{newer_tag_link}) (#{time_string})\n\n"
       end
 
-      if @options[:compare_link] && older_tag_name
+      if @options[:compare_link] && older_tag_link
         # Generate compare link
-        log += "[Full Changelog](#{project_url}/compare/#{older_tag_name}...#{newer_tag_name2})\n\n"
+        log += "[Full Changelog](#{project_url}/compare/#{older_tag_link}...#{newer_tag_link})\n\n"
       end
 
       log
