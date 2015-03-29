@@ -28,4 +28,5 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency('github_api', ['~> 0.12'])
   spec.add_runtime_dependency('colorize', ['~> 0.7'])
+  spec.add_runtime_dependency('thor', ['~> 0.19'])
 end
