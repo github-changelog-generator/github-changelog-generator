@@ -10,4 +10,5 @@ group :test do
   gem 'rubocop'
   gem 'coveralls', require: false
   gem 'simplecov', require: false
+  gem "codeclimate-test-reporter"
 end

@@ -15,11 +15,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-require 'coveralls'
+require 'codeclimate-test-reporter'
 require 'simplecov'
+require 'coveralls'
+
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
+  Coveralls::SimpleCov::Formatter,
   SimpleCov::Formatter::HTMLFormatter,
-  Coveralls::SimpleCov::Formatter
+  CodeClimate::TestReporter::Formatter
 ]
 SimpleCov.start
 
