@@ -1,17 +1,16 @@
----
 sudo: false
 cache: bundler
 language: ruby
-
 rvm:
-  - 2.1.0
-
+- 2.1.0
 script:
-  - bundle exec rake
-
+- bundle exec rake
 notifications:
   email:
     recipients:
-      - sky4winder+githubchangeloggenerator@gmail.com
-    on_success: never # [always|never|change]
-    on_failure: change # [always|never|change]
+    - sky4winder+githubchangeloggenerator@gmail.com
+    on_success: never
+    on_failure: change
+env:
+  global:
+    secure: iMpV5IAvH+/EVGZrpWnt2BnmNFzSbsRcIumsr4ZyLC8N5nrCSXyjCSy0g48btL3Sj0bSgK9hcrJsmrFd2bkqFleyAcPAzNyUQzBuIRZx47O8yFmbZ+Pj+l3+KOlmcbzJNHfDfxkxuWTmTAcSDfsiyApin721T/ey3SUuwKpZNUc=
