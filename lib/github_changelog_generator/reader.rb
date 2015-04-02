@@ -25,7 +25,7 @@ module GitHubChangelogGenerator
   class Reader
     def initialize(options = {})
       defaults = {
-        heading_level: '##',
+        heading_level: "##",
         heading_structures: [
           /^## \[(?<version>.+?)\]\((?<url>.+?)\)( \((?<date>.+?)\))?$/,
           /^## (?<version>.+?)( \((?<date>.+?)\))?$/
@@ -49,7 +49,7 @@ module GitHubChangelogGenerator
     # @param [String] heading Heading from the ChangeLog File
     # @return [Hash] Returns a structured Hash with version, url and date
     def parse_heading(heading)
-      captures = { 'version' => nil, 'url' => nil, 'date' => nil }
+      captures = { "version" => nil, "url" => nil, "date" => nil }
 
       @heading_structures.each do |regexp|
         matches = Regexp.new(regexp).match(heading)
@@ -73,7 +73,7 @@ module GitHubChangelogGenerator
 
       headings.each_with_index do |heading, index|
         captures = parse_heading(heading)
-        captures['content'] = sections.at(index + 1)
+        captures["content"] = sections.at(index + 1)
         changelog.push captures
       end
 

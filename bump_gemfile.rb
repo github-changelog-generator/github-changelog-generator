@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
-require 'optparse'
+require "optparse"
 
-SPEC_TYPE = 'gemspec'
+SPEC_TYPE = "gemspec"
 
 :major
 :minor
@@ -10,21 +10,21 @@ SPEC_TYPE = 'gemspec'
 @options = { dry_run: false, bump_number: :patch }
 
 OptionParser.new { |opts|
-  opts.banner = 'Usage: bump.rb [options]'
+  opts.banner = "Usage: bump.rb [options]"
 
-  opts.on('-d', '--dry-run', 'Dry run') do |v|
+  opts.on("-d", "--dry-run", "Dry run") do |v|
     @options[:dry_run] = v
   end
-  opts.on('-a', '--major', 'Bump major version') do |_v|
+  opts.on("-a", "--major", "Bump major version") do |_v|
     @options[:bump_number] = :major
   end
-  opts.on('-m', '--minor', 'Bump minor version') do |_v|
+  opts.on("-m", "--minor", "Bump minor version") do |_v|
     @options[:bump_number] = :minor
   end
-  opts.on('-p', '--patch', 'Bump patch version') do |_v|
+  opts.on("-p", "--patch", "Bump patch version") do |_v|
     @options[:bump_number] = :patch
   end
-  opts.on('-r', '--revert', 'Revert last bump') do |v|
+  opts.on("-r", "--revert", "Revert last bump") do |v|
     @options[:revert] = v
   end
 }.parse!
@@ -32,15 +32,15 @@ OptionParser.new { |opts|
 p @options
 
 def check_repo_is_clean_or_dry_run
-  value = `#{'git status --porcelain'}`
+  value = `#{"git status --porcelain"}`
 
   if value.empty?
-    puts 'Repo is clean -> continue'
+    puts "Repo is clean -> continue"
   else
     if @options[:dry_run]
       puts 'Repo not clean, "Dry run" enabled -> continue'
     else
-      puts 'Repository not clean -> exit'
+      puts "Repository not clean -> exit"
       exit
     end
   end
@@ -50,7 +50,7 @@ def find_spec_file
   list_of_specs = execute_line("find . -name '*.#{SPEC_TYPE}'")
   arr = list_of_specs.split("\n")
 
-  spec_file = ''
+  spec_file = ""
 
   case arr.count
     when 0
@@ -59,7 +59,7 @@ def find_spec_file
     when 1
       spec_file = arr[0]
     else
-      puts 'Which spec should be used?'
+      puts "Which spec should be used?"
       arr.each_with_index { |file, index| puts "#{index + 1}. #{file}" }
       input_index = Integer(gets.chomp)
       spec_file = arr[input_index - 1]
@@ -70,14 +70,14 @@ def find_spec_file
     exit
   end
 
-  spec_file.sub('./', '')
+  spec_file.sub("./", "")
 end
 
 def find_current_gem_file
   list_of_specs = execute_line("find . -name '*.gem'")
   arr = list_of_specs.split("\n")
 
-  spec_file = ''
+  spec_file = ""
 
   case arr.count
     when 0
@@ -86,7 +86,7 @@ def find_current_gem_file
     when 1
       spec_file = arr[0]
     else
-      puts 'Which spec should be used?'
+      puts "Which spec should be used?"
       arr.each_with_index { |file, index| puts "#{index + 1}. #{file}" }
       input_index = Integer(gets.chomp)
       spec_file = arr[input_index - 1]
@@ -97,7 +97,7 @@ def find_current_gem_file
     exit
   end
 
-  spec_file.sub('./', '')
+  spec_file.sub("./", "")
 end
 
 def find_version_in_podspec(podspec)
@@ -109,7 +109,7 @@ def find_version_in_podspec(podspec)
   match_result = re.match(readme)
 
   unless match_result
-    puts 'Not found any versions'
+    puts "Not found any versions"
     exit
   end
 
@@ -132,10 +132,10 @@ def bump_version(versions_array)
     when :patch
       bumped_result[2] += 1
     else
-      fail('unknown bump_number')
+      fail("unknown bump_number")
   end
 
-  bumped_version = bumped_result.join('.')
+  bumped_version = bumped_result.join(".")
   puts "Bump version: #{versions_array.join('.')} -> #{bumped_version}"
   bumped_version
 end
@@ -174,10 +174,10 @@ def run_bumping_script
   bumped_version = bump_version(versions_array)
 
   unless @options[:dry_run]
-    puts 'Are you sure? Press Y to continue:'
+    puts "Are you sure? Press Y to continue:"
     str = gets.chomp
-    if str != 'Y'
-      puts '-> exit'
+    if str != "Y"
+      puts "-> exit"
       exit
     end
   end
@@ -186,8 +186,8 @@ def run_bumping_script
   execute_line_if_not_dry_run("sed -i \"\" \"s/#{result}/#{bumped_version}/\" #{spec_file}")
   execute_line_if_not_dry_run("git commit --all -m \"Update #{$SPEC_TYPE} to version #{bumped_version}\"")
   execute_line_if_not_dry_run("git tag #{bumped_version}")
-  execute_line_if_not_dry_run('git push')
-  execute_line_if_not_dry_run('git push --tags')
+  execute_line_if_not_dry_run("git push")
+  execute_line_if_not_dry_run("git push --tags")
   execute_line_if_not_dry_run("gem build #{spec_file}")
 
   gem = find_current_gem_file
@@ -201,12 +201,12 @@ def revert_last_bump
 
   puts "DELETE tag #{result} and HARD reset HEAD~1?\nPress Y to continue:"
   str = gets.chomp
-  if str != 'Y'
-    puts '-> exit'
+  if str != "Y"
+    puts "-> exit"
     exit
   end
   execute_line_if_not_dry_run("git tag -d #{result}")
-  execute_line_if_not_dry_run('git reset --hard HEAD~1')
+  execute_line_if_not_dry_run("git reset --hard HEAD~1")
   execute_line_if_not_dry_run("git push --delete origin #{result}")
 end
 
