@@ -44,6 +44,7 @@ module GitHubChangelogGenerator
       @generator = Generator.new(@options)
 
       @all_tags = get_all_tags
+
       @issues, @pull_requests = fetch_issues_and_pull_requests
 
       @pull_requests = @options[:pulls] ? get_filtered_pull_requests : []
@@ -566,6 +567,9 @@ module GitHubChangelogGenerator
       filtered_issues
     end
 
+    # This method fetch all closed issues and separate them to pull requests and pure issues
+    # (pull request is kind of issue in term of GitHub)
+    # @return [Tuple] with issues and pull requests
     def fetch_issues_and_pull_requests
       if @options[:verbose]
         print "Fetching closed issues...\r"
@@ -586,20 +590,16 @@ module GitHubChangelogGenerator
         puts GH_RATE_LIMIT_EXCEEDED_MSG.yellow
       end
 
-      print "                               \r"
+      print "                                                \r"
 
       if @options[:verbose]
         puts "Received issues: #{issues.count}"
       end
 
       # remove pull request from issues:
-      issues_wo_pr = issues.select { |x|
-        x.pull_request.nil?
+      issues.partition { |x|
+        x[:pull_request].nil?
       }
-      pull_requests = issues.select { |x|
-        !x.pull_request.nil?
-      }
-      [issues_wo_pr, pull_requests]
     end
 
     def fetch_event_for_issues_and_pr
