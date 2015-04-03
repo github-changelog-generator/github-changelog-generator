@@ -46,17 +46,9 @@ module GitHubChangelogGenerator
       @all_tags = get_all_tags
       @issues, @pull_requests = fetch_issues_and_pull_requests
 
-      if @options[:pulls]
-        @pull_requests = get_filtered_pull_requests
-      else
-        @pull_requests = []
-      end
+      @options[:pulls] ? @pull_requests = get_filtered_pull_requests : @pull_requests = []
 
-      if @options[:issues]
-        @issues = get_filtered_issues
-      else
-        @issues = []
-      end
+      @options[:issues] ? @issues = get_filtered_issues : @issues = []
 
       fetch_event_for_issues_and_pr
       detect_actual_closed_dates
@@ -162,12 +154,7 @@ module GitHubChangelogGenerator
         }
       end
 
-      unless @options[:exclude_labels].nil?
-        filtered_pull_requests = filtered_pull_requests.select { |issue|
-          # delete all labels from @options[:exclude_labels] array
-          !(issue.labels.map(&:name) & @options[:exclude_labels]).any?
-        }
-      end
+      filtered_pull_requests = exclude_issues_by_labels(filtered_pull_requests)
 
       if @options[:add_issues_wo_labels]
         issues_wo_labels = @pull_requests.select { |issue|
@@ -181,6 +168,18 @@ module GitHubChangelogGenerator
       end
 
       filtered_pull_requests
+    end
+
+    # delete all labels with labels from @options[:exclude_labels] array
+    # @param [Array] issues
+    # @return [Array] filtered array
+    def exclude_issues_by_labels(issues)
+      unless @options[:exclude_labels].nil?
+        issues = issues.select { |issue|
+          !(issue.labels.map(&:name) & @options[:exclude_labels]).any?
+        }
+      end
+      issues
     end
 
     # The entry point of this script to generate change log
@@ -551,12 +550,7 @@ module GitHubChangelogGenerator
         }
       end
 
-      unless @options[:exclude_labels].nil?
-        filtered_issues = filtered_issues.select { |issue|
-          # delete all labels from @options[:exclude_labels] array
-          !(issue.labels.map(&:name) & @options[:exclude_labels]).any?
-        }
-      end
+      filtered_issues = exclude_issues_by_labels(filtered_issues)
 
       if @options[:add_issues_wo_labels]
         issues_wo_labels = issues.select { |issue|
