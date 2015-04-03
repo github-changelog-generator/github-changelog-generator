@@ -11,7 +11,6 @@ require_relative "github_changelog_generator/version"
 require_relative "github_changelog_generator/reader"
 
 module GitHubChangelogGenerator
-
   # Default error for ChangelogGenerator
   class ChangelogGeneratorError < StandardError
   end
@@ -205,10 +204,10 @@ module GitHubChangelogGenerator
             index2 = hash[tag2]
             log += generate_log_between_tags(all_tags[index1], all_tags[index2])
           else
-           raise ChangelogGeneratorError, "Can't find tag #{tag2} -> exit".red
+            fail ChangelogGeneratorError, "Can't find tag #{tag2} -> exit".red
           end
         else
-          raise ChangelogGeneratorError, "Can't find tag #{tag1} -> exit".red
+          fail ChangelogGeneratorError, "Can't find tag #{tag1} -> exit".red
         end
       else
         log += generate_log_for_all_tags
@@ -389,8 +388,7 @@ module GitHubChangelogGenerator
     # @param [String] older_tag all issues before this tag date will be excluded. May be nil, if it's first tag
     # @param [String] newer_tag all issue after this tag will be excluded. May be nil for unreleased section
     def delete_by_time(array, hash_key = :actual_date, older_tag = nil, newer_tag = nil)
-
-      raise ChangelogGeneratorError, "At least one of the tags should be not nil!" if older_tag.nil? && newer_tag.nil?
+      fail ChangelogGeneratorError, "At least one of the tags should be not nil!".red if older_tag.nil? && newer_tag.nil?
 
       newer_tag_time = get_time_of_tag(newer_tag)
       older_tag_time = get_time_of_tag(older_tag)
