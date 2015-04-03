@@ -19,7 +19,7 @@ module GitHubChangelogGenerator
       unless issue.pull_request.nil?
         if @options[:author]
           if issue.user.nil?
-            title_with_number += ' ({Null user})'
+            title_with_number += " ({Null user})"
           else
             title_with_number += " ([#{issue.user.login}](#{issue.user.html_url}))"
           end

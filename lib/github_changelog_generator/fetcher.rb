@@ -27,11 +27,11 @@ module GitHubChangelogGenerator
     #
     # @return [String]
     def fetch_github_token
-      env_var = @options[:token] ? @options[:token] : (ENV.fetch 'CHANGELOG_GITHUB_TOKEN', nil)
+      env_var = @options[:token] ? @options[:token] : (ENV.fetch "CHANGELOG_GITHUB_TOKEN", nil)
 
       unless env_var
-        puts 'Warning: No token provided (-t option) and variable $CHANGELOG_GITHUB_TOKEN was not found.'.yellow
-        puts 'This script can make only 50 requests to GitHub API per hour without token!'.yellow
+        puts "Warning: No token provided (-t option) and variable $CHANGELOG_GITHUB_TOKEN was not found.".yellow
+        puts "This script can make only 50 requests to GitHub API per hour without token!".yellow
       end
 
       env_var
