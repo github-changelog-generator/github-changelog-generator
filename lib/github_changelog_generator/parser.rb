@@ -113,6 +113,28 @@ module GitHubChangelogGenerator
 
       parser.parse!
 
+      detect_user_and_project(options)
+
+      if !options[:user] || !options[:project]
+        puts parser.banner
+        exit
+      end
+
+      if ARGV[1]
+        options[:tag1] = ARGV[0]
+        options[:tag2] = ARGV[1]
+      end
+
+      if options[:verbose]
+        puts "Performing task with options:"
+        pp options
+        puts ""
+      end
+
+      options
+    end
+
+    def self.detect_user_and_project(options)
       if ARGV[0] && !ARGV[1]
         github_site = options[:github_site] ? options[:github_site] : "github.com"
         # this match should parse  strings such "https://github.com/skywinder/Github-Changelog-Generator" or "skywinder/Github-Changelog-Generator" to user and name
@@ -134,44 +156,31 @@ module GitHubChangelogGenerator
       end
 
       if !options[:user] && !options[:project]
-        remote = `git config --get remote.#{options[:branch]}.url`
-        # try to find repo in format:
-        # origin	git@github.com:skywinder/Github-Changelog-Generator.git (fetch)
-        # git@github.com:skywinder/Github-Changelog-Generator.git
-        match = /.*(?:[:\/])((?:-|\w|\.)*)\/((?:-|\w|\.)*)(?:\.git).*/.match(remote)
-
-        if match && match[1] && match[2]
-          puts "Detected user:#{match[1]}, project:#{match[2]}"
-          options[:user], options[:project] = match[1], match[2]
+        if ENV["RUBYLIB"] =~ /ruby-debug-ide/
+          options[:user] = "skywinder"
+          options[:project] = "changelog_test"
         else
+          remote = `git config --get remote.#{options[:branch]}.url`
           # try to find repo in format:
-          # origin	https://github.com/skywinder/ChangelogMerger (fetch)
-          # https://github.com/skywinder/ChangelogMerger
-          match = /.*\/((?:-|\w|\.)*)\/((?:-|\w|\.)*).*/.match(remote)
+          # origin	git@github.com:skywinder/Github-Changelog-Generator.git (fetch)
+          # git@github.com:skywinder/Github-Changelog-Generator.git
+          match = /.*(?:[:\/])((?:-|\w|\.)*)\/((?:-|\w|\.)*)(?:\.git).*/.match(remote)
+
           if match && match[1] && match[2]
             puts "Detected user:#{match[1]}, project:#{match[2]}"
             options[:user], options[:project] = match[1], match[2]
+          else
+            # try to find repo in format:
+            # origin	https://github.com/skywinder/ChangelogMerger (fetch)
+            # https://github.com/skywinder/ChangelogMerger
+            match = /.*\/((?:-|\w|\.)*)\/((?:-|\w|\.)*).*/.match(remote)
+            if match && match[1] && match[2]
+              puts "Detected user:#{match[1]}, project:#{match[2]}"
+              options[:user], options[:project] = match[1], match[2]
+            end
           end
         end
       end
-
-      if !options[:user] || !options[:project]
-        puts parser.banner
-        exit
-      end
-
-      if ARGV[1]
-        options[:tag1] = ARGV[0]
-        options[:tag2] = ARGV[1]
-      end
-
-      if options[:verbose]
-        puts "Performing task with options:"
-        pp options
-        puts ""
-      end
-
-      options
     end
   end
 end
