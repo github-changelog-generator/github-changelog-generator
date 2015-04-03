@@ -11,6 +11,12 @@ require_relative "github_changelog_generator/version"
 require_relative "github_changelog_generator/reader"
 
 module GitHubChangelogGenerator
+
+  # Default error for ChangelogGenerator
+  class ChangelogGeneratorError < StandardError
+  end
+
+  # Main class and entry point for this script.
   class ChangelogGenerator
     attr_accessor :options, :all_tags, :github
 
@@ -18,6 +24,8 @@ module GitHubChangelogGenerator
     GH_RATE_LIMIT_EXCEEDED_MSG = "Warning: GitHub API rate limit (5000 per hour) exceeded, change log may be " \
         "missing some issues. You can limit the number of issues fetched using the `--max-issues NUM` argument."
 
+    # Class, responsible for whole change log generation cycle
+    # @return initialised insance of ChangelogGenerator
     def initialize
       @options = Parser.parse_options
 
@@ -176,6 +184,8 @@ module GitHubChangelogGenerator
       filtered_pull_requests
     end
 
+    # The entry point of this script to generate change log
+    # @raise (ChangelogGeneratorError) Is thrown when one of specified tags was not found in list of tags.
     def compound_changelog
       log = "# Change Log\n\n"
 
@@ -195,12 +205,10 @@ module GitHubChangelogGenerator
             index2 = hash[tag2]
             log += generate_log_between_tags(all_tags[index1], all_tags[index2])
           else
-            puts "Can't find tag #{tag2} -> exit"
-            exit
+           raise ChangelogGeneratorError.new("Can't find tag #{tag2} -> exit")
           end
         else
-          puts "Can't find tag #{tag1} -> exit"
-          exit
+          raise ChangelogGeneratorError.new("Can't find tag #{tag1} -> exit")
         end
       else
         log += generate_log_for_all_tags
@@ -317,8 +325,10 @@ module GitHubChangelogGenerator
       @github_token ||= env_var
     end
 
+    # Generate log only between 2 specified tags
+    # @param [String] older_tag all issues before this tag date will be excluded. May be nil, if it's first tag
+    # @param [String] newer_tag all issue after this tag will be excluded. May be nil for unreleased section
     def generate_log_between_tags(older_tag, newer_tag)
-      # older_tag nil - means it's first tag, newer_tag nil - means it unreleased section
       filtered_pull_requests = delete_by_time(@pull_requests, :actual_date, older_tag, newer_tag)
       filtered_issues = delete_by_time(@issues, :actual_date, older_tag, newer_tag)
 
