@@ -46,9 +46,9 @@ module GitHubChangelogGenerator
       @all_tags = get_all_tags
       @issues, @pull_requests = fetch_issues_and_pull_requests
 
-      @options[:pulls] ? @pull_requests = get_filtered_pull_requests : @pull_requests = []
+      @pull_requests = @options[:pulls] ? get_filtered_pull_requests : []
 
-      @options[:issues] ? @issues = get_filtered_issues : @issues = []
+      @issues = @options[:issues] ? get_filtered_issues : []
 
       fetch_event_for_issues_and_pr
       detect_actual_closed_dates
