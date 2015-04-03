@@ -113,6 +113,28 @@ module GitHubChangelogGenerator
 
       parser.parse!
 
+      detect_user_and_project(options)
+
+      if !options[:user] || !options[:project]
+        puts parser.banner
+        exit
+      end
+
+      if ARGV[1]
+        options[:tag1] = ARGV[0]
+        options[:tag2] = ARGV[1]
+      end
+
+      if options[:verbose]
+        puts "Performing task with options:"
+        pp options
+        puts ""
+      end
+
+      options
+    end
+
+    def self.detect_user_and_project(options)
       if ARGV[0] && !ARGV[1]
         github_site = options[:github_site] ? options[:github_site] : "github.com"
         # this match should parse  strings such "https://github.com/skywinder/Github-Changelog-Generator" or "skywinder/Github-Changelog-Generator" to user and name
@@ -159,24 +181,6 @@ module GitHubChangelogGenerator
           end
         end
       end
-
-      if !options[:user] || !options[:project]
-        puts parser.banner
-        exit
-      end
-
-      if ARGV[1]
-        options[:tag1] = ARGV[0]
-        options[:tag2] = ARGV[1]
-      end
-
-      if options[:verbose]
-        puts "Performing task with options:"
-        pp options
-        puts ""
-      end
-
-      options
     end
   end
 end
