@@ -1,8 +1,8 @@
 # Change Log
 
-## [Unreleased](https://github.com/skywinder/Github-Changelog-Generator/tree/HEAD)
+## [Unreleased](https://github.com/skywinder/github-changelog-generator/tree/HEAD)
 
-[Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.3.11...HEAD)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.3.11...HEAD)
 
 **Implemented enhancements:**
 
@@ -28,29 +28,25 @@
 
 - Add --max-issues argument to limit requests [\#76](https://github.com/skywinder/github-changelog-generator/pull/76) ([sneal](https://github.com/sneal))
 
-## [1.3.11](https://github.com/skywinder/Github-Changelog-Generator/tree/1.3.11) (2015-03-21)
+## [1.3.11](https://github.com/skywinder/github-changelog-generator/tree/1.3.11) (2015-03-21)
 
-[Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.3.10...1.3.11)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.3.10...1.3.11)
 
 **Merged pull requests:**
 
 - Add  fallback with warning message to prevent crash in case of exceed API Rate Limit \(temporary workaround for \#71\) [\#75](https://github.com/skywinder/github-changelog-generator/pull/75) ([skywinder](https://github.com/skywinder))
 
-## [1.3.10](https://github.com/skywinder/Github-Changelog-Generator/tree/1.3.10) (2015-03-18)
+## [1.3.10](https://github.com/skywinder/github-changelog-generator/tree/1.3.10) (2015-03-18)
 
-[Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.3.9...1.3.10)
-
-**Fixed bugs:**
-
-- Exclude closed \(not merged\) PR's from changelog. [\#69](https://github.com/skywinder/github-changelog-generator/issues/69)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.3.9...1.3.10)
 
 **Merged pull requests:**
 
 - Fix termination in case of empty unreleased section with `--unreleased-only` option. [\#70](https://github.com/skywinder/github-changelog-generator/pull/70) ([skywinder](https://github.com/skywinder))
 
-## [1.3.9](https://github.com/skywinder/Github-Changelog-Generator/tree/1.3.9) (2015-03-06)
+## [1.3.9](https://github.com/skywinder/github-changelog-generator/tree/1.3.9) (2015-03-06)
 
-[Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.3.8...1.3.9)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.3.8...1.3.9)
 
 **Implemented enhancements:**
 
@@ -60,57 +56,57 @@
 
 - Resolved concurrency problem in case of issues \> 2048 [\#65](https://github.com/skywinder/github-changelog-generator/pull/65) ([skywinder](https://github.com/skywinder))
 
-## [1.3.8](https://github.com/skywinder/Github-Changelog-Generator/tree/1.3.8) (2015-03-05)
+## [1.3.8](https://github.com/skywinder/github-changelog-generator/tree/1.3.8) (2015-03-05)
 
-[Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.3.6...1.3.8)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.3.6...1.3.8)
 
 **Merged pull requests:**
 
 - Fix `git remote` parsing in case, when script running without parameters inside destination directory [\#61](https://github.com/skywinder/github-changelog-generator/pull/61) ([skywinder](https://github.com/skywinder))
 
-## [1.3.6](https://github.com/skywinder/Github-Changelog-Generator/tree/1.3.6) (2015-03-05)
+## [1.3.6](https://github.com/skywinder/github-changelog-generator/tree/1.3.6) (2015-03-05)
 
-[Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.3.5...1.3.6)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.3.5...1.3.6)
 
-## [1.3.5](https://github.com/skywinder/Github-Changelog-Generator/tree/1.3.5) (2015-03-04)
+## [1.3.5](https://github.com/skywinder/github-changelog-generator/tree/1.3.5) (2015-03-04)
 
-[Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.3.4...1.3.5)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.3.4...1.3.5)
 
 **Fixed bugs:**
 
 - Pull Requests in Wrong Tag [\#60](https://github.com/skywinder/github-changelog-generator/issues/60)
 
-## [1.3.4](https://github.com/skywinder/Github-Changelog-Generator/tree/1.3.4) (2015-03-03)
+## [1.3.4](https://github.com/skywinder/github-changelog-generator/tree/1.3.4) (2015-03-03)
 
-[Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.3.3...1.3.4)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.3.3...1.3.4)
 
 **Fixed bugs:**
 
 - --no-issues appears to break PRs [\#59](https://github.com/skywinder/github-changelog-generator/issues/59)
 
-## [1.3.3](https://github.com/skywinder/Github-Changelog-Generator/tree/1.3.3) (2015-03-03)
+## [1.3.3](https://github.com/skywinder/github-changelog-generator/tree/1.3.3) (2015-03-03)
 
-[Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.3.2...1.3.3)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.3.2...1.3.3)
 
 **Closed issues:**
 
 - Add \# character to encapsulate list. [\#58](https://github.com/skywinder/github-changelog-generator/issues/58)
 
-## [1.3.2](https://github.com/skywinder/Github-Changelog-Generator/tree/1.3.2) (2015-03-03)
+## [1.3.2](https://github.com/skywinder/github-changelog-generator/tree/1.3.2) (2015-03-03)
 
-[Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.3.1...1.3.2)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.3.1...1.3.2)
 
 **Fixed bugs:**
 
 - generation failed if github commit api return `404 Not Found` [\#57](https://github.com/skywinder/github-changelog-generator/issues/57)
 
-## [1.3.1](https://github.com/skywinder/Github-Changelog-Generator/tree/1.3.1) (2015-02-27)
+## [1.3.1](https://github.com/skywinder/github-changelog-generator/tree/1.3.1) (2015-02-27)
 
-[Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.3.0...1.3.1)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.3.0...1.3.1)
 
-## [1.3.0](https://github.com/skywinder/Github-Changelog-Generator/tree/1.3.0) (2015-02-26)
+## [1.3.0](https://github.com/skywinder/github-changelog-generator/tree/1.3.0) (2015-02-26)
 
-[Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.2.8...1.3.0)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.2.8...1.3.0)
 
 **Implemented enhancements:**
 
@@ -130,9 +126,9 @@
 
 - Implement filtering of Pull Requests by milestones [\#50](https://github.com/skywinder/github-changelog-generator/pull/50) ([skywinder](https://github.com/skywinder))
 
-## [1.2.8](https://github.com/skywinder/Github-Changelog-Generator/tree/1.2.8) (2015-02-17)
+## [1.2.8](https://github.com/skywinder/github-changelog-generator/tree/1.2.8) (2015-02-17)
 
-[Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.2.7...1.2.8)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.2.7...1.2.8)
 
 **Closed issues:**
 
@@ -144,25 +140,25 @@
 
 - Prettify output [\#48](https://github.com/skywinder/github-changelog-generator/pull/48) ([skywinder](https://github.com/skywinder))
 
-## [1.2.7](https://github.com/skywinder/Github-Changelog-Generator/tree/1.2.7) (2015-01-26)
+## [1.2.7](https://github.com/skywinder/github-changelog-generator/tree/1.2.7) (2015-01-26)
 
-[Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.2.6...1.2.7)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.2.6...1.2.7)
 
 **Merged pull requests:**
 
 - Add compare link between older version and newer version [\#46](https://github.com/skywinder/github-changelog-generator/pull/46) ([sue445](https://github.com/sue445))
 
-## [1.2.6](https://github.com/skywinder/Github-Changelog-Generator/tree/1.2.6) (2015-01-21)
+## [1.2.6](https://github.com/skywinder/github-changelog-generator/tree/1.2.6) (2015-01-21)
 
-[Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.2.5...1.2.6)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.2.5...1.2.6)
 
 **Merged pull requests:**
 
 - fix link tag format [\#45](https://github.com/skywinder/github-changelog-generator/pull/45) ([sugamasao](https://github.com/sugamasao))
 
-## [1.2.5](https://github.com/skywinder/Github-Changelog-Generator/tree/1.2.5) (2015-01-15)
+## [1.2.5](https://github.com/skywinder/github-changelog-generator/tree/1.2.5) (2015-01-15)
 
-[Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.2.4...1.2.5)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.2.4...1.2.5)
 
 **Implemented enhancements:**
 
@@ -178,9 +174,9 @@
 
 - support enterprise github via command line options [\#42](https://github.com/skywinder/github-changelog-generator/pull/42) ([glenlovett](https://github.com/glenlovett))
 
-## [1.2.4](https://github.com/skywinder/Github-Changelog-Generator/tree/1.2.4) (2014-12-16)
+## [1.2.4](https://github.com/skywinder/github-changelog-generator/tree/1.2.4) (2014-12-16)
 
-[Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.2.3...1.2.4)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.2.3...1.2.4)
 
 **Fixed bugs:**
 
@@ -188,9 +184,9 @@
 
 - Crash when try generate log for rails [\#35](https://github.com/skywinder/github-changelog-generator/issues/35)
 
-## [1.2.3](https://github.com/skywinder/Github-Changelog-Generator/tree/1.2.3) (2014-12-16)
+## [1.2.3](https://github.com/skywinder/github-changelog-generator/tree/1.2.3) (2014-12-16)
 
-[Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.2.2...1.2.3)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.2.2...1.2.3)
 
 **Implemented enhancements:**
 
@@ -208,9 +204,9 @@
 
 - Fix crash when user is NULL [\#40](https://github.com/skywinder/github-changelog-generator/pull/40) ([skywinder](https://github.com/skywinder))
 
-## [1.2.2](https://github.com/skywinder/Github-Changelog-Generator/tree/1.2.2) (2014-12-10)
+## [1.2.2](https://github.com/skywinder/github-changelog-generator/tree/1.2.2) (2014-12-10)
 
-[Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.2.1...1.2.2)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.2.1...1.2.2)
 
 **Fixed bugs:**
 
@@ -220,9 +216,9 @@
 
 - Add a Bitdeli Badge to README [\#36](https://github.com/skywinder/github-changelog-generator/pull/36) ([bitdeli-chef](https://github.com/bitdeli-chef))
 
-## [1.2.1](https://github.com/skywinder/Github-Changelog-Generator/tree/1.2.1) (2014-11-22)
+## [1.2.1](https://github.com/skywinder/github-changelog-generator/tree/1.2.1) (2014-11-22)
 
-[Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.2.0...1.2.1)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.2.0...1.2.1)
 
 **Fixed bugs:**
 
@@ -234,9 +230,9 @@
 
 - Disable default --filter-pull-requests option. [\#28](https://github.com/skywinder/github-changelog-generator/pull/28) ([skywinder](https://github.com/skywinder))
 
-## [1.2.0](https://github.com/skywinder/Github-Changelog-Generator/tree/1.2.0) (2014-11-19)
+## [1.2.0](https://github.com/skywinder/github-changelog-generator/tree/1.2.0) (2014-11-19)
 
-[Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.1.4...1.2.0)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.1.4...1.2.0)
 
 **Merged pull requests:**
 
@@ -246,9 +242,9 @@
 
 - Don't receive issues in case of --no-isses flag specied [\#24](https://github.com/skywinder/github-changelog-generator/pull/24) ([skywinder](https://github.com/skywinder))
 
-## [1.1.4](https://github.com/skywinder/Github-Changelog-Generator/tree/1.1.4) (2014-11-18)
+## [1.1.4](https://github.com/skywinder/github-changelog-generator/tree/1.1.4) (2014-11-18)
 
-[Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.1.2...1.1.4)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.1.2...1.1.4)
 
 **Implemented enhancements:**
 
@@ -258,9 +254,9 @@
 
 - Sort tags by date [\#23](https://github.com/skywinder/github-changelog-generator/pull/23) ([skywinder](https://github.com/skywinder))
 
-## [1.1.2](https://github.com/skywinder/Github-Changelog-Generator/tree/1.1.2) (2014-11-12)
+## [1.1.2](https://github.com/skywinder/github-changelog-generator/tree/1.1.2) (2014-11-12)
 
-[Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.1.1...1.1.2)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.1.1...1.1.2)
 
 **Merged pull requests:**
 
@@ -268,9 +264,9 @@
 
 - Fix bug with dot signs in user name [\#17](https://github.com/skywinder/github-changelog-generator/pull/17) ([skywinder](https://github.com/skywinder))
 
-## [1.1.1](https://github.com/skywinder/Github-Changelog-Generator/tree/1.1.1) (2014-11-10)
+## [1.1.1](https://github.com/skywinder/github-changelog-generator/tree/1.1.1) (2014-11-10)
 
-[Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.1.0...1.1.1)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.1.0...1.1.1)
 
 **Merged pull requests:**
 
@@ -280,9 +276,9 @@
 
 - Add ability to add or exclude issues without any labels [\#13](https://github.com/skywinder/github-changelog-generator/pull/13) ([skywinder](https://github.com/skywinder))
 
-## [1.1.0](https://github.com/skywinder/Github-Changelog-Generator/tree/1.1.0) (2014-11-10)
+## [1.1.0](https://github.com/skywinder/github-changelog-generator/tree/1.1.0) (2014-11-10)
 
-[Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.0.1...1.1.0)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.0.1...1.1.0)
 
 **Implemented enhancements:**
 
@@ -294,13 +290,13 @@
 
 - Markdown formating in the last line wrong [\#9](https://github.com/skywinder/github-changelog-generator/issues/9)
 
-## [1.0.1](https://github.com/skywinder/Github-Changelog-Generator/tree/1.0.1) (2014-11-10)
+## [1.0.1](https://github.com/skywinder/github-changelog-generator/tree/1.0.1) (2014-11-10)
 
-[Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.0.0...1.0.1)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.0.0...1.0.1)
 
-## [1.0.0](https://github.com/skywinder/Github-Changelog-Generator/tree/1.0.0) (2014-11-07)
+## [1.0.0](https://github.com/skywinder/github-changelog-generator/tree/1.0.0) (2014-11-07)
 
-[Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/0.1.0...1.0.0)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/0.1.0...1.0.0)
 
 **Implemented enhancements:**
 
@@ -318,9 +314,9 @@
 
 - Add support for issues in CHANGELOG [\#7](https://github.com/skywinder/github-changelog-generator/pull/7) ([skywinder](https://github.com/skywinder))
 
-## [0.1.0](https://github.com/skywinder/Github-Changelog-Generator/tree/0.1.0) (2014-11-07)
+## [0.1.0](https://github.com/skywinder/github-changelog-generator/tree/0.1.0) (2014-11-07)
 
-[Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/0.0.2...0.1.0)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/0.0.2...0.1.0)
 
 **Merged pull requests:**
 
@@ -330,11 +326,11 @@
 
 - Add option \(-o --output\) to specify name of the output file. [\#1](https://github.com/skywinder/github-changelog-generator/pull/1) ([skywinder](https://github.com/skywinder))
 
-## [0.0.2](https://github.com/skywinder/Github-Changelog-Generator/tree/0.0.2) (2014-11-06)
+## [0.0.2](https://github.com/skywinder/github-changelog-generator/tree/0.0.2) (2014-11-06)
 
-[Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/0.0.1...0.0.2)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/0.0.1...0.0.2)
 
-## [0.0.1](https://github.com/skywinder/Github-Changelog-Generator/tree/0.0.1) (2014-11-06)
+## [0.0.1](https://github.com/skywinder/github-changelog-generator/tree/0.0.1) (2014-11-06)
 
 
 

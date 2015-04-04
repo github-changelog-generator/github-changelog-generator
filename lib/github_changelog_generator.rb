@@ -11,6 +11,11 @@ require_relative "github_changelog_generator/version"
 require_relative "github_changelog_generator/reader"
 
 module GitHubChangelogGenerator
+  # Default error for ChangelogGenerator
+  class ChangelogGeneratorError < StandardError
+  end
+
+  # Main class and entry point for this script.
   class ChangelogGenerator
     attr_accessor :options, :all_tags, :github
 
@@ -18,6 +23,8 @@ module GitHubChangelogGenerator
     GH_RATE_LIMIT_EXCEEDED_MSG = "Warning: GitHub API rate limit (5000 per hour) exceeded, change log may be " \
         "missing some issues. You can limit the number of issues fetched using the `--max-issues NUM` argument."
 
+    # Class, responsible for whole change log generation cycle
+    # @return initialised insance of ChangelogGenerator
     def initialize
       @options = Parser.parse_options
 
@@ -37,19 +44,12 @@ module GitHubChangelogGenerator
       @generator = Generator.new(@options)
 
       @all_tags = get_all_tags
+
       @issues, @pull_requests = fetch_issues_and_pull_requests
 
-      if @options[:pulls]
-        @pull_requests = get_filtered_pull_requests
-      else
-        @pull_requests = []
-      end
+      @pull_requests = @options[:pulls] ? get_filtered_pull_requests : []
 
-      if @options[:issues]
-        @issues = get_filtered_issues
-      else
-        @issues = []
-      end
+      @issues = @options[:issues] ? get_filtered_issues : []
 
       fetch_event_for_issues_and_pr
       detect_actual_closed_dates
@@ -110,6 +110,9 @@ module GitHubChangelogGenerator
       puts JSON.pretty_generate(json)
     end
 
+    # This method fetch missing required attributes for pull requests
+    # :merged_at - is a date, when issue PR was merged.
+    # More correct to use this date, not closed date.
     def fetch_merged_at_pull_requests
       if @options[:verbose]
         print "Fetching merged dates...\r"
@@ -143,31 +146,16 @@ module GitHubChangelogGenerator
       end
     end
 
+    # This method fetches missing params for PR and filter them by specified options
+    # It include add all PR's with labels from @options[:include_labels] array
+    # And exclude all from :exclude_labels array.
+    # @return [Array] filtered PR's
     def get_filtered_pull_requests
       fetch_merged_at_pull_requests
 
-      filtered_pull_requests = @pull_requests.select { |pr| !pr[:merged_at].nil? }
+      filtered_pull_requests = include_issues_by_labels(@pull_requests)
 
-      unless @options[:include_labels].nil?
-        filtered_pull_requests = @pull_requests.select { |issue|
-          # add all labels from @options[:include_labels] array
-          (issue.labels.map(&:name) & @options[:include_labels]).any?
-        }
-      end
-
-      unless @options[:exclude_labels].nil?
-        filtered_pull_requests = filtered_pull_requests.select { |issue|
-          # delete all labels from @options[:exclude_labels] array
-          !(issue.labels.map(&:name) & @options[:exclude_labels]).any?
-        }
-      end
-
-      if @options[:add_issues_wo_labels]
-        issues_wo_labels = @pull_requests.select { |issue|
-          !issue.labels.map(&:name).any?
-        }
-        filtered_pull_requests |= issues_wo_labels
-      end
+      filtered_pull_requests = exclude_issues_by_labels(filtered_pull_requests)
 
       if @options[:verbose]
         puts "Filtered pull requests: #{filtered_pull_requests.count}"
@@ -176,6 +164,35 @@ module GitHubChangelogGenerator
       filtered_pull_requests
     end
 
+    # Include issues with labels, specified in :include_labels
+    # @param [Array] issues to filter
+    # @return [Array] filtered array of issues
+    def include_issues_by_labels(issues)
+      filtered_issues = @options[:include_labels].nil? ? issues : issues.select { |issue| (issue.labels.map(&:name) & @options[:include_labels]).any? }
+
+      if @options[:add_issues_wo_labels]
+        issues_wo_labels = issues.select { |issue|
+          !issue.labels.map(&:name).any?
+        }
+        filtered_issues |= issues_wo_labels
+      end
+      filtered_issues
+    end
+
+    # delete all labels with labels from @options[:exclude_labels] array
+    # @param [Array] issues
+    # @return [Array] filtered array
+    def exclude_issues_by_labels(issues)
+      unless @options[:exclude_labels].nil?
+        issues = issues.select { |issue|
+          !(issue.labels.map(&:name) & @options[:exclude_labels]).any?
+        }
+      end
+      issues
+    end
+
+    # The entry point of this script to generate change log
+    # @raise (ChangelogGeneratorError) Is thrown when one of specified tags was not found in list of tags.
     def compound_changelog
       log = "# Change Log\n\n"
 
@@ -195,12 +212,10 @@ module GitHubChangelogGenerator
             index2 = hash[tag2]
             log += generate_log_between_tags(all_tags[index1], all_tags[index2])
           else
-            puts "Can't find tag #{tag2} -> exit"
-            exit
+            fail ChangelogGeneratorError, "Can't find tag #{tag2} -> exit".red
           end
         else
-          puts "Can't find tag #{tag1} -> exit"
-          exit
+          fail ChangelogGeneratorError, "Can't find tag #{tag1} -> exit".red
         end
       else
         log += generate_log_for_all_tags
@@ -214,6 +229,8 @@ module GitHubChangelogGenerator
       puts "Generated log placed in #{`pwd`.strip!}/#{output_filename}"
     end
 
+    # The full cycle of generation for whole project
+    # @return [String] The complete change log
     def generate_log_for_all_tags
       fetch_tags_dates
 
@@ -246,6 +263,7 @@ module GitHubChangelogGenerator
       log
     end
 
+    # Async fetching of all tags dates
     def fetch_tags_dates
       if @options[:verbose]
         print "Fetching tag dates...\r"
@@ -317,8 +335,10 @@ module GitHubChangelogGenerator
       @github_token ||= env_var
     end
 
+    # Generate log only between 2 specified tags
+    # @param [String] older_tag all issues before this tag date will be excluded. May be nil, if it's first tag
+    # @param [String] newer_tag all issue after this tag will be excluded. May be nil for unreleased section
     def generate_log_between_tags(older_tag, newer_tag)
-      # older_tag nil - means it's first tag, newer_tag nil - means it unreleased section
       filtered_pull_requests = delete_by_time(@pull_requests, :actual_date, older_tag, newer_tag)
       filtered_issues = delete_by_time(@issues, :actual_date, older_tag, newer_tag)
 
@@ -374,11 +394,15 @@ module GitHubChangelogGenerator
       filtered_issues
     end
 
-    def delete_by_time(array, hash_key, older_tag = nil, newer_tag = nil)
-      fail "At least one of the tags should be not nil!" if older_tag.nil? && newer_tag.nil?
+    # @param [Array] array of issues to filter
+    # @param [Symbol] hash_key key of date value default is :actual_date
+    # @param [String] older_tag all issues before this tag date will be excluded. May be nil, if it's first tag
+    # @param [String] newer_tag all issue after this tag will be excluded. May be nil for unreleased section
+    def delete_by_time(array, hash_key = :actual_date, older_tag = nil, newer_tag = nil)
+      fail ChangelogGeneratorError, "At least one of the tags should be not nil!".red if older_tag.nil? && newer_tag.nil?
 
-      newer_tag_time = get_time_of_tag(newer_tag)
-      older_tag_time = get_time_of_tag(older_tag)
+      newer_tag_time = newer_tag && get_time_of_tag(newer_tag)
+      older_tag_time = older_tag && get_time_of_tag(older_tag)
 
       array.select { |req|
         if req[hash_key]
@@ -508,10 +532,13 @@ module GitHubChangelogGenerator
       log
     end
 
+    # Try to find tag date in local hash.
+    # Otherwise fFetch tag time and put it to local hash file.
+    # @param [String] tag_name name of the tag
+    # @param [Hash] tag_times_hash the hash of tag times
+    # @return [Time] time of specified tag
     def get_time_of_tag(tag_name, tag_times_hash = @tag_times_hash)
-      if tag_name.nil?
-        return nil
-      end
+      fail ChangelogGeneratorError, "tag_name is nil".red if tag_name.nil?
 
       if tag_times_hash[tag_name["name"]]
         return @tag_times_hash[tag_name["name"]]
@@ -527,30 +554,9 @@ module GitHubChangelogGenerator
     end
 
     def get_filtered_issues
-      issues = @issues
+      filtered_issues = include_issues_by_labels(@issues)
 
-      filtered_issues = issues
-
-      unless @options[:include_labels].nil?
-        filtered_issues = issues.select { |issue|
-          # add all labels from @options[:include_labels] array
-          (issue.labels.map(&:name) & @options[:include_labels]).any?
-        }
-      end
-
-      unless @options[:exclude_labels].nil?
-        filtered_issues = filtered_issues.select { |issue|
-          # delete all labels from @options[:exclude_labels] array
-          !(issue.labels.map(&:name) & @options[:exclude_labels]).any?
-        }
-      end
-
-      if @options[:add_issues_wo_labels]
-        issues_wo_labels = issues.select { |issue|
-          !issue.labels.map(&:name).any?
-        }
-        filtered_issues |= issues_wo_labels
-      end
+      filtered_issues = exclude_issues_by_labels(filtered_issues)
 
       if @options[:verbose]
         puts "Filtered issues: #{filtered_issues.count}"
@@ -559,6 +565,9 @@ module GitHubChangelogGenerator
       filtered_issues
     end
 
+    # This method fetch all closed issues and separate them to pull requests and pure issues
+    # (pull request is kind of issue in term of GitHub)
+    # @return [Tuple] with issues and pull requests
     def fetch_issues_and_pull_requests
       if @options[:verbose]
         print "Fetching closed issues...\r"
@@ -579,20 +588,16 @@ module GitHubChangelogGenerator
         puts GH_RATE_LIMIT_EXCEEDED_MSG.yellow
       end
 
-      print "                               \r"
+      print "                                                \r"
 
       if @options[:verbose]
         puts "Received issues: #{issues.count}"
       end
 
       # remove pull request from issues:
-      issues_wo_pr = issues.select { |x|
-        x.pull_request.nil?
+      issues.partition { |x|
+        x[:pull_request].nil?
       }
-      pull_requests = issues.select { |x|
-        !x.pull_request.nil?
-      }
-      [issues_wo_pr, pull_requests]
     end
 
     def fetch_event_for_issues_and_pr
