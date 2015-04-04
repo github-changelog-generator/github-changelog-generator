@@ -394,10 +394,12 @@ module GitHubChangelogGenerator
       filtered_issues
     end
 
+    # Method filter issues, that belong only specified tag range
     # @param [Array] array of issues to filter
     # @param [Symbol] hash_key key of date value default is :actual_date
     # @param [String] older_tag all issues before this tag date will be excluded. May be nil, if it's first tag
     # @param [String] newer_tag all issue after this tag will be excluded. May be nil for unreleased section
+    # @return [Array] filtered issues
     def delete_by_time(array, hash_key = :actual_date, older_tag = nil, newer_tag = nil)
       fail ChangelogGeneratorError, "At least one of the tags should be not nil!".red if older_tag.nil? && newer_tag.nil?
 
