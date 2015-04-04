@@ -229,6 +229,8 @@ module GitHubChangelogGenerator
       puts "Generated log placed in #{`pwd`.strip!}/#{output_filename}"
     end
 
+    # The full cycle of generation for whole project
+    # @return [String] The complete change log
     def generate_log_for_all_tags
       fetch_tags_dates
 
@@ -261,6 +263,7 @@ module GitHubChangelogGenerator
       log
     end
 
+    # Async fetching of all tags dates
     def fetch_tags_dates
       if @options[:verbose]
         print "Fetching tag dates...\r"
@@ -529,10 +532,13 @@ module GitHubChangelogGenerator
       log
     end
 
+    # Try to find tag date in local hash.
+    # Otherwise fFetch tag time and put it to local hash file.
+    # @param [String] tag_name name of the tag
+    # @param [Hash] tag_times_hash the hash of tag times
+    # @return [Time] time of specified tag
     def get_time_of_tag(tag_name, tag_times_hash = @tag_times_hash)
-      if tag_name.nil?
-        return nil
-      end
+      fail ChangelogGeneratorError, "tag_name is nil".red if tag_name.nil?
 
       if tag_times_hash[tag_name["name"]]
         return @tag_times_hash[tag_name["name"]]
