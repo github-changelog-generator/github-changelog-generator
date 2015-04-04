@@ -401,8 +401,8 @@ module GitHubChangelogGenerator
     def delete_by_time(array, hash_key = :actual_date, older_tag = nil, newer_tag = nil)
       fail ChangelogGeneratorError, "At least one of the tags should be not nil!".red if older_tag.nil? && newer_tag.nil?
 
-      newer_tag_time = get_time_of_tag(newer_tag)
-      older_tag_time = get_time_of_tag(older_tag)
+      newer_tag_time = newer_tag && get_time_of_tag(newer_tag)
+      older_tag_time = older_tag && get_time_of_tag(older_tag)
 
       array.select { |req|
         if req[hash_key]
