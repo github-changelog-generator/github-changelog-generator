@@ -153,8 +153,6 @@ module GitHubChangelogGenerator
     def get_filtered_pull_requests
       fetch_merged_at_pull_requests
 
-      # filtered_pull_requests = @pull_requests.select { |pr| !pr[:merged_at].nil? }
-
       filtered_pull_requests = include_issues_by_labels(@pull_requests)
 
       filtered_pull_requests = exclude_issues_by_labels(filtered_pull_requests)
@@ -166,20 +164,19 @@ module GitHubChangelogGenerator
       filtered_pull_requests
     end
 
+    # Include issues with labels, specified in :include_labels
+    # @param [Array] issues to filter
+    # @return [Array] filtered array of issues
     def include_issues_by_labels(issues)
-      unless @options[:include_labels].nil?
-        _issues = issues.select { |issue|
-          (issue.labels.map(&:name) & @options[:include_labels]).any?
-        }
-      end
+      filtered_issues = @options[:include_labels].nil? ? issues : issues.select { |issue| (issue.labels.map(&:name) & @options[:include_labels]).any? }
 
       if @options[:add_issues_wo_labels]
         issues_wo_labels = issues.select { |issue|
           !issue.labels.map(&:name).any?
         }
-        _issues |= issues_wo_labels
+        filtered_issues |= issues_wo_labels
       end
-      _issues
+      filtered_issues
     end
 
     # delete all labels with labels from @options[:exclude_labels] array
