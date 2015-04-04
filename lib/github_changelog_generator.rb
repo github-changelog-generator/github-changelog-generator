@@ -128,6 +128,9 @@ module GitHubChangelogGenerator
       puts JSON.pretty_generate(json)
     end
 
+    # This method fetch missing required attributes for pull requests
+    # :merged_at - is a date, when issue PR was merged.
+    # More correct to use this date, not closed date.
     def fetch_merged_at_pull_requests
       if @options[:verbose]
         print "Fetching merged dates...\r"
@@ -161,32 +164,37 @@ module GitHubChangelogGenerator
       end
     end
 
+    # This method fetches missing params for PR and filter them by specified options
+    # It include add all PR's with labels from @options[:include_labels] array
+    # And exclude all from :exclude_labels array.
+    # @return [Array] filtered PR's
     def get_filtered_pull_requests
       fetch_merged_at_pull_requests
 
-      filtered_pull_requests = @pull_requests.select { |pr| !pr[:merged_at].nil? }
-
-      unless @options[:include_labels].nil?
-        filtered_pull_requests = @pull_requests.select { |issue|
-          # add all labels from @options[:include_labels] array
-          (issue.labels.map(&:name) & @options[:include_labels]).any?
-        }
-      end
+      filtered_pull_requests = include_issues_by_labels(@pull_requests)
 
       filtered_pull_requests = exclude_issues_by_labels(filtered_pull_requests)
-
-      if @options[:add_issues_wo_labels]
-        issues_wo_labels = @pull_requests.select { |issue|
-          !issue.labels.map(&:name).any?
-        }
-        filtered_pull_requests |= issues_wo_labels
-      end
 
       if @options[:verbose]
         puts "Filtered pull requests: #{filtered_pull_requests.count}"
       end
 
       filtered_pull_requests
+    end
+
+    # Include issues with labels, specified in :include_labels
+    # @param [Array] issues to filter
+    # @return [Array] filtered array of issues
+    def include_issues_by_labels(issues)
+      filtered_issues = @options[:include_labels].nil? ? issues : issues.select { |issue| (issue.labels.map(&:name) & @options[:include_labels]).any? }
+
+      if @options[:add_issues_wo_labels]
+        issues_wo_labels = issues.select { |issue|
+          !issue.labels.map(&:name).any?
+        }
+        filtered_issues |= issues_wo_labels
+      end
+      filtered_issues
     end
 
     # delete all labels with labels from @options[:exclude_labels] array
@@ -239,6 +247,8 @@ module GitHubChangelogGenerator
       puts "Generated log placed in #{`pwd`.strip!}/#{output_filename}"
     end
 
+    # The full cycle of generation for whole project
+    # @return [String] The complete change log
     def generate_log_for_all_tags
       fetch_tags_dates
 
@@ -271,6 +281,7 @@ module GitHubChangelogGenerator
       log
     end
 
+    # Async fetching of all tags dates
     def fetch_tags_dates
       if @options[:verbose]
         print "Fetching tag dates...\r"
@@ -401,15 +412,17 @@ module GitHubChangelogGenerator
       filtered_issues
     end
 
+    # Method filter issues, that belong only specified tag range
     # @param [Array] array of issues to filter
     # @param [Symbol] hash_key key of date value default is :actual_date
     # @param [String] older_tag all issues before this tag date will be excluded. May be nil, if it's first tag
     # @param [String] newer_tag all issue after this tag will be excluded. May be nil for unreleased section
+    # @return [Array] filtered issues
     def delete_by_time(array, hash_key = :actual_date, older_tag = nil, newer_tag = nil)
       fail ChangelogGeneratorError, "At least one of the tags should be not nil!".red if older_tag.nil? && newer_tag.nil?
 
-      newer_tag_time = get_time_of_tag(newer_tag)
-      older_tag_time = get_time_of_tag(older_tag)
+      newer_tag_time = newer_tag && get_time_of_tag(newer_tag)
+      older_tag_time = older_tag && get_time_of_tag(older_tag)
 
       array.select { |req|
         if req[hash_key]
@@ -539,10 +552,13 @@ module GitHubChangelogGenerator
       log
     end
 
+    # Try to find tag date in local hash.
+    # Otherwise fFetch tag time and put it to local hash file.
+    # @param [String] tag_name name of the tag
+    # @param [Hash] tag_times_hash the hash of tag times
+    # @return [Time] time of specified tag
     def get_time_of_tag(tag_name, tag_times_hash = @tag_times_hash)
-      if tag_name.nil?
-        return nil
-      end
+      fail ChangelogGeneratorError, "tag_name is nil".red if tag_name.nil?
 
       if tag_times_hash[tag_name["name"]]
         return @tag_times_hash[tag_name["name"]]
@@ -558,25 +574,9 @@ module GitHubChangelogGenerator
     end
 
     def get_filtered_issues
-      issues = @issues
-
-      filtered_issues = issues
-
-      unless @options[:include_labels].nil?
-        filtered_issues = issues.select { |issue|
-          # add all labels from @options[:include_labels] array
-          (issue.labels.map(&:name) & @options[:include_labels]).any?
-        }
-      end
+      filtered_issues = include_issues_by_labels(@issues)
 
       filtered_issues = exclude_issues_by_labels(filtered_issues)
-
-      if @options[:add_issues_wo_labels]
-        issues_wo_labels = issues.select { |issue|
-          !issue.labels.map(&:name).any?
-        }
-        filtered_issues |= issues_wo_labels
-      end
 
       if @options[:verbose]
         puts "Filtered issues: #{filtered_issues.count}"
