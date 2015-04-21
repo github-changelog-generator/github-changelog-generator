@@ -15,7 +15,7 @@ module GitHubChangelogGenerator
       @project = @options[:project]
       @github_token = fetch_github_token
       @tag_times_hash = {}
-      github_options = {per_page: PER_PAGE_NUMBER}
+      github_options = { per_page: PER_PAGE_NUMBER }
       github_options[:oauth_token] = @github_token unless @github_token.nil?
       github_options[:endpoint] = options[:github_endpoint] unless options[:github_endpoint].nil?
       github_options[:site] = options[:github_endpoint] unless options[:github_site].nil?
@@ -73,7 +73,6 @@ module GitHubChangelogGenerator
 
       tags
     end
-
 
     # This method fetch all closed issues and separate them to pull requests and pure issues
     # (pull request is kind of issue in term of GitHub)
@@ -163,8 +162,6 @@ module GitHubChangelogGenerator
       end
     end
 
-
-
     # Try to find tag date in local hash.
     # Otherwise fFetch tag time and put it to local hash file.
     # @param [String] tag_name name of the tag
@@ -190,6 +187,5 @@ module GitHubChangelogGenerator
     def fetch_commit(event)
       @github.git_data.commits.get @options[:user], @options[:project], event[:commit_id]
     end
-
   end
 end

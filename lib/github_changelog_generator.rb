@@ -133,9 +133,6 @@ module GitHubChangelogGenerator
       filtered_pull_requests
     end
 
-
-
-
     # This method fetch missing required attributes for pull requests
     # :merged_at - is a date, when issue PR was merged.
     # More correct to use this date, not closed date.
@@ -157,7 +154,6 @@ module GitHubChangelogGenerator
         puts "Fetching merged dates: Done!"
       end
     end
-
 
     # Include issues with labels, specified in :include_labels
     # @param [Array] issues to filter
