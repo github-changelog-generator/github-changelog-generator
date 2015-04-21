@@ -1,3 +1,5 @@
+require "logger"
+
 module GitHubChangelogGenerator
   # A Fetcher responsible for all requests to GitHub and all basic manipulation with related data
   # (such as filtering, validating, e.t.c)
@@ -16,6 +18,11 @@ module GitHubChangelogGenerator
       @project = @options[:project]
       @github_token = fetch_github_token
       @tag_times_hash = {}
+
+      @logger = Logger.new(STDOUT)
+      @logger.formatter = proc do |severity, datetime, progname, msg|
+        "#{msg}\n"
+      end
       github_options = { per_page: PER_PAGE_NUMBER }
       github_options[:oauth_token] = @github_token unless @github_token.nil?
       github_options[:endpoint] = options[:github_endpoint] unless options[:github_endpoint].nil?
@@ -24,7 +31,7 @@ module GitHubChangelogGenerator
       begin
         @github = Github.new github_options
       rescue
-        puts GH_RATE_LIMIT_EXCEEDED_MSG.yellow
+        @logger.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
       end
     end
 
@@ -36,8 +43,8 @@ module GitHubChangelogGenerator
       env_var = @options[:token] ? @options[:token] : (ENV.fetch "CHANGELOG_GITHUB_TOKEN", nil)
 
       unless env_var
-        puts "Warning: No token provided (-t option) and variable $CHANGELOG_GITHUB_TOKEN was not found.".yellow
-        puts "This script can make only 50 requests to GitHub API per hour without token!".yellow
+        @logger.warn "Warning: No token provided (-t option) and variable $CHANGELOG_GITHUB_TOKEN was not found.".yellow
+        @logger.warn "This script can make only 50 requests to GitHub API per hour without token!".yellow
       end
 
       env_var
@@ -64,14 +71,14 @@ module GitHubChangelogGenerator
         print "                               \r"
 
         if tags.count == 0
-          puts "Warning: Can't find any tags in repo.\
+          @logger.warn "Warning: Can't find any tags in repo.\
 Make sure, that you push tags to remote repo via 'git push --tags'".yellow
         elsif @options[:verbose]
-          puts "Found #{tags.count} tags"
+          @logger.info "Found #{tags.count} tags"
         end
 
       rescue
-        puts GH_RATE_LIMIT_EXCEEDED_MSG.yellow
+        @logger.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
       end
 
       tags
@@ -101,13 +108,13 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
           break if @options[:max_issues] && issues.length >= @options[:max_issues]
         end
       rescue
-        puts GH_RATE_LIMIT_EXCEEDED_MSG.yellow
+        @logger.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
       end
 
       print "                                                \r"
 
       if @options[:verbose]
-        puts "Received issues: #{issues.count}"
+        @logger.info "Received issues: #{issues.count}"
       end
 
       # remove pull request from issues:
@@ -130,7 +137,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
           pull_requests.concat(page)
         end
       rescue
-        puts GH_RATE_LIMIT_EXCEEDED_MSG.yellow
+        @logger.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
       end
 
       print "                                                   \r"
@@ -152,7 +159,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
                                                repo: @options[:project],
                                                issue_number: issue["number"]
             rescue
-              puts GH_RATE_LIMIT_EXCEEDED_MSG.yellow
+              @logger.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
             end
             issue[:events] = obj.body
             print "Fetching events for issues and PR: #{i + 1}/#{issues.count}\r"
@@ -167,7 +174,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
       print "                                                            \r"
 
       if @options[:verbose]
-        puts "Fetching events for issues and PR: #{i} Done!"
+        @logger.info "Fetching events for issues and PR: #{i} Done!"
       end
     end
 
@@ -187,7 +194,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
                                                                    @options[:project],
                                                                    tag_name["commit"]["sha"]
       rescue
-        puts GH_RATE_LIMIT_EXCEEDED_MSG.yellow
+        @logger.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
       end
       time_string = github_git_data_commits_get["committer"]["date"]
       @tag_times_hash[tag_name["name"]] = Time.parse(time_string)
