@@ -1,5 +1,6 @@
 module GitHubChangelogGenerator
-  # A Fetcher responsible for all requests to GitHub and all basic manipulation with related data (such as filtering, validating, e.t.c)
+  # A Fetcher responsible for all requests to GitHub and all basic manipulation with related data
+  # (such as filtering, validating, e.t.c)
   #
   # Example:
   # fetcher = GitHubChangelogGenerator::Fetcher.new options
@@ -27,7 +28,8 @@ module GitHubChangelogGenerator
       end
     end
 
-    # Returns GitHub token. First try to use variable, provided by --token option, otherwise try to fetch it from CHANGELOG_GITHUB_TOKEN env variable.
+    # Returns GitHub token. First try to use variable, provided by --token option,
+    # otherwise try to fetch it from CHANGELOG_GITHUB_TOKEN env variable.
     #
     # @return [String]
     def fetch_github_token
@@ -62,7 +64,8 @@ module GitHubChangelogGenerator
         print "                               \r"
 
         if tags.count == 0
-          puts "Warning: Can't find any tags in repo. Make sure, that you push tags to remote repo via 'git push --tags'".yellow
+          puts "Warning: Can't find any tags in repo.\
+Make sure, that you push tags to remote repo via 'git push --tags'".yellow
         elsif @options[:verbose]
           puts "Found #{tags.count} tags"
         end
@@ -84,7 +87,11 @@ module GitHubChangelogGenerator
       issues = []
 
       begin
-        response = @github.issues.list user: @options[:user], repo: @options[:project], state: "closed", filter: "all", labels: nil
+        response = @github.issues.list user: @options[:user],
+                                       repo: @options[:project],
+                                       state: "closed",
+                                       filter: "all",
+                                       labels: nil
         page_i = 0
         count_pages = response.count_pages
         response.each_page do |page|
@@ -141,7 +148,9 @@ module GitHubChangelogGenerator
         issues_slice.each { |issue|
           threads << Thread.new {
             begin
-              obj = @github.issues.events.list user: @options[:user], repo: @options[:project], issue_number: issue["number"]
+              obj = @github.issues.events.list user: @options[:user],
+                                               repo: @options[:project],
+                                               issue_number: issue["number"]
             rescue
               puts GH_RATE_LIMIT_EXCEEDED_MSG.yellow
             end
@@ -174,7 +183,9 @@ module GitHubChangelogGenerator
       end
 
       begin
-        github_git_data_commits_get = @github.git_data.commits.get @options[:user], @options[:project], tag_name["commit"]["sha"]
+        github_git_data_commits_get = @github.git_data.commits.get @options[:user],
+                                                                   @options[:project],
+                                                                   tag_name["commit"]["sha"]
       rescue
         puts GH_RATE_LIMIT_EXCEEDED_MSG.yellow
       end
