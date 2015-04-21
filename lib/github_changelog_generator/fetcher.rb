@@ -14,7 +14,7 @@ module GitHubChangelogGenerator
       @user = @options[:user]
       @project = @options[:project]
       @github_token = fetch_github_token
-
+      @tag_times_hash = {}
       github_options = {per_page: PER_PAGE_NUMBER}
       github_options[:oauth_token] = @github_token unless @github_token.nil?
       github_options[:endpoint] = options[:github_endpoint] unless options[:github_endpoint].nil?
@@ -74,22 +74,6 @@ module GitHubChangelogGenerator
       tags
     end
 
-    # Return tags after filtering tags in lists provided by option: --between-tags & --exclude-tags
-    #
-    # @return [Array]
-    def get_filtered_tags
-      all_tags = get_all_tags
-      filtered_tags = []
-      if @options[:between_tags]
-        @options[:between_tags].each do |tag|
-          unless all_tags.include? tag
-            puts "Warning: can't find tag #{tag}, specified with --between-tags option.".yellow
-          end
-        end
-        filtered_tags = all_tags.select { |tag| @options[:between_tags].include? tag }
-      end
-      filtered_tags
-    end
 
     # This method fetch all closed issues and separate them to pull requests and pure issues
     # (pull request is kind of issue in term of GitHub)
@@ -126,14 +110,9 @@ module GitHubChangelogGenerator
       }
     end
 
-
-    # This method fetch missing required attributes for pull requests
-    # :merged_at - is a date, when issue PR was merged.
-    # More correct to use this date, not closed date.
-    def fetch_merged_at_pull_requests
-      if @options[:verbose]
-        print "Fetching merged dates...\r"
-      end
+    # Fetch all pull requests. We need them to detect :merged_at parameter
+    # @return [Array] all pull requests
+    def fetch_pull_requests
       pull_requests = []
       begin
         response = @github.pull_requests.list @options[:user], @options[:project], state: "closed"
@@ -149,18 +128,67 @@ module GitHubChangelogGenerator
       end
 
       print "                                                   \r"
+      pull_requests
+    end
 
-      @pull_requests.each { |pr|
-        fetched_pr = pull_requests.find { |fpr|
-          fpr.number == pr.number
+    # Fetch event for all issues and add them to :events
+    # @param [Array] issues
+    # @return [Void]
+    def fetch_events_async(issues)
+      i = 0
+      max_thread_number = 50
+      threads = []
+      issues.each_slice(max_thread_number) { |issues_slice|
+        issues_slice.each { |issue|
+          threads << Thread.new {
+            begin
+              obj = @github.issues.events.list user: @options[:user], repo: @options[:project], issue_number: issue["number"]
+            rescue
+              puts GH_RATE_LIMIT_EXCEEDED_MSG.yellow
+            end
+            issue[:events] = obj.body
+            print "Fetching events for issues and PR: #{i + 1}/#{issues.count}\r"
+            i += 1
+          }
         }
-        pr[:merged_at] = fetched_pr[:merged_at]
-        pull_requests.delete(fetched_pr)
+        threads.each(&:join)
+        threads = []
       }
 
+      # to clear line from prev print
+      print "                                                            \r"
+
       if @options[:verbose]
-        puts "Fetching merged dates: Done!"
+        puts "Fetching events for issues and PR: #{i} Done!"
       end
+    end
+
+
+
+    # Try to find tag date in local hash.
+    # Otherwise fFetch tag time and put it to local hash file.
+    # @param [String] tag_name name of the tag
+    # @return [Time] time of specified tag
+    def get_time_of_tag(tag_name)
+      fail ChangelogGeneratorError, "tag_name is nil".red if tag_name.nil?
+
+      if @tag_times_hash[tag_name["name"]]
+        return @tag_times_hash[tag_name["name"]]
+      end
+
+      begin
+        github_git_data_commits_get = @github.git_data.commits.get @options[:user], @options[:project], tag_name["commit"]["sha"]
+      rescue
+        puts GH_RATE_LIMIT_EXCEEDED_MSG.yellow
+      end
+      time_string = github_git_data_commits_get["committer"]["date"]
+      @tag_times_hash[tag_name["name"]] = Time.parse(time_string)
+    end
+
+    # Fetch commit for specifed event
+    # @return [Hash]
+    def fetch_commit(event)
+      @github.git_data.commits.get @options[:user], @options[:project], event[:commit_id]
     end
 
   end

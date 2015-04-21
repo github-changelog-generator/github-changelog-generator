@@ -29,7 +29,8 @@ module GitHubChangelogGenerator
 
       @generator = Generator.new @options
 
-      @all_tags = @fetcher.get_filtered_tags
+      # @all_tags = get_filtered_tags
+      @all_tags = @fetcher.get_all_tags
 
       @issues, @pull_requests = @fetcher.fetch_issues_and_pull_requests
 
@@ -39,9 +40,24 @@ module GitHubChangelogGenerator
 
       fetch_event_for_issues_and_pr
       detect_actual_closed_dates
-      @tag_times_hash = {}
     end
 
+    # Return tags after filtering tags in lists provided by option: --between-tags & --exclude-tags
+    #
+    # @return [Array]
+    def get_filtered_tags
+      all_tags = @fetcher.get_all_tags
+      filtered_tags = []
+      if @options[:between_tags]
+        @options[:between_tags].each do |tag|
+          unless all_tags.include? tag
+            puts "Warning: can't find tag #{tag}, specified with --between-tags option.".yellow
+          end
+        end
+        filtered_tags = all_tags.select { |tag| @options[:between_tags].include? tag }
+      end
+      filtered_tags
+    end
 
     def detect_actual_closed_dates
       if @options[:verbose]
@@ -68,6 +84,8 @@ module GitHubChangelogGenerator
       end
     end
 
+    # Fill :actual_date parameter of specified issue by closed date of the commit, it it was closed by commit.
+    # @param [Hash] issue
     def find_closed_date_by_commit(issue)
       unless issue["events"].nil?
         # if it's PR -> then find "merged event", in case of usual issue -> fond closed date
@@ -79,7 +97,7 @@ module GitHubChangelogGenerator
               issue[:actual_date] = issue[:closed_at]
             else
               begin
-                commit = @github.git_data.commits.get @options[:user], @options[:project], event[:commit_id]
+                commit = @fetcher.fetch_commit(event)
                 issue[:actual_date] = commit[:author][:date]
               rescue
                 puts "Warning: Can't fetch commit #{event[:commit_id]}. It is probably referenced from another repo.".yellow
@@ -114,6 +132,32 @@ module GitHubChangelogGenerator
 
       filtered_pull_requests
     end
+
+
+
+
+    # This method fetch missing required attributes for pull requests
+    # :merged_at - is a date, when issue PR was merged.
+    # More correct to use this date, not closed date.
+    def fetch_merged_at_pull_requests
+      if @options[:verbose]
+        print "Fetching merged dates...\r"
+      end
+      pull_requests = @fetcher.fetch_pull_requests
+
+      @pull_requests.each { |pr|
+        fetched_pr = pull_requests.find { |fpr|
+          fpr.number == pr.number
+        }
+        pr[:merged_at] = fetched_pr[:merged_at]
+        pull_requests.delete(fetched_pr)
+      }
+
+      if @options[:verbose]
+        puts "Fetching merged dates: Done!"
+      end
+    end
+
 
     # Include issues with labels, specified in :include_labels
     # @param [Array] issues to filter
@@ -189,7 +233,7 @@ module GitHubChangelogGenerator
         puts "Sorting tags..."
       end
 
-      @all_tags.sort_by! { |x| get_time_of_tag(x) }.reverse!
+      @all_tags.sort_by! { |x| @fetcher.get_time_of_tag(x) }.reverse!
 
       if @options[:verbose]
         puts "Generating log..."
@@ -225,9 +269,8 @@ module GitHubChangelogGenerator
       i = 0
       all = @all_tags.count
       @all_tags.each { |tag|
-        # explicit set @tag_times_hash to write data safety.
         threads << Thread.new {
-          get_time_of_tag(tag, @tag_times_hash)
+          @fetcher.get_time_of_tag(tag)
           if @options[:verbose]
             print "Fetching tags dates: #{i + 1}/#{all}\r"
             i += 1
@@ -312,8 +355,8 @@ module GitHubChangelogGenerator
     def delete_by_time(array, hash_key = :actual_date, older_tag = nil, newer_tag = nil)
       fail ChangelogGeneratorError, "At least one of the tags should be not nil!".red if older_tag.nil? && newer_tag.nil?
 
-      newer_tag_time = newer_tag && get_time_of_tag(newer_tag)
-      older_tag_time = older_tag && get_time_of_tag(older_tag)
+      newer_tag_time = newer_tag && @fetcher.get_time_of_tag(newer_tag)
+      older_tag_time = older_tag && @fetcher.get_time_of_tag(older_tag)
 
       array.select { |req|
         if req[hash_key]
@@ -348,7 +391,7 @@ module GitHubChangelogGenerator
     # @param [String] older_tag_name Older tag, used for the links. Could be nil for last tag.
     # @return [String] Ready and parsed section
     def create_log(pull_requests, issues, newer_tag, older_tag_name = nil)
-      newer_tag_time = newer_tag.nil? ? Time.new : get_time_of_tag(newer_tag)
+      newer_tag_time = newer_tag.nil? ? Time.new : @fetcher.get_time_of_tag(newer_tag)
       newer_tag_name = newer_tag.nil? ? @options[:unreleased_label] : newer_tag["name"]
       newer_tag_link = newer_tag.nil? ? "HEAD" : newer_tag_name
 
@@ -443,27 +486,8 @@ module GitHubChangelogGenerator
       log
     end
 
-    # Try to find tag date in local hash.
-    # Otherwise fFetch tag time and put it to local hash file.
-    # @param [String] tag_name name of the tag
-    # @param [Hash] tag_times_hash the hash of tag times
-    # @return [Time] time of specified tag
-    def get_time_of_tag(tag_name, tag_times_hash = @tag_times_hash)
-      fail ChangelogGeneratorError, "tag_name is nil".red if tag_name.nil?
-
-      if tag_times_hash[tag_name["name"]]
-        return @tag_times_hash[tag_name["name"]]
-      end
-
-      begin
-        github_git_data_commits_get = @github.git_data.commits.get @options[:user], @options[:project], tag_name["commit"]["sha"]
-      rescue
-        puts GH_RATE_LIMIT_EXCEEDED_MSG.yellow
-      end
-      time_string = github_git_data_commits_get["committer"]["date"]
-      @tag_times_hash[tag_name["name"]] = Time.parse(time_string)
-    end
-
+    # Filter issues according labels
+    # @return [Array] Filtered issues
     def get_filtered_issues
       filtered_issues = include_issues_by_labels(@issues)
 
@@ -475,6 +499,9 @@ module GitHubChangelogGenerator
 
       filtered_issues
     end
+
+    # Fetch event for issues and pull requests
+    # @return [Array] array of fetched issues
     def fetch_event_for_issues_and_pr
       if @options[:verbose]
         print "Fetching events for issues and PR: 0/#{@issues.count + @pull_requests.count}\r"
@@ -482,36 +509,7 @@ module GitHubChangelogGenerator
 
       # Async fetching events:
 
-      fetch_events_async(@issues + @pull_requests)
-    end
-
-    def fetch_events_async(issues)
-      i = 0
-      max_thread_number = 50
-      threads = []
-      issues.each_slice(max_thread_number) { |issues_slice|
-        issues_slice.each { |issue|
-          threads << Thread.new {
-            begin
-              obj = @github.issues.events.list user: @options[:user], repo: @options[:project], issue_number: issue["number"]
-            rescue
-              puts GH_RATE_LIMIT_EXCEEDED_MSG.yellow
-            end
-            issue[:events] = obj.body
-            print "Fetching events for issues and PR: #{i + 1}/#{@issues.count + @pull_requests.count}\r"
-            i += 1
-          }
-        }
-        threads.each(&:join)
-        threads = []
-      }
-
-      # to clear line from prev print
-      print "                                                            \r"
-
-      if @options[:verbose]
-        puts "Fetching events for issues and PR: #{i} Done!"
-      end
+      @fetcher.fetch_events_async(@issues + @pull_requests)
     end
   end
 
