@@ -20,7 +20,7 @@ module GitHubChangelogGenerator
       @tag_times_hash = {}
 
       @logger = Logger.new(STDOUT)
-      @logger.formatter = proc do |severity, datetime, progname, msg|
+      @logger.formatter = proc do |_severity, _datetime, _progname, msg|
         "#{msg}\n"
       end
       github_options = { per_page: PER_PAGE_NUMBER }
