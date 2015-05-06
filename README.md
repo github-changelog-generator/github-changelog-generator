@@ -111,7 +111,7 @@ Type `github_changelog_generator --help` for detailed usage.
 
 Since GitHub allows you to make only 50 requests without authentication it's recommended to run this script with a token (`-t, --token` option)
 
-**You can easily [generate it here](https://github.com/settings/applications)**.
+**You can easily [generate it here](https://github.com/settings/tokens)**.
 
 And:
 
