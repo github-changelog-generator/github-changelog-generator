@@ -1,8 +1,8 @@
 # Change Log
 
-## [Unreleased](https://github.com/skywinder/github-changelog-generator/tree/HEAD)
+## [1.4.0](https://github.com/skywinder/github-changelog-generator/tree/1.4.0) (2015-05-07)
 
-[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.3.11...HEAD)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.3.11...1.4.0)
 
 **Implemented enhancements:**
 
@@ -17,6 +17,8 @@
 **Merged pull requests:**
 
 - Cleanup [\#220](https://github.com/skywinder/github-changelog-generator/pull/220) ([tuexss](https://github.com/tuexss))
+
+- Implement fetcher class [\#227](https://github.com/skywinder/github-changelog-generator/pull/227) ([skywinder](https://github.com/skywinder))
 
 - Add coveralls integration [\#223](https://github.com/skywinder/github-changelog-generator/pull/223) ([skywinder](https://github.com/skywinder))
 
