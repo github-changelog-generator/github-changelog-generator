@@ -156,6 +156,8 @@ Here is a [wikipage list of alternatives](https://github.com/skywinder/Github-Ch
 ### Projects using this library
 [Wikipage with list of projects](https://github.com/skywinder/Github-Changelog-Generator/wiki/Projects-using-Github-Changelog-Generator) 
 
+If you've used this project in a live app, please let me know! Nothing makes me happier than seeing someone else take my work and go wild with it.
+
 *If you are using `github_changelog_generator` for generation change log in your project or know another project that uses it, please add it to [this] (https://github.com/skywinder/Github-Changelog-Generator/wiki/Projects-using-Github-Changelog-Generator) list.*
 
 ## Am I missing some essential feature?
