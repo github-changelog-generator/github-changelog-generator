@@ -7,7 +7,7 @@
 
 # Offense count: 21
 Metrics/AbcSize:
-  Max: 71
+  Enabled: false
 
 # Offense count: 2
 Metrics/BlockNesting:
@@ -25,7 +25,7 @@ Metrics/CyclomaticComplexity:
 # Offense count: 28
 # Configuration parameters: CountComments.
 Metrics/MethodLength:
-  Max: 118
+  Enabled: false
 
 # Offense count: 5
 Metrics/PerceivedComplexity:
