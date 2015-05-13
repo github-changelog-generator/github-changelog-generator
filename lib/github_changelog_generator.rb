@@ -388,8 +388,13 @@ module GitHubChangelogGenerator
     # @return [String] Ready and parsed section
     def create_log(pull_requests, issues, newer_tag, older_tag_name = nil)
       newer_tag_time = newer_tag.nil? ? Time.new : @fetcher.get_time_of_tag(newer_tag)
-      newer_tag_name = newer_tag.nil? ? @options[:unreleased_label] : newer_tag["name"]
-      newer_tag_link = newer_tag.nil? ? "HEAD" : newer_tag_name
+      if newer_tag.nil? && @options[:future_release]
+        newer_tag_name = @options[:future_release]
+        newer_tag_link = @options[:future_release]
+      else
+        newer_tag_name = newer_tag.nil? ? @options[:unreleased_label] : newer_tag["name"]
+        newer_tag_link = newer_tag.nil? ? "HEAD" : newer_tag_name
+      end
 
       github_site = options[:github_site] || "https://github.com"
       project_url = "#{github_site}/#{@options[:user]}/#{@options[:project]}"
