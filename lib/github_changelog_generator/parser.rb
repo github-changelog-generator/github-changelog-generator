@@ -171,7 +171,8 @@ module GitHubChangelogGenerator
 
           if match && match[1] && match[2]
             puts "Detected user:#{match[1]}, project:#{match[2]}"
-            options[:user], options[:project] = match[1], match[2]
+            options[:user] = match[1]
+            options[:project] = match[2]
           else
             # try to find repo in format:
             # origin	https://github.com/skywinder/ChangelogMerger (fetch)
@@ -179,7 +180,8 @@ module GitHubChangelogGenerator
             match = /.*\/((?:-|\w|\.)*)\/((?:-|\w|\.)*).*/.match(remote)
             if match && match[1] && match[2]
               puts "Detected user:#{match[1]}, project:#{match[2]}"
-              options[:user], options[:project] = match[1], match[2]
+              options[:user] = match[1]
+              options[:project] = match[2]
             end
           end
         end

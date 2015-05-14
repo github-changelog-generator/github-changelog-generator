@@ -118,9 +118,9 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
       end
 
       # remove pull request from issues:
-      issues.partition { |x|
+      issues.partition do |x|
         x[:pull_request].nil?
-      }
+      end
     end
 
     # Fetch all pull requests. We need them to detect :merged_at parameter
@@ -151,9 +151,9 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
       i = 0
       max_thread_number = 50
       threads = []
-      issues.each_slice(max_thread_number) { |issues_slice|
-        issues_slice.each { |issue|
-          threads << Thread.new {
+      issues.each_slice(max_thread_number) do |issues_slice|
+        issues_slice.each do |issue|
+          threads << Thread.new do
             begin
               obj = @github.issues.events.list user: @options[:user],
                                                repo: @options[:project],
@@ -164,11 +164,11 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
             issue[:events] = obj.body
             print "Fetching events for issues and PR: #{i + 1}/#{issues.count}\r"
             i += 1
-          }
-        }
+          end
+        end
         threads.each(&:join)
         threads = []
-      }
+      end
 
       # to clear line from prev print
       print "                                                            \r"
