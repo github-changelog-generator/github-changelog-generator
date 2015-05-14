@@ -8,6 +8,7 @@ module GitHubChangelogGenerator
   # fetcher = GitHubChangelogGenerator::Fetcher.new options
   class Fetcher
     PER_PAGE_NUMBER = 30
+    CHANGELOG_GITHUB_TOKEN = "CHANGELOG_GITHUB_TOKEN"
     GH_RATE_LIMIT_EXCEEDED_MSG = "Warning: GitHub API rate limit (5000 per hour) exceeded, change log may be " \
         "missing some issues. You can limit the number of issues fetched using the `--max-issues NUM` argument."
 
@@ -40,7 +41,7 @@ module GitHubChangelogGenerator
     #
     # @return [String]
     def fetch_github_token
-      env_var = @options[:token] ? @options[:token] : (ENV.fetch "CHANGELOG_GITHUB_TOKEN", nil)
+      env_var = @options[:token] ? @options[:token] : (ENV.fetch CHANGELOG_GITHUB_TOKEN, nil)
 
       unless env_var
         @logger.warn "Warning: No token provided (-t option) and variable $CHANGELOG_GITHUB_TOKEN was not found.".yellow
