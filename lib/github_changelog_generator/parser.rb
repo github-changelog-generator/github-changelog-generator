@@ -98,6 +98,9 @@ module GitHubChangelogGenerator
         opts.on("--simple-list", "Create simple list from issues and pull requests. Default is false.") do |v|
           options[:simple_list] = v
         end
+        opts.on("--future-release [RELEASE-VERSION]", "Put the unreleased changes in the specified release number.") do |future_release|
+          options[:future_release] = future_release
+        end
         opts.on("--[no-]verbose", "Run verbosely. Default is true") do |v|
           options[:verbose] = v
         end
