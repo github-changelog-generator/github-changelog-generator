@@ -8,21 +8,22 @@ module GitHubChangelogGenerator
   # fetcher = GitHubChangelogGenerator::Fetcher.new options
   class Fetcher
     PER_PAGE_NUMBER = 30
+    CHANGELOG_GITHUB_TOKEN = "CHANGELOG_GITHUB_TOKEN"
     GH_RATE_LIMIT_EXCEEDED_MSG = "Warning: GitHub API rate limit (5000 per hour) exceeded, change log may be " \
         "missing some issues. You can limit the number of issues fetched using the `--max-issues NUM` argument."
 
     def initialize(options = {})
       @options = options
 
-      @user = @options[:user]
-      @project = @options[:project]
-      @github_token = fetch_github_token
-      @tag_times_hash = {}
-
       @logger = Logger.new(STDOUT)
       @logger.formatter = proc do |_severity, _datetime, _progname, msg|
         "#{msg}\n"
       end
+
+      @user = @options[:user]
+      @project = @options[:project]
+      @github_token = fetch_github_token
+      @tag_times_hash = {}
       github_options = { per_page: PER_PAGE_NUMBER }
       github_options[:oauth_token] = @github_token unless @github_token.nil?
       github_options[:endpoint] = options[:github_endpoint] unless options[:github_endpoint].nil?
@@ -40,7 +41,7 @@ module GitHubChangelogGenerator
     #
     # @return [String]
     def fetch_github_token
-      env_var = @options[:token] ? @options[:token] : (ENV.fetch "CHANGELOG_GITHUB_TOKEN", nil)
+      env_var = @options[:token] ? @options[:token] : (ENV.fetch CHANGELOG_GITHUB_TOKEN, nil)
 
       unless env_var
         @logger.warn "Warning: No token provided (-t option) and variable $CHANGELOG_GITHUB_TOKEN was not found.".yellow
