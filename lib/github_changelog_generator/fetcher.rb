@@ -18,13 +18,12 @@ module GitHubChangelogGenerator
       @logger = Logger.new(STDOUT)
       @logger.formatter = proc do |_severity, _datetime, _progname, msg|
         "#{msg}\n"
+      end
 
       @user = @options[:user]
       @project = @options[:project]
       @github_token = fetch_github_token
       @tag_times_hash = {}
-
-      end
       github_options = { per_page: PER_PAGE_NUMBER }
       github_options[:oauth_token] = @github_token unless @github_token.nil?
       github_options[:endpoint] = options[:github_endpoint] unless options[:github_endpoint].nil?
