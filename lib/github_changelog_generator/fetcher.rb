@@ -23,7 +23,7 @@ module GitHubChangelogGenerator
       @logger.formatter = proc do |_severity, _datetime, _progname, msg|
         "#{msg}\n"
       end
-      github_options = { per_page: PER_PAGE_NUMBER }
+      github_options = {per_page: PER_PAGE_NUMBER}
       github_options[:oauth_token] = @github_token unless @github_token.nil?
       github_options[:endpoint] = options[:github_endpoint] unless options[:github_endpoint].nil?
       github_options[:site] = options[:github_endpoint] unless options[:github_site].nil?
@@ -60,28 +60,37 @@ module GitHubChangelogGenerator
       tags = []
 
       begin
-        response = @github.repos.tags @options[:user], @options[:project]
-        page_i = 0
-        count_pages = response.count_pages
-        response.each_page do |page|
-          page_i += PER_PAGE_NUMBER
-          print "Fetching tags... #{page_i}/#{count_pages * PER_PAGE_NUMBER}\r"
-          tags.concat(page)
+        github_fetch_tags(tags)
+      rescue Github::Error::Unauthorized => e
+        @logger.error e.body.red
+        @logger.error "Error: wrong github token provided".red
+      rescue Github::Error::Forbidden => e
+        @logger.warn e.body.red
+        unless @options[:token].nil?
+          @logger.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
         end
-        print "                               \r"
-
-        if tags.count == 0
-          @logger.warn "Warning: Can't find any tags in repo.\
-Make sure, that you push tags to remote repo via 'git push --tags'".yellow
-        elsif @options[:verbose]
-          @logger.info "Found #{tags.count} tags"
-        end
-
-      rescue
-        @logger.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
       end
 
       tags
+    end
+
+    def github_fetch_tags(tags)
+      response = @github.repos.tags @options[:user], @options[:project]
+      page_i = 0
+      count_pages = response.count_pages
+      response.each_page do |page|
+        page_i += PER_PAGE_NUMBER
+        print "Fetching tags... #{page_i}/#{count_pages * PER_PAGE_NUMBER}\r"
+        tags.concat(page)
+      end
+      print "                               \r"
+
+      if tags.count == 0
+        @logger.warn "Warning: Can't find any tags in repo.\
+Make sure, that you push tags to remote repo via 'git push --tags'".yellow
+      elsif @options[:verbose]
+        @logger.info "Found #{tags.count} tags"
+      end
     end
 
     # This method fetch all closed issues and separate them to pull requests and pure issues
@@ -108,6 +117,8 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
           break if @options[:max_issues] && issues.length >= @options[:max_issues]
         end
       rescue
+        puts e.message
+        puts e.backtrace.inspect
         @logger.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
       end
 
