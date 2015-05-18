@@ -16,9 +16,10 @@
 # Uncomment the following lines to make the configuration take effect.
 
 PreCommit:
-  Rubocop:
+  RuboCop:
     enabled: true
-#    on_warn: fail # Treat all warnings as failures
+    #command: ['bundle', 'exec', 'rubocop'] 
+    on_warn: fail # Treat all warnings as failures
 #
 #  TrailingWhitespace:
 #    exclude:
