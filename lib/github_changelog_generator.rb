@@ -219,7 +219,7 @@ module GitHubChangelogGenerator
       output_filename = "#{@options[:output]}"
       File.open(output_filename, "w") { |file| file.write(log) }
       puts "Done!"
-      puts "Generated log placed in #{`pwd`.strip!}/#{output_filename}"
+      puts "Generated log placed in #{Dir.pwd}/#{output_filename}"
     end
 
     # The full cycle of generation for whole project
