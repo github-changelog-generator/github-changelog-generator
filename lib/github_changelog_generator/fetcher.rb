@@ -9,8 +9,10 @@ module GitHubChangelogGenerator
   class Fetcher
     PER_PAGE_NUMBER = 30
     CHANGELOG_GITHUB_TOKEN = "CHANGELOG_GITHUB_TOKEN"
-    GH_RATE_LIMIT_EXCEEDED_MSG = "Warning: GitHub API rate limit (5000 per hour) exceeded, change log may be " \
-        "missing some issues. You can limit the number of issues fetched using the `--max-issues NUM` argument."
+    GH_RATE_LIMIT_EXCEEDED_MSG = "Warning: Can't finish operation: GitHub API rate limit exceeded, change log may be " \
+    "missing some issues. You can limit the number of issues fetched using the `--max-issues NUM` argument."
+    NO_TOKEN_PROVIDED = "Warning: No token provided (-t option) and variable $CHANGELOG_GITHUB_TOKEN was not found. " \
+    "This script can make only 50 requests to GitHub API per hour without token!"
 
     def initialize(options = {})
       @options = options
@@ -29,11 +31,7 @@ module GitHubChangelogGenerator
       github_options[:endpoint] = options[:github_endpoint] unless options[:github_endpoint].nil?
       github_options[:site] = options[:github_endpoint] unless options[:github_site].nil?
 
-      begin
-        @github = Github.new github_options
-      rescue
-        @logger.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
-      end
+      @github = check_github_response { Github.new github_options }
     end
 
     # Returns GitHub token. First try to use variable, provided by --token option,
@@ -44,8 +42,7 @@ module GitHubChangelogGenerator
       env_var = @options[:token] ? @options[:token] : (ENV.fetch CHANGELOG_GITHUB_TOKEN, nil)
 
       unless env_var
-        @logger.warn "Warning: No token provided (-t option) and variable $CHANGELOG_GITHUB_TOKEN was not found.".yellow
-        @logger.warn "This script can make only 50 requests to GitHub API per hour without token!".yellow
+        @logger.warn NO_TOKEN_PROVIDED.yellow
       end
 
       env_var
@@ -60,29 +57,41 @@ module GitHubChangelogGenerator
 
       tags = []
 
-      begin
-        response = @github.repos.tags @options[:user], @options[:project]
-        page_i = 0
-        count_pages = response.count_pages
-        response.each_page do |page|
-          page_i += PER_PAGE_NUMBER
-          print "Fetching tags... #{page_i}/#{count_pages * PER_PAGE_NUMBER}\r"
-          tags.concat(page)
-        end
-        print "                               \r"
-
-        if tags.count == 0
-          @logger.warn "Warning: Can't find any tags in repo.\
-Make sure, that you push tags to remote repo via 'git push --tags'".yellow
-        elsif @options[:verbose]
-          @logger.info "Found #{tags.count} tags"
-        end
-
-      rescue
-        @logger.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
-      end
+      check_github_response { github_fetch_tags(tags) }
 
       tags
+    end
+
+    def check_github_response
+      begin
+        value = yield
+      rescue Github::Error::Unauthorized => e
+        @logger.error e.body.red
+        abort "Error: wrong GitHub token"
+      rescue Github::Error::Forbidden => e
+        @logger.warn e.body.red
+        @logger.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
+      end
+      value
+    end
+
+    def github_fetch_tags(tags)
+      response = @github.repos.tags @options[:user], @options[:project]
+      page_i = 0
+      count_pages = response.count_pages
+      response.each_page do |page|
+        page_i += PER_PAGE_NUMBER
+        print "Fetching tags... #{page_i}/#{count_pages * PER_PAGE_NUMBER}\r"
+        tags.concat(page)
+      end
+      print "                               \r"
+
+      if tags.count == 0
+        @logger.warn "Warning: Can't find any tags in repo.\
+Make sure, that you push tags to remote repo via 'git push --tags'".yellow
+      elsif @options[:verbose]
+        @logger.info "Found #{tags.count} tags"
+      end
     end
 
     # This method fetch all closed issues and separate them to pull requests and pure issues
