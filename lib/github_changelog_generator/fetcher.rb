@@ -96,8 +96,8 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
 
     # This method fetch all closed issues and separate them to pull requests and pure issues
     # (pull request is kind of issue in term of GitHub)
-    # @return [Tuple] with issues and pull requests
-    def fetch_issues_and_pull_requests
+    # @return [Tuple] with (issues, pull-requests)
+    def fetch_closed_issues_and_pr
       if @options[:verbose]
         print "Fetching closed issues...\r"
       end
@@ -124,7 +124,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
         @logger.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
       end
 
-      # remove pull request from issues:
+      # separate arrays of issues and pull requests:
       issues.partition do |x|
         x[:pull_request].nil?
       end
@@ -132,7 +132,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
 
     # Fetch all pull requests. We need them to detect :merged_at parameter
     # @return [Array] all pull requests
-    def fetch_pull_requests
+    def fetch_closed_pull_requests
       pull_requests = []
       begin
         response = @github.pull_requests.list @options[:user], @options[:project], state: "closed"

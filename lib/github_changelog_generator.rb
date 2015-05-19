@@ -32,7 +32,8 @@ module GitHubChangelogGenerator
       # @all_tags = get_filtered_tags
       @all_tags = @fetcher.get_all_tags
 
-      @issues, @pull_requests = @fetcher.fetch_issues_and_pull_requests
+      # TODO: refactor this double asssign of @issues and @pull_requests and move all logic in one method
+      @issues, @pull_requests = @fetcher.fetch_closed_issues_and_pr
 
       @pull_requests = @options[:pulls] ? get_filtered_pull_requests : []
 
@@ -120,7 +121,7 @@ module GitHubChangelogGenerator
     # And exclude all from :exclude_labels array.
     # @return [Array] filtered PR's
     def get_filtered_pull_requests
-      fetch_merged_at_pull_requests
+      filter_merged_pull_requests
 
       filtered_pull_requests = include_issues_by_labels(@pull_requests)
 
@@ -133,14 +134,15 @@ module GitHubChangelogGenerator
       filtered_pull_requests
     end
 
-    # This method fetch missing required attributes for pull requests
+    # This method filter only merged PR and
+    # fetch missing required attributes for pull requests
     # :merged_at - is a date, when issue PR was merged.
-    # More correct to use this date, not closed date.
-    def fetch_merged_at_pull_requests
+    # More correct to use merged date, rather than closed date.
+    def filter_merged_pull_requests
       if @options[:verbose]
         print "Fetching merged dates...\r"
       end
-      pull_requests = @fetcher.fetch_pull_requests
+      pull_requests = @fetcher.fetch_closed_pull_requests
 
       @pull_requests.each { |pr|
         fetched_pr = pull_requests.find { |fpr|
@@ -149,6 +151,10 @@ module GitHubChangelogGenerator
         pr[:merged_at] = fetched_pr[:merged_at]
         pull_requests.delete(fetched_pr)
       }
+
+      @pull_requests.select! do |pr|
+        !pr[:merged_at].nil?
+      end
     end
 
     # Include issues with labels, specified in :include_labels
