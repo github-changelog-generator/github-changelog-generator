@@ -9,8 +9,10 @@ module GitHubChangelogGenerator
   class Fetcher
     PER_PAGE_NUMBER = 30
     CHANGELOG_GITHUB_TOKEN = "CHANGELOG_GITHUB_TOKEN"
-    GH_RATE_LIMIT_EXCEEDED_MSG = "Warning: GitHub API rate limit (5000 per hour) exceeded, change log may be " \
-        "missing some issues. You can limit the number of issues fetched using the `--max-issues NUM` argument."
+    GH_RATE_LIMIT_EXCEEDED_MSG = "Warning: Can't finish operation: GitHub API rate limit exceeded, change log may be " \
+    "missing some issues. You can limit the number of issues fetched using the `--max-issues NUM` argument."
+    NO_TOKEN_PROVIDED = "Warning: No token provided (-t option) and variable $CHANGELOG_GITHUB_TOKEN was not found. " \
+    "This script can make only 50 requests to GitHub API per hour without token!"
 
     def initialize(options = {})
       @options = options
@@ -29,11 +31,7 @@ module GitHubChangelogGenerator
       github_options[:endpoint] = options[:github_endpoint] unless options[:github_endpoint].nil?
       github_options[:site] = options[:github_endpoint] unless options[:github_site].nil?
 
-      begin
-        @github = Github.new github_options
-      rescue
-        @logger.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
-      end
+      @github = check_github_response { Github.new github_options }
     end
 
     # Returns GitHub token. First try to use variable, provided by --token option,
@@ -44,8 +42,7 @@ module GitHubChangelogGenerator
       env_var = @options[:token] ? @options[:token] : (ENV.fetch CHANGELOG_GITHUB_TOKEN, nil)
 
       unless env_var
-        @logger.warn "Warning: No token provided (-t option) and variable $CHANGELOG_GITHUB_TOKEN was not found.".yellow
-        @logger.warn "This script can make only 50 requests to GitHub API per hour without token!".yellow
+        @logger.warn NO_TOKEN_PROVIDED.yellow
       end
 
       env_var
@@ -60,35 +57,47 @@ module GitHubChangelogGenerator
 
       tags = []
 
-      begin
-        response = @github.repos.tags @options[:user], @options[:project]
-        page_i = 0
-        count_pages = response.count_pages
-        response.each_page do |page|
-          page_i += PER_PAGE_NUMBER
-          print "Fetching tags... #{page_i}/#{count_pages * PER_PAGE_NUMBER}\r"
-          tags.concat(page)
-        end
-        print "                               \r"
-
-        if tags.count == 0
-          @logger.warn "Warning: Can't find any tags in repo.\
-Make sure, that you push tags to remote repo via 'git push --tags'".yellow
-        elsif @options[:verbose]
-          @logger.info "Found #{tags.count} tags"
-        end
-
-      rescue
-        @logger.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
-      end
+      check_github_response { github_fetch_tags(tags) }
 
       tags
     end
 
+    def check_github_response
+      begin
+        value = yield
+      rescue Github::Error::Unauthorized => e
+        @logger.error e.body.red
+        abort "Error: wrong GitHub token"
+      rescue Github::Error::Forbidden => e
+        @logger.warn e.body.red
+        @logger.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
+      end
+      value
+    end
+
+    def github_fetch_tags(tags)
+      response = @github.repos.tags @options[:user], @options[:project]
+      page_i = 0
+      count_pages = response.count_pages
+      response.each_page do |page|
+        page_i += PER_PAGE_NUMBER
+        print_in_same_line("Fetching tags... #{page_i}/#{count_pages * PER_PAGE_NUMBER}")
+        tags.concat(page)
+      end
+      print_empty_line
+
+      if tags.count == 0
+        @logger.warn "Warning: Can't find any tags in repo.\
+Make sure, that you push tags to remote repo via 'git push --tags'".yellow
+      else
+        @logger.info "Found #{tags.count} tags"
+      end
+    end
+
     # This method fetch all closed issues and separate them to pull requests and pure issues
     # (pull request is kind of issue in term of GitHub)
-    # @return [Tuple] with issues and pull requests
-    def fetch_issues_and_pull_requests
+    # @return [Tuple] with (issues, pull-requests)
+    def fetch_closed_issues_and_pr
       if @options[:verbose]
         print "Fetching closed issues...\r"
       end
@@ -104,21 +113,18 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
         count_pages = response.count_pages
         response.each_page do |page|
           page_i += PER_PAGE_NUMBER
-          print "Fetching issues... #{page_i}/#{count_pages * PER_PAGE_NUMBER}\r"
+          print_in_same_line("Fetching issues... #{page_i}/#{count_pages * PER_PAGE_NUMBER}")
           issues.concat(page)
           break if @options[:max_issues] && issues.length >= @options[:max_issues]
         end
+        print_empty_line
+        @logger.info "Received issues: #{issues.count}"
+
       rescue
         @logger.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
       end
 
-      print "                                                \r"
-
-      if @options[:verbose]
-        @logger.info "Received issues: #{issues.count}"
-      end
-
-      # remove pull request from issues:
+      # separate arrays of issues and pull requests:
       issues.partition do |x|
         x[:pull_request].nil?
       end
@@ -126,23 +132,33 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
 
     # Fetch all pull requests. We need them to detect :merged_at parameter
     # @return [Array] all pull requests
-    def fetch_pull_requests
+    def fetch_closed_pull_requests
       pull_requests = []
       begin
         response = @github.pull_requests.list @options[:user], @options[:project], state: "closed"
         page_i = 0
+        count_pages = response.count_pages
         response.each_page do |page|
           page_i += PER_PAGE_NUMBER
-          count_pages = response.count_pages
-          print "Fetching merged dates... #{page_i}/#{count_pages * PER_PAGE_NUMBER}\r"
+          log_string = "Fetching merged dates... #{page_i}/#{count_pages * PER_PAGE_NUMBER}"
+          print_in_same_line(log_string)
           pull_requests.concat(page)
         end
+        print_empty_line
       rescue
         @logger.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
       end
 
-      print "                                                   \r"
+      @logger.info "Fetching merged dates: #{pull_requests.count}"
       pull_requests
+    end
+
+    def print_in_same_line(log_string)
+      print log_string + "\r"
+    end
+
+    def print_empty_line
+      print_in_same_line("                                                                       ")
     end
 
     # Fetch event for all issues and add them to :events
@@ -163,7 +179,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
               @logger.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
             end
             issue[:events] = obj.body
-            print "Fetching events for issues and PR: #{i + 1}/#{issues.count}\r"
+            print_in_same_line("Fetching events for issues and PR: #{i + 1}/#{issues.count}")
             i += 1
           end
         end
@@ -172,11 +188,9 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
       end
 
       # to clear line from prev print
-      print "                                                            \r"
+      print_empty_line
 
-      if @options[:verbose]
-        @logger.info "Fetching events for issues and PR: #{i} Done!"
-      end
+      @logger.info "Fetching events for issues and PR: #{i}"
     end
 
     # Try to find tag date in local hash.

@@ -6,8 +6,6 @@
 
 **Merged pull requests:**
 
-- This PR SHOULD NOT appear in change log! [\#6](https://github.com/skywinder/changelog_test/pull/6) ([skywinder](https://github.com/skywinder))
-
 - Add automatically generated change log file. [\#5](https://github.com/skywinder/changelog_test/pull/5) ([skywinder](https://github.com/skywinder))
 
 ## [v0.0.3](https://github.com/skywinder/changelog_test/tree/v0.0.3) (2015-03-04)

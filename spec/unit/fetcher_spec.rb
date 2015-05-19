@@ -1,5 +1,16 @@
+VALID_TOKEN = "0123456789abcdef"
+INVALID_TOKEN = "0000000000000000"
+
+DEFAULT_OPTIONS = { user: "skywinder",
+                    project: "changelog_test" }
+
+def options_with_invalid_token
+  options = DEFAULT_OPTIONS
+  options[:token] = INVALID_TOKEN
+  options
+end
+
 describe GitHubChangelogGenerator::Fetcher do
-  VALID_TOKEN = "0123456789abcdef"
   before(:all) do
     @fetcher = GitHubChangelogGenerator::Fetcher.new
   end
@@ -31,6 +42,18 @@ describe GitHubChangelogGenerator::Fetcher do
       end
       subject { @fetcher.fetch_github_token }
       it { is_expected.to eq(VALID_TOKEN) }
+    end
+  end
+
+  describe "#github_fetch_tags" do
+    context "when wrong token provided" do
+      before do
+        options = options_with_invalid_token
+        @fetcher = GitHubChangelogGenerator::Fetcher.new(options)
+      end
+      it "should raise Unauthorized error" do
+        expect { @fetcher.github_fetch_tags [] }.to raise_error Github::Error::Unauthorized
+      end
     end
   end
 end
