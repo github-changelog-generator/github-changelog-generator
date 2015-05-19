@@ -1,5 +1,29 @@
 # Change Log
 
+## [1.4.1](https://github.com/skywinder/github-changelog-generator/tree/1.4.1) (2015-05-19)
+
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.4.0...1.4.1)
+
+**Implemented enhancements:**
+
+- Trees/Archives with missing change log notes for the current tag. [\#230](https://github.com/skywinder/github-changelog-generator/issues/230)
+
+**Fixed bugs:**
+
+- github\_changelog\_generator.rb:220:in ``': No such file or directory - pwd \(Errno::ENOENT\) [\#237](https://github.com/skywinder/github-changelog-generator/issues/237)
+
+- Doesnot generator changelog [\#235](https://github.com/skywinder/github-changelog-generator/issues/235)
+
+- Exclude closed \(not merged\) PR's from changelog. [\#69](https://github.com/skywinder/github-changelog-generator/issues/69)
+
+**Merged pull requests:**
+
+- Wrap GitHub requests in function check\_github\_response [\#238](https://github.com/skywinder/github-changelog-generator/pull/238) ([skywinder](https://github.com/skywinder))
+
+- Add fetch token tests [\#236](https://github.com/skywinder/github-changelog-generator/pull/236) ([skywinder](https://github.com/skywinder))
+
+- Add future release option [\#231](https://github.com/skywinder/github-changelog-generator/pull/231) ([sildur](https://github.com/sildur))
+
 ## [1.4.0](https://github.com/skywinder/github-changelog-generator/tree/1.4.0) (2015-05-07)
 
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.3.11...1.4.0)
@@ -61,10 +85,6 @@
 ## [1.3.8](https://github.com/skywinder/github-changelog-generator/tree/1.3.8) (2015-03-05)
 
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.3.6...1.3.8)
-
-**Merged pull requests:**
-
-- Fix `git remote` parsing in case, when script running without parameters inside destination directory [\#61](https://github.com/skywinder/github-changelog-generator/pull/61) ([skywinder](https://github.com/skywinder))
 
 ## [1.3.6](https://github.com/skywinder/github-changelog-generator/tree/1.3.6) (2015-03-05)
 
