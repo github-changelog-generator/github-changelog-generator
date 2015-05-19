@@ -81,15 +81,15 @@ module GitHubChangelogGenerator
       count_pages = response.count_pages
       response.each_page do |page|
         page_i += PER_PAGE_NUMBER
-        print "Fetching tags... #{page_i}/#{count_pages * PER_PAGE_NUMBER}\r"
+        print_in_same_line("Fetching tags... #{page_i}/#{count_pages * PER_PAGE_NUMBER}")
         tags.concat(page)
       end
-      print "                               \r"
+      print_empty_line
 
       if tags.count == 0
         @logger.warn "Warning: Can't find any tags in repo.\
 Make sure, that you push tags to remote repo via 'git push --tags'".yellow
-      elsif @options[:verbose]
+      else
         @logger.info "Found #{tags.count} tags"
       end
     end
@@ -113,18 +113,15 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
         count_pages = response.count_pages
         response.each_page do |page|
           page_i += PER_PAGE_NUMBER
-          print "Fetching issues... #{page_i}/#{count_pages * PER_PAGE_NUMBER}\r"
+          print_in_same_line("Fetching issues... #{page_i}/#{count_pages * PER_PAGE_NUMBER}")
           issues.concat(page)
           break if @options[:max_issues] && issues.length >= @options[:max_issues]
         end
+        print_empty_line
+        @logger.info "Received issues: #{issues.count}"
+
       rescue
         @logger.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
-      end
-
-      print "                                                \r"
-
-      if @options[:verbose]
-        @logger.info "Received issues: #{issues.count}"
       end
 
       # remove pull request from issues:
@@ -140,18 +137,28 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
       begin
         response = @github.pull_requests.list @options[:user], @options[:project], state: "closed"
         page_i = 0
+        count_pages = response.count_pages
         response.each_page do |page|
           page_i += PER_PAGE_NUMBER
-          count_pages = response.count_pages
-          print "Fetching merged dates... #{page_i}/#{count_pages * PER_PAGE_NUMBER}\r"
+          log_string = "Fetching merged dates... #{page_i}/#{count_pages * PER_PAGE_NUMBER}"
+          print_in_same_line(log_string)
           pull_requests.concat(page)
         end
+        print_empty_line
       rescue
         @logger.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
       end
 
-      print "                                                   \r"
+      @logger.info "Fetching merged dates: #{pull_requests.count}"
       pull_requests
+    end
+
+    def print_in_same_line(log_string)
+      print log_string + "\r"
+    end
+
+    def print_empty_line
+      print_in_same_line("                                                                       ")
     end
 
     # Fetch event for all issues and add them to :events
@@ -172,7 +179,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
               @logger.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
             end
             issue[:events] = obj.body
-            print "Fetching events for issues and PR: #{i + 1}/#{issues.count}\r"
+            print_in_same_line("Fetching events for issues and PR: #{i + 1}/#{issues.count}")
             i += 1
           end
         end
@@ -181,11 +188,9 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
       end
 
       # to clear line from prev print
-      print "                                                            \r"
+      print_empty_line
 
-      if @options[:verbose]
-        @logger.info "Fetching events for issues and PR: #{i} Done!"
-      end
+      @logger.info "Fetching events for issues and PR: #{i}"
     end
 
     # Try to find tag date in local hash.

@@ -149,10 +149,6 @@ module GitHubChangelogGenerator
         pr[:merged_at] = fetched_pr[:merged_at]
         pull_requests.delete(fetched_pr)
       }
-
-      if @options[:verbose]
-        puts "Fetching merged dates: Done!"
-      end
     end
 
     # Include issues with labels, specified in :include_labels
@@ -279,7 +275,7 @@ module GitHubChangelogGenerator
       threads.each(&:join)
 
       if @options[:verbose]
-        puts "Fetching tags dates: #{i} Done!"
+        puts "Fetching tags dates: #{i}"
       end
     end
 
