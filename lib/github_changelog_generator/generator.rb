@@ -1,5 +1,11 @@
 module GitHubChangelogGenerator
   class Generator
+    # A Generator responsible for all logic, related with change log generation from ready-to-parse issues
+    #
+    # Example:
+    #   generator = GitHubChangelogGenerator::Generator.new
+    #   content = generator.compound_changelog
+
     def initialize(options = nil)
       @options = options
     end
@@ -42,5 +48,7 @@ module GitHubChangelogGenerator
 
       string
     end
+
+    
   end
 end
