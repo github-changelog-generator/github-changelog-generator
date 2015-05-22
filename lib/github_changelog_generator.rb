@@ -161,12 +161,15 @@ module GitHubChangelogGenerator
     # @param [Array] issues to filter
     # @return [Array] filtered array of issues
     def include_issues_by_labels(issues)
-      filtered_issues = @options[:include_labels].nil? ? issues : issues.select { |issue| (issue.labels.map(&:name) & @options[:include_labels]).any? }
+      filtered_issues = @options[:include_labels].nil? ? issues : issues.select do |issue|
+        labels = issue.labels.map(&:name) & @options[:include_labels]
+        (labels).any?
+      end
 
       if @options[:add_issues_wo_labels]
-        issues_wo_labels = issues.select { |issue|
+        issues_wo_labels = issues.select do |issue|
           !issue.labels.map(&:name).any?
-        }
+        end
         filtered_issues |= issues_wo_labels
       end
       filtered_issues
@@ -178,7 +181,8 @@ module GitHubChangelogGenerator
     def exclude_issues_by_labels(issues)
       unless @options[:exclude_labels].nil?
         issues = issues.select { |issue|
-          !(issue.labels.map(&:name) & @options[:exclude_labels]).any?
+          var = issue.labels.map(&:name) & @options[:exclude_labels]
+          !(var).any?
         }
       end
       issues
@@ -405,28 +409,7 @@ module GitHubChangelogGenerator
 
       if @options[:issues]
         # Generate issues:
-        issues_a = []
-        enhancement_a = []
-        bugs_a = []
-
-        issues.each { |dict|
-          added = false
-          dict.labels.each { |label|
-            if label.name == "bug"
-              bugs_a.push dict
-              added = true
-              next
-            end
-            if label.name == "enhancement"
-              enhancement_a.push dict
-              added = true
-              next
-            end
-          }
-          unless added
-            issues_a.push dict
-          end
-        }
+        bugs_a, enhancement_a, issues_a = parse_by_sections(issues)
 
         log += generate_sub_section(enhancement_a, @options[:enhancement_prefix])
         log += generate_sub_section(bugs_a, @options[:bug_prefix])
@@ -439,6 +422,37 @@ module GitHubChangelogGenerator
       end
 
       log
+    end
+
+    # This method sort issues by types
+    # (bugs, features, or just closed issues) by labels
+    #
+    # @param [Array] issues
+    # @return [Array] tuple of filtered arrays: (Bugs, Enhancements Issues)
+    def parse_by_sections(issues)
+      issues_a = []
+      enhancement_a = []
+      bugs_a = []
+
+      issues.each { |dict|
+        added = false
+        dict.labels.each { |label|
+          if label.name == "bug"
+            bugs_a.push dict
+            added = true
+            next
+          end
+          if label.name == "enhancement"
+            enhancement_a.push dict
+            added = true
+            next
+          end
+        }
+        unless added
+          issues_a.push dict
+        end
+      }
+      [bugs_a, enhancement_a, issues_a]
     end
 
     # @param [Array] issues List of issues on sub-section
