@@ -28,6 +28,10 @@ module GitHubChangelogGenerator
       title_with_number
     end
 
+    # Encapsulate characters to make markdown look as expected.
+    #
+    # @param [String] string
+    # @return [String] encapsulated input string
     def encapsulate_string(string)
       string.gsub! '\\', '\\\\'
 
