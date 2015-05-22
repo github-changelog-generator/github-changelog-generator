@@ -13,7 +13,6 @@ require_relative "github_changelog_generator/reader"
 module GitHubChangelogGenerator
   # Main class and entry point for this script.
   class ChangelogGenerator
-
     # Class, responsible for whole change log generation cycle
     # @return initialised instance of ChangelogGenerator
     def initialize
@@ -31,7 +30,6 @@ module GitHubChangelogGenerator
       puts "Done!"
       puts "Generated log placed in #{Dir.pwd}/#{output_filename}"
     end
-
   end
 
   if __FILE__ == $PROGRAM_NAME

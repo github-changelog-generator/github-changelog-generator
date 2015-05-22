@@ -6,15 +6,13 @@ module GitHubChangelogGenerator
     def generate_sub_section(issues, prefix)
       log = ""
 
-      if options[:simple_list] != true && issues.any?
-        log += "#{prefix}\n\n"
-      end
+      log += "#{prefix}\n\n" if options[:simple_list] != true && issues.any?
 
       if issues.any?
-        issues.each { |issue|
+        issues.each do |issue|
           merge_string = get_string_for_issue(issue)
           log += "- #{merge_string}\n\n"
-        }
+        end
       end
       log
     end
@@ -77,34 +75,27 @@ module GitHubChangelogGenerator
     def generate_log_for_all_tags
       fetch_tags_dates
 
-      if @options[:verbose]
-        puts "Sorting tags..."
-      end
+      puts "Sorting tags..." if @options[:verbose]
 
       @all_tags.sort_by! { |x| @fetcher.get_time_of_tag(x) }.reverse!
 
-      if @options[:verbose]
-        puts "Generating log..."
-      end
+      puts "Generating log..." if @options[:verbose]
 
       log = ""
 
       if @options[:unreleased] && @all_tags.count != 0
         unreleased_log = generate_log_between_tags(all_tags[0], nil)
-        if unreleased_log
-          log += unreleased_log
-        end
+        log += unreleased_log if unreleased_log
       end
 
-      (1...all_tags.size).each { |index|
+      (1...all_tags.size).each do |index|
         log += generate_log_between_tags(all_tags[index], all_tags[index - 1])
-      }
+      end
       if @all_tags.count != 0
         log += generate_log_between_tags(nil, all_tags.last)
       end
 
       log
     end
-
   end
 end

@@ -80,7 +80,7 @@ module GitHubChangelogGenerator
 
       if @options[:unreleased_only]
         log += generate_log_between_tags(all_tags[0], nil)
-      elsif @options[:tag1] and @options[:tag2]
+      elsif @options[:tag1] && @options[:tag2]
         tag1 = @options[:tag1]
         tag2 = @options[:tag2]
         tags_strings = []
@@ -110,31 +110,27 @@ module GitHubChangelogGenerator
 
     # Async fetching of all tags dates
     def fetch_tags_dates
-      if @options[:verbose]
-        print "Fetching tag dates...\r"
-      end
+      print "Fetching tag dates...\r" if @options[:verbose]
 
       # Async fetching tags:
       threads = []
       i = 0
       all = @all_tags.count
-      @all_tags.each { |tag|
-        threads << Thread.new {
+      @all_tags.each do |tag|
+        threads << Thread.new do
           @fetcher.get_time_of_tag(tag)
           if @options[:verbose]
             print "Fetching tags dates: #{i + 1}/#{all}\r"
             i += 1
           end
-        }
-      }
+        end
+      end
 
       print "                                 \r"
 
       threads.each(&:join)
 
-      if @options[:verbose]
-        puts "Fetching tags dates: #{i}"
-      end
+      puts "Fetching tags dates: #{i}" if @options[:verbose]
     end
 
     # Return tags after filtering tags in lists provided by option: --between-tags & --exclude-tags
@@ -155,28 +151,24 @@ module GitHubChangelogGenerator
     end
 
     def detect_actual_closed_dates
-      if @options[:verbose]
-        print "Fetching closed dates for issues...\r"
-      end
+      print "Fetching closed dates for issues...\r" if @options[:verbose]
 
       threads = []
 
-      @issues.each { |issue|
-        threads << Thread.new {
+      @issues.each do |issue|
+        threads << Thread.new do
           find_closed_date_by_commit(issue)
-        }
-      }
+        end
+      end
 
-      @pull_requests.each { |pull_request|
-        threads << Thread.new {
+      @pull_requests.each do |pull_request|
+        threads << Thread.new do
           find_closed_date_by_commit(pull_request)
-        }
-      }
+        end
+      end
       threads.each(&:join)
 
-      if @options[:verbose]
-        puts "Fetching closed dates for issues: Done!"
-      end
+      puts "Fetching closed dates for issues: Done!" if @options[:verbose]
     end
 
     # Fill :actual_date parameter of specified issue by closed date of the commit, it it was closed by commit.
@@ -186,7 +178,7 @@ module GitHubChangelogGenerator
         # if it's PR -> then find "merged event", in case of usual issue -> fond closed date
         compare_string = issue[:merged_at].nil? ? "closed" : "merged"
         # reverse! - to find latest closed event. (event goes in date order)
-        issue["events"].reverse!.each { |event|
+        issue["events"].reverse!.each do |event|
           if event[:event].eql? compare_string
             if event[:commit_id].nil?
               issue[:actual_date] = issue[:closed_at]
@@ -201,7 +193,7 @@ module GitHubChangelogGenerator
             end
             break
           end
-        }
+        end
       end
       # TODO: assert issues, that remain without 'actual_date' hash for some reason.
     end
@@ -233,18 +225,16 @@ module GitHubChangelogGenerator
     # :merged_at - is a date, when issue PR was merged.
     # More correct to use merged date, rather than closed date.
     def filter_merged_pull_requests
-      if @options[:verbose]
-        print "Fetching merged dates...\r"
-      end
+      print "Fetching merged dates...\r" if @options[:verbose]
       pull_requests = @fetcher.fetch_closed_pull_requests
 
-      @pull_requests.each { |pr|
-        fetched_pr = pull_requests.find { |fpr|
+      @pull_requests.each do |pr|
+        fetched_pr = pull_requests.find do |fpr|
           fpr.number == pr.number
-        }
+        end
         pr[:merged_at] = fetched_pr[:merged_at]
         pull_requests.delete(fetched_pr)
-      }
+      end
 
       @pull_requests.select! do |pr|
         !pr[:merged_at].nil?
@@ -274,16 +264,16 @@ module GitHubChangelogGenerator
     # @return [Array] filtered array
     def exclude_issues_by_labels(issues)
       unless @options[:exclude_labels].nil?
-        issues = issues.select { |issue|
+        issues = issues.select do |issue|
           var = issue.labels.map(&:name) & @options[:exclude_labels]
           !(var).any?
-        }
+        end
       end
       issues
     end
 
     def filter_by_milestone(filtered_issues, newer_tag_name, src_array)
-      filtered_issues.select! { |issue|
+      filtered_issues.select! do |issue|
         # leave issues without milestones
         if issue.milestone.nil?
           true
@@ -291,18 +281,18 @@ module GitHubChangelogGenerator
           # check, that this milestone in tag list:
           @all_tags.find { |tag| tag.name == issue.milestone.title }.nil?
         end
-      }
+      end
       unless newer_tag_name.nil?
 
         # add missed issues (according milestones)
-        issues_to_add = src_array.select { |issue|
+        issues_to_add = src_array.select do |issue|
           if issue.milestone.nil?
             false
           else
             # check, that this milestone in tag list:
-            milestone_is_tag = @all_tags.find { |tag|
+            milestone_is_tag = @all_tags.find do |tag|
               tag.name == issue.milestone.title
-            }
+            end
 
             if milestone_is_tag.nil?
               false
@@ -310,7 +300,7 @@ module GitHubChangelogGenerator
               issue.milestone.title == newer_tag_name
             end
           end
-        }
+        end
 
         filtered_issues |= issues_to_add
       end
@@ -329,7 +319,7 @@ module GitHubChangelogGenerator
       newer_tag_time = newer_tag && @fetcher.get_time_of_tag(newer_tag)
       older_tag_time = older_tag && @fetcher.get_time_of_tag(older_tag)
 
-      array.select { |req|
+      array.select do |req|
         if req[hash_key]
           t = Time.parse(req[hash_key]).utc
 
@@ -351,7 +341,7 @@ module GitHubChangelogGenerator
         else
           false
         end
-      }
+      end
     end
 
     # Generates log for section with header and body
@@ -403,9 +393,9 @@ module GitHubChangelogGenerator
       enhancement_a = []
       bugs_a = []
 
-      issues.each { |dict|
+      issues.each do |dict|
         added = false
-        dict.labels.each { |label|
+        dict.labels.each do |label|
           if label.name == "bug"
             bugs_a.push dict
             added = true
@@ -416,11 +406,9 @@ module GitHubChangelogGenerator
             added = true
             next
           end
-        }
-        unless added
-          issues_a.push dict
         end
-      }
+        issues_a.push dict unless added
+      end
       [bugs_a, enhancement_a, issues_a]
     end
 
@@ -431,12 +419,9 @@ module GitHubChangelogGenerator
 
       filtered_issues = exclude_issues_by_labels(filtered_issues)
 
-      if @options[:verbose]
-        puts "Filtered issues: #{filtered_issues.count}"
-      end
+      puts "Filtered issues: #{filtered_issues.count}" if @options[:verbose]
 
       filtered_issues
     end
-
   end
 end

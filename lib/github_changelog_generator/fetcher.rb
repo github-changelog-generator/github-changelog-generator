@@ -41,9 +41,7 @@ module GitHubChangelogGenerator
     def fetch_github_token
       env_var = @options[:token] ? @options[:token] : (ENV.fetch CHANGELOG_GITHUB_TOKEN, nil)
 
-      unless env_var
-        @logger.warn NO_TOKEN_PROVIDED.yellow
-      end
+      @logger.warn NO_TOKEN_PROVIDED.yellow unless env_var
 
       env_var
     end
@@ -51,9 +49,7 @@ module GitHubChangelogGenerator
     # Fetch all tags from repo
     # @return [Array] array of tags
     def get_all_tags
-      if @options[:verbose]
-        print "Fetching tags...\r"
-      end
+      print "Fetching tags...\r" if @options[:verbose]
 
       tags = []
 
@@ -98,9 +94,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
     # (pull request is kind of issue in term of GitHub)
     # @return [Tuple] with (issues, pull-requests)
     def fetch_closed_issues_and_pr
-      if @options[:verbose]
-        print "Fetching closed issues...\r"
-      end
+      print "Fetching closed issues...\r" if @options[:verbose]
       issues = []
 
       begin
