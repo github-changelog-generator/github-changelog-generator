@@ -86,5 +86,40 @@ module GitHubChangelogGenerator
     end
 
 
+    # The full cycle of generation for whole project
+    # @return [String] The complete change log
+    def generate_log_for_all_tags
+      fetch_tags_dates
+
+      if @options[:verbose]
+        puts "Sorting tags..."
+      end
+
+      @all_tags.sort_by! { |x| @fetcher.get_time_of_tag(x) }.reverse!
+
+      if @options[:verbose]
+        puts "Generating log..."
+      end
+
+      log = ""
+
+      if @options[:unreleased] && @all_tags.count != 0
+        unreleased_log = generate_log_between_tags(all_tags[0], nil)
+        if unreleased_log
+          log += unreleased_log
+        end
+      end
+
+      (1...all_tags.size).each { |index|
+        log += generate_log_between_tags(all_tags[index], all_tags[index - 1])
+      }
+      if @all_tags.count != 0
+        log += generate_log_between_tags(nil, all_tags.last)
+      end
+
+      log
+    end
+
+
   end
 end

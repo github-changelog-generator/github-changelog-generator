@@ -43,6 +43,48 @@ module GitHubChangelogGenerator
       detect_actual_closed_dates
     end
 
+
+    # The entry point of this script to generate change log
+    # @raise (ChangelogGeneratorError) Is thrown when one of specified tags was not found in list of tags.
+    def run
+      log = @generator.compound_changelog
+
+      output_filename = "#{@options[:output]}"
+      File.open(output_filename, "w") { |file| file.write(log) }
+      puts "Done!"
+      puts "Generated log placed in #{Dir.pwd}/#{output_filename}"
+    end
+
+    # Async fetching of all tags dates
+    def fetch_tags_dates
+      if @options[:verbose]
+        print "Fetching tag dates...\r"
+      end
+
+      # Async fetching tags:
+      threads = []
+      i = 0
+      all = @all_tags.count
+      @all_tags.each { |tag|
+        threads << Thread.new {
+          @fetcher.get_time_of_tag(tag)
+          if @options[:verbose]
+            print "Fetching tags dates: #{i + 1}/#{all}\r"
+            i += 1
+          end
+        }
+      }
+
+      print "                                 \r"
+
+      threads.each(&:join)
+
+      if @options[:verbose]
+        puts "Fetching tags dates: #{i}"
+      end
+    end
+
+
     # Return tags after filtering tags in lists provided by option: --between-tags & --exclude-tags
     #
     # @return [Array]
@@ -188,79 +230,7 @@ module GitHubChangelogGenerator
       issues
     end
 
-    # The entry point of this script to generate change log
-    # @raise (ChangelogGeneratorError) Is thrown when one of specified tags was not found in list of tags.
-    def run
-      log = @generator.compound_changelog
 
-      output_filename = "#{@options[:output]}"
-      File.open(output_filename, "w") { |file| file.write(log) }
-      puts "Done!"
-      puts "Generated log placed in #{Dir.pwd}/#{output_filename}"
-    end
-
-    # The full cycle of generation for whole project
-    # @return [String] The complete change log
-    def generate_log_for_all_tags
-      fetch_tags_dates
-
-      if @options[:verbose]
-        puts "Sorting tags..."
-      end
-
-      @all_tags.sort_by! { |x| @fetcher.get_time_of_tag(x) }.reverse!
-
-      if @options[:verbose]
-        puts "Generating log..."
-      end
-
-      log = ""
-
-      if @options[:unreleased] && @all_tags.count != 0
-        unreleased_log = generate_log_between_tags(all_tags[0], nil)
-        if unreleased_log
-          log += unreleased_log
-        end
-      end
-
-      (1...all_tags.size).each { |index|
-        log += generate_log_between_tags(all_tags[index], all_tags[index - 1])
-      }
-      if @all_tags.count != 0
-        log += generate_log_between_tags(nil, all_tags.last)
-      end
-
-      log
-    end
-
-    # Async fetching of all tags dates
-    def fetch_tags_dates
-      if @options[:verbose]
-        print "Fetching tag dates...\r"
-      end
-
-      # Async fetching tags:
-      threads = []
-      i = 0
-      all = @all_tags.count
-      @all_tags.each { |tag|
-        threads << Thread.new {
-          @fetcher.get_time_of_tag(tag)
-          if @options[:verbose]
-            print "Fetching tags dates: #{i + 1}/#{all}\r"
-            i += 1
-          end
-        }
-      }
-
-      print "                                 \r"
-
-      threads.each(&:join)
-
-      if @options[:verbose]
-        puts "Fetching tags dates: #{i}"
-      end
-    end
 
     # Generate log only between 2 specified tags
     # @param [String] older_tag all issues before this tag date will be excluded. May be nil, if it's first tag
