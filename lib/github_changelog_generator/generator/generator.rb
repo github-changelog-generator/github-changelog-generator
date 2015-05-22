@@ -20,18 +20,35 @@ module GitHubChangelogGenerator
       @options = options
 
       @fetcher = GitHubChangelogGenerator::Fetcher.new @options
+
+      fetch_tags
+
+      fetch_issues_and_pr
+    end
+
+    def fetch_issues_and_pr
+      issues, pull_requests = @fetcher.fetch_closed_issues_and_pr
+
+      @pull_requests = @options[:pulls] ? get_filtered_pull_requests(pull_requests) : []
+
+      @issues = @options[:issues] ? get_filtered_issues(issues) : []
+
+      fetch_events_for_issues_and_pr
+      detect_actual_closed_dates(@issues + @pull_requests)
+    end
+
+    def fetch_tags
       # @all_tags = get_filtered_tags
       @all_tags = @fetcher.get_all_tags
 
-      # TODO: refactor this double asssign of @issues and @pull_requests and move all logic in one method
-      @issues, @pull_requests = @fetcher.fetch_closed_issues_and_pr
+      fetch_tags_dates
+      sort_tags_by_date
+    end
 
-      @pull_requests = @options[:pulls] ? get_filtered_pull_requests : []
-
-      @issues = @options[:issues] ? get_filtered_issues : []
-
-      fetch_event_for_issues_and_pr
-      detect_actual_closed_dates
+    # Sort all tags by date
+    def sort_tags_by_date
+      puts "Sorting tags..." if @options[:verbose]
+      @all_tags.sort_by! { |x| @fetcher.get_time_of_tag(x) }.reverse!
     end
 
     # Encapsulate characters to make markdown look as expected.

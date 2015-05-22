@@ -2,7 +2,7 @@ module GitHubChangelogGenerator
   class Generator
     # Fetch event for issues and pull requests
     # @return [Array] array of fetched issues
-    def fetch_event_for_issues_and_pr
+    def fetch_events_for_issues_and_pr
       if @options[:verbose]
         print "Fetching events for issues and PR: 0/#{@issues.count + @pull_requests.count}\r"
       end
@@ -37,28 +37,24 @@ module GitHubChangelogGenerator
     end
 
     # Find correct closed dates, if issues was closed by commits
-    def detect_actual_closed_dates
+    def detect_actual_closed_dates(issues)
       print "Fetching closed dates for issues...\r" if @options[:verbose]
 
+      # TODO: implement async fetching with slice!
       threads = []
 
-      @issues.each do |issue|
+      issues.each do |issue|
         threads << Thread.new do
           find_closed_date_by_commit(issue)
         end
       end
 
-      @pull_requests.each do |pull_request|
-        threads << Thread.new do
-          find_closed_date_by_commit(pull_request)
-        end
-      end
       threads.each(&:join)
 
       puts "Fetching closed dates for issues: Done!" if @options[:verbose]
     end
 
-    # Fill :actual_date parameter of specified issue by closed date of the commit, it it was closed by commit.
+    # Fill :actual_date parameter of specified issue by closed date of the commit, if it was closed by commit.
     # @param [Hash] issue
     def find_closed_date_by_commit(issue)
       unless issue["events"].nil?
@@ -67,22 +63,30 @@ module GitHubChangelogGenerator
         # reverse! - to find latest closed event. (event goes in date order)
         issue["events"].reverse!.each do |event|
           if event[:event].eql? compare_string
-            if event[:commit_id].nil?
-              issue[:actual_date] = issue[:closed_at]
-            else
-              begin
-                commit = @fetcher.fetch_commit(event)
-                issue[:actual_date] = commit[:author][:date]
-              rescue
-                puts "Warning: Can't fetch commit #{event[:commit_id]}. It is probably referenced from another repo.".yellow
-                issue[:actual_date] = issue[:closed_at]
-              end
-            end
+            set_date_from_event(event, issue)
             break
           end
         end
       end
       # TODO: assert issues, that remain without 'actual_date' hash for some reason.
+    end
+
+    # Set closed date from this issue
+    #
+    # @param [Hash] event
+    # @param [Hash] issue
+    def set_date_from_event(event, issue)
+      if event[:commit_id].nil?
+        issue[:actual_date] = issue[:closed_at]
+      else
+        begin
+          commit = @fetcher.fetch_commit(event)
+          issue[:actual_date] = commit[:author][:date]
+        rescue
+          puts "Warning: Can't fetch commit #{event[:commit_id]}. It is probably referenced from another repo.".yellow
+          issue[:actual_date] = issue[:closed_at]
+        end
+      end
     end
   end
 end

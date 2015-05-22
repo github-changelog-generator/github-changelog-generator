@@ -10,6 +10,7 @@ require_relative "github_changelog_generator/generator/generator"
 require_relative "github_changelog_generator/version"
 require_relative "github_changelog_generator/reader"
 
+# The main module, where placed all classes (now, at least)
 module GitHubChangelogGenerator
   # Main class and entry point for this script.
   class ChangelogGenerator

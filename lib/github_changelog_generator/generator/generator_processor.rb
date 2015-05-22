@@ -85,45 +85,6 @@ module GitHubChangelogGenerator
       end
     end
 
-    # This method fetches missing params for PR and filter them by specified options
-    # It include add all PR's with labels from @options[:include_labels] array
-    # And exclude all from :exclude_labels array.
-    # @return [Array] filtered PR's
-    def get_filtered_pull_requests
-      filter_merged_pull_requests
-
-      filtered_pull_requests = include_issues_by_labels(@pull_requests)
-
-      filtered_pull_requests = exclude_issues_by_labels(filtered_pull_requests)
-
-      if @options[:verbose]
-        puts "Filtered pull requests: #{filtered_pull_requests.count}"
-      end
-
-      filtered_pull_requests
-    end
-
-    # This method filter only merged PR and
-    # fetch missing required attributes for pull requests
-    # :merged_at - is a date, when issue PR was merged.
-    # More correct to use merged date, rather than closed date.
-    def filter_merged_pull_requests
-      print "Fetching merged dates...\r" if @options[:verbose]
-      pull_requests = @fetcher.fetch_closed_pull_requests
-
-      @pull_requests.each do |pr|
-        fetched_pr = pull_requests.find do |fpr|
-          fpr.number == pr.number
-        end
-        pr[:merged_at] = fetched_pr[:merged_at]
-        pull_requests.delete(fetched_pr)
-      end
-
-      @pull_requests.select! do |pr|
-        !pr[:merged_at].nil?
-      end
-    end
-
     # Include issues with labels, specified in :include_labels
     # @param [Array] issues to filter
     # @return [Array] filtered array of issues
@@ -159,16 +120,55 @@ module GitHubChangelogGenerator
       filtered_tags
     end
 
+    # General filtered function
+    #
+    # @param [Array] all_issues
+    # @return [Array] filtered issues
+    def filter_array_by_labels(all_issues)
+      filtered_issues = include_issues_by_labels(all_issues)
+      exclude_issues_by_labels(filtered_issues)
+    end
+
     # Filter issues according labels
     # @return [Array] Filtered issues
-    def get_filtered_issues
-      filtered_issues = include_issues_by_labels(@issues)
+    def get_filtered_issues(issues)
+      issues = filter_array_by_labels(issues)
+      puts "Filtered issues: #{issues.count}" if @options[:verbose]
+      issues
+    end
 
-      filtered_issues = exclude_issues_by_labels(filtered_issues)
+    # This method fetches missing params for PR and filter them by specified options
+    # It include add all PR's with labels from @options[:include_labels] array
+    # And exclude all from :exclude_labels array.
+    # @return [Array] filtered PR's
+    def get_filtered_pull_requests(pull_requests)
+      pull_requests = filter_array_by_labels(pull_requests)
+      pull_requests = filter_merged_pull_requests(pull_requests)
+      puts "Filtered pull requests: #{pull_requests.count}" if @options[:verbose]
+      pull_requests
+    end
 
-      puts "Filtered issues: #{filtered_issues.count}" if @options[:verbose]
+    # This method filter only merged PR and
+    # fetch missing required attributes for pull requests
+    # :merged_at - is a date, when issue PR was merged.
+    # More correct to use merged date, rather than closed date.
+    def filter_merged_pull_requests(pull_requests)
+      print "Fetching merged dates...\r" if @options[:verbose]
+      closed_pull_requests = @fetcher.fetch_closed_pull_requests
 
-      filtered_issues
+      pull_requests.each do |pr|
+        fetched_pr = closed_pull_requests.find do |fpr|
+          fpr.number == pr.number
+        end
+        pr[:merged_at] = fetched_pr[:merged_at]
+        closed_pull_requests.delete(fetched_pr)
+      end
+
+      pull_requests.select! do |pr|
+        !pr[:merged_at].nil?
+      end
+
+      pull_requests
     end
   end
 end
