@@ -296,12 +296,12 @@ module GitHubChangelogGenerator
       older_tag_name = older_tag.nil? ? nil : older_tag["name"]
 
       if @options[:filter_issues_by_milestone]
-        # delete excess irrelevant issues (according milestones)
+        # delete excess irrelevant issues (according milestones). Issue #22.
         filtered_issues = filter_by_milestone(filtered_issues, newer_tag_name, @issues)
         filtered_pull_requests = filter_by_milestone(filtered_pull_requests, newer_tag_name, @pull_requests)
       end
 
-      if filtered_issues.empty? && filtered_pull_requests.empty? && newer_tag.nil?
+      if newer_tag.nil? && filtered_issues.empty? && filtered_pull_requests.empty?
         # do not generate empty unreleased section
         return ""
       end
