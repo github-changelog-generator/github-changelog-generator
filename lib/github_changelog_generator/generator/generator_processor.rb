@@ -1,101 +1,174 @@
 module GitHubChangelogGenerator
   class Generator
-    # @param [Array] issues List of issues on sub-section
-    # @param [String] prefix Nae of sub-section
-    # @return [String] Generate ready-to-go sub-section
-    def generate_sub_section(issues, prefix)
-      log = ""
-
-      log += "#{prefix}\n\n" if options[:simple_list] != true && issues.any?
-
-      if issues.any?
-        issues.each do |issue|
-          merge_string = get_string_for_issue(issue)
-          log += "- #{merge_string}\n\n"
+    # delete all labels with labels from @options[:exclude_labels] array
+    # @param [Array] issues
+    # @return [Array] filtered array
+    def exclude_issues_by_labels(issues)
+      unless @options[:exclude_labels].nil?
+        issues = issues.select do |issue|
+          var = issue.labels.map(&:name) & @options[:exclude_labels]
+          !(var).any?
         end
       end
-      log
+      issues
     end
 
-    # It generate one header for section with specific parameters.
-    #
-    # @param [String] newer_tag_name - name of newer tag
-    # @param [String] newer_tag_link - used for links. Could be same as #newer_tag_name or some specific value, like HEAD
-    # @param [Time] newer_tag_time - time, when newer tag created
-    # @param [String] older_tag_link - tag name, used for links.
-    # @param [String] project_url - url for current project.
-    # @return [String] - Generate one ready-to-add section.
-    def generate_header(newer_tag_name, newer_tag_link, newer_tag_time, older_tag_link, project_url)
-      log = ""
-
-      # Generate date string:
-      time_string = newer_tag_time.strftime @options[:dateformat]
-
-      # Generate tag name and link
-      if newer_tag_name.equal? @options[:unreleased_label]
-        log += "## [#{newer_tag_name}](#{project_url}/tree/#{newer_tag_link})\n\n"
-      else
-        log += "## [#{newer_tag_name}](#{project_url}/tree/#{newer_tag_link}) (#{time_string})\n\n"
+    def filter_by_milestone(filtered_issues, newer_tag_name, src_array)
+      filtered_issues.select! do |issue|
+        # leave issues without milestones
+        if issue.milestone.nil?
+          true
+        else
+          # check, that this milestone in tag list:
+          @all_tags.find { |tag| tag.name == issue.milestone.title }.nil?
+        end
       end
+      unless newer_tag_name.nil?
 
-      if @options[:compare_link] && older_tag_link
-        # Generate compare link
-        log += "[Full Changelog](#{project_url}/compare/#{older_tag_link}...#{newer_tag_link})\n\n"
+        # add missed issues (according milestones)
+        issues_to_add = src_array.select do |issue|
+          if issue.milestone.nil?
+            false
+          else
+            # check, that this milestone in tag list:
+            milestone_is_tag = @all_tags.find do |tag|
+              tag.name == issue.milestone.title
+            end
+
+            if milestone_is_tag.nil?
+              false
+            else
+              issue.milestone.title == newer_tag_name
+            end
+          end
+        end
+
+        filtered_issues |= issues_to_add
       end
-
-      log
+      filtered_issues
     end
 
-    # Generate log only between 2 specified tags
+    # Method filter issues, that belong only specified tag range
+    # @param [Array] array of issues to filter
+    # @param [Symbol] hash_key key of date value default is :actual_date
     # @param [String] older_tag all issues before this tag date will be excluded. May be nil, if it's first tag
     # @param [String] newer_tag all issue after this tag will be excluded. May be nil for unreleased section
-    def generate_log_between_tags(older_tag, newer_tag)
-      filtered_pull_requests = delete_by_time(@pull_requests, :actual_date, older_tag, newer_tag)
-      filtered_issues = delete_by_time(@issues, :actual_date, older_tag, newer_tag)
+    # @return [Array] filtered issues
+    def delete_by_time(array, hash_key = :actual_date, older_tag = nil, newer_tag = nil)
+      fail ChangelogGeneratorError, "At least one of the tags should be not nil!".red if older_tag.nil? && newer_tag.nil?
 
-      newer_tag_name = newer_tag.nil? ? nil : newer_tag["name"]
-      older_tag_name = older_tag.nil? ? nil : older_tag["name"]
+      newer_tag_time = newer_tag && @fetcher.get_time_of_tag(newer_tag)
+      older_tag_time = older_tag && @fetcher.get_time_of_tag(older_tag)
 
-      if @options[:filter_issues_by_milestone]
-        # delete excess irrelevant issues (according milestones). Issue #22.
-        filtered_issues = filter_by_milestone(filtered_issues, newer_tag_name, @issues)
-        filtered_pull_requests = filter_by_milestone(filtered_pull_requests, newer_tag_name, @pull_requests)
+      array.select do |req|
+        if req[hash_key]
+          t = Time.parse(req[hash_key]).utc
+
+          if older_tag_time.nil?
+            tag_in_range_old = true
+          else
+            tag_in_range_old = t > older_tag_time
+          end
+
+          if newer_tag_time.nil?
+            tag_in_range_new = true
+          else
+            tag_in_range_new = t <= newer_tag_time
+          end
+
+          tag_in_range = (tag_in_range_old) && (tag_in_range_new)
+
+          tag_in_range
+        else
+          false
+        end
       end
-
-      if newer_tag.nil? && filtered_issues.empty? && filtered_pull_requests.empty?
-        # do not generate empty unreleased section
-        return ""
-      end
-
-      create_log(filtered_pull_requests, filtered_issues, newer_tag, older_tag_name)
     end
 
-    # The full cycle of generation for whole project
-    # @return [String] The complete change log
-    def generate_log_for_all_tags
-      fetch_tags_dates
+    # This method fetches missing params for PR and filter them by specified options
+    # It include add all PR's with labels from @options[:include_labels] array
+    # And exclude all from :exclude_labels array.
+    # @return [Array] filtered PR's
+    def get_filtered_pull_requests
+      filter_merged_pull_requests
 
-      puts "Sorting tags..." if @options[:verbose]
+      filtered_pull_requests = include_issues_by_labels(@pull_requests)
 
-      @all_tags.sort_by! { |x| @fetcher.get_time_of_tag(x) }.reverse!
+      filtered_pull_requests = exclude_issues_by_labels(filtered_pull_requests)
 
-      puts "Generating log..." if @options[:verbose]
-
-      log = ""
-
-      if @options[:unreleased] && @all_tags.count != 0
-        unreleased_log = generate_log_between_tags(all_tags[0], nil)
-        log += unreleased_log if unreleased_log
+      if @options[:verbose]
+        puts "Filtered pull requests: #{filtered_pull_requests.count}"
       end
 
-      (1...all_tags.size).each do |index|
-        log += generate_log_between_tags(all_tags[index], all_tags[index - 1])
-      end
-      if @all_tags.count != 0
-        log += generate_log_between_tags(nil, all_tags.last)
+      filtered_pull_requests
+    end
+
+    # This method filter only merged PR and
+    # fetch missing required attributes for pull requests
+    # :merged_at - is a date, when issue PR was merged.
+    # More correct to use merged date, rather than closed date.
+    def filter_merged_pull_requests
+      print "Fetching merged dates...\r" if @options[:verbose]
+      pull_requests = @fetcher.fetch_closed_pull_requests
+
+      @pull_requests.each do |pr|
+        fetched_pr = pull_requests.find do |fpr|
+          fpr.number == pr.number
+        end
+        pr[:merged_at] = fetched_pr[:merged_at]
+        pull_requests.delete(fetched_pr)
       end
 
-      log
+      @pull_requests.select! do |pr|
+        !pr[:merged_at].nil?
+      end
+    end
+
+    # Include issues with labels, specified in :include_labels
+    # @param [Array] issues to filter
+    # @return [Array] filtered array of issues
+    def include_issues_by_labels(issues)
+      filtered_issues = @options[:include_labels].nil? ? issues : issues.select do |issue|
+        labels = issue.labels.map(&:name) & @options[:include_labels]
+        (labels).any?
+      end
+
+      if @options[:add_issues_wo_labels]
+        issues_wo_labels = issues.select do |issue|
+          !issue.labels.map(&:name).any?
+        end
+        filtered_issues |= issues_wo_labels
+      end
+      filtered_issues
+    end
+
+    # Return tags after filtering tags in lists provided by option: --between-tags & --exclude-tags
+    #
+    # @return [Array]
+    def get_filtered_tags
+      all_tags = @fetcher.get_all_tags
+      filtered_tags = []
+      if @options[:between_tags]
+        @options[:between_tags].each do |tag|
+          unless all_tags.include? tag
+            puts "Warning: can't find tag #{tag}, specified with --between-tags option.".yellow
+          end
+        end
+        filtered_tags = all_tags.select { |tag| @options[:between_tags].include? tag }
+      end
+      filtered_tags
+    end
+
+    # Filter issues according labels
+    # @return [Array] Filtered issues
+    def get_filtered_issues
+      filtered_issues = include_issues_by_labels(@issues)
+
+      filtered_issues = exclude_issues_by_labels(filtered_issues)
+
+      puts "Filtered issues: #{filtered_issues.count}" if @options[:verbose]
+
+      filtered_issues
     end
   end
 end
