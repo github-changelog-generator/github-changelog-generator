@@ -41,5 +41,20 @@ describe GitHubChangelogGenerator::Parser do
       it { is_expected.to be_a(Array) }
       it { is_expected.to match_array([nil, nil]) }
     end
+    context "when site is nil" do
+      subject { GitHubChangelogGenerator::Parser.user_project_from_option("skywinder/ActionSheetPicker-3.0", nil, nil) }
+      it { is_expected.to be_a(Array) }
+      it { is_expected.to match_array(["skywinder", "ActionSheetPicker-3.0"]) }
+    end
+    context "when site is valid" do
+      subject { GitHubChangelogGenerator::Parser.user_project_from_option("skywinder/ActionSheetPicker-3.0", nil, "https://codeclimate.com") }
+      it { is_expected.to be_a(Array) }
+      it { is_expected.to match_array(["skywinder", "ActionSheetPicker-3.0"]) }
+    end
+    context "when second arg is not nil" do
+      subject { GitHubChangelogGenerator::Parser.user_project_from_option("skywinder/ActionSheetPicker-3.0", "blah", nil) }
+      it { is_expected.to be_a(Array) }
+      it { is_expected.to match_array([nil, nil]) }
+    end
   end
 end
