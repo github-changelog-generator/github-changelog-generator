@@ -76,19 +76,11 @@ module GitHubChangelogGenerator
 
       array.select do |req|
         if req[hash_key]
-          t = Time.parse(req[hash_key]).utc
+          time = Time.parse(req[hash_key]).utc
 
-          if older_tag_time.nil?
-            tag_in_range_old = true
-          else
-            tag_in_range_old = t > older_tag_time
-          end
+          tag_in_range_old = tag_newer_old_tag?(older_tag_time, time)
 
-          if newer_tag_time.nil?
-            tag_in_range_new = true
-          else
-            tag_in_range_new = t <= newer_tag_time
-          end
+          tag_in_range_new = tag_older_new_tag?(newer_tag_time, time)
 
           tag_in_range = (tag_in_range_old) && (tag_in_range_new)
 
@@ -97,6 +89,24 @@ module GitHubChangelogGenerator
           false
         end
       end
+    end
+
+    def tag_older_new_tag?(newer_tag_time, time)
+      if newer_tag_time.nil?
+        tag_in_range_new = true
+      else
+        tag_in_range_new = time <= newer_tag_time
+      end
+      tag_in_range_new
+    end
+
+    def tag_newer_old_tag?(older_tag_time, t)
+      if older_tag_time.nil?
+        tag_in_range_old = true
+      else
+        tag_in_range_old = t > older_tag_time
+      end
+      tag_in_range_old
     end
 
     # Include issues with labels, specified in :include_labels
