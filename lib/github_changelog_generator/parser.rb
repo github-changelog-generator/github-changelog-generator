@@ -133,7 +133,7 @@ module GitHubChangelogGenerator
     end
 
     def self.detect_user_and_project(options)
-      user_project_from_option(options)
+      options[:user], options[:project] = user_project_from_option(ARGV[0], ARGV[1], options[:github_site])
       if !options[:user] || !options[:project]
         if ENV["RUBYLIB"] =~ /ruby-debug-ide/
           options[:user] = "skywinder"
@@ -145,31 +145,38 @@ module GitHubChangelogGenerator
       end
     end
 
-    def self.user_project_from_option(options)
-      if ARGV[0] && !ARGV[1]
-        github_site = options[:github_site] ? options[:github_site] : "github.com"
+    # Try to find user and project name from git remote output
+    #
+    # @param [String] output of git remote command
+    # @return [Array] user and project
+    def self.user_project_from_option(arg0, arg2, github_site = "github.com")
+      user = nil
+      project = nil
+
+      if arg0 && !arg2
         # this match should parse  strings such "https://github.com/skywinder/Github-Changelog-Generator" or "skywinder/Github-Changelog-Generator" to user and name
-        match = /(?:.+#{Regexp.escape(github_site)}\/)?(.+)\/(.+)/.match(ARGV[0])
+        match = /(?:.+#{Regexp.escape(github_site)}\/)?(.+)\/(.+)/.match(arg0)
 
         begin
           param = match[2].nil?
         rescue
-          puts "Can't detect user and name from first parameter: '#{ARGV[0]}' -> exit'"
+          puts "Can't detect user and name from first parameter: '#{arg0}' -> exit'"
           exit
         end
         if param
           exit
         else
-          options[:user] = match[1]
-          options[:project] = match[2]
+          user = match[1]
+          project = match[2]
         end
       end
+      [user, project]
     end
 
     # Try to find user and project name from git remote output
     #
     # @param [String] output of git remote command
-    # @return [Arrajy] user and project
+    # @return [Array] user and project
     def self.user_project_from_remote(remote)
       # try to find repo in format:
       # origin	git@github.com:skywinder/Github-Changelog-Generator.git (fetch)
@@ -202,7 +209,7 @@ module GitHubChangelogGenerator
   end
 
   if __FILE__ == $PROGRAM_NAME
-    remote = "origin  https://github.com/skywinder/Changelog.Merger (fetch)"
-    p GitHubChangelogGenerator::Parser.user_project_from_remote(remote)[0]
+    remote = "invalid reference to project"
+    p user_project_from_option(ARGV[0], ARGV[1], remote)
   end
 end
