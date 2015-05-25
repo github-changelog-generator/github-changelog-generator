@@ -119,7 +119,7 @@ module GitHubChangelogGenerator
     # @param [Array] issues
     # @return [String] generated log for issues
     def issues_to_log(issues)
-      log ""
+      log = ""
       bugs_a, enhancement_a, issues_a = parse_by_sections(issues)
 
       log += generate_sub_section(enhancement_a, @options[:enhancement_prefix])

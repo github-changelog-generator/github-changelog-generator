@@ -69,7 +69,8 @@ module GitHubChangelogGenerator
     # @param [String] newer_tag all issue after this tag will be excluded. May be nil for unreleased section
     # @return [Array] filtered issues
     def delete_by_time(array, hash_key = :actual_date, older_tag = nil, newer_tag = nil)
-      fail ChangelogGeneratorError, "At least one of the tags should be not nil!".red if older_tag.nil? && newer_tag.nil?
+      # in case if not tags specified - return unchanged array
+      return array if older_tag.nil? && newer_tag.nil?
 
       newer_tag_time = newer_tag && @fetcher.get_time_of_tag(newer_tag)
       older_tag_time = older_tag && @fetcher.get_time_of_tag(older_tag)
@@ -124,16 +125,17 @@ module GitHubChangelogGenerator
         issues_wo_labels = issues.select do |issue|
           !issue.labels.map(&:name).any?
         end
-        issues_wo_labels
+        return issues_wo_labels
       end
       []
     end
 
     def filter_by_include_labels(issues)
-      @options[:include_labels].nil? ? issues : issues.select do |issue|
+      filtered_issues = @options[:include_labels].nil? ? issues : issues.select do |issue|
         labels = issue.labels.map(&:name) & @options[:include_labels]
         (labels).any?
       end
+      filtered_issues
     end
 
     # Return tags after filtering tags in lists provided by option: --between-tags & --exclude-tags
