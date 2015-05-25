@@ -30,7 +30,7 @@ module GitHubChangelogGenerator
         issue_prefix: "**Closed issues:**",
         bug_prefix: "**Fixed bugs:**",
         enhancement_prefix: "**Implemented enhancements:**",
-        branch: "origin"
+        git_remote: "origin"
       }
 
       parser = OptionParser.new do |opts|
@@ -123,11 +123,6 @@ module GitHubChangelogGenerator
         exit
       end
 
-      if ARGV[1]
-        options[:tag1] = ARGV[0]
-        options[:tag2] = ARGV[1]
-      end
-
       if options[:verbose]
         puts "Performing task with options:"
         pp options
@@ -138,6 +133,18 @@ module GitHubChangelogGenerator
     end
 
     def self.detect_user_and_project(options)
+      user_project_from_option(options)
+      if !options[:user] || !options[:project]
+        if ENV["RUBYLIB"] =~ /ruby-debug-ide/
+          options[:user] = "skywinder"
+          options[:project] = "changelog_test"
+        else
+          options[:user], options[:project] = user_project_from_remote(options[:git_remote])
+        end
+      end
+    end
+
+    def self.user_project_from_option(options)
       if ARGV[0] && !ARGV[1]
         github_site = options[:github_site] ? options[:github_site] : "github.com"
         # this match should parse  strings such "https://github.com/skywinder/Github-Changelog-Generator" or "skywinder/Github-Changelog-Generator" to user and name
@@ -155,37 +162,41 @@ module GitHubChangelogGenerator
           options[:user] = match[1]
           options[:project] = match[2]
         end
-
       end
+    end
 
-      if !options[:user] && !options[:project]
-        if ENV["RUBYLIB"] =~ /ruby-debug-ide/
-          options[:user] = "skywinder"
-          options[:project] = "changelog_test"
-        else
-          remote = `git config --get remote.#{options[:branch]}.url`
-          # try to find repo in format:
-          # origin	git@github.com:skywinder/Github-Changelog-Generator.git (fetch)
-          # git@github.com:skywinder/Github-Changelog-Generator.git
-          match = /.*(?:[:\/])((?:-|\w|\.)*)\/((?:-|\w|\.)*)(?:\.git).*/.match(remote)
+    # Try to find user and project name from git remote
+    #
+    # @return [Tuple] user and project
+    def self.user_project_from_remote(git_remote)
+      # try to find repo in format:
+      # origin	git@github.com:skywinder/Github-Changelog-Generator.git (fetch)
+      # git@github.com:skywinder/Github-Changelog-Generator.git
+      regex1 = /.*(?:[:\/])((?:-|\w|\.)*)\/((?:-|\w|\.)*)(?:\.git).*/
 
-          if match && match[1] && match[2]
-            puts "Detected user:#{match[1]}, project:#{match[2]}"
-            options[:user] = match[1]
-            options[:project] = match[2]
-          else
-            # try to find repo in format:
-            # origin	https://github.com/skywinder/ChangelogMerger (fetch)
-            # https://github.com/skywinder/ChangelogMerger
-            match = /.*\/((?:-|\w|\.)*)\/((?:-|\w|\.)*).*/.match(remote)
-            if match && match[1] && match[2]
-              puts "Detected user:#{match[1]}, project:#{match[2]}"
-              options[:user] = match[1]
-              options[:project] = match[2]
-            end
-          end
+      # try to find repo in format:
+      # origin	https://github.com/skywinder/ChangelogMerger (fetch)
+      # https://github.com/skywinder/ChangelogMerger
+      regex2 = /.*\/((?:-|\w|\.)*)\/((?:-|\w|\.)*).*/
+
+      remote_structures = [regex1, regex2]
+
+      remote = `git config --get remote.#{git_remote}.url`
+      user = nil
+      project = nil
+      remote_structures.each do |regex|
+        matches = Regexp.new(regex).match(remote)
+
+        if matches && matches[1] && matches[2]
+          puts "Detected user:#{matches[1]}, project:#{matches[2]}"
+          user = matches[1]
+          project = matches[2]
         end
+
+        break unless matches.nil?
       end
+
+      [user, project]
     end
   end
 end
