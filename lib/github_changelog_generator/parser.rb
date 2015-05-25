@@ -139,7 +139,8 @@ module GitHubChangelogGenerator
           options[:user] = "skywinder"
           options[:project] = "changelog_test"
         else
-          options[:user], options[:project] = user_project_from_remote(options[:git_remote])
+          remote = `git config --get remote.#{options[:git_remote]}.url`
+          options[:user], options[:project] = user_project_from_remote(remote)
         end
       end
     end
@@ -165,10 +166,11 @@ module GitHubChangelogGenerator
       end
     end
 
-    # Try to find user and project name from git remote
+    # Try to find user and project name from git remote output
     #
-    # @return [Tuple] user and project
-    def self.user_project_from_remote(git_remote)
+    # @param [String] output of git remote command
+    # @return [Arrajy] user and project
+    def self.user_project_from_remote(remote)
       # try to find repo in format:
       # origin	git@github.com:skywinder/Github-Changelog-Generator.git (fetch)
       # git@github.com:skywinder/Github-Changelog-Generator.git
@@ -181,7 +183,6 @@ module GitHubChangelogGenerator
 
       remote_structures = [regex1, regex2]
 
-      remote = `git config --get remote.#{git_remote}.url`
       user = nil
       project = nil
       remote_structures.each do |regex|
@@ -198,5 +199,10 @@ module GitHubChangelogGenerator
 
       [user, project]
     end
+  end
+
+  if __FILE__ == $PROGRAM_NAME
+    remote = "origin  https://github.com/skywinder/Changelog.Merger (fetch)"
+    p GitHubChangelogGenerator::Parser.user_project_from_remote(remote)[0]
   end
 end
