@@ -18,13 +18,9 @@ module GitHubChangelogGenerator
     #   generator = GitHubChangelogGenerator::Generator.new
     #   content = generator.compound_changelog
     def initialize(options = nil)
-      @options = options
+      @options = options || {}
 
       @fetcher = GitHubChangelogGenerator::Fetcher.new @options
-
-      fetch_and_filter_tags
-
-      fetch_issues_and_pr
     end
 
     def fetch_issues_and_pr
