@@ -15,7 +15,7 @@ module GitHubChangelogGenerator
     "This script can make only 50 requests to GitHub API per hour without token!"
 
     def initialize(options = {})
-      @options = options
+      @options = options || {}
 
       @logger = Logger.new(STDOUT)
       @logger.formatter = proc do |_severity, _datetime, _progname, msg|
@@ -28,8 +28,8 @@ module GitHubChangelogGenerator
       @tag_times_hash = {}
       github_options = { per_page: PER_PAGE_NUMBER }
       github_options[:oauth_token] = @github_token unless @github_token.nil?
-      github_options[:endpoint] = options[:github_endpoint] unless options[:github_endpoint].nil?
-      github_options[:site] = options[:github_endpoint] unless options[:github_site].nil?
+      github_options[:endpoint] = @options[:github_endpoint] unless @options[:github_endpoint].nil?
+      github_options[:site] = @options[:github_endpoint] unless @options[:github_site].nil?
 
       @github = check_github_response { Github.new github_options }
     end

@@ -4,6 +4,9 @@ module GitHubChangelogGenerator
     #
     # @return [String] Generated change log file
     def compound_changelog
+      fetch_and_filter_tags
+      fetch_issues_and_pr
+
       log = "# Change Log\n\n"
 
       if @options[:unreleased_only]
