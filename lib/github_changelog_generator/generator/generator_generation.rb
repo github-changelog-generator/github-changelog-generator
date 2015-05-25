@@ -8,8 +8,6 @@ module GitHubChangelogGenerator
 
       if @options[:unreleased_only]
         log += generate_log_between_tags(all_tags[0], nil)
-      elsif @options[:tag1] && @options[:tag2]
-        log = generate_for_2_tags(log)
       else
         log += generate_log_for_all_tags
       end

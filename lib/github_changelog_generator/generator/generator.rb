@@ -2,6 +2,7 @@ require "github_changelog_generator/fetcher"
 require_relative "generator_generation"
 require_relative "generator_fetcher"
 require_relative "generator_processor"
+require_relative "generator_tags"
 
 module GitHubChangelogGenerator
   # Default error for ChangelogGenerator
@@ -21,7 +22,7 @@ module GitHubChangelogGenerator
 
       @fetcher = GitHubChangelogGenerator::Fetcher.new @options
 
-      fetch_tags
+      fetch_and_filter_tags
 
       fetch_issues_and_pr
     end
@@ -35,20 +36,6 @@ module GitHubChangelogGenerator
 
       fetch_events_for_issues_and_pr
       detect_actual_closed_dates(@issues + @pull_requests)
-    end
-
-    def fetch_tags
-      # @all_tags = get_filtered_tags
-      @all_tags = @fetcher.get_all_tags
-
-      fetch_tags_dates
-      sort_tags_by_date
-    end
-
-    # Sort all tags by date
-    def sort_tags_by_date
-      puts "Sorting tags..." if @options[:verbose]
-      @all_tags.sort_by! { |x| @fetcher.get_time_of_tag(x) }.reverse!
     end
 
     # Encapsulate characters to make markdown look as expected.
@@ -92,26 +79,6 @@ module GitHubChangelogGenerator
       end
 
       log
-    end
-
-    # Detect link, name and time for specified tag.
-    #
-    # @param [Hash] newer_tag newer tag. Can be nil, if it's Unreleased section.
-    # @return [Array] link, name and time of the tag
-    def detect_link_tag_time(newer_tag)
-      # if tag is nil - set current time
-      newer_tag_time = newer_tag.nil? ? Time.new : @fetcher.get_time_of_tag(newer_tag)
-
-      # if it's future release tag - set this value
-      if newer_tag.nil? && @options[:future_release]
-        newer_tag_name = @options[:future_release]
-        newer_tag_link = @options[:future_release]
-      else
-        # put unreleased label if there is no name for the tag
-        newer_tag_name = newer_tag.nil? ? @options[:unreleased_label] : newer_tag["name"]
-        newer_tag_link = newer_tag.nil? ? "HEAD" : newer_tag_name
-      end
-      [newer_tag_link, newer_tag_name, newer_tag_time]
     end
 
     # Generate ready-to-paste log from list of issues.
