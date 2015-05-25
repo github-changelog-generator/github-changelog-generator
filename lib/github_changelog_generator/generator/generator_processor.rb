@@ -138,23 +138,6 @@ module GitHubChangelogGenerator
       filtered_issues
     end
 
-    # Return tags after filtering tags in lists provided by option: --between-tags & --exclude-tags
-    #
-    # @return [Array]
-    def get_filtered_tags
-      all_tags = @fetcher.get_all_tags
-      filtered_tags = []
-      if @options[:between_tags]
-        @options[:between_tags].each do |tag|
-          unless all_tags.include? tag
-            puts "Warning: can't find tag #{tag}, specified with --between-tags option.".yellow
-          end
-        end
-        filtered_tags = all_tags.select { |tag| @options[:between_tags].include? tag }
-      end
-      filtered_tags
-    end
-
     # General filtered function
     #
     # @param [Array] all_issues
