@@ -1,8 +1,12 @@
 # Change Log
 
-## [Unreleased](https://github.com/skywinder/changelog_test/tree/HEAD)
+## [0.0.4](https://github.com/skywinder/changelog_test/tree/0.0.4) (2015-05-22)
 
-[Full Changelog](https://github.com/skywinder/changelog_test/compare/v0.0.3...HEAD)
+[Full Changelog](https://github.com/skywinder/changelog_test/compare/v0.0.3...0.0.4)
+
+**Closed issues:**
+
+- Test issue, that should appear in 0.0.4 [\#3](https://github.com/skywinder/changelog_test/issues/3)
 
 **Merged pull requests:**
 
