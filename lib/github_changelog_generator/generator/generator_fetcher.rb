@@ -40,18 +40,15 @@ module GitHubChangelogGenerator
     def detect_actual_closed_dates(issues)
       print "Fetching closed dates for issues...\r" if @options[:verbose]
 
-      # TODO: implement async fetching with slice!
-      threads = []
-
-      issues.each do |issue|
-        threads << Thread.new do
-          find_closed_date_by_commit(issue)
+      max_thread_number = 50
+      issues.each_slice(max_thread_number) do |issues_slice|
+        threads = []
+        issues_slice.each do |issue|
+          threads << Thread.new { find_closed_date_by_commit(issue) }
         end
+        threads.each(&:join)
+        puts "Fetching closed dates for issues: Done!" if @options[:verbose]
       end
-
-      threads.each(&:join)
-
-      puts "Fetching closed dates for issues: Done!" if @options[:verbose]
     end
 
     # Fill :actual_date parameter of specified issue by closed date of the commit, if it was closed by commit.
