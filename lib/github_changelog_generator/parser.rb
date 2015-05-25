@@ -149,12 +149,13 @@ module GitHubChangelogGenerator
     #
     # @param [String] output of git remote command
     # @return [Array] user and project
-    def self.user_project_from_option(arg0, arg2, github_site = "github.com")
+    def self.user_project_from_option(arg0, arg1, github_site = nil)
       user = nil
       project = nil
-
-      if arg0 && !arg2
+      github_site ||= "github.com"
+      if arg0 && !arg1
         # this match should parse  strings such "https://github.com/skywinder/Github-Changelog-Generator" or "skywinder/Github-Changelog-Generator" to user and name
+        puts arg0
         match = /(?:.+#{Regexp.escape(github_site)}\/)?(.+)\/(.+)/.match(arg0)
 
         begin
