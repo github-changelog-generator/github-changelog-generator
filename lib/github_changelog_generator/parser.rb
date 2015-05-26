@@ -84,8 +84,11 @@ module GitHubChangelogGenerator
         opts.on("--exclude-labels  x,y,z", Array, 'Issues with the specified labels will be always excluded from changelog. Default is \'duplicate,question,invalid,wontfix\'') do |list|
           options[:exclude_labels] = list
         end
-        opts.on("--between-tags  x,y,z", Array, "Change log will be filed only between specified tags") do |list|
+        opts.on("--between-tags  x,y,z", Array, "Change log will be filled only between specified tags") do |list|
           options[:between_tags] = list
+        end
+        opts.on("--exclude-tags  x,y,z", Array, "Change log will be exclude specified tags") do |list|
+          options[:exclude_tags] = list
         end
         opts.on("--max-issues [NUMBER]", Integer, "Max number of issues to fetch from GitHub. Default is unlimited") do |max|
           options[:max_issues] = max
