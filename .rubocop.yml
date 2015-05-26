@@ -6,3 +6,11 @@ Metrics/LineLength:
 #http://viget.com/extend/just-use-double-quoted-ruby-strings
 Style/StringLiterals:
   EnforcedStyle: double_quotes
+
+# Configuration parameters: CountComments.
+Metrics/ClassLength:
+    Enabled: false
+
+# Configuration parameters: CountComments.
+Metrics/MethodLength:
+    Enabled: false

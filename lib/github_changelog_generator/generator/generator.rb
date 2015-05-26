@@ -2,6 +2,7 @@ require "github_changelog_generator/fetcher"
 require_relative "generator_generation"
 require_relative "generator_fetcher"
 require_relative "generator_processor"
+require_relative "generator_tags"
 
 module GitHubChangelogGenerator
   # Default error for ChangelogGenerator
@@ -17,13 +18,9 @@ module GitHubChangelogGenerator
     #   generator = GitHubChangelogGenerator::Generator.new
     #   content = generator.compound_changelog
     def initialize(options = nil)
-      @options = options
+      @options = options || {}
 
       @fetcher = GitHubChangelogGenerator::Fetcher.new @options
-
-      fetch_tags
-
-      fetch_issues_and_pr
     end
 
     def fetch_issues_and_pr
@@ -35,20 +32,6 @@ module GitHubChangelogGenerator
 
       fetch_events_for_issues_and_pr
       detect_actual_closed_dates(@issues + @pull_requests)
-    end
-
-    def fetch_tags
-      # @all_tags = get_filtered_tags
-      @all_tags = @fetcher.get_all_tags
-
-      fetch_tags_dates
-      sort_tags_by_date
-    end
-
-    # Sort all tags by date
-    def sort_tags_by_date
-      puts "Sorting tags..." if @options[:verbose]
-      @all_tags.sort_by! { |x| @fetcher.get_time_of_tag(x) }.reverse!
     end
 
     # Encapsulate characters to make markdown look as expected.
@@ -74,14 +57,7 @@ module GitHubChangelogGenerator
     # @param [String] older_tag_name Older tag, used for the links. Could be nil for last tag.
     # @return [String] Ready and parsed section
     def create_log(pull_requests, issues, newer_tag, older_tag_name = nil)
-      newer_tag_time = newer_tag.nil? ? Time.new : @fetcher.get_time_of_tag(newer_tag)
-      if newer_tag.nil? && @options[:future_release]
-        newer_tag_name = @options[:future_release]
-        newer_tag_link = @options[:future_release]
-      else
-        newer_tag_name = newer_tag.nil? ? @options[:unreleased_label] : newer_tag["name"]
-        newer_tag_link = newer_tag.nil? ? "HEAD" : newer_tag_name
-      end
+      newer_tag_link, newer_tag_name, newer_tag_time = detect_link_tag_time(newer_tag)
 
       github_site = options[:github_site] || "https://github.com"
       project_url = "#{github_site}/#{@options[:user]}/#{@options[:project]}"
@@ -90,11 +66,7 @@ module GitHubChangelogGenerator
 
       if @options[:issues]
         # Generate issues:
-        bugs_a, enhancement_a, issues_a = parse_by_sections(issues)
-
-        log += generate_sub_section(enhancement_a, @options[:enhancement_prefix])
-        log += generate_sub_section(bugs_a, @options[:bug_prefix])
-        log += generate_sub_section(issues_a, @options[:issue_prefix])
+        log += issues_to_log(issues)
       end
 
       if @options[:pulls]
@@ -102,6 +74,20 @@ module GitHubChangelogGenerator
         log += generate_sub_section(pull_requests, @options[:merge_prefix])
       end
 
+      log
+    end
+
+    # Generate ready-to-paste log from list of issues.
+    #
+    # @param [Array] issues
+    # @return [String] generated log for issues
+    def issues_to_log(issues)
+      log = ""
+      bugs_a, enhancement_a, issues_a = parse_by_sections(issues)
+
+      log += generate_sub_section(enhancement_a, @options[:enhancement_prefix])
+      log += generate_sub_section(bugs_a, @options[:bug_prefix])
+      log += generate_sub_section(issues_a, @options[:issue_prefix])
       log
     end
 

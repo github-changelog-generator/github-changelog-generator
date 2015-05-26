@@ -5,34 +5,32 @@ require_relative "version"
 
 module GitHubChangelogGenerator
   class Parser
+    # parse options with optparse
     def self.parse_options
-      options = {
-        tag1: nil,
-        tag2: nil,
-        date_format: "%Y-%m-%d",
-        output: "CHANGELOG.md",
-        issues: true,
-        add_issues_wo_labels: true,
-        add_pr_wo_labels: true,
-        pulls: true,
-        filter_issues_by_milestone: true,
-        author: true,
-        unreleased: true,
-        unreleased_label: "Unreleased",
-        compare_link: true,
-        include_labels: %w(bug enhancement),
-        exclude_labels: %w(duplicate question invalid wontfix),
-        max_issues: nil,
-        simple_list: false,
-        verbose: true,
+      options = get_default_options
 
-        merge_prefix: "**Merged pull requests:**",
-        issue_prefix: "**Closed issues:**",
-        bug_prefix: "**Fixed bugs:**",
-        enhancement_prefix: "**Implemented enhancements:**",
-        git_remote: "origin"
-      }
+      parser = setup_parser(options)
 
+      parser.parse!
+
+      detect_user_and_project(options)
+
+      if !options[:user] || !options[:project]
+        puts parser.banner
+        exit
+      end
+
+      if options[:verbose]
+        puts "Performing task with options:"
+        pp options
+        puts ""
+      end
+
+      options
+    end
+
+    # setup parsing options
+    def self.setup_parser(options)
       parser = OptionParser.new do |opts|
         opts.banner = "Usage: github_changelog_generator [options]"
         opts.on("-u", "--user [USER]", "Username of the owner of target GitHub repo") do |last|
@@ -86,6 +84,12 @@ module GitHubChangelogGenerator
         opts.on("--exclude-labels  x,y,z", Array, 'Issues with the specified labels will be always excluded from changelog. Default is \'duplicate,question,invalid,wontfix\'') do |list|
           options[:exclude_labels] = list
         end
+        opts.on("--between-tags  x,y,z", Array, "Change log will be filled only between specified tags") do |list|
+          options[:between_tags] = list
+        end
+        opts.on("--exclude-tags  x,y,z", Array, "Change log will be exclude specified tags") do |list|
+          options[:exclude_tags] = list
+        end
         opts.on("--max-issues [NUMBER]", Integer, "Max number of issues to fetch from GitHub. Default is unlimited") do |max|
           options[:max_issues] = max
         end
@@ -113,25 +117,41 @@ module GitHubChangelogGenerator
           exit
         end
       end
+      parser
+    end
 
-      parser.parse!
-
-      detect_user_and_project(options)
-
-      if !options[:user] || !options[:project]
-        puts parser.banner
-        exit
-      end
-
-      if options[:verbose]
-        puts "Performing task with options:"
-        pp options
-        puts ""
-      end
+    # just get default options
+    def self.get_default_options
+      options = {
+        tag1: nil,
+        tag2: nil,
+        date_format: "%Y-%m-%d",
+        output: "CHANGELOG.md",
+        issues: true,
+        add_issues_wo_labels: true,
+        add_pr_wo_labels: true,
+        pulls: true,
+        filter_issues_by_milestone: true,
+        author: true,
+        unreleased: true,
+        unreleased_label: "Unreleased",
+        compare_link: true,
+        include_labels: %w(bug enhancement),
+        exclude_labels: %w(duplicate question invalid wontfix),
+        max_issues: nil,
+        simple_list: false,
+        verbose: true,
+        merge_prefix: "**Merged pull requests:**",
+        issue_prefix: "**Closed issues:**",
+        bug_prefix: "**Fixed bugs:**",
+        enhancement_prefix: "**Implemented enhancements:**",
+        git_remote: "origin"
+      }
 
       options
     end
 
+    # Detects user and project from git
     def self.detect_user_and_project(options)
       options[:user], options[:project] = user_project_from_option(ARGV[0], ARGV[1], options[:github_site])
       if !options[:user] || !options[:project]
@@ -149,12 +169,13 @@ module GitHubChangelogGenerator
     #
     # @param [String] output of git remote command
     # @return [Array] user and project
-    def self.user_project_from_option(arg0, arg2, github_site = "github.com")
+    def self.user_project_from_option(arg0, arg1, github_site = nil)
       user = nil
       project = nil
-
-      if arg0 && !arg2
+      github_site ||= "github.com"
+      if arg0 && !arg1
         # this match should parse  strings such "https://github.com/skywinder/Github-Changelog-Generator" or "skywinder/Github-Changelog-Generator" to user and name
+        puts arg0
         match = /(?:.+#{Regexp.escape(github_site)}\/)?(.+)\/(.+)/.match(arg0)
 
         begin

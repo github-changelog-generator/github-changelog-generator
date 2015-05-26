@@ -14,25 +14,19 @@ module GitHubChangelogGenerator
     # Async fetching of all tags dates
     def fetch_tags_dates
       print "Fetching tag dates...\r" if @options[:verbose]
-
       # Async fetching tags:
       threads = []
       i = 0
       all = @all_tags.count
       @all_tags.each do |tag|
+        print "                                 \r"
         threads << Thread.new do
           @fetcher.get_time_of_tag(tag)
-          if @options[:verbose]
-            print "Fetching tags dates: #{i + 1}/#{all}\r"
-            i += 1
-          end
+          print "Fetching tags dates: #{i + 1}/#{all}\r" if @options[:verbose]
+          i += 1
         end
       end
-
-      print "                                 \r"
-
       threads.each(&:join)
-
       puts "Fetching tags dates: #{i}" if @options[:verbose]
     end
 

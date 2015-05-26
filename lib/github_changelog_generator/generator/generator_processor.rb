@@ -13,7 +13,44 @@ module GitHubChangelogGenerator
       issues
     end
 
-    def filter_by_milestone(filtered_issues, newer_tag_name, src_array)
+    # @return [Array] filtered issues accourding milestone
+    def filter_by_milestone(filtered_issues, tag_name, all_issues)
+      remove_issues_in_milestones(filtered_issues)
+      unless tag_name.nil?
+        # add missed issues (according milestones)
+        issues_to_add = find_issues_to_add(all_issues, tag_name)
+
+        filtered_issues |= issues_to_add
+      end
+      filtered_issues
+    end
+
+    # Add all issues, that should be in that tag, according milestone
+    #
+    # @param [Array] all_issues
+    # @param [String] tag_name
+    # @return [Array] issues with milestone #tag_name
+    def find_issues_to_add(all_issues, tag_name)
+      all_issues.select do |issue|
+        if issue.milestone.nil?
+          false
+        else
+          # check, that this milestone in tag list:
+          milestone_is_tag = @all_tags.find do |tag|
+            tag.name == issue.milestone.title
+          end
+
+          if milestone_is_tag.nil?
+            false
+          else
+            issue.milestone.title == tag_name
+          end
+        end
+      end
+    end
+
+    # @return [Array] array with removed issues, that contain milestones with same name as a tag
+    def remove_issues_in_milestones(filtered_issues)
       filtered_issues.select! do |issue|
         # leave issues without milestones
         if issue.milestone.nil?
@@ -23,29 +60,6 @@ module GitHubChangelogGenerator
           @all_tags.find { |tag| tag.name == issue.milestone.title }.nil?
         end
       end
-      unless newer_tag_name.nil?
-
-        # add missed issues (according milestones)
-        issues_to_add = src_array.select do |issue|
-          if issue.milestone.nil?
-            false
-          else
-            # check, that this milestone in tag list:
-            milestone_is_tag = @all_tags.find do |tag|
-              tag.name == issue.milestone.title
-            end
-
-            if milestone_is_tag.nil?
-              false
-            else
-              issue.milestone.title == newer_tag_name
-            end
-          end
-        end
-
-        filtered_issues |= issues_to_add
-      end
-      filtered_issues
     end
 
     # Method filter issues, that belong only specified tag range
@@ -55,26 +69,19 @@ module GitHubChangelogGenerator
     # @param [String] newer_tag all issue after this tag will be excluded. May be nil for unreleased section
     # @return [Array] filtered issues
     def delete_by_time(array, hash_key = :actual_date, older_tag = nil, newer_tag = nil)
-      fail ChangelogGeneratorError, "At least one of the tags should be not nil!".red if older_tag.nil? && newer_tag.nil?
+      # in case if not tags specified - return unchanged array
+      return array if older_tag.nil? && newer_tag.nil?
 
       newer_tag_time = newer_tag && @fetcher.get_time_of_tag(newer_tag)
       older_tag_time = older_tag && @fetcher.get_time_of_tag(older_tag)
 
       array.select do |req|
         if req[hash_key]
-          t = Time.parse(req[hash_key]).utc
+          time = Time.parse(req[hash_key]).utc
 
-          if older_tag_time.nil?
-            tag_in_range_old = true
-          else
-            tag_in_range_old = t > older_tag_time
-          end
+          tag_in_range_old = tag_newer_old_tag?(older_tag_time, time)
 
-          if newer_tag_time.nil?
-            tag_in_range_new = true
-          else
-            tag_in_range_new = t <= newer_tag_time
-          end
+          tag_in_range_new = tag_older_new_tag?(newer_tag_time, time)
 
           tag_in_range = (tag_in_range_old) && (tag_in_range_new)
 
@@ -85,39 +92,50 @@ module GitHubChangelogGenerator
       end
     end
 
+    def tag_older_new_tag?(newer_tag_time, time)
+      if newer_tag_time.nil?
+        tag_in_range_new = true
+      else
+        tag_in_range_new = time <= newer_tag_time
+      end
+      tag_in_range_new
+    end
+
+    def tag_newer_old_tag?(older_tag_time, t)
+      if older_tag_time.nil?
+        tag_in_range_old = true
+      else
+        tag_in_range_old = t > older_tag_time
+      end
+      tag_in_range_old
+    end
+
     # Include issues with labels, specified in :include_labels
     # @param [Array] issues to filter
     # @return [Array] filtered array of issues
     def include_issues_by_labels(issues)
-      filtered_issues = @options[:include_labels].nil? ? issues : issues.select do |issue|
-        labels = issue.labels.map(&:name) & @options[:include_labels]
-        (labels).any?
-      end
+      filtered_issues = filter_by_include_labels(issues)
+      filtered_issues |= filter_wo_labels(issues)
+      filtered_issues
+    end
 
+    # @return [Array] issues without labels or empty array if add_issues_wo_labels is false
+    def filter_wo_labels(issues)
       if @options[:add_issues_wo_labels]
         issues_wo_labels = issues.select do |issue|
           !issue.labels.map(&:name).any?
         end
-        filtered_issues |= issues_wo_labels
+        return issues_wo_labels
       end
-      filtered_issues
+      []
     end
 
-    # Return tags after filtering tags in lists provided by option: --between-tags & --exclude-tags
-    #
-    # @return [Array]
-    def get_filtered_tags
-      all_tags = @fetcher.get_all_tags
-      filtered_tags = []
-      if @options[:between_tags]
-        @options[:between_tags].each do |tag|
-          unless all_tags.include? tag
-            puts "Warning: can't find tag #{tag}, specified with --between-tags option.".yellow
-          end
-        end
-        filtered_tags = all_tags.select { |tag| @options[:between_tags].include? tag }
+    def filter_by_include_labels(issues)
+      filtered_issues = @options[:include_labels].nil? ? issues : issues.select do |issue|
+        labels = issue.labels.map(&:name) & @options[:include_labels]
+        (labels).any?
       end
-      filtered_tags
+      filtered_issues
     end
 
     # General filtered function
