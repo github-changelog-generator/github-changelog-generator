@@ -8,7 +8,10 @@ describe GitHubChangelogGenerator::Generator do
       # before(:each) do
       #   @generator.options = {}
       # end
-      subject { @generator.get_filtered_tags(%w(1 2 3)) }
+      subject do
+        @generator.instance_variable_set("@options", between_tags: %w(1 2 3))
+        @generator.get_filtered_tags(%w(1 2 3))
+      end
       it { is_expected.to be_a(Array) }
       it { is_expected.to match_array(%w(1 2 3)) }
     end
@@ -19,11 +22,11 @@ describe GitHubChangelogGenerator::Generator do
       # end
 
       subject do
-        @generator.instance_variable_set("@options", between_tags: ["1"])
+        @generator.instance_variable_set("@options", between_tags: %w(1 2))
         @generator.get_filtered_tags(%w(1 2 3))
       end
       it { is_expected.to be_a(Array) }
-      it { is_expected.to match_array(%w(1)) }
+      it { is_expected.to match_array(%w(1 2)) }
     end
   end
 end
