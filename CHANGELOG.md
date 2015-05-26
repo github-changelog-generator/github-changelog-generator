@@ -1,5 +1,21 @@
 # Change Log
 
+## [1.5.0](https://github.com/skywinder/github-changelog-generator/tree/1.5.0) (2015-05-26)
+
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.4.1...1.5.0)
+
+**Implemented enhancements:**
+
+- Show `Unreleased` section even when there is no tags in repo. [\#228](https://github.com/skywinder/github-changelog-generator/issues/228)
+
+- Add option `--exclude-tags x,y,z` [\#214](https://github.com/skywinder/github-changelog-generator/issues/214)
+
+- Generate change log between 2 specific tags [\#172](https://github.com/skywinder/github-changelog-generator/issues/172)
+
+**Merged pull requests:**
+
+- Big refactoring [\#243](https://github.com/skywinder/github-changelog-generator/pull/243) ([skywinder](https://github.com/skywinder))
+
 ## [1.4.1](https://github.com/skywinder/github-changelog-generator/tree/1.4.1) (2015-05-19)
 
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.4.0...1.4.1)
