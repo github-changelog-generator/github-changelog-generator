@@ -82,30 +82,35 @@ As output you will get `CHANGELOG.md` file with pretty *Markdown-formatted* chan
 ### Params
 Type `github_changelog_generator --help` for detailed usage.
 
-    Usage: changelog_generator [options]
-    -u, --user [USER]                         Username of the owner of target GitHub repo
-    -p, --project [PROJECT]                   Name of project on GitHub
-    -t, --token [TOKEN]                       To make more than 50 requests per hour your GitHub token required. You can generate it here: https://github.com/settings/tokens/new
-    -f, --date-format [FORMAT]                Date format. Default is %d/%m/%y
-    -o, --output [NAME]                       Output file. Default is CHANGELOG.md
-        --[no-]verbose                        Run verbosely. Default is true
-        --[no-]issues                         Include closed issues to changelog. Default is true
-        --[no-]issues-wo-labels               Include closed issues without labels to changelog. Default is true
-        --[no-]pr-wo-labels                   Include pull requests without labels to changelog. Default is true
-        --[no-]pull-requests                  Include pull-requests to changelog. Default is true
-        --[no-]filter-by-milestone            Use milestone to detect when issue was resolved. Default is true
-        --[no-]author                         Add author of pull-request in the end. Default is true
-        --unreleased-only                     Generate log from unreleased closed issues only.
-        --[no-]unreleased                     Add to log unreleased closed issues. Default is true
-        --[no-]compare-link                   Include compare link between older version and newer version. Default is true
-        --include-labels  x,y,z               Issues only with that labels will be included to changelog. Default is 'bug,enhancement'
-        --exclude-labels  x,y,z               Issues with that labels will be always excluded from changelog. Default is 'duplicate,question,invalid,wontfix'
-        --max-issues [NUMBER]                 Max number of issues to fetch from GitHub. Default is unlimited.
-        --github-site [URL]                   The Enterprise Github site on which your project is hosted.
-        --github-api [URL]                    The enterprise endpoint to use for your Github API.
-        --future-release [RELEASE-VERSION]    Put the unreleased changes in the specified release number.
-    -v, --version                             Print version number
-    -h, --help                                Displays Help
+     Usage: github_changelog_generator [options]
+        -u, --user [USER]                Username of the owner of target GitHub repo
+        -p, --project [PROJECT]          Name of project on GitHub
+        -t, --token [TOKEN]              To make more than 50 requests per hour your GitHub token is required. You can generate it at: https://github.com/settings/tokens/new
+        -f, --date-format [FORMAT]       Date format. Default is %Y-%m-%d
+        -o, --output [NAME]              Output file. Default is CHANGELOG.md
+            --[no-]issues                Include closed issues in changelog. Default is true
+            --[no-]issues-wo-labels      Include closed issues without labels in changelog. Default is true
+            --[no-]pr-wo-labels          Include pull requests without labels in changelog. Default is true
+            --[no-]pull-requests         Include pull-requests in changelog. Default is true
+            --[no-]filter-by-milestone   Use milestone to detect when issue was resolved. Default is true
+            --[no-]author                Add author of pull-request in the end. Default is true
+            --unreleased-only            Generate log from unreleased closed issues only.
+            --[no-]unreleased            Add to log unreleased closed issues. Default is true
+            --unreleased-label [label]   Add to log unreleased closed issues. Default is true
+            --[no-]compare-link          Include compare link (Full Changelog) between older version and newer version. Default is true
+            --include-labels  x,y,z      Only issues with the specified labels will be included in the changelog. Default is 'bug,enhancement'
+            --exclude-labels  x,y,z      Issues with the specified labels will be always excluded from changelog. Default is 'duplicate,question,invalid,wontfix'
+            --between-tags  x,y,z        Change log will be filled only between specified tags
+            --exclude-tags  x,y,z        Change log will be exclude specified tags
+            --max-issues [NUMBER]        Max number of issues to fetch from GitHub. Default is unlimited
+            --github-site [URL]          The Enterprise Github site on which your project is hosted.
+            --github-api [URL]           The enterprise endpoint to use for your Github API.
+            --simple-list                Create simple list from issues and pull requests. Default is false.
+            --future-release [RELEASE-VERSION]
+                                         Put the unreleased changes in the specified release number.
+            --[no-]verbose               Run verbosely. Default is true
+        -v, --version                    Print version number
+        -h, --help                       Displays Help
 
 
 ### GitHub token
