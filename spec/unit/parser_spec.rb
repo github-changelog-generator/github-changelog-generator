@@ -1,5 +1,5 @@
 describe GitHubChangelogGenerator::Parser do
-  describe "#self.user_project_from_remote" do
+  describe ".user_project_from_remote" do
     context "when remote is 1" do
       subject { GitHubChangelogGenerator::Parser.user_project_from_remote("origin  https://github.com/skywinder/ActionSheetPicker-3.0 (fetch)") }
       it { is_expected.to be_a(Array) }
@@ -26,7 +26,7 @@ describe GitHubChangelogGenerator::Parser do
       it { is_expected.to match_array([nil, nil]) }
     end
   end
-  describe "#self.user_project_from_option" do
+  describe ".user_project_from_option" do
     # context "when option is invalid" do
     #   it("should exit") { expect { GitHubChangelogGenerator::Parser.user_project_from_option("blah", nil) }.to raise_error(SystemExit) }
     # end
