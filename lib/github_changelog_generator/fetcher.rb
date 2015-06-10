@@ -1,4 +1,3 @@
-
 module GitHubChangelogGenerator
   # A Fetcher responsible for all requests to GitHub and all basic manipulation with related data
   # (such as filtering, validating, e.t.c)
@@ -45,13 +44,11 @@ module GitHubChangelogGenerator
     def get_all_tags
       print "Fetching tags...\r" if @options[:verbose]
 
-      tags = []
-
-      check_github_response { github_fetch_tags(tags) }
-
-      tags
+      check_github_response { github_fetch_tags }
     end
 
+    # This is wrapper with rescue block
+    # @return [Object] returns exactly the same, what you put in the block, but wrap it with begin-rescue block
     def check_github_response
       begin
         value = yield
@@ -65,7 +62,10 @@ module GitHubChangelogGenerator
       value
     end
 
-    def github_fetch_tags(tags)
+    # Fill input array with tags
+    # @return [Array] array of tags in repo
+    def github_fetch_tags
+      tags = []
       response = @github.repos.tags @options[:user], @options[:project]
       page_i = 0
       count_pages = response.count_pages
@@ -82,6 +82,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
       else
         Helper.log.info "Found #{tags.count} tags"
       end
+      tags
     end
 
     # This method fetch all closed issues and separate them to pull requests and pure issues
@@ -141,10 +142,13 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
       pull_requests
     end
 
+    # Print specified line on the same string
+    # @param [String] log_string
     def print_in_same_line(log_string)
       print log_string + "\r"
     end
 
+    # Print long line with spaces on same line to clear prev message
     def print_empty_line
       print_in_same_line("                                                                       ")
     end
@@ -203,7 +207,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
       @tag_times_hash[tag_name["name"]] = Time.parse(time_string)
     end
 
-    # Fetch commit for specifed event
+    # Fetch commit for specified event
     # @return [Hash]
     def fetch_commit(event)
       @github.git_data.commits.get @options[:user], @options[:project], event[:commit_id]
