@@ -2,15 +2,15 @@ module GitHubChangelogGenerator
   class Generator
     # fetch, filter tags, fetch dates and sort them in time order
     def fetch_and_filter_tags
-      @all_tags = get_filtered_tags(@fetcher.get_all_tags)
+      @filtered_tags = get_filtered_tags(@fetcher.get_all_tags)
       fetch_tags_dates
-      sort_tags_by_date
+      sort_tags_by_date(@filtered_tags)
     end
 
     # Sort all tags by date
-    def sort_tags_by_date
+    def sort_tags_by_date(tags)
       puts "Sorting tags..." if @options[:verbose]
-      @all_tags.sort_by! { |x| @fetcher.get_time_of_tag(x) }.reverse!
+      tags.sort_by! { |x| @fetcher.get_time_of_tag(x) }.reverse!
     end
 
     # Detect link, name and time for specified tag.

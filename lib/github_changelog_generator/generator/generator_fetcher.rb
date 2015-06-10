@@ -17,8 +17,8 @@ module GitHubChangelogGenerator
       # Async fetching tags:
       threads = []
       i = 0
-      all = @all_tags.count
-      @all_tags.each do |tag|
+      all = @filtered_tags.count
+      @filtered_tags.each do |tag|
         print "                                 \r"
         threads << Thread.new do
           @fetcher.get_time_of_tag(tag)

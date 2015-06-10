@@ -36,7 +36,7 @@ module GitHubChangelogGenerator
           false
         else
           # check, that this milestone in tag list:
-          milestone_is_tag = @all_tags.find do |tag|
+          milestone_is_tag = @filtered_tags.find do |tag|
             tag.name == issue.milestone.title
           end
 
@@ -57,7 +57,7 @@ module GitHubChangelogGenerator
           true
         else
           # check, that this milestone in tag list:
-          @all_tags.find { |tag| tag.name == issue.milestone.title }.nil?
+          @filtered_tags.find { |tag| tag.name == issue.milestone.title }.nil?
         end
       end
     end

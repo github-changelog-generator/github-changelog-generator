@@ -10,7 +10,7 @@ module GitHubChangelogGenerator
   end
 
   class Generator
-    attr_accessor :options, :all_tags, :github
+    attr_accessor :options, :filtered_tags, :github
 
     # A Generator responsible for all logic, related with change log generation from ready-to-parse issues
     #

@@ -131,7 +131,7 @@ module GitHubChangelogGenerator
       (1...all_tags.size).each do |index|
         log += generate_log_between_tags(all_tags[index], all_tags[index - 1])
       end
-      if @all_tags.count != 0
+      if @filtered_tags.count != 0
         log += generate_log_between_tags(nil, all_tags.last)
       end
 
