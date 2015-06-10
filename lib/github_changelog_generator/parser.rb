@@ -2,7 +2,7 @@
 require "optparse"
 require "pp"
 require_relative "version"
-
+require_relative "helper"
 module GitHubChangelogGenerator
   class Parser
     # parse options with optparse
@@ -21,7 +21,7 @@ module GitHubChangelogGenerator
       end
 
       if options[:verbose]
-        puts "Performing task with options:"
+        Helper.log.info "Performing task with options:"
         pp options
         puts ""
       end

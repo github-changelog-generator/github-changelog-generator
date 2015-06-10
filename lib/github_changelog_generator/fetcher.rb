@@ -1,4 +1,3 @@
-require "logger"
 
 module GitHubChangelogGenerator
   # A Fetcher responsible for all requests to GitHub and all basic manipulation with related data
@@ -6,6 +5,7 @@ module GitHubChangelogGenerator
   #
   # Example:
   # fetcher = GitHubChangelogGenerator::Fetcher.new options
+
   class Fetcher
     PER_PAGE_NUMBER = 30
     CHANGELOG_GITHUB_TOKEN = "CHANGELOG_GITHUB_TOKEN"
@@ -16,12 +16,6 @@ module GitHubChangelogGenerator
 
     def initialize(options = {})
       @options = options || {}
-
-      @logger = Logger.new(STDOUT)
-      @logger.formatter = proc do |_severity, _datetime, _progname, msg|
-        "#{msg}\n"
-      end
-
       @user = @options[:user]
       @project = @options[:project]
       @github_token = fetch_github_token
@@ -41,7 +35,7 @@ module GitHubChangelogGenerator
     def fetch_github_token
       env_var = @options[:token] ? @options[:token] : (ENV.fetch CHANGELOG_GITHUB_TOKEN, nil)
 
-      @logger.warn NO_TOKEN_PROVIDED.yellow unless env_var
+      Helper.log.warn NO_TOKEN_PROVIDED.yellow unless env_var
 
       env_var
     end
@@ -62,11 +56,11 @@ module GitHubChangelogGenerator
       begin
         value = yield
       rescue Github::Error::Unauthorized => e
-        @logger.error e.body.red
+        Helper.log.error e.body.red
         abort "Error: wrong GitHub token"
       rescue Github::Error::Forbidden => e
-        @logger.warn e.body.red
-        @logger.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
+        Helper.log.warn e.body.red
+        Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
       end
       value
     end
@@ -83,10 +77,10 @@ module GitHubChangelogGenerator
       print_empty_line
 
       if tags.count == 0
-        @logger.warn "Warning: Can't find any tags in repo.\
+        Helper.log.warn "Warning: Can't find any tags in repo.\
 Make sure, that you push tags to remote repo via 'git push --tags'".yellow
       else
-        @logger.info "Found #{tags.count} tags"
+        Helper.log.info "Found #{tags.count} tags"
       end
     end
 
@@ -112,10 +106,10 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
           break if @options[:max_issues] && issues.length >= @options[:max_issues]
         end
         print_empty_line
-        @logger.info "Received issues: #{issues.count}"
+        Helper.log.info "Received issues: #{issues.count}"
 
       rescue
-        @logger.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
+        Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
       end
 
       # separate arrays of issues and pull requests:
@@ -140,10 +134,10 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
         end
         print_empty_line
       rescue
-        @logger.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
+        Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
       end
 
-      @logger.info "Fetching merged dates: #{pull_requests.count}"
+      Helper.log.info "Fetching merged dates: #{pull_requests.count}"
       pull_requests
     end
 
@@ -170,7 +164,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
                                                repo: @options[:project],
                                                issue_number: issue["number"]
             rescue
-              @logger.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
+              Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
             end
             issue[:events] = obj.body
             print_in_same_line("Fetching events for issues and PR: #{i + 1}/#{issues.count}")
@@ -184,7 +178,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
       # to clear line from prev print
       print_empty_line
 
-      @logger.info "Fetching events for issues and PR: #{i}"
+      Helper.log.info "Fetching events for issues and PR: #{i}"
     end
 
     # Try to find tag date in local hash.
@@ -203,7 +197,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
                                                                    @options[:project],
                                                                    tag_name["commit"]["sha"]
       rescue
-        @logger.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
+        Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
       end
       time_string = github_git_data_commits_get["committer"]["date"]
       @tag_times_hash[tag_name["name"]] = Time.parse(time_string)
