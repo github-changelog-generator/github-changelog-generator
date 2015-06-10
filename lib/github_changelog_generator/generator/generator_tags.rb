@@ -49,7 +49,7 @@ module GitHubChangelogGenerator
             puts "Warning: can't find tag #{tag}, specified with --between-tags option.".yellow
           end
         end
-        filtered_tags = all_tags.select { |tag| @options[:between_tags].include? tag }
+        filtered_tags = all_tags.select { |tag| @options[:between_tags].include? tag.name }
       end
       filtered_tags
     end
