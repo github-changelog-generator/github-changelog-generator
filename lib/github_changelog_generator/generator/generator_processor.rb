@@ -72,8 +72,8 @@ module GitHubChangelogGenerator
       # in case if not tags specified - return unchanged array
       return array if older_tag.nil? && newer_tag.nil?
 
-      newer_tag_time = newer_tag && @fetcher.get_time_of_tag(newer_tag)
-      older_tag_time = older_tag && @fetcher.get_time_of_tag(older_tag)
+      newer_tag_time = newer_tag && get_time_of_tag(newer_tag)
+      older_tag_time = older_tag && get_time_of_tag(older_tag)
 
       array.select do |req|
         if req[hash_key]

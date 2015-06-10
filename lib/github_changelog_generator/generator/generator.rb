@@ -1,4 +1,4 @@
-require "github_changelog_generator/fetcher"
+require_relative "../fetcher"
 require_relative "generator_generation"
 require_relative "generator_fetcher"
 require_relative "generator_processor"
@@ -19,7 +19,7 @@ module GitHubChangelogGenerator
     #   content = generator.compound_changelog
     def initialize(options = nil)
       @options = options || {}
-
+      @tag_times_hash = {}
       @fetcher = GitHubChangelogGenerator::Fetcher.new @options
     end
 

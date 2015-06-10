@@ -18,7 +18,6 @@ module GitHubChangelogGenerator
       @user = @options[:user]
       @project = @options[:project]
       @github_token = fetch_github_token
-      @tag_times_hash = {}
       github_options = { per_page: PER_PAGE_NUMBER }
       github_options[:oauth_token] = @github_token unless @github_token.nil?
       github_options[:endpoint] = @options[:github_endpoint] unless @options[:github_endpoint].nil?
@@ -185,26 +184,20 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
       Helper.log.info "Fetching events for issues and PR: #{i}"
     end
 
-    # Try to find tag date in local hash.
-    # Otherwise fFetch tag time and put it to local hash file.
-    # @param [String] tag_name name of the tag
+    # Fetch tag time from repo
+    #
+    # @param [Hash] tag
     # @return [Time] time of specified tag
-    def get_time_of_tag(tag_name)
-      fail ChangelogGeneratorError, "tag_name is nil".red if tag_name.nil?
-
-      if @tag_times_hash[tag_name["name"]]
-        return @tag_times_hash[tag_name["name"]]
-      end
-
+    def fetch_date_of_tag(tag)
       begin
-        github_git_data_commits_get = @github.git_data.commits.get @options[:user],
-                                                                   @options[:project],
-                                                                   tag_name["commit"]["sha"]
+        commit_data = @github.git_data.commits.get @options[:user],
+                                                   @options[:project],
+                                                   tag["commit"]["sha"]
       rescue
         Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
       end
-      time_string = github_git_data_commits_get["committer"]["date"]
-      @tag_times_hash[tag_name["name"]] = Time.parse(time_string)
+      time_string = commit_data["committer"]["date"]
+      Time.parse(time_string)
     end
 
     # Fetch commit for specified event

@@ -24,7 +24,7 @@ module GitHubChangelogGenerator
       tag1 = @options[:tag1]
       tag2 = @options[:tag2]
       tags_strings = []
-      all_tags.each { |x| tags_strings.push(x["name"]) }
+      filtered_tags.each { |x| tags_strings.push(x["name"]) }
 
       if tags_strings.include?(tag1)
         if tags_strings.include?(tag2)
@@ -128,11 +128,11 @@ module GitHubChangelogGenerator
 
       log = generate_unreleased_section
 
-      (1...all_tags.size).each do |index|
+      (1...filtered_tags.size).each do |index|
         log += generate_log_between_tags(all_tags[index], all_tags[index - 1])
       end
       if @filtered_tags.count != 0
-        log += generate_log_between_tags(nil, all_tags.last)
+        log += generate_log_between_tags(nil, filtered_tags.last)
       end
 
       log
@@ -141,7 +141,7 @@ module GitHubChangelogGenerator
     def generate_unreleased_section
       log = ""
       if @options[:unreleased]
-        unreleased_log = generate_log_between_tags(all_tags[0], nil)
+        unreleased_log = generate_log_between_tags(filtered_tags[0], nil)
         log += unreleased_log if unreleased_log
       end
       log

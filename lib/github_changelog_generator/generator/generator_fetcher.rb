@@ -21,7 +21,7 @@ module GitHubChangelogGenerator
       @filtered_tags.each do |tag|
         print "                                 \r"
         threads << Thread.new do
-          @fetcher.get_time_of_tag(tag)
+          get_time_of_tag(tag)
           print "Fetching tags dates: #{i + 1}/#{all}\r" if @options[:verbose]
           i += 1
         end
