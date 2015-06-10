@@ -45,8 +45,8 @@ module GitHubChangelogGenerator
       filtered_tags = all_tags
       if @options[:between_tags]
         @options[:between_tags].each do |tag|
-          unless all_tags.include? tag
-            puts "Warning: can't find tag #{tag}, specified with --between-tags option.".yellow
+          unless all_tags.map(&:name).include? tag
+            Helper.log.warn "Warning: can't find tag #{tag}, specified with --between-tags option."
           end
         end
         filtered_tags = all_tags.select { |tag| @options[:between_tags].include? tag.name }
@@ -58,11 +58,11 @@ module GitHubChangelogGenerator
       filtered_tags = all_tags
       if @options[:exclude_tags]
         @options[:exclude_tags].each do |tag|
-          unless all_tags.include? tag
-            puts "Warning: can't find tag #{tag}, specified with --between-tags option.".yellow
+          unless all_tags.map(&:name).include? tag
+            Helper.log.warn "Warning: can't find tag #{tag}, specified with --exclude-tags option."
           end
         end
-        filtered_tags = all_tags.reject { |tag| @options[:exclude_tags].include? tag }
+        filtered_tags = all_tags.reject { |tag| @options[:exclude_tags].include? tag.name }
       end
       filtered_tags
     end

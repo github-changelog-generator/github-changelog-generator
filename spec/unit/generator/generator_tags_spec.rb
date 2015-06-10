@@ -58,25 +58,23 @@ describe GitHubChangelogGenerator::Generator do
 
   describe "#get_filtered_tags" do
     subject do
-      tags_mash = tags_mash_from_strings(%w(1 2 3 4 5))
-      generator.get_filtered_tags(tags_mash)
+      generator.get_filtered_tags(tags_mash_from_strings(%w(1 2 3 4 5)))
     end
-    # before { generator.get_filtered_tags(%w(1 2 3 4 5)) }
 
     context "with excluded and between tags" do
       let(:generator) { GitHubChangelogGenerator::Generator.new(between_tags: %w(1 2 3), exclude_tags: %w(2)) }
       it { is_expected.to be_a Array }
-      it { is_expected.to match_array(%w(1 3)) }
+      it { is_expected.to match_array(tags_mash_from_strings(%w(1 3))) }
     end
   end
 
   describe "#filter_excluded_tags" do
-    subject { generator.filter_excluded_tags(%w(1 2 3)) }
+    subject { generator.filter_excluded_tags(tags_mash_from_strings(%w(1 2 3))) }
 
     context "with valid excluded tags" do
       let(:generator) { GitHubChangelogGenerator::Generator.new(exclude_tags: %w(3)) }
       it { is_expected.to be_a Array }
-      it { is_expected.to match_array(%w(1 2)) }
+      it { is_expected.to match_array(tags_mash_from_strings(%w(1 2))) }
     end
   end
 end
