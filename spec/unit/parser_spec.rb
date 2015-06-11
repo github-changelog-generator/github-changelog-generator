@@ -27,9 +27,9 @@ describe GitHubChangelogGenerator::Parser do
     end
   end
   describe ".user_project_from_option" do
-    # context "when option is invalid" do
-    #   it("should exit") { expect { GitHubChangelogGenerator::Parser.user_project_from_option("blah", nil) }.to raise_error(SystemExit) }
-    # end
+    context "when option is invalid" do
+      it("should exit") { expect { GitHubChangelogGenerator::Parser.user_project_from_option("blah", nil) }.to raise_error(SystemExit) }
+    end
 
     context "when option is valid" do
       subject { GitHubChangelogGenerator::Parser.user_project_from_option("skywinder/ActionSheetPicker-3.0", nil) }

@@ -4,7 +4,6 @@ module GitHubChangelogGenerator
     def fetch_and_filter_tags
       @filtered_tags = get_filtered_tags(@fetcher.get_all_tags)
       fetch_tags_dates
-      sort_tags_by_date(@filtered_tags)
     end
 
     # Sort all tags by date
@@ -22,11 +21,13 @@ module GitHubChangelogGenerator
     def get_time_of_tag(tag_name)
       fail ChangelogGeneratorError, "tag_name is nil".red if tag_name.nil?
 
-      if @tag_times_hash[tag_name["name"]]
-        @tag_times_hash[tag_name["name"]]
+      name_of_tag = tag_name["name"]
+      time_for_name = @tag_times_hash[name_of_tag]
+      if !time_for_name.nil?
+        time_for_name
       else
         time_string = @fetcher.fetch_date_of_tag tag_name
-        @tag_times_hash[tag_name["name"]] = time_string
+        @tag_times_hash[name_of_tag] = time_string
         time_string
       end
     end
