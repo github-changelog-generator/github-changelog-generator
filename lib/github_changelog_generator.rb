@@ -5,6 +5,7 @@ require "json"
 require "colorize"
 require "benchmark"
 
+require_relative "github_changelog_generator/helper"
 require_relative "github_changelog_generator/parser"
 require_relative "github_changelog_generator/generator/generator"
 require_relative "github_changelog_generator/version"

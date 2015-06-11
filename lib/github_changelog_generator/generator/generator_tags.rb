@@ -2,15 +2,34 @@ module GitHubChangelogGenerator
   class Generator
     # fetch, filter tags, fetch dates and sort them in time order
     def fetch_and_filter_tags
-      @all_tags = get_filtered_tags(@fetcher.get_all_tags)
+      @filtered_tags = get_filtered_tags(@fetcher.get_all_tags)
       fetch_tags_dates
-      sort_tags_by_date
     end
 
     # Sort all tags by date
-    def sort_tags_by_date
+    def sort_tags_by_date(tags)
       puts "Sorting tags..." if @options[:verbose]
-      @all_tags.sort_by! { |x| @fetcher.get_time_of_tag(x) }.reverse!
+      tags.sort_by! do |x|
+        get_time_of_tag(x)
+      end.reverse!
+    end
+
+    # Try to find tag date in local hash.
+    # Otherwise fFetch tag time and put it to local hash file.
+    # @param [Hash] tag_name name of the tag
+    # @return [Time] time of specified tag
+    def get_time_of_tag(tag_name)
+      fail ChangelogGeneratorError, "tag_name is nil".red if tag_name.nil?
+
+      name_of_tag = tag_name["name"]
+      time_for_name = @tag_times_hash[name_of_tag]
+      if !time_for_name.nil?
+        time_for_name
+      else
+        time_string = @fetcher.fetch_date_of_tag tag_name
+        @tag_times_hash[name_of_tag] = time_string
+        time_string
+      end
     end
 
     # Detect link, name and time for specified tag.
@@ -19,7 +38,7 @@ module GitHubChangelogGenerator
     # @return [Array] link, name and time of the tag
     def detect_link_tag_time(newer_tag)
       # if tag is nil - set current time
-      newer_tag_time = newer_tag.nil? ? Time.new : @fetcher.get_time_of_tag(newer_tag)
+      newer_tag_time = newer_tag.nil? ? Time.new : get_time_of_tag(newer_tag)
 
       # if it's future release tag - set this value
       if newer_tag.nil? && @options[:future_release]

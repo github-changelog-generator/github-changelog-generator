@@ -19,6 +19,10 @@ require "codeclimate-test-reporter"
 require "simplecov"
 require "coveralls"
 
+# This module is only used to check the environment is currently a testing env
+module SpecHelper
+end
+
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
   Coveralls::SimpleCov::Formatter,
   SimpleCov::Formatter::HTMLFormatter,

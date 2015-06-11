@@ -1,4 +1,4 @@
-require "github_changelog_generator/fetcher"
+require_relative "../fetcher"
 require_relative "generator_generation"
 require_relative "generator_fetcher"
 require_relative "generator_processor"
@@ -10,7 +10,7 @@ module GitHubChangelogGenerator
   end
 
   class Generator
-    attr_accessor :options, :all_tags, :github
+    attr_accessor :options, :filtered_tags, :github
 
     # A Generator responsible for all logic, related with change log generation from ready-to-parse issues
     #
@@ -19,7 +19,7 @@ module GitHubChangelogGenerator
     #   content = generator.compound_changelog
     def initialize(options = nil)
       @options = options || {}
-
+      @tag_times_hash = {}
       @fetcher = GitHubChangelogGenerator::Fetcher.new @options
     end
 
@@ -104,12 +104,12 @@ module GitHubChangelogGenerator
       issues.each do |dict|
         added = false
         dict.labels.each do |label|
-          if label.name == "bug"
+          if @options[:bug_labels].include? label.name
             bugs_a.push dict
             added = true
             next
           end
-          if label.name == "enhancement"
+          if @options[:enhancement_labels].include? label.name
             enhancement_a.push dict
             added = true
             next

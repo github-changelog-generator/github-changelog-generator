@@ -52,7 +52,7 @@ describe GitHubChangelogGenerator::Fetcher do
         @fetcher = GitHubChangelogGenerator::Fetcher.new(options)
       end
       it "should raise Unauthorized error" do
-        expect { @fetcher.github_fetch_tags [] }.to raise_error Github::Error::Unauthorized
+        expect { @fetcher.github_fetch_tags }.to raise_error Github::Error::Unauthorized
       end
     end
   end
