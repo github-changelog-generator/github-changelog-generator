@@ -146,7 +146,7 @@ module GitHubChangelogGenerator
         compare_link: true,
         enhancement_labels: %w(enhancement Enhancement),
         bug_labels: %w(bug Bug),
-        exclude_labels: %w(duplicate question invalid wontfix),
+        exclude_labels: %w(duplicate question invalid wontfix Duplicate Question Invalid Wontfix),
         max_issues: nil,
         simple_list: false,
         verbose: true,
