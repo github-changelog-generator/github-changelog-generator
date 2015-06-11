@@ -45,13 +45,22 @@ module GitHubChangelogGenerator
       filtered_tags = all_tags
       if @options[:between_tags]
         @options[:between_tags].each do |tag|
-          unless all_tags.include? tag
+          unless is_tag(all_tags, tag)
             puts "Warning: can't find tag #{tag}, specified with --between-tags option.".yellow
           end
         end
-        filtered_tags = all_tags.select { |tag| @options[:between_tags].include? tag }
+        filtered_tags = all_tags.select { |tag| @options[:between_tags].include? tag["name"] }
       end
       filtered_tags
+    end
+
+    def is_tag(all_tags, tagName)
+        all_tags.each do |tag|
+            if tag["name"] == tagName
+                return true
+            end
+        end
+        return false
     end
 
     def filter_excluded_tags(all_tags)
