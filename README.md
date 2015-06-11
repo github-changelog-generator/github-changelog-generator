@@ -134,7 +134,7 @@ So, if you got error like this:
 It's time to create this token or wait for 1 hour before GitHub reset the counter for your IP.
 
 ##Features and advantages of this project
-- Generate canonical, neat change log file, followed by [basic change log guidlines](http://keepachangelog.com/) :gem:
+- Generate canonical, neat change log file, followed by [basic change log guidelines](http://keepachangelog.com/) :gem:
 - Possible to generate **Unreleased** changes (closed issues that have not released yet) :dizzy:
 - **GitHub Enterprise support** via command line options! :factory:
 - Flexible format **customisation**:
