@@ -86,6 +86,12 @@ module GitHubChangelogGenerator
         opts.on("--exclude-labels  x,y,z", Array, 'Issues with the specified labels will be always excluded from changelog. Default is \'duplicate,question,invalid,wontfix\'') do |list|
           options[:exclude_labels] = list
         end
+        opts.on("--bug-labels  x,y,z", Array, 'Issues with the specified labels will be always added to "Fixed bugs" section. Default is \'bug,Bug\'') do |list|
+          options[:bug_labels] = list
+        end
+        opts.on("--enhancement-labels  x,y,z", Array, 'Issues with the specified labels will be always added to "Implemented enhancements" section. Default is \'enhancement,Enhancement\'') do |list|
+          options[:enhancement_labels] = list
+        end
         opts.on("--between-tags  x,y,z", Array, "Change log will be filled only between specified tags") do |list|
           options[:between_tags] = list
         end
@@ -138,7 +144,8 @@ module GitHubChangelogGenerator
         unreleased: true,
         unreleased_label: "Unreleased",
         compare_link: true,
-        include_labels: %w(bug enhancement),
+        enhancement_labels: %w(enhancement Enhancement),
+        bug_labels: %w(bug Bug),
         exclude_labels: %w(duplicate question invalid wontfix),
         max_issues: nil,
         simple_list: false,

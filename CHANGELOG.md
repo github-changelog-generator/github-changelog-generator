@@ -1,5 +1,13 @@
 # Change Log
 
+## [Unreleased](https://github.com/skywinder/github-changelog-generator/tree/HEAD)
+
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.5.0...HEAD)
+
+**Fixed bugs:**
+
+- Exclude and Include tags is broken [\#245](https://github.com/skywinder/github-changelog-generator/issues/245)
+
 ## [1.5.0](https://github.com/skywinder/github-changelog-generator/tree/1.5.0) (2015-05-26)
 
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.4.1...1.5.0)

@@ -104,12 +104,12 @@ module GitHubChangelogGenerator
       issues.each do |dict|
         added = false
         dict.labels.each do |label|
-          if label.name == "bug"
+          if @options[:bug_labels].include? label.name
             bugs_a.push dict
             added = true
             next
           end
-          if label.name == "enhancement"
+          if @options[:enhancement_labels].include? label.name
             enhancement_a.push dict
             added = true
             next
