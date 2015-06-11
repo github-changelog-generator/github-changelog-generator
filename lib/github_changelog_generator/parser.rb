@@ -13,7 +13,9 @@ module GitHubChangelogGenerator
 
       parser.parse!
 
-      detect_user_and_project(options)
+      if options[:user].nil? || options[:project].nil?
+        detect_user_and_project(options)
+      end
 
       if !options[:user] || !options[:project]
         puts parser.banner
