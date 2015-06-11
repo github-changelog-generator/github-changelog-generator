@@ -77,4 +77,18 @@ describe GitHubChangelogGenerator::Generator do
       it { is_expected.to match_array(tags_mash_from_strings(%w(1 2))) }
     end
   end
+
+  describe "#get_time_of_tag" do
+    before(:all) do
+      @generator = GitHubChangelogGenerator::Generator.new
+      puts "blah"
+    end
+    it "should raise ChangelogGeneratorError" do
+      expect { @generator.get_time_of_tag nil }.to raise_error(GitHubChangelogGenerator::ChangelogGeneratorError)
+    end
+  end
+
+  describe "#sort_tags_by_date" do
+    subject { generator.sort_tags_by_date }
+  end
 end
