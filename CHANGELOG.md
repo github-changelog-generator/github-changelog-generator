@@ -1,10 +1,18 @@
 # Change Log
 
-## [Unreleased](https://github.com/skywinder/github-changelog-generator/tree/HEAD)
+## [1.6.0](https://github.com/skywinder/github-changelog-generator/tree/1.6.0) (2015-06-11)
 
-[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.5.0...HEAD)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.5.0...1.6.0)
+
+**Implemented enhancements:**
+
+- Issues with any label expect "bug", "enhancement" are excluded by default. [\#240](https://github.com/skywinder/github-changelog-generator/issues/240)
+
+- Add ability to specify custom labels for enhancements & bugfixes [\#54](https://github.com/skywinder/github-changelog-generator/issues/54)
 
 **Fixed bugs:**
+
+- --user and --project options are broken [\#246](https://github.com/skywinder/github-changelog-generator/issues/246)
 
 - Exclude and Include tags is broken [\#245](https://github.com/skywinder/github-changelog-generator/issues/245)
 
@@ -64,11 +72,11 @@
 
 **Merged pull requests:**
 
-- Cleanup [\#220](https://github.com/skywinder/github-changelog-generator/pull/220) ([tuexss](https://github.com/tuexss))
-
 - Implement fetcher class [\#227](https://github.com/skywinder/github-changelog-generator/pull/227) ([skywinder](https://github.com/skywinder))
 
 - Add coveralls integration [\#223](https://github.com/skywinder/github-changelog-generator/pull/223) ([skywinder](https://github.com/skywinder))
+
+- Cleanup [\#220](https://github.com/skywinder/github-changelog-generator/pull/220) ([tuexss](https://github.com/tuexss))
 
 - Rspec & rubocop integration [\#217](https://github.com/skywinder/github-changelog-generator/pull/217) ([skywinder](https://github.com/skywinder))
 
