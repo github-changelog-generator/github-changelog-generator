@@ -50,6 +50,18 @@ module GitHubChangelogGenerator
         opts.on("-o", "--output [NAME]", "Output file. Default is CHANGELOG.md") do |last|
           options[:output] = last
         end
+        opts.on("--bugs-label [LABEL]", "Setup custom label for bug-fixes section. Default is \"**Fixed bugs:**""") do |v|
+          options[:bug_prefix] = v
+        end
+        opts.on("--enhancement-label [LABEL]", "Setup custom label for enhancements section. Default is \"**Implemented enhancements:**\"") do |v|
+          options[:enhancement_prefix] = v
+        end
+        opts.on("--issues-label [LABEL]", "Setup custom label for closed-issues section. Default is \"**Closed issues:**\"") do |v|
+          options[:issue_prefix] = v
+        end
+        opts.on("--pr-label [LABEL]", "Setup custom label for pull requests section. Default is \"**Merged pull requests:**\"") do |v|
+          options[:merge_prefix] = v
+        end
         opts.on("--[no-]issues", "Include closed issues in changelog. Default is true") do |v|
           options[:issues] = v
         end

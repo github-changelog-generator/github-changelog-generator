@@ -4,7 +4,17 @@
 
 [Full Changelog](https://github.com/skywinder/changelog_test/compare/0.0.4...HEAD)
 
+**Implemented enhancements:**
+
+- Enchancment [\#9](https://github.com/skywinder/changelog_test/issues/9)
+
+**Fixed bugs:**
+
+- BugFix [\#11](https://github.com/skywinder/changelog_test/issues/11)
+
 **Closed issues:**
+
+- Issue [\#10](https://github.com/skywinder/changelog_test/issues/10)
 
 - Issue with some other label - Should be in closed issues [\#8](https://github.com/skywinder/changelog_test/issues/8)
 
