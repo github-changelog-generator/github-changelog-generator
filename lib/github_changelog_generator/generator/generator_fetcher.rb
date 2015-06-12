@@ -41,8 +41,8 @@ module GitHubChangelogGenerator
           threads << Thread.new { find_closed_date_by_commit(issue) }
         end
         threads.each(&:join)
-        puts "Fetching closed dates for issues: Done!" if @options[:verbose]
       end
+      puts "Fetching closed dates for issues: Done!" if @options[:verbose]
     end
 
     # Fill :actual_date parameter of specified issue by closed date of the commit, if it was closed by commit.
