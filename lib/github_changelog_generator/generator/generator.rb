@@ -41,7 +41,7 @@ module GitHubChangelogGenerator
     def encapsulate_string(string)
       string.gsub! '\\', '\\\\'
 
-      encpas_chars = %w(> * _ \( \) [ ] #)
+      encpas_chars = %w(< > * _ \( \) [ ] #)
       encpas_chars.each do |char|
         string.gsub! char, "\\#{char}"
       end
