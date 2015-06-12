@@ -166,10 +166,10 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
               obj = @github.issues.events.list user: @options[:user],
                                                repo: @options[:project],
                                                issue_number: issue["number"]
+              issue[:events] = obj.body
             rescue
               Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
             end
-            issue[:events] = obj.body
             print_in_same_line("Fetching events for issues and PR: #{i + 1}/#{issues.count}")
             i += 1
           end
