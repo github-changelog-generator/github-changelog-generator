@@ -1,12 +1,24 @@
 # Change Log
 
+## [1.6.1](https://github.com/skywinder/github-changelog-generator/tree/1.6.1) (2015-06-12)
+
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.6.0...1.6.1)
+
+**Implemented enhancements:**
+
+- Ability to specify custom section header [\#241](https://github.com/skywinder/github-changelog-generator/issues/241)
+
+**Fixed bugs:**
+
+- not encapsulated character `\<` [\#249](https://github.com/skywinder/github-changelog-generator/issues/249)
+
 ## [1.6.0](https://github.com/skywinder/github-changelog-generator/tree/1.6.0) (2015-06-11)
 
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.5.0...1.6.0)
 
 **Implemented enhancements:**
 
-- Issues with any label expect "bug", "enhancement" are excluded by default. [\#240](https://github.com/skywinder/github-changelog-generator/issues/240)
+- Issues with any label  except "bug", "enhancement" should not be excluded by default. [\#240](https://github.com/skywinder/github-changelog-generator/issues/240)
 
 - Add ability to specify custom labels for enhancements & bugfixes [\#54](https://github.com/skywinder/github-changelog-generator/issues/54)
 
@@ -27,6 +39,8 @@
 - Add option `--exclude-tags x,y,z` [\#214](https://github.com/skywinder/github-changelog-generator/issues/214)
 
 - Generate change log between 2 specific tags [\#172](https://github.com/skywinder/github-changelog-generator/issues/172)
+
+- Yanked releases support [\#53](https://github.com/skywinder/github-changelog-generator/issues/53)
 
 **Merged pull requests:**
 
