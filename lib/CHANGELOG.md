@@ -1,5 +1,13 @@
 # Change Log
 
+## [Unreleased](https://github.com/skywinder/changelog_test/tree/HEAD)
+
+[Full Changelog](https://github.com/skywinder/changelog_test/compare/0.0.4...HEAD)
+
+**Closed issues:**
+
+- Issue with some other label - Should be in closed issues [\#8](https://github.com/skywinder/changelog_test/issues/8)
+
 ## [0.0.4](https://github.com/skywinder/changelog_test/tree/0.0.4) (2015-05-22)
 
 [Full Changelog](https://github.com/skywinder/changelog_test/compare/v0.0.3...0.0.4)
