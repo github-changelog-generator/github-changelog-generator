@@ -11,7 +11,7 @@ module GitHubChangelogGenerator
       log = "# Change Log\n\n"
 
       if @options[:unreleased_only]
-        log += generate_log_between_tags(all_tags[0], nil)
+        log += generate_log_between_tags(filtered_tags[0], nil)
       else
         log += generate_log_for_all_tags
       end
