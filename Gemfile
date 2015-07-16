@@ -1,9 +1,6 @@
 source "https://rubygems.org"
 
-gem "rake", ">=10.4.2"
-
-gem "github_api", ">=0.12.3"
-gem "colorize", ">=0.7.7"
+gemspec
 
 group :test do
   gem "rspec"
