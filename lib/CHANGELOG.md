@@ -14,8 +14,15 @@
 
 **Closed issues:**
 
+- Issue closed from commit from PR [\#14](https://github.com/skywinder/changelog_test/issues/14)
+- Issue, closed by PR [\#12](https://github.com/skywinder/changelog_test/issues/12)
 - Issue [\#10](https://github.com/skywinder/changelog_test/issues/10)
 - Issue with some other label - Should be in closed issues [\#8](https://github.com/skywinder/changelog_test/issues/8)
+
+**Merged pull requests:**
+
+- This PR closes 14 from commit [\#15](https://github.com/skywinder/changelog_test/pull/15) ([skywinder](https://github.com/skywinder))
+- This PR to close \#12 from body [\#13](https://github.com/skywinder/changelog_test/pull/13) ([skywinder](https://github.com/skywinder))
 
 ## [0.0.4](https://github.com/skywinder/changelog_test/tree/0.0.4) (2015-05-22)
 [Full Changelog](https://github.com/skywinder/changelog_test/compare/v0.0.3...0.0.4)
