@@ -8,7 +8,7 @@ module GitHubChangelogGenerator
       sort_tags_by_date(@filtered_tags)
       fetch_issues_and_pr
 
-      log = "# Change Log\n\n"
+      log = "#{@options[:header]}\n\n"
 
       if @options[:unreleased_only]
         log += generate_log_between_tags(filtered_tags[0], nil)
@@ -54,8 +54,9 @@ module GitHubChangelogGenerator
       if issues.any?
         issues.each do |issue|
           merge_string = get_string_for_issue(issue)
-          log += "- #{merge_string}\n\n"
+          log += "- #{merge_string}\n"
         end
+        log += "\n"
       end
       log
     end
@@ -78,7 +79,7 @@ module GitHubChangelogGenerator
       if newer_tag_name.equal? @options[:unreleased_label]
         log += "## [#{newer_tag_name}](#{project_url}/tree/#{newer_tag_link})\n\n"
       else
-        log += "## [#{newer_tag_name}](#{project_url}/tree/#{newer_tag_link}) (#{time_string})\n\n"
+        log += "## [#{newer_tag_name}](#{project_url}/tree/#{newer_tag_link}) (#{time_string})\n"
       end
 
       if @options[:compare_link] && older_tag_link
@@ -102,7 +103,7 @@ module GitHubChangelogGenerator
         return ""
       end
 
-      create_log(filtered_pull_requests, filtered_issues, newer_tag, older_tag_name)
+      create_log_for_tag(filtered_pull_requests, filtered_issues, newer_tag, older_tag_name)
     end
 
     # Apply all filters to issues and pull requests

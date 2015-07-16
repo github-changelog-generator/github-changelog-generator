@@ -59,6 +59,9 @@ module GitHubChangelogGenerator
         opts.on("--issues-label [LABEL]", "Setup custom label for closed-issues section. Default is \"**Closed issues:**\"") do |v|
           options[:issue_prefix] = v
         end
+        opts.on("--header-label [LABEL]", "Setup custom header label. Default is \"# Change Log\"") do |v|
+          options[:header] = v
+        end
         opts.on("--pr-label [LABEL]", "Setup custom label for pull requests section. Default is \"**Merged pull requests:**\"") do |v|
           options[:merge_prefix] = v
         end
@@ -92,7 +95,7 @@ module GitHubChangelogGenerator
         opts.on("--[no-]compare-link", "Include compare link (Full Changelog) between older version and newer version. Default is true") do |v|
           options[:compare_link] = v
         end
-        opts.on("--include-labels  x,y,z", Array, 'Only issues with the specified labels will be included in the changelog. Default is \'bug,enhancement\'') do |list|
+        opts.on("--include-labels  x,y,z", Array, "Only issues with the specified labels will be included in the changelog.") do |list|
           options[:include_labels] = list
         end
         opts.on("--exclude-labels  x,y,z", Array, 'Issues with the specified labels will be always excluded from changelog. Default is \'duplicate,question,invalid,wontfix\'') do |list|
@@ -162,6 +165,7 @@ module GitHubChangelogGenerator
         max_issues: nil,
         simple_list: false,
         verbose: true,
+        header: "# Change Log",
         merge_prefix: "**Merged pull requests:**",
         issue_prefix: "**Closed issues:**",
         bug_prefix: "**Fixed bugs:**",
