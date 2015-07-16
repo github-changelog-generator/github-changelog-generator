@@ -105,10 +105,10 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (~> 1.7)
-  codeclimate-test-reporter
-  coveralls
+  codeclimate-test-reporter (~> 0.4)
+  coveralls (~> 0.8)
   github_changelog_generator!
   rake (~> 10.0)
-  rspec
-  rubocop
-  simplecov
+  rspec (~> 3.2)
+  rubocop (~> 0.31)
+  simplecov (~> 0.10)
