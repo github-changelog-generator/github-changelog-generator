@@ -88,7 +88,7 @@ More detailed info about params you can find in Wiki page: [**Advanced change lo
 
 Since GitHub allows you to make only 50 requests without authentication it's recommended to run this script with a token (`-t, --token` option)
 
-**You can easily [generate it here](https://github.com/settings/tokens)**.
+**You can easily [generate it here](https://github.com/settings/tokens/new?description=GitHub%20Changelog%20Generator%20token)**.
 
 And:
 
