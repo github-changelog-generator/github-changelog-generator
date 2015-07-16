@@ -1,3 +1,10 @@
+PATH
+  remote: .
+  specs:
+    github_changelog_generator (1.6.2)
+      colorize (~> 0.7)
+      github_api (~> 0.12)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -97,11 +104,11 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  codeclimate-test-reporter
-  colorize (>= 0.7.7)
-  coveralls
-  github_api (>= 0.12.3)
-  rake (>= 10.4.2)
-  rspec
-  rubocop
-  simplecov
+  bundler (~> 1.7)
+  codeclimate-test-reporter (~> 0.4)
+  coveralls (~> 0.8)
+  github_changelog_generator!
+  rake (~> 10.0)
+  rspec (~> 3.2)
+  rubocop (~> 0.31)
+  simplecov (~> 0.10)
