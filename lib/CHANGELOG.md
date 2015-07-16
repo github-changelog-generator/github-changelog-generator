@@ -15,7 +15,6 @@
 **Closed issues:**
 
 - Issue [\#10](https://github.com/skywinder/changelog_test/issues/10)
-
 - Issue with some other label - Should be in closed issues [\#8](https://github.com/skywinder/changelog_test/issues/8)
 
 ## [0.0.4](https://github.com/skywinder/changelog_test/tree/0.0.4) (2015-05-22)

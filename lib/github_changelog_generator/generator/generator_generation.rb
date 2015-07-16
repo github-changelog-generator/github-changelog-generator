@@ -54,8 +54,9 @@ module GitHubChangelogGenerator
       if issues.any?
         issues.each do |issue|
           merge_string = get_string_for_issue(issue)
-          log += "- #{merge_string}\n\n"
+          log += "- #{merge_string}\n"
         end
+        log += "\n"
       end
       log
     end
