@@ -8,7 +8,7 @@ module GitHubChangelogGenerator
       sort_tags_by_date(@filtered_tags)
       fetch_issues_and_pr
 
-      log = "# Change Log\n\n"
+      log = "#{@options[:header]}\n\n"
 
       if @options[:unreleased_only]
         log += generate_log_between_tags(filtered_tags[0], nil)
@@ -103,7 +103,7 @@ module GitHubChangelogGenerator
         return ""
       end
 
-      create_log(filtered_pull_requests, filtered_issues, newer_tag, older_tag_name)
+      create_log_for_tag(filtered_pull_requests, filtered_issues, newer_tag, older_tag_name)
     end
 
     # Apply all filters to issues and pull requests

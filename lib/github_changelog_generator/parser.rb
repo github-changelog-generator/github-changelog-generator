@@ -59,6 +59,9 @@ module GitHubChangelogGenerator
         opts.on("--issues-label [LABEL]", "Setup custom label for closed-issues section. Default is \"**Closed issues:**\"") do |v|
           options[:issue_prefix] = v
         end
+        opts.on("--header-label [LABEL]", "Setup custom header label. Default is \"# Change Log\"") do |v|
+          options[:header] = v
+        end
         opts.on("--pr-label [LABEL]", "Setup custom label for pull requests section. Default is \"**Merged pull requests:**\"") do |v|
           options[:merge_prefix] = v
         end
@@ -162,6 +165,7 @@ module GitHubChangelogGenerator
         max_issues: nil,
         simple_list: false,
         verbose: true,
+        header: "# Change Log",
         merge_prefix: "**Merged pull requests:**",
         issue_prefix: "**Closed issues:**",
         bug_prefix: "**Fixed bugs:**",
