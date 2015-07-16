@@ -1,5 +1,13 @@
 # Change Log
 
+## [1.6.2](https://github.com/skywinder/github-changelog-generator/tree/1.6.2) (2015-07-16)
+
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.6.1...1.6.2)
+
+**Fixed bugs:**
+
+- --unreleased-only broken [\#250](https://github.com/skywinder/github-changelog-generator/issues/250)
+
 ## [1.6.1](https://github.com/skywinder/github-changelog-generator/tree/1.6.1) (2015-06-12)
 
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.6.0...1.6.1)
