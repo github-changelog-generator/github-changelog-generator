@@ -95,7 +95,7 @@ module GitHubChangelogGenerator
         opts.on("--[no-]compare-link", "Include compare link (Full Changelog) between older version and newer version. Default is true") do |v|
           options[:compare_link] = v
         end
-        opts.on("--include-labels  x,y,z", Array, 'Only issues with the specified labels will be included in the changelog. Default is \'bug,enhancement\'') do |list|
+        opts.on("--include-labels  x,y,z", Array, "Only issues with the specified labels will be included in the changelog.") do |list|
           options[:include_labels] = list
         end
         opts.on("--exclude-labels  x,y,z", Array, 'Issues with the specified labels will be always excluded from changelog. Default is \'duplicate,question,invalid,wontfix\'') do |list|
