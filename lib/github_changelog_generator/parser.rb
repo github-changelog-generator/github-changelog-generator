@@ -110,8 +110,11 @@ module GitHubChangelogGenerator
         opts.on("--between-tags  x,y,z", Array, "Change log will be filled only between specified tags") do |list|
           options[:between_tags] = list
         end
-        opts.on("--exclude-tags  x,y,z", Array, "Change log will be exclude specified tags") do |list|
+        opts.on("--exclude-tags  x,y,z", Array, "Change log will exclude specified tags") do |list|
           options[:exclude_tags] = list
+        end
+        opts.on("--since-tag  x", "Change log will start after specified tag") do |v|
+          options[:since_tag] = v
         end
         opts.on("--max-issues [NUMBER]", Integer, "Max number of issues to fetch from GitHub. Default is unlimited") do |max|
           options[:max_issues] = max

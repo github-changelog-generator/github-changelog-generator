@@ -56,8 +56,27 @@ module GitHubChangelogGenerator
     #
     # @return [Array]
     def get_filtered_tags(all_tags)
-      filtered_tags = filter_between_tags(all_tags)
+      filtered_tags = filter_since_tag(all_tags)
+      filtered_tags = filter_between_tags(filtered_tags)
       filter_excluded_tags(filtered_tags)
+    end
+
+    def filter_since_tag(all_tags)
+      filtered_tags = all_tags
+      tag = @options[:since_tag]
+      if tag
+        if all_tags.map(&:name).include? tag
+          idx = all_tags.index { |t| t.name == tag }
+          if idx > 0
+            filtered_tags = all_tags[0..idx - 1]
+          else
+            filtered_tags = []
+          end
+        else
+          Helper.log.warn "Warning: can't find tag #{tag}, specified with --since-tag option."
+        end
+      end
+      filtered_tags
     end
 
     def filter_between_tags(all_tags)
