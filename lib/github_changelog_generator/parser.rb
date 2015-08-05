@@ -14,7 +14,7 @@ module GitHubChangelogGenerator
       parser.parse!
 
       if options[:user].nil? || options[:project].nil?
-        detect_user_and_project(options)
+        detect_user_and_project(options, ARGV[0], ARGV[1])
       end
 
       if !options[:user] || !options[:project]
@@ -180,8 +180,8 @@ module GitHubChangelogGenerator
     end
 
     # Detects user and project from git
-    def self.detect_user_and_project(options)
-      options[:user], options[:project] = user_project_from_option(ARGV[0], ARGV[1], options[:github_site])
+    def self.detect_user_and_project(options, arg0 = nil, arg1 = nil)
+      options[:user], options[:project] = user_project_from_option(arg0, arg1, options[:github_site])
       if !options[:user] || !options[:project]
         if ENV["RUBYLIB"] =~ /ruby-debug-ide/
           options[:user] = "skywinder"
