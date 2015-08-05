@@ -16,7 +16,7 @@ module GitHubChangelogGenerator
                   bug_labels enhancement_labels
                   between_tags exclude_tags since_tag max_issues
                   github_site github_endpoint simple_list
-                  future_release verbose )
+                  future_release verbose release_url )
 
     OPTIONS.each do |o|
       attr_accessor o.to_sym
