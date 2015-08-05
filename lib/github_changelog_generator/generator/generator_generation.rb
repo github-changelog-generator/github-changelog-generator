@@ -76,10 +76,15 @@ module GitHubChangelogGenerator
       time_string = newer_tag_time.strftime @options[:date_format]
 
       # Generate tag name and link
-      if newer_tag_name.equal? @options[:unreleased_label]
-        log += "## [#{newer_tag_name}](#{project_url}/tree/#{newer_tag_link})\n\n"
+      if @options[:release_url]
+        release_url = format(@options[:release_url], newer_tag_link)
       else
-        log += "## [#{newer_tag_name}](#{project_url}/tree/#{newer_tag_link}) (#{time_string})\n"
+        release_url = "#{project_url}/tree/#{newer_tag_link}"
+      end
+      if newer_tag_name.equal? @options[:unreleased_label]
+        log += "## [#{newer_tag_name}](#{release_url})\n\n"
+      else
+        log += "## [#{newer_tag_name}](#{release_url}) (#{time_string})\n"
       end
 
       if @options[:compare_link] && older_tag_link
