@@ -104,6 +104,20 @@ So, if you got error like this:
 
 It's time to create this token or wait for 1 hour before GitHub reset the counter for your IP.
 
+
+### Rake task
+
+You love Rake? So do we! And so we've made it easier for you by providing a Rake task library for your Change log generation. In your Rakefile, use:
+
+```ruby
+GitHubChangelogGenerator::RakeTask.new :changelog do |config|
+  config.since_tag = '0.1.14'
+  config.future_release = '0.2.0'
+end
+```
+
+All command line options can be passed to the Rake task as `config` parameters. Since you're naming the Rake task yourself, you can create as many as you want, too.
+
 ##Features and advantages of this project
 - Generate canonical, neat change log file, followed by [basic change log guidelines](http://keepachangelog.com/) :gem:
 - Possible to generate **Unreleased** changes (closed issues that have not released yet) :dizzy:
