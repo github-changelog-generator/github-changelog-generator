@@ -119,6 +119,9 @@ module GitHubChangelogGenerator
         opts.on("--max-issues [NUMBER]", Integer, "Max number of issues to fetch from GitHub. Default is unlimited") do |max|
           options[:max_issues] = max
         end
+        opts.on("--release-url [URL]", "The URL to point to for release links, in printf format (with the tag as variable).") do |url|
+          options[:release_url] = url
+        end
         opts.on("--github-site [URL]", "The Enterprise Github site on which your project is hosted.") do |last|
           options[:github_site] = last
         end
