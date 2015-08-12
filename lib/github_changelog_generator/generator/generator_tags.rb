@@ -53,7 +53,7 @@ module GitHubChangelogGenerator
     end
 
     def detect_since_tag
-      if File.file?(@options[:base])
+      if @options[:base] && File.file?(@options[:base])
         reader = GitHubChangelogGenerator::Reader.new
         content = reader.read(@options[:base])
         return content[0]["version"] if content
