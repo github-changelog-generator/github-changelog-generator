@@ -92,7 +92,7 @@ Since GitHub allows you to make only 50 requests without authentication it's rec
 
 And:
 
-- Run with key `-t [your-16-digit-token]` 
+- Run with key `-t [your-40-digit-token]` 
 - Or set environment variable `CHANGELOG_GITHUB_TOKEN` and specify there your token. 
  		
 	i.e. add to your `~/.bash_profile` or `~/.zshrc` or any other place to load ENV variables string :
