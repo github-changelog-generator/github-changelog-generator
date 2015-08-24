@@ -90,18 +90,70 @@ describe GitHubChangelogGenerator::Generator do
   end
 
   describe "#filter_since_tag" do
-    subject { generator.filter_since_tag(tags_mash_from_strings(%w(1 2 3))) }
+    context "with filled array" do
+      subject { generator.filter_since_tag(tags_mash_from_strings(%w(1 2 3))) }
 
-    context "with valid since tag" do
-      let(:generator) { GitHubChangelogGenerator::Generator.new(since_tag: "2") }
-      it { is_expected.to be_a Array }
-      it { is_expected.to match_array(tags_mash_from_strings(%w(1))) }
+      context "with valid since tag" do
+        let(:generator) { GitHubChangelogGenerator::Generator.new(since_tag: "2") }
+        it { is_expected.to be_a Array }
+        it { is_expected.to match_array(tags_mash_from_strings(%w(1))) }
+      end
+
+      context "with invalid since tag" do
+        let(:generator) { GitHubChangelogGenerator::Generator.new(since_tag: "Invalid tag") }
+        it { is_expected.to be_a Array }
+        it { is_expected.to match_array(tags_mash_from_strings(%w(1 2 3))) }
+      end
     end
 
-    context "with invalid since tag" do
-      let(:generator) { GitHubChangelogGenerator::Generator.new(since_tag: %w(invalid tags)) }
-      it { is_expected.to be_a Array }
-      it { is_expected.to match_array(tags_mash_from_strings(%w(1 2 3))) }
+    context "with empty array" do
+      subject { generator.filter_since_tag(tags_mash_from_strings(%w())) }
+
+      context "with valid since tag" do
+        let(:generator) { GitHubChangelogGenerator::Generator.new(since_tag: "2") }
+        it { is_expected.to be_a Array }
+        it { is_expected.to match_array(tags_mash_from_strings(%w())) }
+      end
+
+      context "with invalid since tag" do
+        let(:generator) { GitHubChangelogGenerator::Generator.new(since_tag: "Invalid tag") }
+        it { is_expected.to be_a Array }
+        it { is_expected.to match_array(tags_mash_from_strings(%w())) }
+      end
+    end
+  end
+
+  describe "#filter_due_tag" do
+    context "with filled array" do
+      subject { generator.filter_due_tag(tags_mash_from_strings(%w(1 2 3))) }
+
+      context "with valid due tag" do
+        let(:generator) { GitHubChangelogGenerator::Generator.new(due_tag: "2") }
+        it { is_expected.to be_a Array }
+        it { is_expected.to match_array(tags_mash_from_strings(%w(3))) }
+      end
+
+      context "with invalid due tag" do
+        let(:generator) { GitHubChangelogGenerator::Generator.new(due_tag: "Invalid tag") }
+        it { is_expected.to be_a Array }
+        it { is_expected.to match_array(tags_mash_from_strings(%w(1 2 3))) }
+      end
+    end
+
+    context "with empty array" do
+      subject { generator.filter_due_tag(tags_mash_from_strings(%w())) }
+
+      context "with valid due tag" do
+        let(:generator) { GitHubChangelogGenerator::Generator.new(due_tag: "2") }
+        it { is_expected.to be_a Array }
+        it { is_expected.to match_array(tags_mash_from_strings(%w())) }
+      end
+
+      context "with invalid due tag" do
+        let(:generator) { GitHubChangelogGenerator::Generator.new(due_tag: "Invalid tag") }
+        it { is_expected.to be_a Array }
+        it { is_expected.to match_array(tags_mash_from_strings(%w())) }
+      end
     end
   end
 
