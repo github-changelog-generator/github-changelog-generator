@@ -1,5 +1,21 @@
 # Change Log
 
+## [1.8.0](https://github.com/skywinder/github-changelog-generator/tree/1.8.0) (2015-08-24)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.7.0...1.8.0)
+
+**Implemented enhancements:**
+
+- Generate change log since/due specific tag [\#254](https://github.com/skywinder/github-changelog-generator/issues/254)
+
+**Merged pull requests:**
+
+- Add `--due-tag` option [\#265](https://github.com/skywinder/github-changelog-generator/pull/265) ([skywinder](https://github.com/skywinder))
+- Add release\_url to rake task options [\#264](https://github.com/skywinder/github-changelog-generator/pull/264) ([raphink](https://github.com/raphink))
+- Add a rake task [\#260](https://github.com/skywinder/github-changelog-generator/pull/260) ([raphink](https://github.com/raphink))
+- Add release\_url option [\#259](https://github.com/skywinder/github-changelog-generator/pull/259) ([raphink](https://github.com/raphink))
+- Add --base option [\#258](https://github.com/skywinder/github-changelog-generator/pull/258) ([raphink](https://github.com/raphink))
+- Add --since-tag [\#257](https://github.com/skywinder/github-changelog-generator/pull/257) ([raphink](https://github.com/raphink))
+
 ## [1.7.0](https://github.com/skywinder/github-changelog-generator/tree/1.7.0) (2015-07-16)
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.6.2...1.7.0)
 
