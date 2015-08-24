@@ -50,6 +50,9 @@ module GitHubChangelogGenerator
         opts.on("-o", "--output [NAME]", "Output file. Default is CHANGELOG.md") do |last|
           options[:output] = last
         end
+        opts.on("-b", "--base [NAME]", "Optional base file to append generated changes to.") do |last|
+          options[:base] = last
+        end
         opts.on("--bugs-label [LABEL]", "Setup custom label for bug-fixes section. Default is \"**Fixed bugs:**""") do |v|
           options[:bug_prefix] = v
         end
@@ -156,6 +159,7 @@ module GitHubChangelogGenerator
         tag2: nil,
         date_format: "%Y-%m-%d",
         output: "CHANGELOG.md",
+        base: "HISTORY.md",
         issues: true,
         add_issues_wo_labels: true,
         add_pr_wo_labels: true,

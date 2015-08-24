@@ -104,6 +104,14 @@ So, if you got error like this:
 
 It's time to create this token or wait for 1 hour before GitHub reset the counter for your IP.
 
+## Migrating from a manual changelog
+
+Knowing how dedicated you are to your project, you probably haven't been waiting for github-changelog-generator to keep a changelog,
+but you most likely wouln't like to have to open issues and PRs for all past features listed in your historic changelog.
+
+That's where `--base` comes handy. This option lets you pass a static changelog to be appended at the end of the generated entries.
+
+If you have a `HISTORY.md` file in your project, it will automatically be picked as the static historical changelog and appended.
 
 ### Rake task
 

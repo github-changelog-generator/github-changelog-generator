@@ -52,6 +52,14 @@ module GitHubChangelogGenerator
       [newer_tag_link, newer_tag_name, newer_tag_time]
     end
 
+    def detect_since_tag
+      if @options[:base] && File.file?(@options[:base])
+        reader = GitHubChangelogGenerator::Reader.new
+        content = reader.read(@options[:base])
+        return content[0]["version"] if content
+      end
+    end
+
     # Return tags after filtering tags in lists provided by option: --between-tags & --exclude-tags
     #
     # @return [Array]
@@ -64,6 +72,7 @@ module GitHubChangelogGenerator
     def filter_since_tag(all_tags)
       filtered_tags = all_tags
       tag = @options[:since_tag]
+      tag ||= detect_since_tag
       if tag
         if all_tags.map(&:name).include? tag
           idx = all_tags.index { |t| t.name == tag }
