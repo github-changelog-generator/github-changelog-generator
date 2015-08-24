@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    github_changelog_generator (1.7.0)
+    github_changelog_generator (1.8.0)
       colorize (~> 0.7)
       github_api (~> 0.12)
 
@@ -29,13 +29,13 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     faraday (0.9.1)
       multipart-post (>= 1.2, < 3)
-    github_api (0.12.3)
+    github_api (0.12.4)
       addressable (~> 2.3)
       descendants_tracker (~> 0.0.4)
       faraday (~> 0.8, < 0.10)
-      hashie (>= 3.3)
+      hashie (>= 3.4)
       multi_json (>= 1.7.5, < 2.0)
-      nokogiri (~> 1.6.3)
+      nokogiri (~> 1.6.6)
       oauth2
     hashie (3.4.2)
     http-cookie (1.0.2)
@@ -112,3 +112,6 @@ DEPENDENCIES
   rspec (~> 3.2)
   rubocop (~> 0.31)
   simplecov (~> 0.10)
+
+BUNDLED WITH
+   1.10.6
