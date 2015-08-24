@@ -92,7 +92,7 @@ Since GitHub allows you to make only 50 requests without authentication it's rec
 
 And:
 
-- Run with key `-t [your-16-digit-token]` 
+- Run with key `-t [your-40-digit-token]` 
 - Or set environment variable `CHANGELOG_GITHUB_TOKEN` and specify there your token. 
  		
 	i.e. add to your `~/.bash_profile` or `~/.zshrc` or any other place to load ENV variables string :
@@ -103,6 +103,28 @@ So, if you got error like this:
 >! /Library/Ruby/Gems/2.0.0/gems/github_api-0.12.2/lib/github_api/response/raise_error.rb:14:in `on_complete'
 
 It's time to create this token or wait for 1 hour before GitHub reset the counter for your IP.
+
+## Migrating from a manual changelog
+
+Knowing how dedicated you are to your project, you probably haven't been waiting for github-changelog-generator to keep a changelog,
+but you most likely wouln't like to have to open issues and PRs for all past features listed in your historic changelog.
+
+That's where `--base` comes handy. This option lets you pass a static changelog to be appended at the end of the generated entries.
+
+If you have a `HISTORY.md` file in your project, it will automatically be picked as the static historical changelog and appended.
+
+### Rake task
+
+You love Rake? So do we! And so we've made it easier for you by providing a Rake task library for your Change log generation. In your Rakefile, use:
+
+```ruby
+GitHubChangelogGenerator::RakeTask.new :changelog do |config|
+  config.since_tag = '0.1.14'
+  config.future_release = '0.2.0'
+end
+```
+
+All command line options can be passed to the Rake task as `config` parameters. Since you're naming the Rake task yourself, you can create as many as you want, too.
 
 ##Features and advantages of this project
 - Generate canonical, neat change log file, followed by [basic change log guidelines](http://keepachangelog.com/) :gem:

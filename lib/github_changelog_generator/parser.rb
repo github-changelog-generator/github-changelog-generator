@@ -14,7 +14,7 @@ module GitHubChangelogGenerator
       parser.parse!
 
       if options[:user].nil? || options[:project].nil?
-        detect_user_and_project(options)
+        detect_user_and_project(options, ARGV[0], ARGV[1])
       end
 
       if !options[:user] || !options[:project]
@@ -49,6 +49,9 @@ module GitHubChangelogGenerator
         end
         opts.on("-o", "--output [NAME]", "Output file. Default is CHANGELOG.md") do |last|
           options[:output] = last
+        end
+        opts.on("-b", "--base [NAME]", "Optional base file to append generated changes to.") do |last|
+          options[:base] = last
         end
         opts.on("--bugs-label [LABEL]", "Setup custom label for bug-fixes section. Default is \"**Fixed bugs:**""") do |v|
           options[:bug_prefix] = v
@@ -110,11 +113,17 @@ module GitHubChangelogGenerator
         opts.on("--between-tags  x,y,z", Array, "Change log will be filled only between specified tags") do |list|
           options[:between_tags] = list
         end
-        opts.on("--exclude-tags  x,y,z", Array, "Change log will be exclude specified tags") do |list|
+        opts.on("--exclude-tags  x,y,z", Array, "Change log will exclude specified tags") do |list|
           options[:exclude_tags] = list
+        end
+        opts.on("--since-tag  x", "Change log will start after specified tag") do |v|
+          options[:since_tag] = v
         end
         opts.on("--max-issues [NUMBER]", Integer, "Max number of issues to fetch from GitHub. Default is unlimited") do |max|
           options[:max_issues] = max
+        end
+        opts.on("--release-url [URL]", "The URL to point to for release links, in printf format (with the tag as variable).") do |url|
+          options[:release_url] = url
         end
         opts.on("--github-site [URL]", "The Enterprise Github site on which your project is hosted.") do |last|
           options[:github_site] = last
@@ -150,6 +159,7 @@ module GitHubChangelogGenerator
         tag2: nil,
         date_format: "%Y-%m-%d",
         output: "CHANGELOG.md",
+        base: "HISTORY.md",
         issues: true,
         add_issues_wo_labels: true,
         add_pr_wo_labels: true,
@@ -177,8 +187,8 @@ module GitHubChangelogGenerator
     end
 
     # Detects user and project from git
-    def self.detect_user_and_project(options)
-      options[:user], options[:project] = user_project_from_option(ARGV[0], ARGV[1], options[:github_site])
+    def self.detect_user_and_project(options, arg0 = nil, arg1 = nil)
+      options[:user], options[:project] = user_project_from_option(arg0, arg1, options[:github_site])
       if !options[:user] || !options[:project]
         if ENV["RUBYLIB"] =~ /ruby-debug-ide/
           options[:user] = "skywinder"

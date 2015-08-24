@@ -89,6 +89,22 @@ describe GitHubChangelogGenerator::Generator do
     end
   end
 
+  describe "#filter_since_tag" do
+    subject { generator.filter_since_tag(tags_mash_from_strings(%w(1 2 3))) }
+
+    context "with valid since tag" do
+      let(:generator) { GitHubChangelogGenerator::Generator.new(since_tag: "2") }
+      it { is_expected.to be_a Array }
+      it { is_expected.to match_array(tags_mash_from_strings(%w(1))) }
+    end
+
+    context "with invalid since tag" do
+      let(:generator) { GitHubChangelogGenerator::Generator.new(since_tag: %w(invalid tags)) }
+      it { is_expected.to be_a Array }
+      it { is_expected.to match_array(tags_mash_from_strings(%w(1 2 3))) }
+    end
+  end
+
   describe "#get_time_of_tag" do
     current_time = Time.now
     before(:all) { @generator = GitHubChangelogGenerator::Generator.new }
