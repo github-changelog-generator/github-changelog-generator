@@ -48,11 +48,11 @@ module GitHubChangelogGenerator
     # Fill :actual_date parameter of specified issue by closed date of the commit, if it was closed by commit.
     # @param [Hash] issue
     def find_closed_date_by_commit(issue)
-      unless issue["events"].nil?
+      unless issue[:events].nil?
         # if it's PR -> then find "merged event", in case of usual issue -> fond closed date
         compare_string = issue[:merged_at].nil? ? "closed" : "merged"
         # reverse! - to find latest closed event. (event goes in date order)
-        issue["events"].reverse!.each do |event|
+        issue[:events].reverse!.each do |event|
           if event[:event].eql? compare_string
             set_date_from_event(event, issue)
             break
