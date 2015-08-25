@@ -1,5 +1,14 @@
 # Change Log
 
+## [Unreleased](https://github.com/skywinder/github-changelog-generator/tree/HEAD)
+
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.8.0...HEAD)
+
+**Merged pull requests:**
+
+- Fix issue with missing events \(in case of events for issue \>30\) [\#268](https://github.com/skywinder/github-changelog-generator/pull/268) ([skywinder](https://github.com/skywinder))
+- Use since\_tag as default for older\_tag [\#267](https://github.com/skywinder/github-changelog-generator/pull/267) ([raphink](https://github.com/raphink))
+
 ## [1.8.0](https://github.com/skywinder/github-changelog-generator/tree/1.8.0) (2015-08-24)
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.7.0...1.8.0)
 
