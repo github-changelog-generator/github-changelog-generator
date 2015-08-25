@@ -7,6 +7,7 @@
 **Implemented enhancements:**
 
 - Enchancment [\#9](https://github.com/skywinder/changelog_test/issues/9)
+- PR with enhancement label [\#16](https://github.com/skywinder/changelog_test/pull/16) ([skywinder](https://github.com/skywinder))
 
 **Fixed bugs:**
 
@@ -22,7 +23,6 @@
 **Merged pull requests:**
 
 - This a PR with a lot of comments and events [\#17](https://github.com/skywinder/changelog_test/pull/17) ([skywinder](https://github.com/skywinder))
-- PR [\#16](https://github.com/skywinder/changelog_test/pull/16) ([skywinder](https://github.com/skywinder))
 - This PR closes 14 from commit [\#15](https://github.com/skywinder/changelog_test/pull/15) ([skywinder](https://github.com/skywinder))
 - This PR to close \#12 from body [\#13](https://github.com/skywinder/changelog_test/pull/13) ([skywinder](https://github.com/skywinder))
 
