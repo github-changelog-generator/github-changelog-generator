@@ -51,9 +51,8 @@ module GitHubChangelogGenerator
     def generate_sub_section(issues, prefix)
       log = ""
 
-      log += "#{prefix}\n\n" if options[:simple_list] != true && issues.any?
-
       if issues.any?
+        log += "#{prefix}\n\n" unless options[:simple_list]
         issues.each do |issue|
           merge_string = get_string_for_issue(issue)
           log += "- #{merge_string}\n"
