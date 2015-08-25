@@ -1,8 +1,11 @@
 # Change Log
 
-## [Unreleased](https://github.com/skywinder/github-changelog-generator/tree/HEAD)
+## [1.8.1](https://github.com/skywinder/github-changelog-generator/tree/1.8.1) (2015-08-25)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.8.0...1.8.1)
 
-[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.8.0...HEAD)
+**Implemented enhancements:**
+
+- Honor labels for Pull Requests [\#266](https://github.com/skywinder/github-changelog-generator/pull/266) ([raphink](https://github.com/raphink))
 
 **Merged pull requests:**
 
@@ -15,6 +18,7 @@
 **Implemented enhancements:**
 
 - Generate change log since/due specific tag [\#254](https://github.com/skywinder/github-changelog-generator/issues/254)
+- Add --base option [\#258](https://github.com/skywinder/github-changelog-generator/pull/258) ([raphink](https://github.com/raphink))
 
 **Merged pull requests:**
 
@@ -22,7 +26,6 @@
 - Add release\_url to rake task options [\#264](https://github.com/skywinder/github-changelog-generator/pull/264) ([raphink](https://github.com/raphink))
 - Add a rake task [\#260](https://github.com/skywinder/github-changelog-generator/pull/260) ([raphink](https://github.com/raphink))
 - Add release\_url option [\#259](https://github.com/skywinder/github-changelog-generator/pull/259) ([raphink](https://github.com/raphink))
-- Add --base option [\#258](https://github.com/skywinder/github-changelog-generator/pull/258) ([raphink](https://github.com/raphink))
 - Add --since-tag [\#257](https://github.com/skywinder/github-changelog-generator/pull/257) ([raphink](https://github.com/raphink))
 
 ## [1.7.0](https://github.com/skywinder/github-changelog-generator/tree/1.7.0) (2015-07-16)
@@ -104,6 +107,7 @@
 
 - Parsing of existing Change Log file [\#212](https://github.com/skywinder/github-changelog-generator/issues/212)
 - Warn users about 0 tags in repo. [\#208](https://github.com/skywinder/github-changelog-generator/issues/208)
+- Cleanup [\#220](https://github.com/skywinder/github-changelog-generator/pull/220) ([tuexss](https://github.com/tuexss))
 
 **Closed issues:**
 
@@ -113,7 +117,6 @@
 
 - Implement fetcher class [\#227](https://github.com/skywinder/github-changelog-generator/pull/227) ([skywinder](https://github.com/skywinder))
 - Add coveralls integration [\#223](https://github.com/skywinder/github-changelog-generator/pull/223) ([skywinder](https://github.com/skywinder))
-- Cleanup [\#220](https://github.com/skywinder/github-changelog-generator/pull/220) ([tuexss](https://github.com/tuexss))
 - Rspec & rubocop integration [\#217](https://github.com/skywinder/github-changelog-generator/pull/217) ([skywinder](https://github.com/skywinder))
 - Implement Reader class to parse ChangeLog.md [\#216](https://github.com/skywinder/github-changelog-generator/pull/216) ([estahn](https://github.com/estahn))
 - Relatively require github\_changelog\_generator library [\#207](https://github.com/skywinder/github-changelog-generator/pull/207) ([sneal](https://github.com/sneal))
@@ -129,7 +132,7 @@
 ## [1.3.10](https://github.com/skywinder/github-changelog-generator/tree/1.3.10) (2015-03-18)
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.3.9...1.3.10)
 
-**Merged pull requests:**
+**Fixed bugs:**
 
 - Fix termination in case of empty unreleased section with `--unreleased-only` option. [\#70](https://github.com/skywinder/github-changelog-generator/pull/70) ([skywinder](https://github.com/skywinder))
 
@@ -140,7 +143,7 @@
 
 - Improve method of detecting owner and repository [\#63](https://github.com/skywinder/github-changelog-generator/issues/63)
 
-**Merged pull requests:**
+**Fixed bugs:**
 
 - Resolved concurrency problem in case of issues \> 2048 [\#65](https://github.com/skywinder/github-changelog-generator/pull/65) ([skywinder](https://github.com/skywinder))
 
@@ -214,7 +217,7 @@
 ## [1.2.7](https://github.com/skywinder/github-changelog-generator/tree/1.2.7) (2015-01-26)
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.2.6...1.2.7)
 
-**Merged pull requests:**
+**Implemented enhancements:**
 
 - Add compare link between older version and newer version [\#46](https://github.com/skywinder/github-changelog-generator/pull/46) ([sue445](https://github.com/sue445))
 
@@ -235,10 +238,10 @@
 **Fixed bugs:**
 
 - Error when trying to generate log for repo without tags [\#32](https://github.com/skywinder/github-changelog-generator/issues/32)
+- PrettyPrint class is included using lowercase 'pp' [\#43](https://github.com/skywinder/github-changelog-generator/pull/43) ([schwing](https://github.com/schwing))
 
 **Merged pull requests:**
 
-- PrettyPrint class is included using lowercase 'pp' [\#43](https://github.com/skywinder/github-changelog-generator/pull/43) ([schwing](https://github.com/schwing))
 - support enterprise github via command line options [\#42](https://github.com/skywinder/github-changelog-generator/pull/42) ([glenlovett](https://github.com/glenlovett))
 
 ## [1.2.4](https://github.com/skywinder/github-changelog-generator/tree/1.2.4) (2014-12-16)
@@ -348,6 +351,7 @@
 
 - Add support for fixed issues and implemented enchanments. [\#6](https://github.com/skywinder/github-changelog-generator/issues/6)
 - Implement option to specify output filename [\#4](https://github.com/skywinder/github-changelog-generator/issues/4)
+- Implement support of different tags. [\#8](https://github.com/skywinder/github-changelog-generator/pull/8) ([skywinder](https://github.com/skywinder))
 
 **Fixed bugs:**
 
@@ -355,7 +359,6 @@
 
 **Merged pull requests:**
 
-- Implement support of different tags. [\#8](https://github.com/skywinder/github-changelog-generator/pull/8) ([skywinder](https://github.com/skywinder))
 - Add support for issues in CHANGELOG [\#7](https://github.com/skywinder/github-changelog-generator/pull/7) ([skywinder](https://github.com/skywinder))
 
 ## [0.1.0](https://github.com/skywinder/github-changelog-generator/tree/0.1.0) (2014-11-07)
