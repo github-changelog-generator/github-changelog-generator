@@ -211,6 +211,8 @@ If you're seeing this warning:
 6. Create a new Pull Request
 7. Profit! :white_check_mark:
 
+*To test change log workflow you can use [test repo](https://github.com/skywinder/changelog_test/)*
+
 ## License
 
 Github Changelog Generator is released under the [MIT License](http://www.opensource.org/licenses/MIT).
