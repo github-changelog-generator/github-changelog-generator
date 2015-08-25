@@ -103,7 +103,7 @@ module GitHubChangelogGenerator
     def generate_log_between_tags(older_tag, newer_tag)
       filtered_issues, filtered_pull_requests = filter_issues_for_tags(newer_tag, older_tag)
 
-      older_tag_name = older_tag.nil? ? nil : older_tag["name"]
+      older_tag_name = older_tag.nil? ? detect_since_tag : older_tag["name"]
 
       if newer_tag.nil? && filtered_issues.empty? && filtered_pull_requests.empty?
         # do not generate empty unreleased section
