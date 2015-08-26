@@ -24,7 +24,9 @@ module GitHubChangelogGenerator
 
       if options[:verbose]
         Helper.log.info "Performing task with options:"
-        pp options
+        options_to_display = options
+        options_to_display[:token] = options_to_display[:token].nil? ? nil : "hidden value"
+        pp options_to_display
         puts ""
       end
 
