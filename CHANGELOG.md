@@ -1,5 +1,12 @@
 # Change Log
 
+## [1.8.2](https://github.com/skywinder/github-changelog-generator/tree/1.8.2) (2015-08-26)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.8.1...1.8.2)
+
+**Closed issues:**
+
+- Output should not include security information [\#270](https://github.com/skywinder/github-changelog-generator/issues/270)
+
 ## [1.8.1](https://github.com/skywinder/github-changelog-generator/tree/1.8.1) (2015-08-25)
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.8.0...1.8.1)
 
