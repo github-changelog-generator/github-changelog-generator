@@ -120,22 +120,22 @@ module GitHubChangelogGenerator
         issues_a.push dict unless added
       end
 
+      added_pull_requests = []
       pull_requests.each do |dict|
-        added = false
         dict.labels.each do |label|
           if @options[:bug_labels].include? label.name
             bugs_a.push dict
-            added = true
+            added_pull_requests.push dict
             next
           end
           if @options[:enhancement_labels].include? label.name
             enhancement_a.push dict
-            added = true
+            added_pull_requests.push dict
             next
           end
         end
-        pull_requests.delete(dict) if added
       end
+      added_pull_requests.each { |p| pull_requests.delete(p) }
 
       [bugs_a, enhancement_a, issues_a]
     end
