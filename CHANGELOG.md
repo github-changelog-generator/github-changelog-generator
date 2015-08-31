@@ -1,5 +1,12 @@
 # Change Log
 
+## [1.8.3](https://github.com/skywinder/github-changelog-generator/tree/1.8.3) (2015-08-31)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.8.2...1.8.3)
+
+**Merged pull requests:**
+
+- Do not alter pull\_requests while iterating on it [\#271](https://github.com/skywinder/github-changelog-generator/pull/271) ([raphink](https://github.com/raphink))
+
 ## [1.8.2](https://github.com/skywinder/github-changelog-generator/tree/1.8.2) (2015-08-26)
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.8.1...1.8.2)
 
@@ -241,15 +248,12 @@
 **Implemented enhancements:**
 
 - Use milestone to specify in which version bug was fixed [\#22](https://github.com/skywinder/github-changelog-generator/issues/22)
+- support enterprise github via command line options [\#42](https://github.com/skywinder/github-changelog-generator/pull/42) ([glenlovett](https://github.com/glenlovett))
 
 **Fixed bugs:**
 
 - Error when trying to generate log for repo without tags [\#32](https://github.com/skywinder/github-changelog-generator/issues/32)
 - PrettyPrint class is included using lowercase 'pp' [\#43](https://github.com/skywinder/github-changelog-generator/pull/43) ([schwing](https://github.com/schwing))
-
-**Merged pull requests:**
-
-- support enterprise github via command line options [\#42](https://github.com/skywinder/github-changelog-generator/pull/42) ([glenlovett](https://github.com/glenlovett))
 
 ## [1.2.4](https://github.com/skywinder/github-changelog-generator/tree/1.2.4) (2014-12-16)
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.2.3...1.2.4)
