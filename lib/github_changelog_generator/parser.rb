@@ -22,15 +22,20 @@ module GitHubChangelogGenerator
         exit
       end
 
+      print_options(options)
+
+      options
+    end
+
+    # @param [Hash] options to display
+    def self.print_options(options)
       if options[:verbose]
         Helper.log.info "Performing task with options:"
-        options_to_display = options
+        options_to_display = options.clone
         options_to_display[:token] = options_to_display[:token].nil? ? nil : "hidden value"
         pp options_to_display
         puts ""
       end
-
-      options
     end
 
     # setup parsing options
