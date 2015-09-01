@@ -1,5 +1,12 @@
 # Change Log
 
+## [1.8.4](https://github.com/skywinder/github-changelog-generator/tree/1.8.4) (2015-09-01)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.8.3...1.8.4)
+
+**Fixed bugs:**
+
+- Sending OATH through -t fails [\#274](https://github.com/skywinder/github-changelog-generator/issues/274)
+
 ## [1.8.3](https://github.com/skywinder/github-changelog-generator/tree/1.8.3) (2015-08-31)
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.8.2...1.8.3)
 
