@@ -51,7 +51,7 @@ module GitHubChangelogGenerator
 
         OPTIONS.each do |o|
           v = instance_variable_get("@#{o}")
-          options[o.to_sym] = v if v
+          options[o.to_sym] = v unless v.nil?
         end
 
         generator = Generator.new options
