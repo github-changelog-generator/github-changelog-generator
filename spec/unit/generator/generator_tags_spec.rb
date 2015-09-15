@@ -87,6 +87,18 @@ describe GitHubChangelogGenerator::Generator do
       it { is_expected.to be_a Array }
       it { is_expected.to match_array(tags_mash_from_strings(%w(1 2 3))) }
     end
+
+    context "with regex exclude_tags" do
+      let(:generator) { GitHubChangelogGenerator::Generator.new(exclude_tags: /[23]/) }
+      it { is_expected.to be_a Array }
+      it { is_expected.to match_array(tags_mash_from_strings(%w(1))) }
+    end
+
+    context "with non-matching regex in exclude_tags" do
+      let(:generator) { GitHubChangelogGenerator::Generator.new(exclude_tags: /[abc]/) }
+      it { is_expected.to be_a Array }
+      it { is_expected.to match_array(tags_mash_from_strings(%w(1 2 3))) }
+    end
   end
 
   describe "#filter_since_tag" do
