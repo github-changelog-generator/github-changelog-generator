@@ -1,5 +1,12 @@
 # Change Log
 
+## [1.8.5](https://github.com/skywinder/github-changelog-generator/tree/1.8.5) (2015-09-15)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.8.4...1.8.5)
+
+**Merged pull requests:**
+
+- Rake task: Be able to set false value in config [\#279](https://github.com/skywinder/github-changelog-generator/pull/279) ([olleolleolle](https://github.com/olleolleolle))
+
 ## [1.8.4](https://github.com/skywinder/github-changelog-generator/tree/1.8.4) (2015-09-01)
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.8.3...1.8.4)
 
@@ -20,6 +27,10 @@
 **Closed issues:**
 
 - Output should not include security information [\#270](https://github.com/skywinder/github-changelog-generator/issues/270)
+
+**Merged pull requests:**
+
+- This PRi will fix \#274. [\#275](https://github.com/skywinder/github-changelog-generator/pull/275) ([skywinder](https://github.com/skywinder))
 
 ## [1.8.1](https://github.com/skywinder/github-changelog-generator/tree/1.8.1) (2015-08-25)
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.8.0...1.8.1)
