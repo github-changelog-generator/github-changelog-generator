@@ -131,16 +131,45 @@ module GitHubChangelogGenerator
     # @param [Array] all_tags all tags
     # @return [Array] filtered tags according :exclude_tags option
     def filter_excluded_tags(all_tags)
-      filtered_tags = all_tags
-      if @options[:exclude_tags]
-        @options[:exclude_tags].each do |tag|
-          unless all_tags.map(&:name).include? tag
-            Helper.log.warn "Warning: can't find tag #{tag}, specified with --exclude-tags option."
-          end
-        end
-        filtered_tags = all_tags.reject { |tag| @options[:exclude_tags].include? tag.name }
+      return all_tags unless @options[:exclude_tags]
+
+      apply_exclude_tags(all_tags)
+    end
+
+    private
+
+    def apply_exclude_tags(all_tags)
+      if @options[:exclude_tags].is_a?(Regexp)
+        filter_tags_with_regex(all_tags)
+      else
+        filter_exact_tags(all_tags)
       end
-      filtered_tags
+    end
+
+    def filter_tags_with_regex(all_tags)
+      warn_if_nonmatching_regex(all_tags)
+      all_tags.reject { |tag| @options[:exclude_tags] =~ tag.name }
+    end
+
+    def filter_exact_tags(all_tags)
+      @options[:exclude_tags].each do |tag|
+        warn_if_tag_not_found(all_tags, tag)
+      end
+      all_tags.reject { |tag| @options[:exclude_tags].include? tag.name }
+    end
+
+    def warn_if_nonmatching_regex(all_tags)
+      unless all_tags.map(&:name).any? { |t| @options[:exclude_tags] =~ t }
+        Helper.log.warn "Warning: unable to reject any tag, using regex "\
+                        "#{@options[:exclude_tags].inspect} in --exclude-tags "\
+                        "option."
+      end
+    end
+
+    def warn_if_tag_not_found(all_tags, tag)
+      unless all_tags.map(&:name).include? tag
+        Helper.log.warn "Warning: can't find tag #{tag}, specified with --exclude-tags option."
+      end
     end
   end
 end
