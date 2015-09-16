@@ -19,7 +19,7 @@ GitHub Changelog Generator ![GitHub Logo](../master/images/logo.jpg)
   - [Contributing](#contributing)
   - [License](#license)
 
- 
+
 ### Changelog generation has never been so easy:
 
 **Fully automate changelog generation** - This gem generates change log file based on **tags**, **issues** and merged **pull requests** (and splits them into separate lists according labels) from :octocat: GitHub Issue Tracker.
@@ -47,26 +47,26 @@ Because software tools are for people. If you don’t care, why are you contribu
 - In general it looks like this:
 
 > ## [1.2.5](https://github.com/skywinder/Github-Changelog-Generator/tree/1.2.5) (2015-01-15)
-> 
+>
 > [Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.2.4...1.2.5)
-> 
+>
 > **Implemented enhancements:**
-> 
+>
 > - Use milestone to specify in which version bug was fixed [\#22](https://github.com/skywinder/Github-Changelog-Generator/issues/22)
-> 
+>
 > **Fixed bugs:**
-> 
+>
 > - Error when trying to generate log for repo without tags [\#32](https://github.com/skywinder/Github-Changelog-Generator/issues/32)
-> 
+>
 > **Merged pull requests:**
-> 
+>
 > - PrettyPrint class is included using lowercase 'pp' [\#43](https://github.com/skywinder/Github-Changelog-Generator/pull/43) ([schwing](https://github.com/schwing))
-> 
+>
 > - support enterprise github via command line options [\#42](https://github.com/skywinder/Github-Changelog-Generator/pull/42) ([glenlovett](https://github.com/glenlovett))
 
 
 ## Usage
-**It's really simple**: 
+**It's really simple**:
 
 - If your **git remote** `origin` refers to your GitHub repo, then just go to your project folder and run:
 
@@ -75,7 +75,7 @@ Because software tools are for people. If you don’t care, why are you contribu
 -  or from anywhere:
     - `github_changelog_generator -u github_username -p github_project`
     - `github_changelog_generator  github_username/github_project`
-     
+
 As output you will get `CHANGELOG.md` file with pretty *Markdown-formatted* changelog.
 
 ### Params
@@ -91,9 +91,9 @@ Since GitHub allows you to make only 50 requests without authentication it's rec
 
 And:
 
-- Run with key `-t [your-40-digit-token]` 
-- Or set environment variable `CHANGELOG_GITHUB_TOKEN` and specify there your token. 
- 		
+- Run with key `-t [your-40-digit-token]`
+- Or set environment variable `CHANGELOG_GITHUB_TOKEN` and specify there your token.
+
 	i.e. add to your `~/.bash_profile` or `~/.zshrc` or any other place to load ENV variables string :
 
         export CHANGELOG_GITHUB_TOKEN="your-40-digit-github-token"
@@ -138,10 +138,10 @@ All command line options can be passed to the Rake task as `config` parameters. 
     - Merged pull requests (all `merged` pull-requests) :twisted_rightwards_arrows:
     - Bug fixes (by label `bug` in issue) :beetle:
     - Enhancements (by label `enhancement` in issue) :star2:
-    - 	Issues (closed issues `w/o any labels`) :non-potable_water:    
+    - 	Issues (closed issues `w/o any labels`) :non-potable_water:
 
 - You can manually set which labels should be included/excluded. :wrench:
-- Apply a lot of other customisations, to fit changelog for your personal style :tophat: 
+- Apply a lot of other customisations, to fit changelog for your personal style :tophat:
 (*look `github_changelog_generator --help`  for details)*
 
 
@@ -152,7 +152,7 @@ Here is a [wikipage list of alternatives](https://github.com/skywinder/Github-Ch
 
 
 ### Projects using this library
-[Wikipage with list of projects](https://github.com/skywinder/Github-Changelog-Generator/wiki/Projects-using-Github-Changelog-Generator) 
+[Wikipage with list of projects](https://github.com/skywinder/Github-Changelog-Generator/wiki/Projects-using-Github-Changelog-Generator)
 
 If you've used this project in a live app, please let me know! Nothing makes me happier than seeing someone else take my work and go wild with it.
 
@@ -160,9 +160,9 @@ If you've used this project in a live app, please let me know! Nothing makes me 
 
 ## Am I missing some essential feature?
 
-- **Nothing is impossible!** 
+- **Nothing is impossible!**
 
-- Open an [issue](https://github.com/skywinder/Github-Changelog-Generator/issues/new) and let's make generator better together! 
+- Open an [issue](https://github.com/skywinder/Github-Changelog-Generator/issues/new) and let's make generator better together!
 
 - *Bug reports, feature requests, patches, well-wishes are always welcome* :heavy_exclamation_mark:
 
