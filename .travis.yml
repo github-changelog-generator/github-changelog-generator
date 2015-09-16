@@ -1,6 +1,5 @@
-sudo: false
-cache: bundler
 language: ruby
+before_install: gem update --system
 rvm:
 - 2.1.0
 script:
