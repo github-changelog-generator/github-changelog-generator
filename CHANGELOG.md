@@ -1,5 +1,13 @@
 # Change Log
 
+## [1.9.0](https://github.com/skywinder/github-changelog-generator/tree/1.9.0) (2015-09-17)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.8.5...1.9.0)
+
+**Implemented enhancements:**
+
+- Feature: exclude\_tags using regular expression [\#281](https://github.com/skywinder/github-changelog-generator/pull/281) ([olleolleolle](https://github.com/olleolleolle))
+- Auto parse options from file .github\_changelog\_generator [\#278](https://github.com/skywinder/github-changelog-generator/pull/278) ([dlanileonardo](https://github.com/dlanileonardo))
+
 ## [1.8.5](https://github.com/skywinder/github-changelog-generator/tree/1.8.5) (2015-09-15)
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.8.4...1.8.5)
 
