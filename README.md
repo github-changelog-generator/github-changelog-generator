@@ -84,6 +84,16 @@ Type `github_changelog_generator --help` for details.
 
 More detailed info about params you can find in Wiki page: [**Advanced change log generation examples**](https://github.com/skywinder/github-changelog-generator/wiki/Advanced-change-log-generation-examples)
 
+### Params File
+You can put Params in a .github_changelog_generator file in Project Root to override default params:
+
+Example:
+```
+unreleased=false
+future-release=5.0.0
+since-tag=1.0.0
+```
+
 ### GitHub token
 
 Since GitHub allows you to make only 50 requests without authentication it's recommended to run this script with a token (`-t, --token` option)

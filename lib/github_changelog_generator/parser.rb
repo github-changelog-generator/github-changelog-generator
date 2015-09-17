@@ -9,8 +9,10 @@ module GitHubChangelogGenerator
     def self.parse_options
       options = get_default_options
 
-      parser = setup_parser(options)
+      parser_file = ParserFile.new options
+      parser_file.parse!
 
+      parser = setup_parser(options)
       parser.parse!
 
       if options[:user].nil? || options[:project].nil?
