@@ -10,23 +10,32 @@ describe GitHubChangelogGenerator::ParserFile do
     context "when file is empty" do
       let(:options) { { params_file: "spec/files/github_changelog_params_empty" } }
       let(:parse) { GitHubChangelogGenerator::ParserFile.new(options) }
-      subject { parse.parse! }
-      it { is_expected.to be_a(Hash) }
-      it { is_expected.to eq(options) }
+
+      it "does not change the options" do
+        expect { parse.parse! }.to_not change { options }
+      end
     end
 
     context "when file is incorrect" do
       let(:options) { { params_file: "spec/files/github_changelog_params_incorrect" } }
+      let(:options_before_change) { options.dup }
       let(:parse) { GitHubChangelogGenerator::ParserFile.new(options) }
-      it { expect { fail.raise! }.to raise_error RuntimeError }
+      it { expect { parse.parse! }.to raise_error }
     end
 
     context "when override default values" do
-      let(:options) { { params_file: "spec/files/github_changelog_params_override" }.merge(GitHubChangelogGenerator::Parser.get_default_options) }
+      let(:default_options) { GitHubChangelogGenerator::Parser.get_default_options }
+      let(:options) { { params_file: "spec/files/github_changelog_params_override" }.merge(default_options) }
+      let(:options_before_change) { options.dup }
       let(:parse) { GitHubChangelogGenerator::ParserFile.new(options) }
-      subject { parse.parse! }
-      it { is_expected.to be_a(Hash) }
-      it { is_expected.to eq(options.merge(unreleased_label: "staging", unreleased: false)) }
+
+      it "changes the options" do
+        expect { parse.parse! }.to change { options }
+          .from(options_before_change)
+          .to(options_before_change.merge(unreleased_label: "staging",
+                                          unreleased: false,
+                                          header: "=== Changelog ==="))
+      end
     end
   end
 end
