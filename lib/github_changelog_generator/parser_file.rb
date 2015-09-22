@@ -4,33 +4,34 @@ module GitHubChangelogGenerator
       @options = options
     end
 
-    def file
-      File.expand_path(@options[:params_file] || ".github_changelog_generator")
-    end
-
-    def file?
-      File.exist?(file)
-    end
-
-    def file_open
-      File.open(file)
-    end
-
     def parse!
-      return unless file?
-      file_open.each do |line|
-        begin
-          key, value = line.split("=")
-          key_sym = key.sub("-", "_").to_sym
-          value = value.gsub(/[\n\r]+/, "")
-          value = true if value =~ (/^(true|t|yes|y|1)$/i)
-          value = false if value =~ (/^(false|f|no|n|0)$/i)
-          @options[key_sym] = value
-        rescue
-          raise "File #{file} is incorrect in line \"#{line.gsub(/[\n\r]+/, '')}\""
-        end
-      end
-      @options
+      return unless File.exist?(file)
+
+      File.readlines(file).each { |line| parse_line!(line) }
+    end
+
+    private
+
+    def file
+      @file ||= File.expand_path(@options[:params_file] || ".github_changelog_generator")
+    end
+
+    def parse_line!(line)
+      key_sym, value = extract_pair(line)
+      value = true if value =~ (/^(true|t|yes|y|1)$/i)
+      value = false if value =~ (/^(false|f|no|n|0)$/i)
+      @options[key_sym] = value
+    rescue
+      raise "Config file #{file} is incorrect in line \"#{line.gsub(/[\n\r]+/, '')}\""
+    end
+
+    # Returns a the setting as a symbol and its string value sans newlines.
+    #
+    # @param line [String] unparsed line from config file
+    # @return [Array<Symbol, String>]
+    def extract_pair(line)
+      key, value = line.split("=", 2)
+      [key.sub("-", "_").to_sym, value.gsub(/[\n\r]+/, "")]
     end
   end
 end
