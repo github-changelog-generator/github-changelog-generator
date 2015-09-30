@@ -1,0 +1,27 @@
+.\" Manpage for git-activity
+.TH man 1 "Sep 2015" "1.0" "git genrate-changelog man page"
+.SH NAME
+git activity \- Generate changelog from github
+.SH SYNOPSIS
+git generate-changelog [-h|--help] [-u|--user] [-p|--project]
+.SH DESCRIPTION
+Automatically generate change log from your tags, issues, labels and pull requests on GitHub.
+.SH OPTIONS
+.TP
+.I --h
+Show helper provide from gem.
+.TP
+.I --help
+Thos this man page.
+.TP
+.I -u | --user github_username
+Username of the owner of target GitHub repo
+.TP
+.I -p | --project github_project
+Name of project on GitHub Just convenience options to specify user/project:
+.SH SEE ALSO
+git-for-each-ref(1)
+.SH BUGS
+No known bugs.
+.SH AUTHOR
+Petr Korolev <sky4winder+github@gmail.com>
