@@ -14,3 +14,7 @@ Metrics/ClassLength:
 # Configuration parameters: CountComments.
 Metrics/MethodLength:
     Enabled: false
+
+Style/FileName:
+    Exclude:
+      - 'bin/git-generate-changelog'
