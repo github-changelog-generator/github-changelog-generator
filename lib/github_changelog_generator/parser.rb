@@ -7,7 +7,7 @@ module GitHubChangelogGenerator
   class Parser
     # parse options with optparse
     def self.parse_options
-      options = get_default_options
+      options = default_options
 
       ParserFile.new(options).parse!
 
@@ -159,8 +159,8 @@ module GitHubChangelogGenerator
     end
 
     # just get default options
-    def self.get_default_options
-      options = {
+    def self.default_options
+      {
         tag1: nil,
         tag2: nil,
         date_format: "%Y-%m-%d",
@@ -188,8 +188,6 @@ module GitHubChangelogGenerator
         enhancement_prefix: "**Implemented enhancements:**",
         git_remote: "origin"
       }
-
-      options
     end
 
     def self.user_and_project_from_git
