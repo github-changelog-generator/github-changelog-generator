@@ -20,7 +20,7 @@ describe GitHubChangelogGenerator::ParserFile do
       let(:options) { { params_file: "spec/files/github_changelog_params_incorrect" } }
       let(:options_before_change) { options.dup }
       let(:parse) { GitHubChangelogGenerator::ParserFile.new(options) }
-      it { expect { parse.parse! }.to raise_error }
+      it { expect { parse.parse! }.to raise_error(GitHubChangelogGenerator::ParserError) }
     end
 
     context "when override default values" do
