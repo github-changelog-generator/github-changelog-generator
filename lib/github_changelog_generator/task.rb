@@ -43,11 +43,9 @@ module GitHubChangelogGenerator
 
       task @name do
         # mimick parse_options
-        options = Parser.get_default_options
+        options = Parser.default_options
 
-        if options[:user].nil? || options[:project].nil?
-          Parser.detect_user_and_project(options)
-        end
+        Parser.user_and_project_from_git(options)
 
         OPTIONS.each do |o|
           v = instance_variable_get("@#{o}")

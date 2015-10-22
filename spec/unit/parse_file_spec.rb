@@ -24,7 +24,7 @@ describe GitHubChangelogGenerator::ParserFile do
     end
 
     context "when override default values" do
-      let(:default_options) { GitHubChangelogGenerator::Parser.get_default_options }
+      let(:default_options) { GitHubChangelogGenerator::Parser.default_options }
       let(:options) { { params_file: "spec/files/github_changelog_params_override" }.merge(default_options) }
       let(:options_before_change) { options.dup }
       let(:parse) { GitHubChangelogGenerator::ParserFile.new(options) }
