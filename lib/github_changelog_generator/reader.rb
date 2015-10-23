@@ -53,10 +53,10 @@ module GitHubChangelogGenerator
 
       @heading_structures.each do |regexp|
         matches = Regexp.new(regexp).match(heading)
-        captures.merge!(Hash[matches.names.map.zip(matches.captures)]) unless matches.nil?
-
-        # Try Regular Expressions until you find one that delivers results
-        break unless matches.nil?
+        if matches
+          captures.merge!(Hash[matches.names.zip(matches.captures)])
+          break
+        end
       end
 
       captures
