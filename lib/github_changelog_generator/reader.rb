@@ -62,22 +62,19 @@ module GitHubChangelogGenerator
       captures
     end
 
-    # Parse the given ChangeLog data into a Hash
+    # Parse the given ChangeLog data into a list of Hashes
     #
     # @param [String] data File data from the ChangeLog.md
-    # @return [Hash] Parsed data, e.g. [{ 'version' => ..., 'url' => ..., 'date' => ..., 'content' => ...}, ...]
+    # @return [Array<Hash>] Parsed data, e.g. [{ 'version' => ..., 'url' => ..., 'date' => ..., 'content' => ...}, ...]
     def parse(data)
       sections = data.split(/^## .+?$/)
       headings = data.scan(/^## .+?$/)
-      changelog = []
 
-      headings.each_with_index do |heading, index|
-        captures = parse_heading(heading)
-        captures["content"] = sections.at(index + 1)
-        changelog.push captures
+      headings.each_with_index.map do |heading, index|
+        section = parse_heading(heading)
+        section["content"] = sections.at(index + 1)
+        section
       end
-
-      changelog
     end
 
     def read(file_path)
