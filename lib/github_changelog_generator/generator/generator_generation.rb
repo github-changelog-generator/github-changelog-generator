@@ -168,15 +168,15 @@ module GitHubChangelogGenerator
       title_with_number = "#{encapsulated_title} [\\##{issue[:number]}](#{issue.html_url})"
       issue_line_with_user(title_with_number, issue)
     end
-    
+
     private
-    
+
     def issue_line_with_user(line, issue)
       return line if !@options[:author] || issue.pull_request.nil?
-      
+
       user = issue.user
       return "#{line} ({Null user})" unless user
-      
+
       if user.html_url.include?("github.com")
         "#{line} (@#{user.login})"
       else
