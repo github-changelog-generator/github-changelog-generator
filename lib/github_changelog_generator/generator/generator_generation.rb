@@ -171,11 +171,15 @@ module GitHubChangelogGenerator
 
       unless issue.pull_request.nil?
         if @options[:author]
-          title_with_number += if issue.user.nil?
-                                 " ({Null user})"
-                               else
-                                 " ([#{issue.user.login}](#{issue.user.html_url}))"
-                               end
+          if issue.user.nil?
+            title_with_number += " ({Null user})"
+          else
+            if issue.user.html_url.exclude? "github.com"
+              title_with_number += " ([#{issue.user.login}](#{issue.user.html_url}))"
+            else
+              title_with_number += " (@#{issue.user.login})"
+            end
+          end
         end
       end
       title_with_number
