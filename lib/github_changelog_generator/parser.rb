@@ -92,6 +92,9 @@ module GitHubChangelogGenerator
         opts.on("--[no-]author", "Add author of pull-request in the end. Default is true") do |author|
           options[:author] = author
         end
+        opts.on("--usernames-as-github-logins", "Use GitHub tags instead of links for the author of an issue or pull-request.") do |v|
+          options[:usernames_as_github_logins] = v
+        end
         opts.on("--unreleased-only", "Generate log from unreleased closed issues only.") do |v|
           options[:unreleased_only] = v
         end
