@@ -190,7 +190,7 @@ module GitHubChangelogGenerator
       }
     end
 
-    def self.user_and_project_from_git
+    def self.user_and_project_from_git(options)
       if options[:user].nil? || options[:project].nil?
         detect_user_and_project(options, ARGV[0], ARGV[1])
       end
