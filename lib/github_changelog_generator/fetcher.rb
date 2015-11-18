@@ -22,6 +22,7 @@ module GitHubChangelogGenerator
       github_options[:oauth_token] = @github_token unless @github_token.nil?
       github_options[:endpoint] = @options[:github_endpoint] unless @options[:github_endpoint].nil?
       github_options[:site] = @options[:github_endpoint] unless @options[:github_site].nil?
+      @release_branch = @options[:release_branch] unless @options[:release_branch].nil?
 
       @github = check_github_response { Github.new github_options }
     end
@@ -123,7 +124,11 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
     def fetch_closed_pull_requests
       pull_requests = []
       begin
-        response = @github.pull_requests.list @options[:user], @options[:project], state: "closed"
+        if @options[:release_branch].nil?
+          response = @github.pull_requests.list @options[:user], @options[:project], state: "closed"
+        else
+          response = @github.pull_requests.list @options[:user], @options[:project], state: "closed", base: @options[:release_branch]
+        end
         page_i = 0
         count_pages = response.count_pages
         response.each_page do |page|
