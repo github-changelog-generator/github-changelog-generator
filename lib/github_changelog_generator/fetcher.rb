@@ -92,9 +92,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
       issues = []
 
       begin
-        response = @github.issues.list user: @options[:user],
-                                       repo: @options[:project],
-                                       state: "closed",
+        response = @github.issues.list state: "closed",
                                        filter: "all",
                                        labels: nil
         page_i = 0
@@ -124,11 +122,10 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
       pull_requests = []
       begin
         if @options[:release_branch].nil?
-          response = @github.pull_requests.list @options[:user],
-                                                @options[:project],
-                                                state: "closed"
+          response = @github.pull_requests.list state: "closed"
         else
-          response = @github.pull_requests.list @options[:user], @options[:project], state: "closed", base: @options[:release_branch]
+          response = @github.pull_requests.list state: "closed",
+                                                base: @options[:release_branch]
         end
         page_i = 0
         count_pages = response.count_pages
@@ -169,9 +166,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
         issues_slice.each do |issue|
           threads << Thread.new do
             begin
-              response = @github.issues.events.list user: @options[:user],
-                                                    repo: @options[:project],
-                                                    issue_number: issue["number"]
+              response = @github.issues.events.list issue_number: issue["number"]
               issue[:events] = []
               response.each_page do |page|
                 issue[:events].concat(page)
@@ -199,9 +194,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
     # @return [Time] time of specified tag
     def fetch_date_of_tag(tag)
       begin
-        commit_data = @github.git_data.commits.get @options[:user],
-                                                   @options[:project],
-                                                   tag["commit"]["sha"]
+        commit_data = @github.git_data.commits.get tag["commit"]["sha"]
       rescue
         Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
       end
@@ -212,7 +205,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
     # Fetch commit for specified event
     # @return [Hash]
     def fetch_commit(event)
-      @github.git_data.commits.get @options[:user], @options[:project], event[:commit_id]
+      @github.git_data.commits.get event[:commit_id]
     end
   end
 end
