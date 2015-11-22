@@ -1,4 +1,6 @@
 module GitHubChangelogGenerator
+  ParserError = Class.new(StandardError)
+
   class ParserFile
     def initialize(options)
       @options = options
@@ -22,7 +24,7 @@ module GitHubChangelogGenerator
       value = false if value =~ (/^(false|f|no|n|0)$/i)
       @options[key_sym] = value
     rescue
-      raise "Config file #{file} is incorrect in line \"#{line.gsub(/[\n\r]+/, '')}\""
+      raise ParserError, "Config file #{file} is incorrect in line \"#{line.gsub(/[\n\r]+/, '')}\""
     end
 
     # Returns a the setting as a symbol and its string value sans newlines.

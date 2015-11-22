@@ -32,7 +32,7 @@ To make it easier for users and contributors to see precisely what notable chang
 ### *Why should I care?*
 Because software tools are for people. If you don’t care, why are you contributing to open source? Surely, there must be a kernel (ha!) of care somewhere in that lovely little brain of yours.
 
-> :copyright: *[http://keepachangelog.com](http://keepachangelog.com/)*
+> :arrow_right: *[http://keepachangelog.com](http://keepachangelog.com/)*
 
 ## Installation
 
@@ -117,7 +117,7 @@ It's time to create this token or wait for 1 hour before GitHub reset the counte
 ## Migrating from a manual changelog
 
 Knowing how dedicated you are to your project, you probably haven't been waiting for github-changelog-generator to keep a changelog,
-but you most likely wouln't like to have to open issues and PRs for all past features listed in your historic changelog.
+but you most likely wouldn't like to have to open issues and PRs for all past features listed in your historic changelog.
 
 That's where `--base` comes handy. This option lets you pass a static changelog to be appended at the end of the generated entries.
 
