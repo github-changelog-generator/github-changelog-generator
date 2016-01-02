@@ -16,7 +16,7 @@ module GitHubChangelogGenerator
                   bug_labels enhancement_labels
                   between_tags exclude_tags since_tag max_issues
                   github_site github_endpoint simple_list
-                  future_release release_branch verbose release_url 
+                  future_release release_branch verbose release_url
                   base )
 
     OPTIONS.each do |o|
