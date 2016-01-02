@@ -201,7 +201,6 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
     # @param [Hash] tag
     # @return [Time] time of specified tag
     def fetch_date_of_tag(tag)
-      puts @github_options
       begin
         commit_data = @github.git_data.commits.get @options[:user],
                                                    @options[:project],
