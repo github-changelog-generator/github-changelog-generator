@@ -1,8 +1,7 @@
 # Change Log
 
-## [Unreleased](https://github.com/skywinder/github-changelog-generator/tree/HEAD)
-
-[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.9.0...HEAD)
+## [1.10.0](https://github.com/skywinder/github-changelog-generator/tree/1.10.0) (2016-01-05)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.9.0...1.10.0)
 
 **Implemented enhancements:**
 
@@ -10,9 +9,14 @@
 - Introduce ParserError exception class [\#296](https://github.com/skywinder/github-changelog-generator/pull/296) ([olleolleolle](https://github.com/olleolleolle))
 - ParserFile: support values with equals signs [\#285](https://github.com/skywinder/github-changelog-generator/pull/285) ([olleolleolle](https://github.com/olleolleolle))
 
+**Closed issues:**
+
+- PRs not closed on master branch show up in changelog [\#280](https://github.com/skywinder/github-changelog-generator/issues/280)
+
 **Merged pull requests:**
 
 - Update bundler [\#306](https://github.com/skywinder/github-changelog-generator/pull/306) ([SteveGilvarry](https://github.com/SteveGilvarry))
+- Fixes \#280 Add release-branch option to filter the Pull Requests [\#305](https://github.com/skywinder/github-changelog-generator/pull/305) ([SteveGilvarry](https://github.com/SteveGilvarry))
 - Add options to def self.user\_and\_project\_from\_git to fix parser.rb:19… [\#303](https://github.com/skywinder/github-changelog-generator/pull/303) ([SteveGilvarry](https://github.com/SteveGilvarry))
 - Git ignore coverage/ [\#300](https://github.com/skywinder/github-changelog-generator/pull/300) ([olleolleolle](https://github.com/olleolleolle))
 - \[refactor\] Fix docblock datatype, use \#map [\#299](https://github.com/skywinder/github-changelog-generator/pull/299) ([olleolleolle](https://github.com/olleolleolle))
