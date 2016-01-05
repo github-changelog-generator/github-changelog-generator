@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    github_changelog_generator (1.9.0)
+    github_changelog_generator (1.10.0)
       colorize (~> 0.7)
       github_api (~> 0.12)
 
@@ -48,7 +48,7 @@ GEM
     multi_xml (0.5.5)
     multipart-post (2.0.0)
     netrc (0.10.3)
-    nokogiri (1.6.6.2)
+    nokogiri (1.6.6.4)
       mini_portile (~> 0.6.0)
     oauth2 (1.0.0)
       faraday (>= 0.8, < 0.10)

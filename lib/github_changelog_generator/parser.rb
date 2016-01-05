@@ -143,6 +143,9 @@ module GitHubChangelogGenerator
         opts.on("--future-release [RELEASE-VERSION]", "Put the unreleased changes in the specified release number.") do |future_release|
           options[:future_release] = future_release
         end
+        opts.on("--release-branch [RELEASE-BRANCH]", "Limit pull requests to the release branch, such as master or release") do |release_branch|
+          options[:release_branch] = release_branch
+        end
         opts.on("--[no-]verbose", "Run verbosely. Default is true") do |v|
           options[:verbose] = v
         end
