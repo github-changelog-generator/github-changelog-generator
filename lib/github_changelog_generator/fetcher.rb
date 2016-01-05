@@ -18,12 +18,12 @@ module GitHubChangelogGenerator
       @user = @options[:user]
       @project = @options[:project]
       @github_token = fetch_github_token
-      github_options = { per_page: PER_PAGE_NUMBER }
-      github_options[:oauth_token] = @github_token unless @github_token.nil?
-      github_options[:endpoint] = @options[:github_endpoint] unless @options[:github_endpoint].nil?
-      github_options[:site] = @options[:github_endpoint] unless @options[:github_site].nil?
+      @github_options = { per_page: PER_PAGE_NUMBER }
+      @github_options[:oauth_token] = @github_token unless @github_token.nil?
+      @github_options[:endpoint] = @options[:github_endpoint] unless @options[:github_endpoint].nil?
+      @github_options[:site] = @options[:github_endpoint] unless @options[:github_site].nil?
 
-      @github = check_github_response { Github.new github_options }
+      @github = check_github_response { Github.new @github_options }
     end
 
     # Returns GitHub token. First try to use variable, provided by --token option,
@@ -123,7 +123,16 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
     def fetch_closed_pull_requests
       pull_requests = []
       begin
-        response = @github.pull_requests.list @options[:user], @options[:project], state: "closed"
+        if @options[:release_branch].nil?
+          response = @github.pull_requests.list @options[:user],
+                                                @options[:project],
+                                                state: "closed"
+        else
+          response = @github.pull_requests.list @options[:user],
+                                                @options[:project],
+                                                state: "closed",
+                                                base: @options[:release_branch]
+        end
         page_i = 0
         count_pages = response.count_pages
         response.each_page do |page|
