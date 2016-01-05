@@ -15,10 +15,10 @@ module GitHubChangelogGenerator
 
     def initialize(options = {})
       @options = options || {}
+      @user = @options[:user]
+      @project = @options[:project]
       @github_token = fetch_github_token
       @github_options = { per_page: PER_PAGE_NUMBER }
-      @github_options[:user] = @options[:user]
-      @github_options[:repo] = @options[:project]
       @github_options[:oauth_token] = @github_token unless @github_token.nil?
       @github_options[:endpoint] = @options[:github_endpoint] unless @options[:github_endpoint].nil?
       @github_options[:site] = @options[:github_endpoint] unless @options[:github_site].nil?
