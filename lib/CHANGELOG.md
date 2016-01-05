@@ -22,7 +22,6 @@
 
 **Merged pull requests:**
 
-- Merged PR to Develop [\#19](https://github.com/skywinder/changelog_test/pull/19) ([skywinder](https://github.com/skywinder))
 - This a PR with a lot of comments and events [\#17](https://github.com/skywinder/changelog_test/pull/17) ([skywinder](https://github.com/skywinder))
 - This PR closes 14 from commit [\#15](https://github.com/skywinder/changelog_test/pull/15) ([skywinder](https://github.com/skywinder))
 - This PR to close \#12 from body [\#13](https://github.com/skywinder/changelog_test/pull/13) ([skywinder](https://github.com/skywinder))
