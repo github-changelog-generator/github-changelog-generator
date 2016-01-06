@@ -1,5 +1,12 @@
 # Change Log
 
+## [1.10.1](https://github.com/skywinder/github-changelog-generator/tree/1.10.1) (2016-01-06)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.10.0...1.10.1)
+
+**Fixed bugs:**
+
+- Parser: avoid Ruby exit, to make Rake tasks work [\#315](https://github.com/skywinder/github-changelog-generator/pull/315) ([olleolleolle](https://github.com/olleolleolle))
+
 ## [1.10.0](https://github.com/skywinder/github-changelog-generator/tree/1.10.0) (2016-01-05)
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.9.0...1.10.0)
 
