@@ -217,7 +217,7 @@ module GitHubChangelogGenerator
     #
     # @param [String] output of git remote command
     # @return [Array] user and project
-    def self.user_project_from_option(arg0, arg1, github_site = nil)
+    def self.user_project_from_option(arg0, arg1, github_site)
       user = nil
       project = nil
       github_site ||= "github.com"
@@ -230,10 +230,10 @@ module GitHubChangelogGenerator
           param = match[2].nil?
         rescue
           puts "Can't detect user and name from first parameter: '#{arg0}' -> exit'"
-          exit
+          return
         end
         if param
-          exit
+          return
         else
           user = match[1]
           project = match[2]
@@ -275,10 +275,5 @@ module GitHubChangelogGenerator
 
       [user, project]
     end
-  end
-
-  if __FILE__ == $PROGRAM_NAME
-    remote = "invalid reference to project"
-    p user_project_from_option(ARGV[0], ARGV[1], remote)
   end
 end
