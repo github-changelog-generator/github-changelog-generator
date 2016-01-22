@@ -68,11 +68,25 @@ module GitHubChangelogGenerator
       response = @github.repos.tags @options[:user], @options[:project]
       page_i = 0
       count_pages = response.count_pages
+
       response.each_page do |page|
+
+        if @options[:filter_tags]
+          body_new = []
+          reg = Regexp.new @options[:filter_tags]
+          page.body.each_with_index do |tag,index|
+            if !(tag.name =~ reg)
+              body_new << tag
+            end
+          end
+          page.body = body_new
+        end
+
         page_i += PER_PAGE_NUMBER
         print_in_same_line("Fetching tags... #{page_i}/#{count_pages * PER_PAGE_NUMBER}")
         tags.concat(page)
       end
+
       print_empty_line
 
       if tags.count == 0
