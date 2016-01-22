@@ -74,7 +74,7 @@ module GitHubChangelogGenerator
         if @options[:filter_tags]
           body_new = []
           reg = Regexp.new @options[:filter_tags]
-          page.body.each_with_index do |tag,index|
+          page.body.each do |tag|
             if !(tag.name =~ reg)
               body_new << tag
             end
