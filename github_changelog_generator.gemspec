@@ -25,6 +25,7 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency("github_api", ["~> 0.12"])
   spec.add_runtime_dependency("colorize", ["~> 0.7"])
+  spec.add_runtime_dependency("sqlite3")
 
   # Development only
   spec.add_development_dependency "bundler", "~> 1.7"

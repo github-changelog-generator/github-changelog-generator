@@ -3,6 +3,9 @@ require "optparse"
 require "pp"
 require_relative "version"
 require_relative "helper"
+require 'yaml'
+require 'json'
+
 module GitHubChangelogGenerator
   class Parser
     # parse options with optparse
@@ -74,6 +77,9 @@ module GitHubChangelogGenerator
         opts.on("--header-label [LABEL]", "Setup custom header label. Default is \"# Change Log\"") do |v|
           options[:header] = v
         end
+        opts.on("--front-matter [JSON]", "Add YAML front matter. Formatted as JSON because it's easier to add on the command line") do |v|
+          options[:frontmatter] = JSON.parse(v).to_yaml + "---\n"
+        end
         opts.on("--pr-label [LABEL]", "Setup custom label for pull requests section. Default is \"**Merged pull requests:**\"") do |v|
           options[:merge_prefix] = v
         end
@@ -123,7 +129,11 @@ module GitHubChangelogGenerator
           options[:between_tags] = list
         end
         opts.on("--exclude-tags  x,y,z", Array, "Change log will exclude specified tags") do |list|
-          options[:exclude_tags] = list
+          if list.length == 1 && list[0].length > 2 && list[0][0] == '/' && list[0][-1] == '/'
+            options[:exclude_tags] = Regexp.new(list[0][1 .. -2])
+          else
+            options[:exclude_tags] = list
+          end
         end
         opts.on("--since-tag  x", "Change log will start after specified tag") do |v|
           options[:since_tag] = v
@@ -151,6 +161,12 @@ module GitHubChangelogGenerator
         end
         opts.on("--[no-]verbose", "Run verbosely. Default is true") do |v|
           options[:verbose] = v
+        end
+        opts.on("--skip-empty-releases", "Don't include releases that have no closed issues") do |v|
+          options[:skip_empty_releases] = v
+        end
+        opts.on("--cache-github-responses [DB]", "Cache github responses") do |type|
+          options[:cache_github_responses] = type
         end
         opts.on("-v", "--version", "Print version number") do |_v|
           puts "Version: #{GitHubChangelogGenerator::VERSION}"

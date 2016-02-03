@@ -19,8 +19,12 @@ module GitHubChangelogGenerator
     # Class, responsible for whole change log generation cycle
     # @return initialised instance of ChangelogGenerator
     def initialize
-      @options = Parser.parse_options
+      @@options = @options = Parser.parse_options
       @generator = Generator.new @options
+    end
+
+    def self.options
+      return @@options
     end
 
     # The entry point of this script to generate change log
