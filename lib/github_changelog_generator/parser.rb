@@ -3,8 +3,8 @@ require "optparse"
 require "pp"
 require_relative "version"
 require_relative "helper"
-require 'yaml'
-require 'json'
+require "yaml"
+require "json"
 
 module GitHubChangelogGenerator
   class Parser
@@ -123,8 +123,8 @@ module GitHubChangelogGenerator
           options[:between_tags] = list
         end
         opts.on("--exclude-tags  x,y,z", Array, "Change log will exclude specified tags") do |list|
-          if list.length == 1 && list[0].length > 2 && list[0][0] == '/' && list[0][-1] == '/'
-            options[:exclude_tags] = Regexp.new(list[0][1 .. -2])
+          if list.length == 1 && list.first =~ /^\/.+\/$/
+            options[:exclude_tags] = Regexp.new(list[0][1..-2])
           else
             options[:exclude_tags] = list
           end

@@ -1,36 +1,36 @@
-require 'sqlite3'
-require 'yaml'
+require "sqlite3"
+require "yaml"
 
 class GithubResponseCache
-  def initialize(app, options = {}, &block)
+  def initialize(app, _options = {}, &_block)
     @app = app
 
     Thread.exclusive do
-      @@cache ||= lambda {
-        db = SQLite3::Database.new(GitHubChangelogGenerator::ChangelogGenerator.options[:cache_github_responses] || ':memory:')
+      @@cache ||= lambda do
+        db = SQLite3::Database.new(GitHubChangelogGenerator::ChangelogGenerator.options[:cache_github_responses] || ":memory:")
         db.results_as_hash = true
         db.execute("create table if not exists cache (url primary key, Etag, response_headers, body)")
-        db.execute('PRAGMA synchronous = OFF')
-        db.execute('PRAGMA journal_mode = MEMORY')
+        db.execute("PRAGMA synchronous = OFF")
+        db.execute("PRAGMA journal_mode = MEMORY")
         db
-      }.call
+      end.call
     end
   end
 
   def self.get(env)
     Thread.exclusive do
-      @@cache.execute('select * from cache where url=?', env[:url].to_s).first
+      @@cache.execute("select * from cache where url=?", env[:url].to_s).first
     end
   end
 
   def self.store(env)
     Thread.exclusive do
-      @@cache.execute('replace into cache (url, Etag, response_headers, body) values (?, ?, ?, ?)', [
-       env[:url].to_s,
-       env[:response_headers]["Etag"].sub(/^W\//, ''),
-       YAML::dump(env[:response_headers]),
-       YAML::dump(env[:body])
-     ])
+      @@cache.execute("replace into cache (url, Etag, response_headers, body) values (?, ?, ?, ?)", [
+        env[:url].to_s,
+        env[:response_headers]["Etag"].sub(/^W\//, ""),
+        YAML.dump(env[:response_headers]),
+        YAML.dump(env[:body])
+      ])
     end
   end
 
@@ -44,8 +44,8 @@ class GithubResponseCache
 
     @app.call(env).on_complete do
       if cached && env[:status] == 304
-        env[:body] = YAML::load(cached['body'])
-        env[:response_headers] = YAML::load(cached['response_headers'])
+        env[:body] = YAML.load(cached["body"])
+        env[:response_headers] = YAML.load(cached["response_headers"])
       elsif env[:response_headers]["Etag"]
         GithubResponseCache.store(env)
       end
@@ -67,7 +67,7 @@ module Github
 
         builder.use GithubResponseCache if GitHubChangelogGenerator::ChangelogGenerator.options[:cache_github_responses]
 
-        builder.use Faraday::Response::Logger if ENV['DEBUG']
+        builder.use Faraday::Response::Logger if ENV["DEBUG"]
         unless options[:raw]
           builder.use Github::Response::Mashify
           builder.use Github::Response::Jsonize

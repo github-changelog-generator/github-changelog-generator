@@ -24,7 +24,7 @@ module GitHubChangelogGenerator
     end
 
     def self.options
-      return @@options
+      @@options
     end
 
     # The entry point of this script to generate change log
