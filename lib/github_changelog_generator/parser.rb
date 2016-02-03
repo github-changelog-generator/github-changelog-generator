@@ -68,6 +68,9 @@ module GitHubChangelogGenerator
         opts.on("--header-label [LABEL]", "Setup custom header label. Default is \"# Change Log\"") do |v|
           options[:header] = v
         end
+        opts.on("--front-matter [JSON]", "Add YAML front matter. Formatted as JSON because it's easier to add on the command line") do |v|
+          options[:frontmatter] = JSON.parse(v).to_yaml + "---\n"
+        end
         opts.on("--pr-label [LABEL]", "Setup custom label for pull requests section. Default is \"**Merged pull requests:**\"") do |v|
           options[:merge_prefix] = v
         end
