@@ -178,8 +178,10 @@ module GitHubChangelogGenerator
         fetched_pr = closed_pull_requests.find do |fpr|
           fpr.number == pr.number
         end
-        pr[:merged_at] = fetched_pr[:merged_at]
-        closed_pull_requests.delete(fetched_pr)
+        if fetched_pr
+          pr[:merged_at] = fetched_pr[:merged_at]
+          closed_pull_requests.delete(fetched_pr)
+        end
       end
 
       pull_requests.select! do |pr|

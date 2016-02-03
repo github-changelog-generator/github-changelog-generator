@@ -9,14 +9,14 @@ Gem::Specification.new do |spec|
   spec.version            = GitHubChangelogGenerator::VERSION
   spec.default_executable = "github_changelog_generator"
 
-  spec.required_ruby_version     = ">= 1.9.3"
+  spec.required_ruby_version = ">= 1.9.3"
   spec.authors = ["Petr Korolev"]
   spec.email = "sky4winder+github_changelog_generator@gmail.com"
   spec.date = `date +"%Y-%m-%d"`.strip!
   spec.summary = "Script, that automatically generate changelog from your tags, issues, labels and pull requests."
   spec.description = "Changelog generation has never been so easy. Fully automate changelog generation - this gem generate change log file based on tags, issues and merged pull requests from Github issue tracker."
   spec.homepage = "https://github.com/skywinder/Github-Changelog-Generator"
-  spec.license       = "MIT"
+  spec.license = "MIT"
 
   spec.files = `git ls-files -z`.split("\x0")
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }

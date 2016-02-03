@@ -16,7 +16,8 @@ module GitHubChangelogGenerator
                   bug_labels enhancement_labels
                   between_tags exclude_tags since_tag max_issues
                   github_site github_endpoint simple_list
-                  future_release verbose release_url base )
+                  future_release release_branch verbose release_url
+                  base )
 
     OPTIONS.each do |o|
       attr_accessor o.to_sym
@@ -43,11 +44,9 @@ module GitHubChangelogGenerator
 
       task @name do
         # mimick parse_options
-        options = Parser.get_default_options
+        options = Parser.default_options
 
-        if options[:user].nil? || options[:project].nil?
-          Parser.detect_user_and_project(options)
-        end
+        Parser.user_and_project_from_git(options)
 
         OPTIONS.each do |o|
           v = instance_variable_get("@#{o}")
