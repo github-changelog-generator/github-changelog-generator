@@ -8,7 +8,9 @@ module GitHubChangelogGenerator
       sort_tags_by_date(@filtered_tags)
       fetch_issues_and_pr
 
-      log = "#{@options[:header]}\n\n"
+      log = ''
+      log += @options[:frontmatter] if @options[:frontmatter]
+      log += "#{@options[:header]}\n\n"
 
       if @options[:unreleased_only]
         log += generate_log_between_tags(filtered_tags[0], nil)
