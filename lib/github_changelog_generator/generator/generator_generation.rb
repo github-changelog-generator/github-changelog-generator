@@ -8,7 +8,7 @@ module GitHubChangelogGenerator
       sort_tags_by_date(@filtered_tags)
       fetch_issues_and_pr
 
-      log = ''
+      log = ""
       log += @options[:frontmatter] if @options[:frontmatter]
       log += "#{@options[:header]}\n\n"
 
