@@ -6,7 +6,7 @@ before_install:
 rvm:
 - 2.1.0
 script:
-- bundle exec rake
+- bundle exec rake checks
 notifications:
   email:
     recipients:
