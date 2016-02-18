@@ -160,7 +160,7 @@ module GitHubChangelogGenerator
     # Parse issue and generate single line formatted issue line.
     #
     # Example output:
-    # - Add coveralls integration [\#223](https://github.com/skywinder/github-changelog-generator/pull/223) ([skywinder](https://github.com/skywinder))
+    # - Add coveralls integration [\#223](https://github.com/skywinder/github-changelog-generator/pull/223) (@skywinder)
     #
     # @param [Hash] issue Fetched issue from GitHub
     # @return [String] Markdown-formatted single issue
@@ -168,17 +168,22 @@ module GitHubChangelogGenerator
       encapsulated_title = encapsulate_string issue[:title]
 
       title_with_number = "#{encapsulated_title} [\\##{issue[:number]}](#{issue.html_url})"
+      issue_line_with_user(title_with_number, issue)
+    end
 
-      unless issue.pull_request.nil?
-        if @options[:author]
-          if issue.user.nil?
-            title_with_number += " ({Null user})"
-          else
-            title_with_number += " ([#{issue.user.login}](#{issue.user.html_url}))"
-          end
-        end
+    private
+
+    def issue_line_with_user(line, issue)
+      return line if !@options[:author] || issue.pull_request.nil?
+
+      user = issue.user
+      return "#{line} ({Null user})" unless user
+
+      if user.html_url.include?("github.com")
+        "#{line} (@#{user.login})"
+      else
+        "#{line} ([#{user.login}](#{user.html_url}))"
       end
-      title_with_number
     end
   end
 end
