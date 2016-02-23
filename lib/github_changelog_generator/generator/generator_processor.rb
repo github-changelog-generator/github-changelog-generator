@@ -7,7 +7,7 @@ module GitHubChangelogGenerator
       unless @options[:exclude_labels].nil?
         issues = issues.select do |issue|
           var = issue.labels.map(&:name) & @options[:exclude_labels]
-          !(var).any?
+          !var.any?
         end
       end
       issues
@@ -83,7 +83,7 @@ module GitHubChangelogGenerator
 
           tag_in_range_new = tag_older_new_tag?(newer_tag_time, time)
 
-          tag_in_range = (tag_in_range_old) && (tag_in_range_new)
+          tag_in_range = tag_in_range_old && tag_in_range_new
 
           tag_in_range
         else
@@ -93,20 +93,20 @@ module GitHubChangelogGenerator
     end
 
     def tag_older_new_tag?(newer_tag_time, time)
-      if newer_tag_time.nil?
-        tag_in_range_new = true
-      else
-        tag_in_range_new = time <= newer_tag_time
-      end
+      tag_in_range_new = if newer_tag_time.nil?
+                           true
+                         else
+                           time <= newer_tag_time
+                         end
       tag_in_range_new
     end
 
     def tag_newer_old_tag?(older_tag_time, t)
-      if older_tag_time.nil?
-        tag_in_range_old = true
-      else
-        tag_in_range_old = t > older_tag_time
-      end
+      tag_in_range_old = if older_tag_time.nil?
+                           true
+                         else
+                           t > older_tag_time
+                         end
       tag_in_range_old
     end
 
@@ -133,7 +133,7 @@ module GitHubChangelogGenerator
     def filter_by_include_labels(issues)
       filtered_issues = @options[:include_labels].nil? ? issues : issues.select do |issue|
         labels = issue.labels.map(&:name) & @options[:include_labels]
-        (labels).any?
+        labels.any?
       end
       filtered_issues
     end
