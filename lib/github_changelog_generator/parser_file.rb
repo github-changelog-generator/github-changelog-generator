@@ -1,3 +1,5 @@
+require 'pathname'
+
 module GitHubChangelogGenerator
   ParserError = Class.new(StandardError)
 
@@ -7,15 +9,15 @@ module GitHubChangelogGenerator
     end
 
     def parse!
-      return unless File.exist?(file)
+      return unless file.exist?
 
-      File.readlines(file).each { |line| parse_line!(line) }
+      file.each_line { |line| parse_line!(line) }
     end
 
     private
 
     def file
-      @file ||= File.expand_path(@options[:params_file] || ".github_changelog_generator")
+      @file ||= Pathname(File.expand_path(@options[:params_file] || ".github_changelog_generator"))
     end
 
     def parse_line!(line)
