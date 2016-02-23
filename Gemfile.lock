@@ -4,6 +4,7 @@ PATH
     github_changelog_generator (1.10.3)
       colorize (~> 0.7)
       github_api (~> 0.12)
+      overcommit (~> 0.31)
 
 GEM
   remote: https://rubygems.org/
@@ -97,7 +98,6 @@ DEPENDENCIES
   codeclimate-test-reporter (~> 0.4)
   coveralls (~> 0.8)
   github_changelog_generator!
-  overcommit (~> 0.31)
   rake (~> 10.0)
   rspec (~> 3.2)
   rubocop (~> 0.31)
