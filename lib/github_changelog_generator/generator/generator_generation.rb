@@ -12,11 +12,11 @@ module GitHubChangelogGenerator
       log += @options[:frontmatter] if @options[:frontmatter]
       log += "#{@options[:header]}\n\n"
 
-      if @options[:unreleased_only]
-        log += generate_log_between_tags(filtered_tags[0], nil)
-      else
-        log += generate_log_for_all_tags
-      end
+      log += if @options[:unreleased_only]
+               generate_log_between_tags(filtered_tags[0], nil)
+             else
+               generate_log_for_all_tags
+             end
 
       log += File.read(@options[:base]) if File.file?(@options[:base])
 
@@ -39,10 +39,10 @@ module GitHubChangelogGenerator
           index2 = hash[tag2]
           log += generate_log_between_tags(all_tags[index1], all_tags[index2])
         else
-          fail ChangelogGeneratorError, "Can't find tag #{tag2} -> exit".red
+          raise ChangelogGeneratorError, "Can't find tag #{tag2} -> exit".red
         end
       else
-        fail ChangelogGeneratorError, "Can't find tag #{tag1} -> exit".red
+        raise ChangelogGeneratorError, "Can't find tag #{tag1} -> exit".red
       end
       log
     end
@@ -79,16 +79,16 @@ module GitHubChangelogGenerator
       time_string = newer_tag_time.strftime @options[:date_format]
 
       # Generate tag name and link
-      if @options[:release_url]
-        release_url = format(@options[:release_url], newer_tag_link)
-      else
-        release_url = "#{project_url}/tree/#{newer_tag_link}"
-      end
-      if newer_tag_name.equal? @options[:unreleased_label]
-        log += "## [#{newer_tag_name}](#{release_url})\n\n"
-      else
-        log += "## [#{newer_tag_name}](#{release_url}) (#{time_string})\n"
-      end
+      release_url = if @options[:release_url]
+                      format(@options[:release_url], newer_tag_link)
+                    else
+                      "#{project_url}/tree/#{newer_tag_link}"
+                    end
+      log += if newer_tag_name.equal? @options[:unreleased_label]
+               "## [#{newer_tag_name}](#{release_url})\n\n"
+             else
+               "## [#{newer_tag_name}](#{release_url}) (#{time_string})\n"
+             end
 
       if @options[:compare_link] && older_tag_link
         # Generate compare link
@@ -171,11 +171,11 @@ module GitHubChangelogGenerator
 
       unless issue.pull_request.nil?
         if @options[:author]
-          if issue.user.nil?
-            title_with_number += " ({Null user})"
-          else
-            title_with_number += " ([#{issue.user.login}](#{issue.user.html_url}))"
-          end
+          title_with_number += if issue.user.nil?
+                                 " ({Null user})"
+                               else
+                                 " ([#{issue.user.login}](#{issue.user.html_url}))"
+                               end
         end
       end
       title_with_number

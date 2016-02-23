@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    github_changelog_generator (1.10.1)
+    github_changelog_generator (1.11.0)
       colorize (~> 0.7)
       github_api (~> 0.12)
 
