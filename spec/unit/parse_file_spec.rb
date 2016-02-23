@@ -37,7 +37,7 @@ describe GitHubChangelogGenerator::ParserFile do
                                           header: "=== Changelog ==="))
       end
 
-      context "turns exclude-label into an Array", bug: '#327' do
+      context "turns exclude-labels into an Array", bug: '#327' do
         let(:options) {
           {
             params_file: 'spec/files/github_changelog_params_327'
