@@ -1,10 +1,18 @@
 # Change Log
 
-## [v1.11.0](https://github.com/skywinder/github-changelog-generator/tree/v1.11.0) (2016-02-23)
-[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.11.1...v1.11.0)
+## [Unreleased](https://github.com/skywinder/github-changelog-generator/tree/HEAD)
 
-## [1.11.1](https://github.com/skywinder/github-changelog-generator/tree/1.11.1) (2016-02-23)
-[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.10.1...1.11.1)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.10.2...HEAD)
+
+**Fixed bugs:**
+
+- Getting an error on install [\#329](https://github.com/skywinder/github-changelog-generator/issues/329)
+
+## [1.10.2](https://github.com/skywinder/github-changelog-generator/tree/1.10.2) (2016-02-23)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/v1.11.0...1.10.2)
+
+## [v1.11.0](https://github.com/skywinder/github-changelog-generator/tree/v1.11.0) (2016-02-23)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.10.1...v1.11.0)
 
 **Implemented enhancements:**
 
