@@ -1,3 +1,3 @@
 module GitHubChangelogGenerator
-  VERSION = "1.11.0".freeze
+  VERSION = "1.10.2"
 end

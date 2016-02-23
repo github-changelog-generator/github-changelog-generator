@@ -1,8 +1,8 @@
-VALID_TOKEN = "0123456789abcdef".freeze
-INVALID_TOKEN = "0000000000000000".freeze
+VALID_TOKEN = "0123456789abcdef"
+INVALID_TOKEN = "0000000000000000"
 
 DEFAULT_OPTIONS = { user: "skywinder",
-                    project: "changelog_test" }.freeze
+                    project: "changelog_test" }
 
 def options_with_invalid_token
   options = DEFAULT_OPTIONS
