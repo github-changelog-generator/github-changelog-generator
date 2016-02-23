@@ -138,12 +138,22 @@ module GitHubChangelogGenerator
 
       log = generate_unreleased_section
 
-      (1...filtered_tags.size).each do |index|
-        log += generate_log_between_tags(filtered_tags[index], filtered_tags[index - 1])
+      tags = filtered_tags
+      # ought to be done in lib/github_changelog_generator/generator/generator_tags.rb but I can't figure out how to
+      # call filter_issues_for_tags there
+      if @options[:skip_empty_releases]
+        tags = (0...tags.length - 1).collect do|i|
+          OpenStruct.new(newer: tags[i], older: tags[i + 1])
+        end.collect do|pair|
+          filtered_issues, filtered_pull_requests = filter_issues_for_tags(pair.newer, pair.older)
+          filtered_issues.length == 0 && filtered_pull_requests.length == 0 ? nil : pair.newer
+        end.compact
       end
-      if @filtered_tags.count != 0
-        log += generate_log_between_tags(nil, filtered_tags.last)
+
+      (1...tags.size).each do |index|
+        log += generate_log_between_tags(tags[index], tags[index - 1])
       end
+      log += generate_log_between_tags(nil, tags.last) if tags.count != 0
 
       log
     end

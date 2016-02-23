@@ -1,3 +1,85 @@
+require "sqlite3"
+require "yaml"
+
+class GithubResponseCache
+  def initialize(app, _options = {}, &_block)
+    @app = app
+
+    Thread.exclusive do
+      @@cache ||= lambda do
+        db = SQLite3::Database.new(GitHubChangelogGenerator::ChangelogGenerator.options[:cache_github_responses] || ":memory:")
+        db.results_as_hash = true
+        db.execute("create table if not exists cache (url primary key, Etag, response_headers, body)")
+        db.execute("PRAGMA synchronous = OFF")
+        db.execute("PRAGMA journal_mode = MEMORY")
+        db
+      end.call
+    end
+  end
+
+  def self.get(env)
+    Thread.exclusive do
+      @@cache.execute("select * from cache where url=?", env[:url].to_s).first
+    end
+  end
+
+  def self.store(env)
+    Thread.exclusive do
+      @@cache.execute("replace into cache (url, Etag, response_headers, body) values (?, ?, ?, ?)", [
+        env[:url].to_s,
+        env[:response_headers]["Etag"].sub(/^W\//, ""),
+        YAML.dump(env[:response_headers]),
+        YAML.dump(env[:body])
+      ])
+    end
+  end
+
+  def call(env)
+    # Only cache "safe" requests
+    return @app.call(env) unless [:get, :head].include?(env[:method]) && GitHubChangelogGenerator::ChangelogGenerator.options[:cache_github_responses]
+
+    cached = GithubResponseCache.get(env)
+
+    env[:request_headers]["If-None-Match"] ||= cached["Etag"] if cached
+
+    @app.call(env).on_complete do
+      if cached && env[:status] == 304
+        env[:body] = YAML.load(cached["body"])
+        env[:response_headers] = YAML.load(cached["response_headers"])
+      elsif env[:response_headers]["Etag"]
+        GithubResponseCache.store(env)
+      end
+      env[:status] = 200 if env[:status] == 304
+    end
+  end
+end
+
+module Github
+  class Middleware
+    def self.default(options = {})
+      api = options[:api]
+      proc do |builder|
+        builder.use Github::Request::Jsonize
+        builder.use Faraday::Request::Multipart
+        builder.use Faraday::Request::UrlEncoded
+        builder.use Github::Request::OAuth2, api.oauth_token if api.oauth_token?
+        builder.use Github::Request::BasicAuth, api.authentication if api.basic_authed?
+
+        builder.use GithubResponseCache if GitHubChangelogGenerator::ChangelogGenerator.options[:cache_github_responses]
+
+        builder.use Faraday::Response::Logger if ENV["DEBUG"]
+        unless options[:raw]
+          builder.use Github::Response::Mashify
+          builder.use Github::Response::Jsonize
+          builder.use Github::Response::AtomParser
+        end
+        builder.use Github::Response::RaiseError
+        builder.adapter options[:adapter]
+      end
+    end
+  end # Middleware
+end # Github
+
 module GitHubChangelogGenerator
   # A Fetcher responsible for all requests to GitHub and all basic manipulation with related data
   # (such as filtering, validating, e.t.c)
@@ -108,7 +190,8 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
         print_empty_line
         Helper.log.info "Received issues: #{issues.count}"
 
-      rescue
+      rescue => e
+        Helper.log.warn e.body.red
         Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
       end
 
@@ -142,7 +225,8 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
           pull_requests.concat(page)
         end
         print_empty_line
-      rescue
+      rescue => e
+        Helper.log.warn e.body.red
         Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
       end
 
@@ -179,7 +263,8 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
               response.each_page do |page|
                 issue[:events].concat(page)
               end
-            rescue
+            rescue => e
+              Helper.log.warn e.body.red
               Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
             end
             print_in_same_line("Fetching events for issues and PR: #{i + 1}/#{issues.count}")
@@ -205,7 +290,8 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
         commit_data = @github.git_data.commits.get @options[:user],
                                                    @options[:project],
                                                    tag["commit"]["sha"]
-      rescue
+      rescue => e
+        Helper.log.warn e.body.red
         Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
       end
       time_string = commit_data["committer"]["date"]
