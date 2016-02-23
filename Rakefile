@@ -3,6 +3,7 @@ require "rubocop/rake_task"
 require "rspec/core/rake_task"
 require "pathname"
 require "fileutils"
+require "overcommit"
 
 RuboCop::RakeTask.new
 RSpec::Core::RakeTask.new(:rspec)
