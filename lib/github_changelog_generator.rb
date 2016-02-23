@@ -28,7 +28,7 @@ module GitHubChangelogGenerator
     def run
       log = @generator.compound_changelog
 
-      output_filename = (@options[:output]).to_s
+      output_filename = "#{@options[:output]}"
       File.open(output_filename, "w") { |file| file.write(log) }
       puts "Done!"
       puts "Generated log placed in #{Dir.pwd}/#{output_filename}"

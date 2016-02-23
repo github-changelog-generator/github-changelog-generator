@@ -7,11 +7,11 @@ module GitHubChangelogGenerator
 
   class Fetcher
     PER_PAGE_NUMBER = 30
-    CHANGELOG_GITHUB_TOKEN = "CHANGELOG_GITHUB_TOKEN".freeze
+    CHANGELOG_GITHUB_TOKEN = "CHANGELOG_GITHUB_TOKEN"
     GH_RATE_LIMIT_EXCEEDED_MSG = "Warning: Can't finish operation: GitHub API rate limit exceeded, change log may be " \
-    "missing some issues. You can limit the number of issues fetched using the `--max-issues NUM` argument.".freeze
+    "missing some issues. You can limit the number of issues fetched using the `--max-issues NUM` argument."
     NO_TOKEN_PROVIDED = "Warning: No token provided (-t option) and variable $CHANGELOG_GITHUB_TOKEN was not found. " \
-    "This script can make only 50 requests to GitHub API per hour without token!".freeze
+    "This script can make only 50 requests to GitHub API per hour without token!"
 
     def initialize(options = {})
       @options = options || {}
@@ -123,16 +123,16 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
     def fetch_closed_pull_requests
       pull_requests = []
       begin
-        response = if @options[:release_branch].nil?
-                     @github.pull_requests.list @options[:user],
+        if @options[:release_branch].nil?
+          response = @github.pull_requests.list @options[:user],
                                                 @options[:project],
                                                 state: "closed"
-                   else
-                     @github.pull_requests.list @options[:user],
+        else
+          response = @github.pull_requests.list @options[:user],
                                                 @options[:project],
                                                 state: "closed",
                                                 base: @options[:release_branch]
-                   end
+        end
         page_i = 0
         count_pages = response.count_pages
         response.each_page do |page|

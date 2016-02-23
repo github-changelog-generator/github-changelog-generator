@@ -19,7 +19,7 @@ module GitHubChangelogGenerator
     # @param [Hash] tag_name name of the tag
     # @return [Time] time of specified tag
     def get_time_of_tag(tag_name)
-      raise ChangelogGeneratorError, "tag_name is nil".red if tag_name.nil?
+      fail ChangelogGeneratorError, "tag_name is nil".red if tag_name.nil?
 
       name_of_tag = tag_name["name"]
       time_for_name = @tag_times_hash[name_of_tag]
@@ -80,11 +80,11 @@ module GitHubChangelogGenerator
       if tag
         if all_tags.map(&:name).include? tag
           idx = all_tags.index { |t| t.name == tag }
-          filtered_tags = if idx > 0
-                            all_tags[0..idx - 1]
-                          else
-                            []
-                          end
+          if idx > 0
+            filtered_tags = all_tags[0..idx - 1]
+          else
+            filtered_tags = []
+          end
         else
           Helper.log.warn "Warning: can't find tag #{tag}, specified with --since-tag option."
         end
@@ -101,11 +101,11 @@ module GitHubChangelogGenerator
         if (all_tags.count > 0) && (all_tags.map(&:name).include? tag)
           idx = all_tags.index { |t| t.name == tag }
           last_index = all_tags.count - 1
-          filtered_tags = if idx > 0 && idx < last_index
-                            all_tags[idx + 1..last_index]
-                          else
-                            []
-                          end
+          if idx > 0 && idx < last_index
+            filtered_tags = all_tags[idx + 1..last_index]
+          else
+            filtered_tags = []
+          end
         else
           Helper.log.warn "Warning: can't find tag #{tag}, specified with --due-tag option."
         end

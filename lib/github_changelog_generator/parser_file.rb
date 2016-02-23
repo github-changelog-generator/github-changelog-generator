@@ -20,8 +20,8 @@ module GitHubChangelogGenerator
 
     def parse_line!(line)
       key_sym, value = extract_pair(line)
-      value = true if value =~ /^(true|t|yes|y|1)$/i
-      value = false if value =~ /^(false|f|no|n|0)$/i
+      value = true if value =~ (/^(true|t|yes|y|1)$/i)
+      value = false if value =~ (/^(false|f|no|n|0)$/i)
       @options[key_sym] = value
     rescue
       raise ParserError, "Config file #{file} is incorrect in line \"#{line.gsub(/[\n\r]+/, '')}\""
