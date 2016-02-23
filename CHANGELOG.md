@@ -1,8 +1,7 @@
 # Change Log
 
-## [Unreleased](https://github.com/skywinder/github-changelog-generator/tree/HEAD)
-
-[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.10.2...HEAD)
+## [1.10.3](https://github.com/skywinder/github-changelog-generator/tree/1.10.3) (2016-02-23)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.10.2...1.10.3)
 
 **Fixed bugs:**
 
