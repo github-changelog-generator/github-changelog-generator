@@ -4,13 +4,12 @@ module GitHubChangelogGenerator
     # @param [Array] issues
     # @return [Array] filtered array
     def exclude_issues_by_labels(issues)
-      unless @options[:exclude_labels].nil?
-        issues = issues.select do |issue|
-          var = issue.labels.map(&:name) & @options[:exclude_labels]
-          !var.any?
-        end
+      return issues if !@options[:exclude_labels] || @options[:exclude_labels].empty?
+
+      issues.reject do |issue|
+        labels = issue.labels.map(&:name)
+        (labels & @options[:exclude_labels]).any?
       end
-      issues
     end
 
     # @return [Array] filtered issues accourding milestone
