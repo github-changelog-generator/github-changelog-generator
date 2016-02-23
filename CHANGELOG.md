@@ -1,5 +1,24 @@
 # Change Log
 
+## [v1.11.0](https://github.com/skywinder/github-changelog-generator/tree/v1.11.0) (2016-02-23)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.11.1...v1.11.0)
+
+## [1.11.1](https://github.com/skywinder/github-changelog-generator/tree/1.11.1) (2016-02-23)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.10.1...1.11.1)
+
+**Implemented enhancements:**
+
+- YAML front matter [\#322](https://github.com/skywinder/github-changelog-generator/pull/322) ([retorquere](https://github.com/retorquere))
+- Git Subcommand [\#288](https://github.com/skywinder/github-changelog-generator/pull/288) ([dlanileonardo](https://github.com/dlanileonardo))
+
+**Fixed bugs:**
+
+- detect\_since\_tag undefined [\#328](https://github.com/skywinder/github-changelog-generator/issues/328)
+
+**Merged pull requests:**
+
+- Update README.md [\#324](https://github.com/skywinder/github-changelog-generator/pull/324) ([Zearin](https://github.com/Zearin))
+
 ## [1.10.1](https://github.com/skywinder/github-changelog-generator/tree/1.10.1) (2016-01-06)
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.10.0...1.10.1)
 
