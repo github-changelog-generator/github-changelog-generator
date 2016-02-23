@@ -37,7 +37,7 @@ module GitHubChangelogGenerator
     def define(args, &task_block)
       desc "Generate a Change log from GitHub"
 
-      task_block.call(*[self, args].slice(0, task_block.arity)) if task_block
+      yield(*[self, args].slice(0, task_block.arity)) if task_block
 
       # clear any (auto-)pre-existing task
       Rake::Task[@name].clear if Rake::Task.task_defined?(@name)
@@ -57,7 +57,7 @@ module GitHubChangelogGenerator
 
         log = generator.compound_changelog
 
-        output_filename = "#{options[:output]}"
+        output_filename = (options[:output]).to_s
         File.open(output_filename, "w") { |file| file.write(log) }
         puts "Done!"
         puts "Generated log placed in #{Dir.pwd}/#{output_filename}"

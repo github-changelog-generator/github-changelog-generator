@@ -123,16 +123,16 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
     def fetch_closed_pull_requests
       pull_requests = []
       begin
-        if @options[:release_branch].nil?
-          response = @github.pull_requests.list @options[:user],
+        response = if @options[:release_branch].nil?
+                     @github.pull_requests.list @options[:user],
                                                 @options[:project],
                                                 state: "closed"
-        else
-          response = @github.pull_requests.list @options[:user],
+                   else
+                     @github.pull_requests.list @options[:user],
                                                 @options[:project],
                                                 state: "closed",
                                                 base: @options[:release_branch]
-        end
+                   end
         page_i = 0
         count_pages = response.count_pages
         response.each_page do |page|
