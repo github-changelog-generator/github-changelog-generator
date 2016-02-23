@@ -58,7 +58,7 @@ module GitHubChangelogGenerator
       if @since_tag.nil? && @options[:base] && File.file?(@options[:base])
         reader = GitHubChangelogGenerator::Reader.new
         content = reader.read(@options[:base])
-        @since_tag = content[0]["version"] if content
+        @since_tag = content[0]["version"] if content.count && content
       end
       @since_tag
     end
