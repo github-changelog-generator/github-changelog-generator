@@ -44,6 +44,7 @@ describe GitHubChangelogGenerator::ParserFile do
           }
         end
         it "reads exclude_labels into an Array" do
+          pending("Related with Bug #327.")
           expect { parse.parse! }.to change { options[:exclude_labels] }
             .from(nil)
             .to(["73a91042-da6f-11e5-9335-1040f38d7f90", "7adf83b4-da6f-11e5-ae18-1040f38d7f90"])
