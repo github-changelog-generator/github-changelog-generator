@@ -1,11 +1,19 @@
 # Change Log
 
-## [1.10.3](https://github.com/skywinder/github-changelog-generator/tree/1.10.3) (2016-02-23)
-[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.10.2...1.10.3)
+## [1.10.4](https://github.com/skywinder/github-changelog-generator/tree/1.10.4) (2016-02-24)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.10.3...1.10.4)
 
 **Fixed bugs:**
 
-- Getting an error on install [\#329](https://github.com/skywinder/github-changelog-generator/issues/329)
+- Rake and Bundler as runtime deps [\#333](https://github.com/skywinder/github-changelog-generator/pull/333) ([olleolleolle](https://github.com/olleolleolle))
+
+**Merged pull requests:**
+
+- Test case for \#327 [\#331](https://github.com/skywinder/github-changelog-generator/pull/331) ([olleolleolle](https://github.com/olleolleolle))
+- Fix crash installing on systems without overcommit [\#330](https://github.com/skywinder/github-changelog-generator/pull/330) ([jkeiser](https://github.com/jkeiser))
+
+## [1.10.3](https://github.com/skywinder/github-changelog-generator/tree/1.10.3) (2016-02-23)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.10.2...1.10.3)
 
 ## [1.10.2](https://github.com/skywinder/github-changelog-generator/tree/1.10.2) (2016-02-23)
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/v1.11.0...1.10.2)
