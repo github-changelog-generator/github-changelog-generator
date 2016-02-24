@@ -1,5 +1,12 @@
 # Change Log
 
+## [1.10.5](https://github.com/skywinder/github-changelog-generator/tree/1.10.5) (2016-02-24)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.10.4...1.10.5)
+
+**Fixed bugs:**
+
+- Getting an error on install [\#329](https://github.com/skywinder/github-changelog-generator/issues/329)
+
 ## [1.10.4](https://github.com/skywinder/github-changelog-generator/tree/1.10.4) (2016-02-24)
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.10.3...1.10.4)
 
