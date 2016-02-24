@@ -38,16 +38,15 @@ describe GitHubChangelogGenerator::ParserFile do
       end
 
       context "turns exclude-labels into an Array", bug: '#327' do
-        let(:options) {
+        let(:options) do
           {
-            params_file: 'spec/files/github_changelog_params_327'
+            params_file: "spec/files/github_changelog_params_327"
           }
-        }
+        end
         it "reads exclude_labels into an Array" do
           expect { parse.parse! }.to change { options[:exclude_labels] }
-                                       .from(nil)
-                                       .to(["73a91042-da6f-11e5-9335-1040f38d7f90", "7adf83b4-da6f-11e5-ae18-1040f38d7f90"])
-
+            .from(nil)
+            .to(["73a91042-da6f-11e5-9335-1040f38d7f90", "7adf83b4-da6f-11e5-ae18-1040f38d7f90"])
         end
       end
     end

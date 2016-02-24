@@ -24,10 +24,10 @@ module SpecHelper
 end
 
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
-  Coveralls::SimpleCov::Formatter,
-  SimpleCov::Formatter::HTMLFormatter,
-  CodeClimate::TestReporter::Formatter
-])
+                                                                 Coveralls::SimpleCov::Formatter,
+                                                                 SimpleCov::Formatter::HTMLFormatter,
+                                                                 CodeClimate::TestReporter::Formatter
+                                                               ])
 SimpleCov.start
 
 require "github_changelog_generator"
