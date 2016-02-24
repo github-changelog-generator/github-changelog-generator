@@ -3,10 +3,10 @@ module GitHubChangelogGenerator
     context "#exclude_issues_by_labels" do
       let(:label) { double("the-bad-label", name: "BAD") }
       let(:issue) { double("the-issue-to-be-excluded", labels: [label]) }
-      let(:good_label) {  double("a-good-label", name: "GOOD") }
+      let(:good_label) { double("a-good-label", name: "GOOD") }
       let(:good_issue) { double("an-issue-to-be-kept", labels: [good_label]) }
       let(:issues) { [issue, good_issue] }
-      subject(:generator) { described_class.new(exclude_labels: %w(BAD BOO))}
+      subject(:generator) { described_class.new(exclude_labels: %w(BAD BOO)) }
 
       it "removes issues with labels in the exclude_label list" do
         result = generator.exclude_issues_by_labels(issues)
