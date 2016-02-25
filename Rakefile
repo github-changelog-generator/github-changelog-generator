@@ -10,8 +10,14 @@ RuboCop::RakeTask.new
 RSpec::Core::RakeTask.new(:rspec)
 
 task :create_man do |_t|
-  os_prefix = "/usr/local"
-  man_prefix = Pathname("#{os_prefix}/share/man/man1")
+  writable_man_path = Pathname('/etc/manpaths').each_line.find do |line|
+    path = Pathname(line.chomp)
+    path.directory? && path.writable?
+  end rescue nil
+
+  return unless writable_man_path
+
+  man_prefix = Pathname("#{writable_man_path.chomp}/man1")
   man_pages = "man/git-*.1"
 
   Pathname.glob(man_pages) do |path|
