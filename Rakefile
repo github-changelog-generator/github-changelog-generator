@@ -12,10 +12,12 @@ RSpec::Core::RakeTask.new(:rspec)
 task :create_man do |_t|
   os_prefix = "/usr/local"
   man_prefix = Pathname("#{os_prefix}/share/man/man1")
-  man_pages = "man/git-*"
+  man_pages = "man/git-*.1"
 
   Pathname.glob(man_pages) do |path|
-    FileUtils.cp(path, man_prefix + path.basename)
+    if path.exist? && man_prefix.exist?
+      FileUtils.cp(path, man_prefix + path.basename)
+    end
   end
 end
 
