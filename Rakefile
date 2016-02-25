@@ -15,7 +15,7 @@ task :create_man do |_t|
   man_pages = "man/git-*.1"
 
   Pathname.glob(man_pages) do |path|
-    if path.exist? && man_prefix.exist?
+    if path.exist? && man_prefix.exist? && man_prefix.writable?
       FileUtils.cp(path, man_prefix + path.basename)
     end
   end
