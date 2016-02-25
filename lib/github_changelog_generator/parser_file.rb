@@ -1,4 +1,4 @@
-require 'pathname'
+require "pathname"
 
 module GitHubChangelogGenerator
   ParserError = Class.new(StandardError)
