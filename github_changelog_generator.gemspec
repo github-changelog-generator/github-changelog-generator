@@ -17,7 +17,7 @@ Gem::Specification.new do |spec|
   spec.description = "Changelog generation has never been so easy. Fully automate changelog generation - this gem generate change log file based on tags, issues and merged pull requests from Github issue tracker."
   spec.homepage = "https://github.com/skywinder/Github-Changelog-Generator"
   spec.license = "MIT"
-  spec.extensions = ["Rakefile"]
+  #spec.extensions = ["Rakefile"]
 
   spec.files = `git ls-files -z`.split("\x0")
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
