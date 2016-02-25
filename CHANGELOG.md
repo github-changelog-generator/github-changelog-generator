@@ -1,5 +1,16 @@
 # Change Log
 
+## [1.11.2](https://github.com/skywinder/github-changelog-generator/tree/1.11.2) (2016-02-25)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.11.1...1.11.2)
+
+**Fixed bugs:**
+
+- Getting an error on install [\#329](https://github.com/skywinder/github-changelog-generator/issues/329)
+
+**Merged pull requests:**
+
+- Fix installation by not running the specs - which have dependencies [\#337](https://github.com/skywinder/github-changelog-generator/pull/337) ([skywinder](https://github.com/skywinder))
+
 ## [1.11.1](https://github.com/skywinder/github-changelog-generator/tree/1.11.1) (2016-02-25)
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.11.0...1.11.1)
 
