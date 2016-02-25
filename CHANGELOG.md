@@ -1,5 +1,12 @@
 # Change Log
 
+## [1.11.3](https://github.com/skywinder/github-changelog-generator/tree/1.11.3) (2016-02-25)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.11.2...1.11.3)
+
+**Closed issues:**
+
+- Cannot install gem [\#335](https://github.com/skywinder/github-changelog-generator/issues/335)
+
 ## [1.11.2](https://github.com/skywinder/github-changelog-generator/tree/1.11.2) (2016-02-25)
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.11.1...1.11.2)
 
