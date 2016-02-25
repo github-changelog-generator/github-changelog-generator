@@ -1,12 +1,14 @@
 PATH
   remote: .
   specs:
-    github_changelog_generator (1.10.3)
-      bundler (~> 1.7)
+    github_changelog_generator (1.10.4)
+      bundler (>= 1.7)
       colorize (~> 0.7)
       github_api (~> 0.12)
-      overcommit (~> 0.31)
-      rake (~> 10.0)
+      overcommit (>= 0.31)
+      rake (>= 10.0)
+      rspec (>= 3.2)
+      rubocop (>= 0.31)
 
 GEM
   remote: https://rubygems.org/
@@ -99,8 +101,6 @@ DEPENDENCIES
   codeclimate-test-reporter (~> 0.4)
   coveralls (~> 0.8)
   github_changelog_generator!
-  rspec (~> 3.2)
-  rubocop (~> 0.31)
   simplecov (~> 0.10)
 
 BUNDLED WITH
