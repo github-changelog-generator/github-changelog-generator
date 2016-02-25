@@ -20,4 +20,4 @@ task :create_man do |_t|
 end
 
 task checks: [:rubocop, :rspec]
-task default: [:checks, :create_man]
+task default: [:create_man]
