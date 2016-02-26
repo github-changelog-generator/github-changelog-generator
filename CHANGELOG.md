@@ -1,5 +1,12 @@
 # Change Log
 
+## [1.11.4](https://github.com/skywinder/github-changelog-generator/tree/1.11.4) (2016-02-26)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.11.3...1.11.4)
+
+**Merged pull requests:**
+
+- Man page copying: only copy .1 [\#338](https://github.com/skywinder/github-changelog-generator/pull/338) ([olleolleolle](https://github.com/olleolleolle))
+
 ## [1.11.3](https://github.com/skywinder/github-changelog-generator/tree/1.11.3) (2016-02-25)
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.11.2...1.11.3)
 
