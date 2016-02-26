@@ -9,15 +9,31 @@ require "overcommit"
 RuboCop::RakeTask.new
 RSpec::Core::RakeTask.new(:rspec)
 
-task :create_man do |_t|
-  os_prefix = "/usr/local"
-  man_prefix = Pathname("#{os_prefix}/share/man/man1")
-  man_pages = "man/git-*"
+task :copy_man_page_to_manpath do |_t|
+  known_manpath_paths = %w(/etc/manpath.config /etc/manpaths)
+  manpath = known_manpath_paths.find do |f|
+    path = Pathname(f)
+    path.file? && path.readable?
+  end
+
+  return unless manpath
+
+  writable_man_path = Pathname(manpath).each_line.find do |line|
+    path = Pathname(line.chomp)
+    path.directory? && path.writable?
+  end
+
+  return unless writable_man_path
+
+  man_prefix = Pathname("#{writable_man_path.chomp}/man1")
+  man_pages = "man/git-*.1"
 
   Pathname.glob(man_pages) do |path|
-    FileUtils.cp(path, man_prefix + path.basename)
+    if path.exist? && man_prefix.exist? && man_prefix.writable?
+      FileUtils.cp(path, man_prefix + path.basename)
+    end
   end
 end
 
 task checks: [:rubocop, :rspec]
-task default: [:create_man]
+task default: [:copy_man_page_to_manpath]
