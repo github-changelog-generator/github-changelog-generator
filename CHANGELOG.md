@@ -1,5 +1,20 @@
 # Change Log
 
+## [1.11.6](https://github.com/skywinder/github-changelog-generator/tree/1.11.6) (2016-03-01)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.11.5...1.11.6)
+
+**Fixed bugs:**
+
+- Can't build on Windows [\#340](https://github.com/skywinder/github-changelog-generator/issues/340)
+
+**Closed issues:**
+
+- install error "Not a git repository" [\#339](https://github.com/skywinder/github-changelog-generator/issues/339)
+
+**Merged pull requests:**
+
+- Gemspec: Calculate date using Date stdlib [\#343](https://github.com/skywinder/github-changelog-generator/pull/343) ([olleolleolle](https://github.com/olleolleolle))
+
 ## [1.11.5](https://github.com/skywinder/github-changelog-generator/tree/1.11.5) (2016-03-01)
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.11.4...1.11.5)
 
