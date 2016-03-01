@@ -16,14 +16,14 @@ task :copy_man_page_to_manpath do |_t|
     path.file? && path.readable?
   end
 
-  return unless manpath
+  next unless manpath
 
   writable_man_path = Pathname(manpath).each_line.find do |line|
     path = Pathname(line.chomp)
     path.directory? && path.writable?
   end
 
-  return unless writable_man_path
+  next unless writable_man_path
 
   man_prefix = Pathname("#{writable_man_path.chomp}/man1")
   man_pages = "man/git-*.1"

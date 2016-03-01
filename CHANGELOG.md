@@ -1,5 +1,13 @@
 # Change Log
 
+## [1.11.5](https://github.com/skywinder/github-changelog-generator/tree/1.11.5) (2016-03-01)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.11.4...1.11.5)
+
+**Merged pull requests:**
+
+- Test clean install in Travis [\#344](https://github.com/skywinder/github-changelog-generator/pull/344) ([jkeiser](https://github.com/jkeiser))
+- Update Rakefile to avoid install-breaking bug [\#341](https://github.com/skywinder/github-changelog-generator/pull/341) ([olleolleolle](https://github.com/olleolleolle))
+
 ## [1.11.4](https://github.com/skywinder/github-changelog-generator/tree/1.11.4) (2016-02-26)
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.11.3...1.11.4)
 
