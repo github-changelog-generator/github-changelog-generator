@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.default_executable = "github_changelog_generator"
 
   spec.required_ruby_version = ">= 1.9.3"
-  spec.authors = ["Petr Korolev"]
+  spec.authors = ["Petr Korolev", "Olle Jonsson"]
   spec.email = "sky4winder+github_changelog_generator@gmail.com"
 
   spec.summary = "Script, that automatically generate changelog from your tags, issues, labels and pull requests."
