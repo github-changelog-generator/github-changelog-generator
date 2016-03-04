@@ -1,0 +1,50 @@
+version: "{build}"
+
+platform: x64
+
+branches:
+    only:
+      - master
+
+clone_depth: 10
+
+skip_tags: true
+
+# See here for Ruby versions pre-installed:
+#  http://www.appveyor.com/docs/installed-software#ruby
+environment:
+  matrix:
+    - ruby_version: "21" # Older version, but matches Travis-CI
+    - ruby_version: "21-x64"
+
+install:
+  - SET PATH=C:\Ruby%ruby_version%\bin;%PATH%
+
+  # Print version and location for pre-installed ruby
+  - ruby --version
+  - where ruby
+
+  # Install latest version of RubyGems
+  - gem update --system --no-document --no-post-install-message
+  - gem --version
+  - where gem
+
+  # Print version and location for pre-installed bundler
+  - bundler --version
+  - where bundler
+
+build_script:
+  # Install ruby dependencies
+  - bundle install --retry 3
+  - bundle exec rake checks
+
+test_script:
+  - gem build github_changelog_generator
+  - gem install *.gem
+
+notifications:
+  - provider: Email
+    to:
+      - sky4winder+githubchangeloggenerator@gmail.com
+    on_build_success: false
+    on_build_status_changed: true
