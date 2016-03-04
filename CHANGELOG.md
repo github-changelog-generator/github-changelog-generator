@@ -1,5 +1,13 @@
 # Change Log
 
+## [1.11.7](https://github.com/skywinder/github-changelog-generator/tree/1.11.7) (2016-03-04)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.11.6...1.11.7)
+
+**Merged pull requests:**
+
+- Add Olle Jonsson as co-author [\#347](https://github.com/skywinder/github-changelog-generator/pull/347) ([skywinder](https://github.com/skywinder))
+- Gemspec, default date [\#346](https://github.com/skywinder/github-changelog-generator/pull/346) ([olleolleolle](https://github.com/olleolleolle))
+
 ## [1.11.6](https://github.com/skywinder/github-changelog-generator/tree/1.11.6) (2016-03-01)
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.11.5...1.11.6)
 
