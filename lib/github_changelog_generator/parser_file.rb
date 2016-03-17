@@ -23,7 +23,7 @@ module GitHubChangelogGenerator
 
     def parse_line!(line)
       key_sym, value = extract_pair(line)
-      @options[key_sym] = convert_value(value, key_sym)
+      @options[translate_option_name(key_sym)] = convert_value(value, key_sym)
     rescue
       raise ParserError, "Config file #{file} is incorrect in line \"#{line.gsub(/[\n\r]+/, '')}\""
     end
@@ -53,6 +53,22 @@ module GitHubChangelogGenerator
       else
         value
       end
+    end
+
+    def translate_option_name(key_sym)
+      {
+        bugs_label: :bug_prefix,
+        enhancement_label: :enhancement_prefix,
+        issues_label: :issue_prefix,
+        header_label: :header,
+        front_matter: :frontmatter,
+        pr_label: :merge_prefix,
+        issues_wo_labels: :add_issues_wo_labels,
+        pr_wo_labels: :add_pr_wo_labels,
+        pull_requests: :pulls,
+        filter_by_milestone: :filter_issues_by_milestone,
+        github_api: :github_endpoint
+      }.fetch(key_sym) { key_sym }
     end
   end
 end
