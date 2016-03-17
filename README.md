@@ -101,7 +101,7 @@ Therefore, it's recommended to run this script with authentication by using a **
 
 Here's how:
 
-- [Generate a token here](https://github.com/settings/tokens/new?description=GitHub%20Changelog%20Generator%20token)
+- [Generate a token here](https://github.com/settings/tokens/new?description=GitHub%20Changelog%20Generator%20token) - you only need "repo" scope for private repositories
 - Either:
     - Run the script with `--token <your-40-digit-token>`; **OR**
     - Set the `CHANGELOG_GITHUB_TOKEN` environment variable to your 40 digit token
