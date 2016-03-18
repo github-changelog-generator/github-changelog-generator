@@ -23,9 +23,7 @@ module GitHubChangelogGenerator
 
     def parse_line!(line)
       key_sym, value = extract_pair(line)
-      value = true if value =~ /^(true|t|yes|y|1)$/i
-      value = false if value =~ /^(false|f|no|n|0)$/i
-      @options[key_sym] = value
+      @options[translate_option_name(key_sym)] = convert_value(value, key_sym)
     rescue
       raise ParserError, "Config file #{file} is incorrect in line \"#{line.gsub(/[\n\r]+/, '')}\""
     end
@@ -37,6 +35,40 @@ module GitHubChangelogGenerator
     def extract_pair(line)
       key, value = line.split("=", 2)
       [key.sub("-", "_").to_sym, value.gsub(/[\n\r]+/, "")]
+    end
+
+    KNOWN_ARRAY_KEYS = [:exclude_labels, :include_labels, :bug_labels,
+                        :enhancement_labels, :between_tags, :exclude_tags]
+    KNOWN_INTEGER_KEYS = [:max_issues]
+
+    def convert_value(value, key_sym)
+      if KNOWN_ARRAY_KEYS.include?(key_sym)
+        value.split(",")
+      elsif KNOWN_INTEGER_KEYS.include?(key_sym)
+        value.to_i
+      elsif value =~ /^(true|t|yes|y|1)$/i
+        true
+      elsif value =~ /^(false|f|no|n|0)$/i
+        false
+      else
+        value
+      end
+    end
+
+    def translate_option_name(key_sym)
+      {
+        bugs_label: :bug_prefix,
+        enhancement_label: :enhancement_prefix,
+        issues_label: :issue_prefix,
+        header_label: :header,
+        front_matter: :frontmatter,
+        pr_label: :merge_prefix,
+        issues_wo_labels: :add_issues_wo_labels,
+        pr_wo_labels: :add_pr_wo_labels,
+        pull_requests: :pulls,
+        filter_by_milestone: :filter_issues_by_milestone,
+        github_api: :github_endpoint
+      }.fetch(key_sym) { key_sym }
     end
   end
 end
