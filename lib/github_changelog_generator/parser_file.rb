@@ -19,7 +19,7 @@ module GitHubChangelogGenerator
   class ParserFile
     # @param options [Hash] options to be configured from file contents
     # @param file [nil,IO] configuration file handle, defaults to opening `.github_changelog_generator`
-    def initialize(options, file = read_default_file)
+    def initialize(options, file = open_settings_file)
       @options = options
       @file = file
     end
@@ -35,7 +35,7 @@ module GitHubChangelogGenerator
 
     FILENAME = ".github_changelog_generator"
 
-    def read_default_file
+    def open_settings_file
       path = Pathname(File.expand_path(FILENAME))
       File.open(path) if path.exist?
     end
