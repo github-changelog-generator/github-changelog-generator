@@ -16,14 +16,11 @@ module GitHubChangelogGenerator
     end
 
     def read_default_file
+      path = Pathname(File.expand_path(FILENAME))
       File.open(path) if path.exist?
     end
 
-    def path
-      @path ||= Pathname(File.expand_path(FILENAME))
-    end
-
-    # Destructively change @options using data in configured options file.
+    # Set @options using configuration file lines.
     def parse!
       return unless file
       file.each_line { |line| parse_line!(line) }
