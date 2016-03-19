@@ -21,17 +21,17 @@ module GitHubChangelogGenerator
     # Set @options using configuration file lines.
     def parse!
       return unless @file
-      @file.each_line { |line| parse_line!(line) }
+      @file.each_with_index { |line, i| parse_line!(line, i + 1) }
       @file.close
     end
 
     private
 
-    def parse_line!(line)
+    def parse_line!(line, line_number)
       option_name, value = extract_pair(line)
       @options[option_key_for(option_name)] = convert_value(value, option_name)
     rescue
-      raise ParserError, "Config file problem on line \"#{line.gsub(/[\n\r]+/, '')}\""
+      raise ParserError, "Config file parsing failed on line ##{line_number}: \"#{line.gsub(/[\n\r]+/, '')}\""
     end
 
     # Returns a the option name as a symbol and its string value sans newlines.
