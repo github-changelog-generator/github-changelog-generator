@@ -6,20 +6,31 @@ module GitHubChangelogGenerator
   class ParserFile
     FILENAME = ".github_changelog_generator"
 
-    def initialize(options)
+    attr_reader :file
+
+    # @param options [Hash]
+    # @param file [nil,IO]
+    def initialize(options, file = read_default_file)
       @options = options
+      @file = file
+    end
+
+    def read_default_file
+      File.open(path) if path.exist?
+    end
+
+    def path
+      @path ||= Pathname(File.expand_path(FILENAME))
     end
 
     # Destructively change @options using data in configured options file.
     def parse!
-      file.each_line { |line| parse_line!(line) } if file.exist?
+      return unless file
+      file.each_line { |line| parse_line!(line) }
+      file.close
     end
 
     private
-
-    def file
-      @file ||= Pathname(File.expand_path(@options[:params_file] || FILENAME))
-    end
 
     def parse_line!(line)
       option_name, value = extract_pair(line)
