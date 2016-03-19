@@ -22,13 +22,13 @@ module GitHubChangelogGenerator
     end
 
     def parse_line!(line)
-      key_sym, value = extract_pair(line)
-      @options[translate_option_name(key_sym)] = convert_value(value, key_sym)
+      option_name, value = extract_pair(line)
+      @options[option_key_for(option_name)] = convert_value(value, option_name)
     rescue
       raise ParserError, "Config file #{file} is incorrect in line \"#{line.gsub(/[\n\r]+/, '')}\""
     end
 
-    # Returns a the setting as a symbol and its string value sans newlines.
+    # Returns a the option name as a symbol and its string value sans newlines.
     #
     # @param line [String] unparsed line from config file
     # @return [Array<Symbol, String>]
@@ -41,10 +41,10 @@ module GitHubChangelogGenerator
                         :enhancement_labels, :between_tags, :exclude_tags]
     KNOWN_INTEGER_KEYS = [:max_issues]
 
-    def convert_value(value, key_sym)
-      if KNOWN_ARRAY_KEYS.include?(key_sym)
+    def convert_value(value, option_name)
+      if KNOWN_ARRAY_KEYS.include?(option_name)
         value.split(",")
-      elsif KNOWN_INTEGER_KEYS.include?(key_sym)
+      elsif KNOWN_INTEGER_KEYS.include?(option_name)
         value.to_i
       elsif value =~ /^(true|t|yes|y|1)$/i
         true
@@ -55,20 +55,22 @@ module GitHubChangelogGenerator
       end
     end
 
-    def translate_option_name(key_sym)
-      {
-        bugs_label: :bug_prefix,
-        enhancement_label: :enhancement_prefix,
-        issues_label: :issue_prefix,
-        header_label: :header,
-        front_matter: :frontmatter,
-        pr_label: :merge_prefix,
-        issues_wo_labels: :add_issues_wo_labels,
-        pr_wo_labels: :add_pr_wo_labels,
-        pull_requests: :pulls,
-        filter_by_milestone: :filter_issues_by_milestone,
-        github_api: :github_endpoint
-      }.fetch(key_sym) { key_sym }
+    IRREGULAR_OPTIONS = {
+      bugs_label: :bug_prefix,
+      enhancement_label: :enhancement_prefix,
+      issues_label: :issue_prefix,
+      header_label: :header,
+      front_matter: :frontmatter,
+      pr_label: :merge_prefix,
+      issues_wo_labels: :add_issues_wo_labels,
+      pr_wo_labels: :add_pr_wo_labels,
+      pull_requests: :pulls,
+      filter_by_milestone: :filter_issues_by_milestone,
+      github_api: :github_endpoint
+    }
+
+    def option_key_for(option_name)
+      IRREGULAR_OPTIONS.fetch(option_name) { option_name }
     end
   end
 end
