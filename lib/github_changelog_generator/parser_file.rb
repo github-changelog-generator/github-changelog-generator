@@ -52,7 +52,7 @@ module GitHubChangelogGenerator
 
     # Returns true if the line starts with a pound sign or a semi-colon.
     def non_configuration_line?(line)
-      line =~ /^[\#;]/
+      line =~ /^[\#;]/ || line =~ /^[\s]+$/
     end
 
     # Returns a the option name as a symbol and its string value sans newlines.

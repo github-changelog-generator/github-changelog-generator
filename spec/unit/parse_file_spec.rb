@@ -25,8 +25,8 @@ describe GitHubChangelogGenerator::ParserFile do
       it { expect { parser.parse! }.to raise_error(/line #2/) }
     end
 
-    context "allows comments with semi-colon or pound sign" do
-      let(:file) { StringIO.new("# Comment on first line\nunreleased_label=staging\n; Comment on third line\nunreleased=false") }
+    context "allows empty lines and comments with semi-colon or pound sign" do
+      let(:file) { StringIO.new("\n   \n# Comment on first line\nunreleased_label=staging\n; Comment on third line\nunreleased=false") }
       let(:parser) do
         GitHubChangelogGenerator::ParserFile.new(options, file)
       end
