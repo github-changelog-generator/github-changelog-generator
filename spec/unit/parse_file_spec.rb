@@ -26,6 +26,14 @@ describe GitHubChangelogGenerator::ParserFile do
       it { expect { parser.parse! }.to raise_error(/line #2/) }
     end
 
+    context "allows comments with semi-colon or pound sign" do
+      let(:file) { StringIO.new("# Comment on first line\nunreleased_label=staging\n; Comment on third line\nunreleased=false") }
+      let(:parser) do
+        GitHubChangelogGenerator::ParserFile.new({}, file)
+      end
+      it { expect { parser.parse! }.not_to raise_error }
+    end
+
     context "when override default values" do
       let(:default_options) { GitHubChangelogGenerator::Parser.default_options }
       let(:options) { {}.merge(default_options) }
