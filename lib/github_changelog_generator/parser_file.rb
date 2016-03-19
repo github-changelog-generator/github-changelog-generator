@@ -3,29 +3,48 @@ require "pathname"
 module GitHubChangelogGenerator
   ParserError = Class.new(StandardError)
 
+  # ParserFile is a configuration file reader which sets options in the
+  # given Hash.
+  #
+  # In your project's root, you can put a file named
+  # <tt>.github_changelog_generator</tt> to override defaults:
+  #
+  # Example:
+  #   header_label=# My Super Changelog
+  #   future-release=5.0.0
+  #   since-tag=1.0.0
+  #
+  # The configuration format is <tt>some-key=value</tt> or <tt>some_key=value</tt>.
+  #
   class ParserFile
-    FILENAME = ".github_changelog_generator"
-
-    def initialize(options)
+    # @param options [Hash] options to be configured from file contents
+    # @param file [nil,IO] configuration file handle, defaults to opening `.github_changelog_generator`
+    def initialize(options, file = open_settings_file)
       @options = options
+      @file = file
     end
 
-    # Destructively change @options using data in configured options file.
+    # Sets options using configuration file content
     def parse!
-      file.each_line { |line| parse_line!(line) } if file.exist?
+      return unless @file
+      @file.each_with_index { |line, i| parse_line!(line, i + 1) }
+      @file.close
     end
 
     private
 
-    def file
-      @file ||= Pathname(File.expand_path(@options[:params_file] || FILENAME))
+    FILENAME = ".github_changelog_generator"
+
+    def open_settings_file
+      path = Pathname(File.expand_path(FILENAME))
+      File.open(path) if path.exist?
     end
 
-    def parse_line!(line)
+    def parse_line!(line, line_number)
       option_name, value = extract_pair(line)
       @options[option_key_for(option_name)] = convert_value(value, option_name)
     rescue
-      raise ParserError, "Config file #{file} is incorrect in line \"#{line.gsub(/[\n\r]+/, '')}\""
+      raise ParserError, "Failed on line ##{line_number}: \"#{line.gsub(/[\n\r]+/, '')}\""
     end
 
     # Returns a the option name as a symbol and its string value sans newlines.
