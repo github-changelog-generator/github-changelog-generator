@@ -3,22 +3,28 @@ require "pathname"
 module GitHubChangelogGenerator
   ParserError = Class.new(StandardError)
 
+  # ParserFile is a configuration file reader which sets options in the
+  # given Hash.
+  #
+  # In your project's root, you can put a file named
+  # <tt>.github_changelog_generator</tt> to override defaults:
+  #
+  # Example:
+  #   header_label=# My Super Changelog
+  #   future-release=5.0.0
+  #   since-tag=1.0.0
+  #
+  # The configuration format is <tt>some-key=value</tt> or <tt>some_key=value</tt>.
+  #
   class ParserFile
-    FILENAME = ".github_changelog_generator"
-
-    # @param options [Hash]
-    # @param file [nil,IO]
+    # @param options [Hash] options to be configured from file contents
+    # @param file [nil,IO] configuration file handle, defaults to opening `.github_changelog_generator`
     def initialize(options, file = read_default_file)
       @options = options
       @file = file
     end
 
-    def read_default_file
-      path = Pathname(File.expand_path(FILENAME))
-      File.open(path) if path.exist?
-    end
-
-    # Set @options using configuration file lines.
+    # Sets options using configuration file content
     def parse!
       return unless @file
       @file.each_with_index { |line, i| parse_line!(line, i + 1) }
@@ -26,6 +32,13 @@ module GitHubChangelogGenerator
     end
 
     private
+
+    FILENAME = ".github_changelog_generator"
+
+    def read_default_file
+      path = Pathname(File.expand_path(FILENAME))
+      File.open(path) if path.exist?
+    end
 
     def parse_line!(line, line_number)
       option_name, value = extract_pair(line)
