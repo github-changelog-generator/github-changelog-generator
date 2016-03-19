@@ -19,11 +19,11 @@ describe GitHubChangelogGenerator::ParserFile do
     context "when file is incorrect" do
       let(:options) { {} }
       let(:options_before_change) { options.dup }
-      let(:file) { StringIO.new("unreleased_label: staging\nunreleased: false") }
+      let(:file) { StringIO.new("unreleased_label=staging\nunreleased: false") }
       let(:parse) do
         GitHubChangelogGenerator::ParserFile.new(options, file)
       end
-      it { expect { parse.parse! }.to raise_error(GitHubChangelogGenerator::ParserError) }
+      it { expect { parse.parse! }.to raise_error(/line #2/) }
     end
 
     context "when override default values" do
