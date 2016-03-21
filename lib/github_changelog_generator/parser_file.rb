@@ -7,11 +7,13 @@ module GitHubChangelogGenerator
   # given Hash.
   #
   # In your project's root, you can put a file named
-  # <tt>.github_changelog_generator</tt> to override defaults:
+  # <tt>.github_changelog_generator</tt> to override defaults.
   #
   # Example:
   #   header_label=# My Super Changelog
+  #   ; Comments are allowed
   #   future-release=5.0.0
+  #   # Ruby-style comments, too
   #   since-tag=1.0.0
   #
   # The configuration format is <tt>some-key=value</tt> or <tt>some_key=value</tt>.
@@ -41,10 +43,16 @@ module GitHubChangelogGenerator
     end
 
     def parse_line!(line, line_number)
+      return if non_configuration_line?(line)
       option_name, value = extract_pair(line)
       @options[option_key_for(option_name)] = convert_value(value, option_name)
     rescue
       raise ParserError, "Failed on line ##{line_number}: \"#{line.gsub(/[\n\r]+/, '')}\""
+    end
+
+    # Returns true if the line starts with a pound sign or a semi-colon.
+    def non_configuration_line?(line)
+      line =~ /^[\#;]/ || line =~ /^[\s]+$/
     end
 
     # Returns a the option name as a symbol and its string value sans newlines.

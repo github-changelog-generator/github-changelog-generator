@@ -1,14 +1,14 @@
 describe GitHubChangelogGenerator::ParserFile do
   describe ".github_changelog_generator" do
-    context "when no has file" do
-      let(:options) { {} }
+    let(:options) { {} }
+
+    context "when the well-known default file does not exist" do
       let(:parser) { GitHubChangelogGenerator::ParserFile.new(options) }
       subject { parser.parse! }
       it { is_expected.to be_nil }
     end
 
     context "when file is empty" do
-      let(:options) { {} }
       let(:parser) { GitHubChangelogGenerator::ParserFile.new(options, StringIO.new("")) }
 
       it "does not change the options" do
@@ -17,13 +17,20 @@ describe GitHubChangelogGenerator::ParserFile do
     end
 
     context "when file is incorrect" do
-      let(:options) { {} }
       let(:options_before_change) { options.dup }
       let(:file) { StringIO.new("unreleased_label=staging\nunreleased: false") }
       let(:parser) do
         GitHubChangelogGenerator::ParserFile.new(options, file)
       end
       it { expect { parser.parse! }.to raise_error(/line #2/) }
+    end
+
+    context "allows empty lines and comments with semi-colon or pound sign" do
+      let(:file) { StringIO.new("\n   \n# Comment on first line\nunreleased_label=staging\n; Comment on third line\nunreleased=false") }
+      let(:parser) do
+        GitHubChangelogGenerator::ParserFile.new(options, file)
+      end
+      it { expect { parser.parse! }.not_to raise_error }
     end
 
     context "when override default values" do
