@@ -1,10 +1,11 @@
-sudo: false
+cache:
+  - bundler
 language: ruby
 before_install:
   - gem update --system
   - gem install bundler
 rvm:
-  - 2.1.0
+  - 2.1
 script: bundle exec rake checks
 matrix:
   include:
@@ -13,6 +14,10 @@ matrix:
       script:
         - gem build github_changelog_generator
         - gem install *.gem
+    - install: true
+      script:
+        - gem build github_changelog_generator
+        - bundle install --gemfile spec/install-gem-in-bundler.gemfile
 notifications:
   email:
     recipients:
