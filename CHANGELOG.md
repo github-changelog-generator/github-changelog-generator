@@ -1,5 +1,36 @@
 # Change Log
 
+## [1.11.8](https://github.com/skywinder/github-changelog-generator/tree/1.11.8) (2016-03-22)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.11.7...1.11.8)
+
+**Implemented enhancements:**
+
+- ParserFile: Allow comments in settings file [\#358](https://github.com/skywinder/github-changelog-generator/pull/358) ([olleolleolle](https://github.com/olleolleolle))
+
+**Fixed bugs:**
+
+- Error when specifying exclude\_labels [\#327](https://github.com/skywinder/github-changelog-generator/issues/327)
+- Parse options file options into arrays, integers, flags, and other [\#354](https://github.com/skywinder/github-changelog-generator/pull/354) ([olleolleolle](https://github.com/olleolleolle))
+
+**Closed issues:**
+
+- Installation fails on Ubuntu [\#352](https://github.com/skywinder/github-changelog-generator/issues/352)
+- Test installing on Windows: use AppVeyor [\#348](https://github.com/skywinder/github-changelog-generator/issues/348)
+- Can't run under RubyGems 2.5.1 and Ruby 2.3.0 [\#325](https://github.com/skywinder/github-changelog-generator/issues/325)
+- Ruby 2.3.0 - Deprecation warning: Github::ResponseWrapper\#respond\_to?\(:to\_ary\) is old fashion which takes only one parameter [\#323](https://github.com/skywinder/github-changelog-generator/issues/323)
+- between-tags and exclude-tags do not work in .github\_changelog\_generator [\#317](https://github.com/skywinder/github-changelog-generator/issues/317)
+- Add a "documentation" label [\#284](https://github.com/skywinder/github-changelog-generator/issues/284)
+
+**Merged pull requests:**
+
+- Replace shelling-out-to-Git w/ Dir call [\#360](https://github.com/skywinder/github-changelog-generator/pull/360) ([olleolleolle](https://github.com/olleolleolle))
+- ParserFile: fail parsing with config file line number; use a File instead of a filename [\#357](https://github.com/skywinder/github-changelog-generator/pull/357) ([olleolleolle](https://github.com/olleolleolle))
+- On gem install, do not try to copy manpage files in the "extensions" step [\#356](https://github.com/skywinder/github-changelog-generator/pull/356) ([olleolleolle](https://github.com/olleolleolle))
+- Refactor: call it option\_name, instead of key\_sym [\#355](https://github.com/skywinder/github-changelog-generator/pull/355) ([olleolleolle](https://github.com/olleolleolle))
+- Add a `bundle install` test [\#353](https://github.com/skywinder/github-changelog-generator/pull/353) ([jkeiser](https://github.com/jkeiser))
+- Add an AppVeyor config [\#350](https://github.com/skywinder/github-changelog-generator/pull/350) ([Arcanemagus](https://github.com/Arcanemagus))
+- README: Document GitHub token URI scope [\#345](https://github.com/skywinder/github-changelog-generator/pull/345) ([olleolleolle](https://github.com/olleolleolle))
+
 ## [1.11.7](https://github.com/skywinder/github-changelog-generator/tree/1.11.7) (2016-03-04)
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.11.6...1.11.7)
 
