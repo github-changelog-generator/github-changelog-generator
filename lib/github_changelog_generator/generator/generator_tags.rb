@@ -129,30 +129,18 @@ module GitHubChangelogGenerator
     end
 
     # @param [Array] all_tags all tags
-    # @return [Array] filtered tags according :exclude_tags option
+    # @return [Array] filtered tags according :exclude_tags or :exclude_tags_regex option
     def filter_excluded_tags(all_tags)
-      if @options[:exclude_tags]
-        apply_exclude_tags(all_tags)
-      elsif @options[:exclude_tags_regex]
-        apply_exclude_tags_regex(all_tags)
+      if (@options[:exclude_tags].is_a?(Regexp) || @options[:exclude_tags_regex])
+        filter_tags_with_regex(all_tags)
+      elsif @options[:exclude_tags]
+        filter_exact_tags(all_tags)
       else
         all_tags
       end
     end
 
     private
-
-    def apply_exclude_tags(all_tags)
-      if @options[:exclude_tags].is_a?(Regexp)
-        filter_tags_with_regex(all_tags)
-      else
-        filter_exact_tags(all_tags)
-      end
-    end
-
-    def apply_exclude_tags_regex(all_tags)
-      filter_tags_with_regex(all_tags)
-    end
 
     def filter_tags_with_regex(all_tags)
       warn_if_nonmatching_regex(all_tags)

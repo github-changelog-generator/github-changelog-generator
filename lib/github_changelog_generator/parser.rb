@@ -116,11 +116,11 @@ module GitHubChangelogGenerator
         opts.on("--between-tags  x,y,z", Array, "Change log will be filled only between specified tags") do |list|
           options[:between_tags] = list
         end
-        opts.on("--exclude-tags-filter [REGEX]", "Apply a regular expression on tag names so that they can be excluded, for example: --exclude-tags-filter \".*\+\d{1,}\" ") do |last|
-          options[:exclude_tags_filter] = last
-        end
         opts.on("--exclude-tags  x,y,z", Array, "Change log will exclude specified tags") do |list|
           options[:exclude_tags] = list
+        end
+        opts.on("--exclude-tags-regex [REGEX]", "Apply a regular expression on tag names so that they can be excluded, for example: --exclude-tags-regex \".*\+\d{1,}\" ") do |last|
+          options[:exclude_tags_regex] = last
         end
         opts.on("--since-tag  x", "Change log will start after specified tag") do |v|
           options[:since_tag] = v
