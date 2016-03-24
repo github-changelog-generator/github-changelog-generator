@@ -76,13 +76,13 @@ describe GitHubChangelogGenerator::Generator do
   describe "#filter_excluded_tags_regex" do
     subject { generator.filter_excluded_tags(tags_mash_from_strings(%w(1 2 3))) }
 
-    context "with regex exclude_tags" do
+    context "with matching regex" do
       let(:generator) { GitHubChangelogGenerator::Generator.new(exclude_tags_regex: '2') }
       it { is_expected.to be_a Array }
       it { is_expected.to match_array(tags_mash_from_strings(%w(1 3))) }
     end
 
-    context "with non-matching regex in exclude_tags" do
+    context "with non-matching regex" do
       let(:generator) { GitHubChangelogGenerator::Generator.new(exclude_tags_regex: 'invalid tags') }
       it { is_expected.to be_a Array }
       it { is_expected.to match_array(tags_mash_from_strings(%w(1 2 3))) }
@@ -92,25 +92,25 @@ describe GitHubChangelogGenerator::Generator do
   describe "#filter_excluded_tags" do
     subject { generator.filter_excluded_tags(tags_mash_from_strings(%w(1 2 3))) }
 
-    context "with valid excluded tags" do
+    context "with matching string" do
       let(:generator) { GitHubChangelogGenerator::Generator.new(exclude_tags: %w(3)) }
       it { is_expected.to be_a Array }
       it { is_expected.to match_array(tags_mash_from_strings(%w(1 2))) }
     end
 
-    context "with invalid excluded tags" do
+    context "with non-matching string" do
       let(:generator) { GitHubChangelogGenerator::Generator.new(exclude_tags: %w(invalid tags)) }
       it { is_expected.to be_a Array }
       it { is_expected.to match_array(tags_mash_from_strings(%w(1 2 3))) }
     end
 
-    context "with regex exclude_tags" do
+    context "with matching regex" do
       let(:generator) { GitHubChangelogGenerator::Generator.new(exclude_tags: /[23]/) }
       it { is_expected.to be_a Array }
       it { is_expected.to match_array(tags_mash_from_strings(%w(1))) }
     end
 
-    context "with non-matching regex in exclude_tags" do
+    context "with non-matching regex" do
       let(:generator) { GitHubChangelogGenerator::Generator.new(exclude_tags: /[abc]/) }
       it { is_expected.to be_a Array }
       it { is_expected.to match_array(tags_mash_from_strings(%w(1 2 3))) }
