@@ -77,13 +77,13 @@ describe GitHubChangelogGenerator::Generator do
     subject { generator.filter_excluded_tags(tags_mash_from_strings(%w(1 2 3))) }
 
     context "with matching regex" do
-      let(:generator) { GitHubChangelogGenerator::Generator.new(exclude_tags_regex: '2') }
+      let(:generator) { GitHubChangelogGenerator::Generator.new(exclude_tags_regex: '[23]') }
       it { is_expected.to be_a Array }
-      it { is_expected.to match_array(tags_mash_from_strings(%w(1 3))) }
+      it { is_expected.to match_array(tags_mash_from_strings(%w(1))) }
     end
 
     context "with non-matching regex" do
-      let(:generator) { GitHubChangelogGenerator::Generator.new(exclude_tags_regex: 'invalid tags') }
+      let(:generator) { GitHubChangelogGenerator::Generator.new(exclude_tags_regex: '[45]') }
       it { is_expected.to be_a Array }
       it { is_expected.to match_array(tags_mash_from_strings(%w(1 2 3))) }
     end
