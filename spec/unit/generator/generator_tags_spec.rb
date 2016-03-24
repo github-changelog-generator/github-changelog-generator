@@ -73,6 +73,16 @@ describe GitHubChangelogGenerator::Generator do
     end
   end
 
+  describe "#filter_excluded_tags_regex" do
+    subject { generator.filter_excluded_tags(tags_mash_from_strings(%w(v1.2.3+12 v1.2.3))) }
+
+    context "with regex exclude_tags" do
+      let(:generator) { GitHubChangelogGenerator::Generator.new(exclude_tags_regex: '.*\+\d{1,}') }
+      it { is_expected.to be_a Array }
+      it { is_expected.to match_array(tags_mash_from_strings(%w(v1.2.3))) }
+    end
+  end
+
   describe "#filter_excluded_tags" do
     subject { generator.filter_excluded_tags(tags_mash_from_strings(%w(1 2 3))) }
 
