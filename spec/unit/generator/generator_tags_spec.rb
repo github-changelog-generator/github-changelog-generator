@@ -73,22 +73,6 @@ describe GitHubChangelogGenerator::Generator do
     end
   end
 
-  describe "#filter_excluded_tags_regex" do
-    subject { generator.filter_excluded_tags(tags_mash_from_strings(%w(1 2 3))) }
-
-    context "with matching regex" do
-      let(:generator) { GitHubChangelogGenerator::Generator.new(exclude_tags_regex: '[23]') }
-      it { is_expected.to be_a Array }
-      it { is_expected.to match_array(tags_mash_from_strings(%w(1))) }
-    end
-
-    context "with non-matching regex" do
-      let(:generator) { GitHubChangelogGenerator::Generator.new(exclude_tags_regex: '[45]') }
-      it { is_expected.to be_a Array }
-      it { is_expected.to match_array(tags_mash_from_strings(%w(1 2 3))) }
-    end
-  end
-
   describe "#filter_excluded_tags" do
     subject { generator.filter_excluded_tags(tags_mash_from_strings(%w(1 2 3))) }
 
@@ -112,6 +96,22 @@ describe GitHubChangelogGenerator::Generator do
 
     context "with non-matching regex" do
       let(:generator) { GitHubChangelogGenerator::Generator.new(exclude_tags: /[abc]/) }
+      it { is_expected.to be_a Array }
+      it { is_expected.to match_array(tags_mash_from_strings(%w(1 2 3))) }
+    end
+  end
+
+  describe "#filter_excluded_tags_regex" do
+    subject { generator.filter_excluded_tags(tags_mash_from_strings(%w(1 2 3))) }
+
+    context "with matching regex" do
+      let(:generator) { GitHubChangelogGenerator::Generator.new(exclude_tags_regex: '[23]') }
+      it { is_expected.to be_a Array }
+      it { is_expected.to match_array(tags_mash_from_strings(%w(1))) }
+    end
+
+    context "with non-matching regex" do
+      let(:generator) { GitHubChangelogGenerator::Generator.new(exclude_tags_regex: '[45]') }
       it { is_expected.to be_a Array }
       it { is_expected.to match_array(tags_mash_from_strings(%w(1 2 3))) }
     end
