@@ -1,5 +1,17 @@
 # Change Log
 
+## [1.12.0](https://github.com/skywinder/github-changelog-generator/tree/1.12.0) (2016-04-01)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.11.8...1.12.0)
+
+**Closed issues:**
+
+- .github\_changelog\_generator config file is not consistent with the internal options hash [\#312](https://github.com/skywinder/github-changelog-generator/issues/312)
+- Feature request: YAML front matter [\#276](https://github.com/skywinder/github-changelog-generator/issues/276)
+
+**Merged pull requests:**
+
+- Added tag exclusion with a filter \(string or regex\) [\#320](https://github.com/skywinder/github-changelog-generator/pull/320) ([soundstep](https://github.com/soundstep))
+
 ## [1.11.8](https://github.com/skywinder/github-changelog-generator/tree/1.11.8) (2016-03-22)
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.11.7...1.11.8)
 
