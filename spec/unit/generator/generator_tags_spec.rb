@@ -1,19 +1,14 @@
-def tag_mash_with_name(tag)
-  mash_tag = Hashie::Mash.new
-  mash_tag.name = tag
-  mash_tag
-end
-
-def tags_mash_from_strings(tags_strings)
-  mash_array = []
-  tags_strings.each do |tag|
-    mash_tag = tag_mash_with_name(tag)
-    mash_array << mash_tag
-  end
-  mash_array
-end
-
 describe GitHubChangelogGenerator::Generator do
+  def tag_mash_with_name(tag)
+    Hashie::Mash.new.tap {|mash_tag| mash_tag.name = tag }
+  end
+
+  def tags_mash_from_strings(tags_strings)
+    tags_strings.map do |tag|
+      tag_mash_with_name(tag)
+    end
+  end
+
   describe "#filter_between_tags" do
     context "when between_tags nil" do
       before do
