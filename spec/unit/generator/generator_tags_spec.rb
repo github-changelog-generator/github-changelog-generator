@@ -1,6 +1,6 @@
 describe GitHubChangelogGenerator::Generator do
   def tag_mash_with_name(tag)
-    Hashie::Mash.new.tap {|mash_tag| mash_tag.name = tag }
+    Hashie::Mash.new.tap { |mash_tag| mash_tag.name = tag }
   end
 
   def tags_mash_from_strings(tags_strings)
