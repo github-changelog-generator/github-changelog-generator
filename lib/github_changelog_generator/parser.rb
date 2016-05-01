@@ -7,28 +7,31 @@ module GitHubChangelogGenerator
   class Parser
     # parse options with optparse
     def self.parse_options
-      options = get_default_options
+      options = default_options
+
+      ParserFile.new(options).parse!
 
       parser = setup_parser(options)
-
       parser.parse!
 
-      if options[:user].nil? || options[:project].nil?
-        detect_user_and_project(options, ARGV[0], ARGV[1])
-      end
+      user_and_project_from_git(options)
 
-      if !options[:user] || !options[:project]
-        puts parser.banner
-        exit
-      end
+      abort(parser.banner) unless options[:user] && options[:project]
 
-      if options[:verbose]
-        Helper.log.info "Performing task with options:"
-        pp options
-        puts ""
-      end
+      print_options(options)
 
       options
+    end
+
+    # @param [Hash] options to display
+    def self.print_options(options)
+      if options[:verbose]
+        Helper.log.info "Performing task with options:"
+        options_to_display = options.clone
+        options_to_display[:token] = options_to_display[:token].nil? ? nil : "hidden value"
+        pp options_to_display
+        puts ""
+      end
     end
 
     # setup parsing options
@@ -50,6 +53,9 @@ module GitHubChangelogGenerator
         opts.on("-o", "--output [NAME]", "Output file. Default is CHANGELOG.md") do |last|
           options[:output] = last
         end
+        opts.on("-b", "--base [NAME]", "Optional base file to append generated changes to.") do |last|
+          options[:base] = last
+        end
         opts.on("--bugs-label [LABEL]", "Setup custom label for bug-fixes section. Default is \"**Fixed bugs:**""") do |v|
           options[:bug_prefix] = v
         end
@@ -61,6 +67,9 @@ module GitHubChangelogGenerator
         end
         opts.on("--header-label [LABEL]", "Setup custom header label. Default is \"# Change Log\"") do |v|
           options[:header] = v
+        end
+        opts.on("--front-matter [JSON]", "Add YAML front matter. Formatted as JSON because it's easier to add on the command line") do |v|
+          options[:frontmatter] = JSON.parse(v).to_yaml + "---\n"
         end
         opts.on("--pr-label [LABEL]", "Setup custom label for pull requests section. Default is \"**Merged pull requests:**\"") do |v|
           options[:merge_prefix] = v
@@ -113,8 +122,14 @@ module GitHubChangelogGenerator
         opts.on("--exclude-tags  x,y,z", Array, "Change log will exclude specified tags") do |list|
           options[:exclude_tags] = list
         end
+        opts.on("--exclude-tags-regex [REGEX]", "Apply a regular expression on tag names so that they can be excluded, for example: --exclude-tags-regex \".*\+\d{1,}\" ") do |last|
+          options[:exclude_tags_regex] = last
+        end
         opts.on("--since-tag  x", "Change log will start after specified tag") do |v|
           options[:since_tag] = v
+        end
+        opts.on("--due-tag  x", "Change log will end before specified tag") do |v|
+          options[:due_tag] = v
         end
         opts.on("--max-issues [NUMBER]", Integer, "Max number of issues to fetch from GitHub. Default is unlimited") do |max|
           options[:max_issues] = max
@@ -134,6 +149,9 @@ module GitHubChangelogGenerator
         opts.on("--future-release [RELEASE-VERSION]", "Put the unreleased changes in the specified release number.") do |future_release|
           options[:future_release] = future_release
         end
+        opts.on("--release-branch [RELEASE-BRANCH]", "Limit pull requests to the release branch, such as master or release") do |release_branch|
+          options[:release_branch] = release_branch
+        end
         opts.on("--[no-]verbose", "Run verbosely. Default is true") do |v|
           options[:verbose] = v
         end
@@ -150,12 +168,13 @@ module GitHubChangelogGenerator
     end
 
     # just get default options
-    def self.get_default_options
-      options = {
+    def self.default_options
+      {
         tag1: nil,
         tag2: nil,
         date_format: "%Y-%m-%d",
         output: "CHANGELOG.md",
+        base: "HISTORY.md",
         issues: true,
         add_issues_wo_labels: true,
         add_pr_wo_labels: true,
@@ -178,21 +197,25 @@ module GitHubChangelogGenerator
         enhancement_prefix: "**Implemented enhancements:**",
         git_remote: "origin"
       }
+    end
 
-      options
+    def self.user_and_project_from_git(options)
+      if options[:user].nil? || options[:project].nil?
+        detect_user_and_project(options, ARGV[0], ARGV[1])
+      end
     end
 
     # Detects user and project from git
     def self.detect_user_and_project(options, arg0 = nil, arg1 = nil)
       options[:user], options[:project] = user_project_from_option(arg0, arg1, options[:github_site])
-      if !options[:user] || !options[:project]
-        if ENV["RUBYLIB"] =~ /ruby-debug-ide/
-          options[:user] = "skywinder"
-          options[:project] = "changelog_test"
-        else
-          remote = `git config --get remote.#{options[:git_remote]}.url`
-          options[:user], options[:project] = user_project_from_remote(remote)
-        end
+      return if options[:user] && options[:project]
+
+      if ENV["RUBYLIB"] =~ /ruby-debug-ide/
+        options[:user] = "skywinder"
+        options[:project] = "changelog_test"
+      else
+        remote = `git config --get remote.#{options[:git_remote]}.url`
+        options[:user], options[:project] = user_project_from_remote(remote)
       end
     end
 
@@ -200,7 +223,7 @@ module GitHubChangelogGenerator
     #
     # @param [String] output of git remote command
     # @return [Array] user and project
-    def self.user_project_from_option(arg0, arg1, github_site = nil)
+    def self.user_project_from_option(arg0, arg1, github_site)
       user = nil
       project = nil
       github_site ||= "github.com"
@@ -213,10 +236,10 @@ module GitHubChangelogGenerator
           param = match[2].nil?
         rescue
           puts "Can't detect user and name from first parameter: '#{arg0}' -> exit'"
-          exit
+          return
         end
         if param
-          exit
+          return
         else
           user = match[1]
           project = match[2]
@@ -258,10 +281,5 @@ module GitHubChangelogGenerator
 
       [user, project]
     end
-  end
-
-  if __FILE__ == $PROGRAM_NAME
-    remote = "invalid reference to project"
-    p user_project_from_option(ARGV[0], ARGV[1], remote)
   end
 end

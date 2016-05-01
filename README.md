@@ -20,8 +20,8 @@ GitHub Changelog Generator ![GitHub Logo](../master/images/logo.jpg)
   - [Contributing](#contributing)
   - [License](#license)
 
- 
-### Changelog generation has never been so easy:
+
+### Changelog generation has never been so easy
 
 **Fully automate changelog generation** - This gem generates change log file based on **tags**, **issues** and merged **pull requests** (and splits them into separate lists according labels) from :octocat: GitHub Issue Tracker.
 
@@ -32,7 +32,7 @@ To make it easier for users and contributors to see precisely what notable chang
 ### *Why should I care?*
 Because software tools are for people. If you don’t care, why are you contributing to open source? Surely, there must be a kernel (ha!) of care somewhere in that lovely little brain of yours.
 
-> :copyright: *[http://keepachangelog.com](http://keepachangelog.com/)*
+> :arrow_right: *[http://keepachangelog.com](http://keepachangelog.com)*
 
 ## Installation
 
@@ -45,69 +45,92 @@ Because software tools are for people. If you don’t care, why are you contribu
 
 		github_changelog_generator -u skywinder -p ActionSheetPicker-3.0
 
-- In general it looks like this:
+- In general, it looks like this:
 
 > ## [1.2.5](https://github.com/skywinder/Github-Changelog-Generator/tree/1.2.5) (2015-01-15)
-> 
+>
 > [Full Changelog](https://github.com/skywinder/Github-Changelog-Generator/compare/1.2.4...1.2.5)
-> 
+>
 > **Implemented enhancements:**
-> 
+>
 > - Use milestone to specify in which version bug was fixed [\#22](https://github.com/skywinder/Github-Changelog-Generator/issues/22)
-> 
+>
 > **Fixed bugs:**
-> 
+>
 > - Error when trying to generate log for repo without tags [\#32](https://github.com/skywinder/Github-Changelog-Generator/issues/32)
-> 
+>
 > **Merged pull requests:**
-> 
+>
 > - PrettyPrint class is included using lowercase 'pp' [\#43](https://github.com/skywinder/Github-Changelog-Generator/pull/43) ([schwing](https://github.com/schwing))
-> 
+>
 > - support enterprise github via command line options [\#42](https://github.com/skywinder/Github-Changelog-Generator/pull/42) ([glenlovett](https://github.com/glenlovett))
 
 
 ## Usage
-**It's really simple**: 
+**It's really simple!**
 
-- If your **git remote** `origin` refers to your GitHub repo, then just go to your project folder and run:
+- If your **`git remote`** `origin` refers to your GitHub repo, just go to your project folder and run:
 
 		github_changelog_generator
 
--  or from anywhere:
+-  Or, run this from anywhere:
     - `github_changelog_generator -u github_username -p github_project`
     - `github_changelog_generator  github_username/github_project`
-     
-As output you will get `CHANGELOG.md` file with pretty *Markdown-formatted* changelog.
+
+This generates a changelog to the `CHANGELOG.md` file, with pretty markdown formatting.
 
 ### Params
 Type `github_changelog_generator --help` for details.
 
-More detailed info about params you can find in Wiki page: [**Advanced change log generation examples**](https://github.com/skywinder/github-changelog-generator/wiki/Advanced-change-log-generation-examples)
+For more details about params, read the Wiki page: [**Advanced change log generation examples**](https://github.com/skywinder/github-changelog-generator/wiki/Advanced-change-log-generation-examples)
+
+### Params File
+In your project root, you can put a params file named `.github_changelog_generator` to override default params:
+
+Example:
+```
+unreleased=false
+future-release=5.0.0
+since-tag=1.0.0
+```
 
 ### GitHub token
 
-Since GitHub allows you to make only 50 requests without authentication it's recommended to run this script with a token (`-t, --token` option)
+GitHub only allows only 50 unauthenticated requests per hour. 
+Therefore, it's recommended to run this script with authentication by using a **token**.
 
-**You can easily [generate it here](https://github.com/settings/tokens/new?description=GitHub%20Changelog%20Generator%20token)**.
+Here's how:
 
-And:
+- [Generate a token here](https://github.com/settings/tokens/new?description=GitHub%20Changelog%20Generator%20token) - you only need "repo" scope for private repositories
+- Either:
+    - Run the script with `--token <your-40-digit-token>`; **OR**
+    - Set the `CHANGELOG_GITHUB_TOKEN` environment variable to your 40 digit token
 
-- Run with key `-t [your-16-digit-token]` 
-- Or set environment variable `CHANGELOG_GITHUB_TOKEN` and specify there your token. 
- 		
-	i.e. add to your `~/.bash_profile` or `~/.zshrc` or any other place to load ENV variables string :
+You can set an environment variable by running the following command at the prompt, or by adding it to your shell profile (e.g., `~/.bash_profile` or `~/.zshrc`):
 
-        export CHANGELOG_GITHUB_TOKEN="your-40-digit-github-token"
+        export CHANGELOG_GITHUB_TOKEN="«your-40-digit-github-token»"
 
-So, if you got error like this:
+So, if you got an error like this:
 >! /Library/Ruby/Gems/2.0.0/gems/github_api-0.12.2/lib/github_api/response/raise_error.rb:14:in `on_complete'
 
-It's time to create this token or wait for 1 hour before GitHub reset the counter for your IP.
+It's time to create this token! (Or, wait an hour for GitHub to reset your unauthenticated request limit.)
 
+## Migrating from a manual changelog
+
+Knowing how dedicated you are to your project, you probably haven't been waiting for `github-changelog-generator` to keep a changelog.
+But you probably don't want your project's open issues and PRs for all past features listed in your historic changelog, either.
+
+That's where `--base <your-manual-changelog.md>` comes in handy!
+This option lets append your old manual changelog to the end of the generated entries.
+
+If you have a `HISTORY.md` file in your project, it will automatically be picked as the static historical changelog and appended.
 
 ### Rake task
 
-You love Rake? So do we! And so we've made it easier for you by providing a Rake task library for your Change log generation. In your Rakefile, use:
+You love `rake`? We do, too! So, we've made it even easier for you: 
+we've provided a `rake` task library for your changelog generation.
+
+Just put something like this in your `Rakefile`:
 
 ```ruby
 GitHubChangelogGenerator::RakeTask.new :changelog do |config|
@@ -116,92 +139,94 @@ GitHubChangelogGenerator::RakeTask.new :changelog do |config|
 end
 ```
 
-All command line options can be passed to the Rake task as `config` parameters. Since you're naming the Rake task yourself, you can create as many as you want, too.
+All command line options can be passed to the `rake` task as `config` parameters. And since you're naming the `rake` task yourself, you can create as many as you want.
 
-##Features and advantages of this project
-- Generate canonical, neat change log file, followed by [basic change log guidelines](http://keepachangelog.com/) :gem:
-- Possible to generate **Unreleased** changes (closed issues that have not released yet) :dizzy:
+## Features and advantages of this project
+- Generate canonical, neat change log file, followed by [basic change log guidelines](http://keepachangelog.com) :gem:
+- Optionally generate **Unreleased** changes (closed issues that have not released yet) :dizzy:
 - **GitHub Enterprise support** via command line options! :factory:
-- Flexible format **customisation**:
-    - **Customize** issues, that **should be added** to changelog :eight_spoked_asterisk:
-    - **Custom date format** supported (but get in mind [ISO 8601](http://xkcd.com/1179/) ) :date:
-    - Ability to manually specify in which version issue was fixed (in case, when closed date is not match) by setting `milestone` of issue the same name as tag of  required version :pushpin:
-    - Automatically **exclude specific issues**, not-related to change log (any issue, that has label `question` `duplicate` `invalid` `wontfix`by default)  :scissors:
-- **Distinguish** issues **according labels**. :mag_right:
-    - Merged pull requests (all `merged` pull-requests) :twisted_rightwards_arrows:
-    - Bug fixes (by label `bug` in issue) :beetle:
-    - Enhancements (by label `enhancement` in issue) :star2:
-    - 	Issues (closed issues `w/o any labels`) :non-potable_water:    
+- Flexible format **customization**:
+    - **Customize** issues that **should be added** to changelog :eight_spoked_asterisk:
+    - **Custom date formats** supported (but keep [ISO 8601](http://xkcd.com/1179/) in mind!) :date:
+    - Manually specify the version that fixed an issue (for cases when the issue's Closed date doesn't match) by giving the issue's `milestone` the same name as the tag of version :pushpin:
+    - Automatically **exclude specific issues** that are irrelevant to your changelog (by default, any issue labeled `question`, `duplicate`, `invalid`, or `wontfix`) :scissors:
+- **Distinguish** issues **by labels**. :mag_right:
+    - Merged pull requests (all merged pull-requests) :twisted_rightwards_arrows:
+    - Bug fixes (issues labeled `bug`) :beetle:
+    - Enhancements (issues labeled `enhancement`) :star2:
+    - Issues (closed issues with no labels) :non-potable_water:
 
-- You can manually set which labels should be included/excluded. :wrench:
-- Apply a lot of other customisations, to fit changelog for your personal style :tophat: 
-(*look `github_changelog_generator --help`  for details)*
+- Manually include or exclude issues by labels :wrench:
+- Customize lots more! Tweak the changelog to fit your preferences :tophat:
+(*See `github_changelog_generator --help`  for details)*
 
 
 ###Alternatives
-Here is a [wikipage list of alternatives](https://github.com/skywinder/Github-Changelog-Generator/wiki/Alternatives), that I found. But none satisfied my requirements.
+Here is a [wikipage list of alternatives](https://github.com/skywinder/Github-Changelog-Generator/wiki/Alternatives) that I found. But none satisfied my requirements.
 
-*If you know other projects - feel free to edit this Wiki page!*
+*If you know other projects, feel free to edit this Wiki page!*
 
 
 ### Projects using this library
-[Wikipage with list of projects](https://github.com/skywinder/Github-Changelog-Generator/wiki/Projects-using-Github-Changelog-Generator) 
+Here's a [wikipage list of projects](https://github.com/skywinder/Github-Changelog-Generator/wiki/Projects-using-Github-Changelog-Generator).
 
 If you've used this project in a live app, please let me know! Nothing makes me happier than seeing someone else take my work and go wild with it.
 
-*If you are using `github_changelog_generator` for generation change log in your project or know another project that uses it, please add it to [this] (https://github.com/skywinder/Github-Changelog-Generator/wiki/Projects-using-Github-Changelog-Generator) list.*
+*If you are using `github_changelog_generator` to generate your project's changelog, or know of other projects using it, please [add it to this list] (https://github.com/skywinder/Github-Changelog-Generator/wiki/Projects-using-Github-Changelog-Generator).*
 
 ## Am I missing some essential feature?
 
-- **Nothing is impossible!** 
+- **Nothing is impossible!**
 
-- Open an [issue](https://github.com/skywinder/Github-Changelog-Generator/issues/new) and let's make generator better together! 
+- Open an [issue](https://github.com/skywinder/Github-Changelog-Generator/issues/new) and let's make the generator better together!
 
-- *Bug reports, feature requests, patches, well-wishes are always welcome* :heavy_exclamation_mark:
+- *Bug reports, feature requests, patches, and well-wishes are always welcome.* :heavy_exclamation_mark:
 
 ## FAQ
 
 - ***I already use GitHub Releases. Why do I need this?***
 
-GitHub Releases is a very good thing. And it's very good practice to maintain it (not so much people using it yet)! :congratulations:
+GitHub Releases is a very good thing. And it's very good practice to maintain it. (Not a lot of people are using it yet!) :congratulations:
 
-*BDW: I would like to support GitHub Releases in [next releases](https://github.com/skywinder/github-changelog-generator/issues/56) ;)*
+*BTW: I would like to support GitHub Releases in [next releases](https://github.com/skywinder/github-changelog-generator/issues/56) ;)*
 
-I'm not try to compare quality of auto-generated and manually generated logs.. but:
+I'm not trying to compare the quality of handwritten and auto-generated logs. That said....
 
-The auto generated Changelog really helps even if you manually fill Releases notes!
+An auto-generated changelog really helps, even if you manually fill in the release notes!
 
 For example:
 
-When I found a closed bug - it's very useful to understand, in which release it was fixed. In that case you can easily find this issue by \# in `CHANGELOG.md`.
+When I found a closed bug, it's very useful know which release fixed it. 
+In this case, you can easily find the issue by \# in `CHANGELOG.md`.
 
-- it's not so quite easy to find it in manually filled Releases notes.
-- this file can also help you to build your Release note and not miss features in manually-filled list.
+- it's not quite as easy to find this in handwritten releases notes
+- a generated file saves you the trouble of remembering everything;
+  sometimes people forget to add things to a handwritten file
 
-In the end:
+Ultimately, I think GitHub Releases is ideal for end-users. 
+Meanwhile, `CHANGELOG.md` lives right in the repository, with its detailed list of changes, which is handy for developers.
+Finally, there's nothing wrong with using GitHub Releases alongside `CHANGELOG.md` in this combination.
 
-I think, that GitHub Releases is more for end-users.
-But `CHANGELOG.md` could stay in the repo for developers with detailed list of changes.
-And it's nothing bad to combine GitHub Releases and `CHANGELOG.md` file together in that manner.
+- ***I received a warning: "GitHub API rate limit exceed"  What does this mean?***
 
-- ***I received a warning: GitHub API rate limit exceed, what does this mean?***
+GitHub [limits the number of API requests](https://developer.github.com/v3/#rate-limiting) you can make in an hour. You can make up to 5,000 requests per hour. For unauthenticated requests, the rate limit is only up to 60 requests per hour. Unauthenticated requests are associated with your IP address (not the user making requests).
 
-GitHub [limits the number of API requests](https://developer.github.com/v3/#rate-limiting) you can make in an hour. You can make up to 5,000 requests per hour. For unauthenticated requests, the rate limit allows you to make up to 60 requests per hour. Unauthenticated requests are associated with your IP address, and not the user making requests.
+If you're seeing this warning, please do the following:
 
-If you're seeing this warning:
-
-1. Make sure you're providing an OAuth token so you're not anonymously making requests. This will increase the number of requests from 60 to 5000 per hour.
-2. You probably have a large repo with lots of issues/PRs. You can use the `--max-issues NUM` argument to limit the number of issues that are pulled back. For example: `--max-issues 1000`
+1. Make sure you're providing an OAuth token, so you're not making requests anonymously. Using an OAuth token increases your hourly request maximum from 60 to 5000.
+2. If you have a large repo with lots of issues/PRs, you can use `--max-issues NUM` to limit the number of issues that are pulled back. For example: `--max-issues 1000`
 
 ## Contributing
 
-1. Create an issue to discuss about your idea
+1. Create an issue and describe your idea
 2. [Fork it] (https://github.com/skywinder/Github-Changelog-Generator/fork)
 3. Create your feature branch (`git checkout -b my-new-feature`)
 4. Commit your changes (`git commit -am 'Add some feature'`)
-5. Push to the branch (`git push origin my-new-feature`)
+5. Publish the branch (`git push origin my-new-feature`)
 6. Create a new Pull Request
 7. Profit! :white_check_mark:
+
+*To test your workflow with changelog generator, you can use [test repo](https://github.com/skywinder/changelog_test/)*
 
 ## License
 

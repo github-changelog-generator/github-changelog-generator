@@ -66,7 +66,7 @@ module GitHubChangelogGenerator
 
       if @options[:issues]
         # Generate issues:
-        log += issues_to_log(issues)
+        log += issues_to_log(issues, pull_requests)
       end
 
       if @options[:pulls]
@@ -77,13 +77,14 @@ module GitHubChangelogGenerator
       log
     end
 
-    # Generate ready-to-paste log from list of issues.
+    # Generate ready-to-paste log from list of issues and pull requests.
     #
     # @param [Array] issues
+    # @param [Array] pull_requests
     # @return [String] generated log for issues
-    def issues_to_log(issues)
+    def issues_to_log(issues, pull_requests)
       log = ""
-      bugs_a, enhancement_a, issues_a = parse_by_sections(issues)
+      bugs_a, enhancement_a, issues_a = parse_by_sections(issues, pull_requests)
 
       log += generate_sub_section(enhancement_a, @options[:enhancement_prefix])
       log += generate_sub_section(bugs_a, @options[:bug_prefix])
@@ -95,8 +96,9 @@ module GitHubChangelogGenerator
     # (bugs, features, or just closed issues) by labels
     #
     # @param [Array] issues
+    # @param [Array] pull_requests
     # @return [Array] tuple of filtered arrays: (Bugs, Enhancements Issues)
-    def parse_by_sections(issues)
+    def parse_by_sections(issues, pull_requests)
       issues_a = []
       enhancement_a = []
       bugs_a = []
@@ -117,6 +119,24 @@ module GitHubChangelogGenerator
         end
         issues_a.push dict unless added
       end
+
+      added_pull_requests = []
+      pull_requests.each do |dict|
+        dict.labels.each do |label|
+          if @options[:bug_labels].include? label.name
+            bugs_a.push dict
+            added_pull_requests.push dict
+            next
+          end
+          if @options[:enhancement_labels].include? label.name
+            enhancement_a.push dict
+            added_pull_requests.push dict
+            next
+          end
+        end
+      end
+      added_pull_requests.each { |p| pull_requests.delete(p) }
+
       [bugs_a, enhancement_a, issues_a]
     end
   end

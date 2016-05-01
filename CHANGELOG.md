@@ -1,5 +1,6 @@
 # Change Log
 
+<<<<<<< HEAD
 ## [Unreleased](https://github.com/skywinder/github-changelog-generator/tree/HEAD)
 
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.7.0...HEAD)
@@ -9,6 +10,253 @@
 - Add a rake task [\#260](https://github.com/skywinder/github-changelog-generator/pull/260) ([raphink](https://github.com/raphink))
 - Add release\_url option [\#259](https://github.com/skywinder/github-changelog-generator/pull/259) ([raphink](https://github.com/raphink))
 - Add --since-tag, close  [\#257](https://github.com/skywinder/github-changelog-generator/pull/257) ([raphink](https://github.com/raphink))
+=======
+## [1.12.0](https://github.com/skywinder/github-changelog-generator/tree/1.12.0) (2016-04-01)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.11.8...1.12.0)
+
+**Closed issues:**
+
+- .github\_changelog\_generator config file is not consistent with the internal options hash [\#312](https://github.com/skywinder/github-changelog-generator/issues/312)
+- Feature request: YAML front matter [\#276](https://github.com/skywinder/github-changelog-generator/issues/276)
+
+**Merged pull requests:**
+
+- Added tag exclusion with a filter \(string or regex\) [\#320](https://github.com/skywinder/github-changelog-generator/pull/320) ([soundstep](https://github.com/soundstep))
+
+## [1.11.8](https://github.com/skywinder/github-changelog-generator/tree/1.11.8) (2016-03-22)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.11.7...1.11.8)
+
+**Implemented enhancements:**
+
+- ParserFile: Allow comments in settings file [\#358](https://github.com/skywinder/github-changelog-generator/pull/358) ([olleolleolle](https://github.com/olleolleolle))
+
+**Fixed bugs:**
+
+- Error when specifying exclude\_labels [\#327](https://github.com/skywinder/github-changelog-generator/issues/327)
+- Parse options file options into arrays, integers, flags, and other [\#354](https://github.com/skywinder/github-changelog-generator/pull/354) ([olleolleolle](https://github.com/olleolleolle))
+
+**Closed issues:**
+
+- Installation fails on Ubuntu [\#352](https://github.com/skywinder/github-changelog-generator/issues/352)
+- Test installing on Windows: use AppVeyor [\#348](https://github.com/skywinder/github-changelog-generator/issues/348)
+- Can't run under RubyGems 2.5.1 and Ruby 2.3.0 [\#325](https://github.com/skywinder/github-changelog-generator/issues/325)
+- Ruby 2.3.0 - Deprecation warning: Github::ResponseWrapper\#respond\_to?\(:to\_ary\) is old fashion which takes only one parameter [\#323](https://github.com/skywinder/github-changelog-generator/issues/323)
+- between-tags and exclude-tags do not work in .github\_changelog\_generator [\#317](https://github.com/skywinder/github-changelog-generator/issues/317)
+- Add a "documentation" label [\#284](https://github.com/skywinder/github-changelog-generator/issues/284)
+
+**Merged pull requests:**
+
+- Replace shelling-out-to-Git w/ Dir call [\#360](https://github.com/skywinder/github-changelog-generator/pull/360) ([olleolleolle](https://github.com/olleolleolle))
+- ParserFile: fail parsing with config file line number; use a File instead of a filename [\#357](https://github.com/skywinder/github-changelog-generator/pull/357) ([olleolleolle](https://github.com/olleolleolle))
+- On gem install, do not try to copy manpage files in the "extensions" step [\#356](https://github.com/skywinder/github-changelog-generator/pull/356) ([olleolleolle](https://github.com/olleolleolle))
+- Refactor: call it option\_name, instead of key\_sym [\#355](https://github.com/skywinder/github-changelog-generator/pull/355) ([olleolleolle](https://github.com/olleolleolle))
+- Add a `bundle install` test [\#353](https://github.com/skywinder/github-changelog-generator/pull/353) ([jkeiser](https://github.com/jkeiser))
+- Add an AppVeyor config [\#350](https://github.com/skywinder/github-changelog-generator/pull/350) ([Arcanemagus](https://github.com/Arcanemagus))
+- README: Document GitHub token URI scope [\#345](https://github.com/skywinder/github-changelog-generator/pull/345) ([olleolleolle](https://github.com/olleolleolle))
+
+## [1.11.7](https://github.com/skywinder/github-changelog-generator/tree/1.11.7) (2016-03-04)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.11.6...1.11.7)
+
+**Merged pull requests:**
+
+- Add Olle Jonsson as co-author [\#347](https://github.com/skywinder/github-changelog-generator/pull/347) ([skywinder](https://github.com/skywinder))
+- Gemspec, default date [\#346](https://github.com/skywinder/github-changelog-generator/pull/346) ([olleolleolle](https://github.com/olleolleolle))
+
+## [1.11.6](https://github.com/skywinder/github-changelog-generator/tree/1.11.6) (2016-03-01)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.11.5...1.11.6)
+
+**Fixed bugs:**
+
+- Can't build on Windows [\#340](https://github.com/skywinder/github-changelog-generator/issues/340)
+
+**Closed issues:**
+
+- install error "Not a git repository" [\#339](https://github.com/skywinder/github-changelog-generator/issues/339)
+
+**Merged pull requests:**
+
+- Gemspec: Calculate date using Date stdlib [\#343](https://github.com/skywinder/github-changelog-generator/pull/343) ([olleolleolle](https://github.com/olleolleolle))
+
+## [1.11.5](https://github.com/skywinder/github-changelog-generator/tree/1.11.5) (2016-03-01)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.11.4...1.11.5)
+
+**Merged pull requests:**
+
+- Test clean install in Travis [\#344](https://github.com/skywinder/github-changelog-generator/pull/344) ([jkeiser](https://github.com/jkeiser))
+- Update Rakefile to avoid install-breaking bug [\#341](https://github.com/skywinder/github-changelog-generator/pull/341) ([olleolleolle](https://github.com/olleolleolle))
+
+## [1.11.4](https://github.com/skywinder/github-changelog-generator/tree/1.11.4) (2016-02-26)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.11.3...1.11.4)
+
+**Merged pull requests:**
+
+- Man page copying: only copy .1 [\#338](https://github.com/skywinder/github-changelog-generator/pull/338) ([olleolleolle](https://github.com/olleolleolle))
+
+## [1.11.3](https://github.com/skywinder/github-changelog-generator/tree/1.11.3) (2016-02-25)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.11.2...1.11.3)
+
+**Closed issues:**
+
+- Cannot install gem [\#335](https://github.com/skywinder/github-changelog-generator/issues/335)
+
+## [1.11.2](https://github.com/skywinder/github-changelog-generator/tree/1.11.2) (2016-02-25)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.11.1...1.11.2)
+
+**Fixed bugs:**
+
+- Getting an error on install [\#329](https://github.com/skywinder/github-changelog-generator/issues/329)
+
+**Merged pull requests:**
+
+- Fix installation by not running the specs - which have dependencies [\#337](https://github.com/skywinder/github-changelog-generator/pull/337) ([skywinder](https://github.com/skywinder))
+
+## [1.11.1](https://github.com/skywinder/github-changelog-generator/tree/1.11.1) (2016-02-25)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.11.0...1.11.1)
+
+**Merged pull requests:**
+
+- Add rubocop and rspec as runtime dependencies [\#336](https://github.com/skywinder/github-changelog-generator/pull/336) ([jkeiser](https://github.com/jkeiser))
+- \[Refactor\] ParserFile class use Pathname [\#334](https://github.com/skywinder/github-changelog-generator/pull/334) ([olleolleolle](https://github.com/olleolleolle))
+- \[Refactor\] Generator\#exclude\_issues\_by\_labels simpler, tested [\#332](https://github.com/skywinder/github-changelog-generator/pull/332) ([olleolleolle](https://github.com/olleolleolle))
+
+## [1.11.0](https://github.com/skywinder/github-changelog-generator/tree/1.11.0) (2016-02-24)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.10.5...1.11.0)
+
+## [1.10.5](https://github.com/skywinder/github-changelog-generator/tree/1.10.5) (2016-02-24)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.10.4...1.10.5)
+
+## [1.10.4](https://github.com/skywinder/github-changelog-generator/tree/1.10.4) (2016-02-24)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.10.3...1.10.4)
+
+**Fixed bugs:**
+
+- Rake and Bundler as runtime deps [\#333](https://github.com/skywinder/github-changelog-generator/pull/333) ([olleolleolle](https://github.com/olleolleolle))
+
+**Merged pull requests:**
+
+- Test case for \#327 [\#331](https://github.com/skywinder/github-changelog-generator/pull/331) ([olleolleolle](https://github.com/olleolleolle))
+- Fix crash installing on systems without overcommit [\#330](https://github.com/skywinder/github-changelog-generator/pull/330) ([jkeiser](https://github.com/jkeiser))
+
+## [1.10.3](https://github.com/skywinder/github-changelog-generator/tree/1.10.3) (2016-02-23)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.10.2...1.10.3)
+
+## [1.10.2](https://github.com/skywinder/github-changelog-generator/tree/1.10.2) (2016-02-23)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/v1.11.0...1.10.2)
+
+## [v1.11.0](https://github.com/skywinder/github-changelog-generator/tree/v1.11.0) (2016-02-23)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.10.1...v1.11.0)
+
+**Implemented enhancements:**
+
+- YAML front matter [\#322](https://github.com/skywinder/github-changelog-generator/pull/322) ([retorquere](https://github.com/retorquere))
+- Git Subcommand [\#288](https://github.com/skywinder/github-changelog-generator/pull/288) ([dlanileonardo](https://github.com/dlanileonardo))
+
+**Fixed bugs:**
+
+- detect\_since\_tag undefined [\#328](https://github.com/skywinder/github-changelog-generator/issues/328)
+
+**Merged pull requests:**
+
+- Update README.md [\#324](https://github.com/skywinder/github-changelog-generator/pull/324) ([Zearin](https://github.com/Zearin))
+
+## [1.10.1](https://github.com/skywinder/github-changelog-generator/tree/1.10.1) (2016-01-06)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.10.0...1.10.1)
+
+**Fixed bugs:**
+
+- Parser: avoid Ruby exit, to make Rake tasks work [\#315](https://github.com/skywinder/github-changelog-generator/pull/315) ([olleolleolle](https://github.com/olleolleolle))
+
+## [1.10.0](https://github.com/skywinder/github-changelog-generator/tree/1.10.0) (2016-01-05)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.9.0...1.10.0)
+
+**Implemented enhancements:**
+
+- Rubocop: less complex methods in parser.rb [\#297](https://github.com/skywinder/github-changelog-generator/pull/297) ([olleolleolle](https://github.com/olleolleolle))
+- Introduce ParserError exception class [\#296](https://github.com/skywinder/github-changelog-generator/pull/296) ([olleolleolle](https://github.com/olleolleolle))
+- ParserFile: support values with equals signs [\#285](https://github.com/skywinder/github-changelog-generator/pull/285) ([olleolleolle](https://github.com/olleolleolle))
+
+**Closed issues:**
+
+- PRs not closed on master branch show up in changelog [\#280](https://github.com/skywinder/github-changelog-generator/issues/280)
+
+**Merged pull requests:**
+
+- Update bundler [\#306](https://github.com/skywinder/github-changelog-generator/pull/306) ([SteveGilvarry](https://github.com/SteveGilvarry))
+- Fixes \#280 Add release-branch option to filter the Pull Requests [\#305](https://github.com/skywinder/github-changelog-generator/pull/305) ([SteveGilvarry](https://github.com/SteveGilvarry))
+- Add options to def self.user\_and\_project\_from\_git to fix parser.rb:19… [\#303](https://github.com/skywinder/github-changelog-generator/pull/303) ([SteveGilvarry](https://github.com/SteveGilvarry))
+- Git ignore coverage/ [\#300](https://github.com/skywinder/github-changelog-generator/pull/300) ([olleolleolle](https://github.com/olleolleolle))
+- \[refactor\] Fix docblock datatype, use \#map [\#299](https://github.com/skywinder/github-changelog-generator/pull/299) ([olleolleolle](https://github.com/olleolleolle))
+- \[refactor\] Reader: positive Boolean; unused \#map [\#298](https://github.com/skywinder/github-changelog-generator/pull/298) ([olleolleolle](https://github.com/olleolleolle))
+- Add base option to RakeTask [\#287](https://github.com/skywinder/github-changelog-generator/pull/287) ([jkeiser](https://github.com/jkeiser))
+
+## [1.9.0](https://github.com/skywinder/github-changelog-generator/tree/1.9.0) (2015-09-17)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.8.5...1.9.0)
+
+**Implemented enhancements:**
+
+- Feature: exclude\_tags using regular expression [\#281](https://github.com/skywinder/github-changelog-generator/pull/281) ([olleolleolle](https://github.com/olleolleolle))
+- Auto parse options from file .github\_changelog\_generator [\#278](https://github.com/skywinder/github-changelog-generator/pull/278) ([dlanileonardo](https://github.com/dlanileonardo))
+
+## [1.8.5](https://github.com/skywinder/github-changelog-generator/tree/1.8.5) (2015-09-15)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.8.4...1.8.5)
+
+**Merged pull requests:**
+
+- Rake task: Be able to set false value in config [\#279](https://github.com/skywinder/github-changelog-generator/pull/279) ([olleolleolle](https://github.com/olleolleolle))
+
+## [1.8.4](https://github.com/skywinder/github-changelog-generator/tree/1.8.4) (2015-09-01)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.8.3...1.8.4)
+
+**Fixed bugs:**
+
+- Sending OATH through -t fails [\#274](https://github.com/skywinder/github-changelog-generator/issues/274)
+
+## [1.8.3](https://github.com/skywinder/github-changelog-generator/tree/1.8.3) (2015-08-31)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.8.2...1.8.3)
+
+**Merged pull requests:**
+
+- Do not alter pull\_requests while iterating on it [\#271](https://github.com/skywinder/github-changelog-generator/pull/271) ([raphink](https://github.com/raphink))
+
+## [1.8.2](https://github.com/skywinder/github-changelog-generator/tree/1.8.2) (2015-08-26)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.8.1...1.8.2)
+
+**Closed issues:**
+
+- Output should not include security information [\#270](https://github.com/skywinder/github-changelog-generator/issues/270)
+
+**Merged pull requests:**
+
+- This PRi will fix \#274. [\#275](https://github.com/skywinder/github-changelog-generator/pull/275) ([skywinder](https://github.com/skywinder))
+
+## [1.8.1](https://github.com/skywinder/github-changelog-generator/tree/1.8.1) (2015-08-25)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.8.0...1.8.1)
+
+**Implemented enhancements:**
+
+- Honor labels for Pull Requests [\#266](https://github.com/skywinder/github-changelog-generator/pull/266) ([raphink](https://github.com/raphink))
+
+**Merged pull requests:**
+
+- Fix issue with missing events \(in case of events for issue \>30\) [\#268](https://github.com/skywinder/github-changelog-generator/pull/268) ([skywinder](https://github.com/skywinder))
+- Use since\_tag as default for older\_tag [\#267](https://github.com/skywinder/github-changelog-generator/pull/267) ([raphink](https://github.com/raphink))
+
+## [1.8.0](https://github.com/skywinder/github-changelog-generator/tree/1.8.0) (2015-08-24)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.7.0...1.8.0)
+
+**Implemented enhancements:**
+
+- Generate change log since/due specific tag [\#254](https://github.com/skywinder/github-changelog-generator/issues/254)
+- Add --base option [\#258](https://github.com/skywinder/github-changelog-generator/pull/258) ([raphink](https://github.com/raphink))
+
+**Merged pull requests:**
+
+- Add `--due-tag` option [\#265](https://github.com/skywinder/github-changelog-generator/pull/265) ([skywinder](https://github.com/skywinder))
+- Add release\_url to rake task options [\#264](https://github.com/skywinder/github-changelog-generator/pull/264) ([raphink](https://github.com/raphink))
+- Add a rake task [\#260](https://github.com/skywinder/github-changelog-generator/pull/260) ([raphink](https://github.com/raphink))
+- Add release\_url option [\#259](https://github.com/skywinder/github-changelog-generator/pull/259) ([raphink](https://github.com/raphink))
+- Add --since-tag [\#257](https://github.com/skywinder/github-changelog-generator/pull/257) ([raphink](https://github.com/raphink))
+>>>>>>> refs/remotes/skywinder/master
 
 ## [1.7.0](https://github.com/skywinder/github-changelog-generator/tree/1.7.0) (2015-07-16)
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.6.2...1.7.0)
@@ -89,6 +337,7 @@
 
 - Parsing of existing Change Log file [\#212](https://github.com/skywinder/github-changelog-generator/issues/212)
 - Warn users about 0 tags in repo. [\#208](https://github.com/skywinder/github-changelog-generator/issues/208)
+- Cleanup [\#220](https://github.com/skywinder/github-changelog-generator/pull/220) ([tuexss](https://github.com/tuexss))
 
 **Closed issues:**
 
@@ -98,7 +347,6 @@
 
 - Implement fetcher class [\#227](https://github.com/skywinder/github-changelog-generator/pull/227) ([skywinder](https://github.com/skywinder))
 - Add coveralls integration [\#223](https://github.com/skywinder/github-changelog-generator/pull/223) ([skywinder](https://github.com/skywinder))
-- Cleanup [\#220](https://github.com/skywinder/github-changelog-generator/pull/220) ([tuexss](https://github.com/tuexss))
 - Rspec & rubocop integration [\#217](https://github.com/skywinder/github-changelog-generator/pull/217) ([skywinder](https://github.com/skywinder))
 - Implement Reader class to parse ChangeLog.md [\#216](https://github.com/skywinder/github-changelog-generator/pull/216) ([estahn](https://github.com/estahn))
 - Relatively require github\_changelog\_generator library [\#207](https://github.com/skywinder/github-changelog-generator/pull/207) ([sneal](https://github.com/sneal))
@@ -114,7 +362,7 @@
 ## [1.3.10](https://github.com/skywinder/github-changelog-generator/tree/1.3.10) (2015-03-18)
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.3.9...1.3.10)
 
-**Merged pull requests:**
+**Fixed bugs:**
 
 - Fix termination in case of empty unreleased section with `--unreleased-only` option. [\#70](https://github.com/skywinder/github-changelog-generator/pull/70) ([skywinder](https://github.com/skywinder))
 
@@ -125,7 +373,7 @@
 
 - Improve method of detecting owner and repository [\#63](https://github.com/skywinder/github-changelog-generator/issues/63)
 
-**Merged pull requests:**
+**Fixed bugs:**
 
 - Resolved concurrency problem in case of issues \> 2048 [\#65](https://github.com/skywinder/github-changelog-generator/pull/65) ([skywinder](https://github.com/skywinder))
 
@@ -199,7 +447,7 @@
 ## [1.2.7](https://github.com/skywinder/github-changelog-generator/tree/1.2.7) (2015-01-26)
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.2.6...1.2.7)
 
-**Merged pull requests:**
+**Implemented enhancements:**
 
 - Add compare link between older version and newer version [\#46](https://github.com/skywinder/github-changelog-generator/pull/46) ([sue445](https://github.com/sue445))
 
@@ -216,15 +464,12 @@
 **Implemented enhancements:**
 
 - Use milestone to specify in which version bug was fixed [\#22](https://github.com/skywinder/github-changelog-generator/issues/22)
+- support enterprise github via command line options [\#42](https://github.com/skywinder/github-changelog-generator/pull/42) ([glenlovett](https://github.com/glenlovett))
 
 **Fixed bugs:**
 
 - Error when trying to generate log for repo without tags [\#32](https://github.com/skywinder/github-changelog-generator/issues/32)
-
-**Merged pull requests:**
-
 - PrettyPrint class is included using lowercase 'pp' [\#43](https://github.com/skywinder/github-changelog-generator/pull/43) ([schwing](https://github.com/schwing))
-- support enterprise github via command line options [\#42](https://github.com/skywinder/github-changelog-generator/pull/42) ([glenlovett](https://github.com/glenlovett))
 
 ## [1.2.4](https://github.com/skywinder/github-changelog-generator/tree/1.2.4) (2014-12-16)
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.2.3...1.2.4)
@@ -333,6 +578,7 @@
 
 - Add support for fixed issues and implemented enchanments. [\#6](https://github.com/skywinder/github-changelog-generator/issues/6)
 - Implement option to specify output filename [\#4](https://github.com/skywinder/github-changelog-generator/issues/4)
+- Implement support of different tags. [\#8](https://github.com/skywinder/github-changelog-generator/pull/8) ([skywinder](https://github.com/skywinder))
 
 **Fixed bugs:**
 
@@ -340,7 +586,6 @@
 
 **Merged pull requests:**
 
-- Implement support of different tags. [\#8](https://github.com/skywinder/github-changelog-generator/pull/8) ([skywinder](https://github.com/skywinder))
 - Add support for issues in CHANGELOG [\#7](https://github.com/skywinder/github-changelog-generator/pull/7) ([skywinder](https://github.com/skywinder))
 
 ## [0.1.0](https://github.com/skywinder/github-changelog-generator/tree/0.1.0) (2014-11-07)

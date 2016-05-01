@@ -3,14 +3,14 @@ module GitHubChangelogGenerator
   module Helper
     # @return true if the currently running program is a unit test
     def self.test?
-      defined?SpecHelper
+      defined? SpecHelper
     end
 
-    if test?
-      @log ||= Logger.new(nil) # don't show any logs when running tests
-    else
-      @log ||= Logger.new(STDOUT)
-    end
+    @log ||= if test?
+               Logger.new(nil) # don't show any logs when running tests
+             else
+               Logger.new(STDOUT)
+             end
     @log.formatter = proc do |severity, _datetime, _progname, msg|
       string = "#{msg}\n"
 

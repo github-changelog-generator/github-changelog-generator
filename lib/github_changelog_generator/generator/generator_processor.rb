@@ -4,13 +4,12 @@ module GitHubChangelogGenerator
     # @param [Array] issues
     # @return [Array] filtered array
     def exclude_issues_by_labels(issues)
-      unless @options[:exclude_labels].nil?
-        issues = issues.select do |issue|
-          var = issue.labels.map(&:name) & @options[:exclude_labels]
-          !(var).any?
-        end
+      return issues if !@options[:exclude_labels] || @options[:exclude_labels].empty?
+
+      issues.reject do |issue|
+        labels = issue.labels.map(&:name)
+        (labels & @options[:exclude_labels]).any?
       end
-      issues
     end
 
     # @return [Array] filtered issues accourding milestone
@@ -63,27 +62,27 @@ module GitHubChangelogGenerator
     end
 
     # Method filter issues, that belong only specified tag range
-    # @param [Array] array of issues to filter
+    # @param [Array] issues issues to filter
     # @param [Symbol] hash_key key of date value default is :actual_date
     # @param [String] older_tag all issues before this tag date will be excluded. May be nil, if it's first tag
     # @param [String] newer_tag all issue after this tag will be excluded. May be nil for unreleased section
     # @return [Array] filtered issues
-    def delete_by_time(array, hash_key = :actual_date, older_tag = nil, newer_tag = nil)
+    def delete_by_time(issues, hash_key = :actual_date, older_tag = nil, newer_tag = nil)
       # in case if not tags specified - return unchanged array
-      return array if older_tag.nil? && newer_tag.nil?
+      return issues if older_tag.nil? && newer_tag.nil?
 
       newer_tag_time = newer_tag && get_time_of_tag(newer_tag)
       older_tag_time = older_tag && get_time_of_tag(older_tag)
 
-      array.select do |req|
-        if req[hash_key]
-          time = Time.parse(req[hash_key]).utc
+      issues.select do |issue|
+        if issue[hash_key]
+          time = Time.parse(issue[hash_key]).utc
 
           tag_in_range_old = tag_newer_old_tag?(older_tag_time, time)
 
           tag_in_range_new = tag_older_new_tag?(newer_tag_time, time)
 
-          tag_in_range = (tag_in_range_old) && (tag_in_range_new)
+          tag_in_range = tag_in_range_old && tag_in_range_new
 
           tag_in_range
         else
@@ -93,20 +92,20 @@ module GitHubChangelogGenerator
     end
 
     def tag_older_new_tag?(newer_tag_time, time)
-      if newer_tag_time.nil?
-        tag_in_range_new = true
-      else
-        tag_in_range_new = time <= newer_tag_time
-      end
+      tag_in_range_new = if newer_tag_time.nil?
+                           true
+                         else
+                           time <= newer_tag_time
+                         end
       tag_in_range_new
     end
 
     def tag_newer_old_tag?(older_tag_time, t)
-      if older_tag_time.nil?
-        tag_in_range_old = true
-      else
-        tag_in_range_old = t > older_tag_time
-      end
+      tag_in_range_old = if older_tag_time.nil?
+                           true
+                         else
+                           t > older_tag_time
+                         end
       tag_in_range_old
     end
 
@@ -133,7 +132,7 @@ module GitHubChangelogGenerator
     def filter_by_include_labels(issues)
       filtered_issues = @options[:include_labels].nil? ? issues : issues.select do |issue|
         labels = issue.labels.map(&:name) & @options[:include_labels]
-        (labels).any?
+        labels.any?
       end
       filtered_issues
     end
@@ -178,8 +177,10 @@ module GitHubChangelogGenerator
         fetched_pr = closed_pull_requests.find do |fpr|
           fpr.number == pr.number
         end
-        pr[:merged_at] = fetched_pr[:merged_at]
-        closed_pull_requests.delete(fetched_pr)
+        if fetched_pr
+          pr[:merged_at] = fetched_pr[:merged_at]
+          closed_pull_requests.delete(fetched_pr)
+        end
       end
 
       pull_requests.select! do |pr|

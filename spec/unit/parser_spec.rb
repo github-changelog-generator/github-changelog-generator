@@ -28,16 +28,16 @@ describe GitHubChangelogGenerator::Parser do
   end
   describe ".user_project_from_option" do
     context "when option is invalid" do
-      it("should exit") { expect { GitHubChangelogGenerator::Parser.user_project_from_option("blah", nil) }.to raise_error(SystemExit) }
+      it("should return nil") { expect(GitHubChangelogGenerator::Parser.user_project_from_option("blah", nil, nil)).to be_nil }
     end
 
     context "when option is valid" do
-      subject { GitHubChangelogGenerator::Parser.user_project_from_option("skywinder/ActionSheetPicker-3.0", nil) }
+      subject { GitHubChangelogGenerator::Parser.user_project_from_option("skywinder/ActionSheetPicker-3.0", nil, nil) }
       it { is_expected.to be_a(Array) }
       it { is_expected.to match_array(["skywinder", "ActionSheetPicker-3.0"]) }
     end
     context "when option nil" do
-      subject { GitHubChangelogGenerator::Parser.user_project_from_option(nil, nil) }
+      subject { GitHubChangelogGenerator::Parser.user_project_from_option(nil, nil, nil) }
       it { is_expected.to be_a(Array) }
       it { is_expected.to match_array([nil, nil]) }
     end

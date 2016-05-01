@@ -1,0 +1,7 @@
+bin/
+!bin/git-generate-changelog
+!bin/github_changelog_generator
+pkg/
+coverage/
+.bundle
+spec/*.lock

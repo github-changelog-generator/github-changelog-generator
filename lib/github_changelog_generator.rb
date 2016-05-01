@@ -7,6 +7,7 @@ require "benchmark"
 
 require_relative "github_changelog_generator/helper"
 require_relative "github_changelog_generator/parser"
+require_relative "github_changelog_generator/parser_file"
 require_relative "github_changelog_generator/generator/generator"
 require_relative "github_changelog_generator/version"
 require_relative "github_changelog_generator/reader"
@@ -27,7 +28,7 @@ module GitHubChangelogGenerator
     def run
       log = @generator.compound_changelog
 
-      output_filename = "#{@options[:output]}"
+      output_filename = (@options[:output]).to_s
       File.open(output_filename, "w") { |file| file.write(log) }
       puts "Done!"
       puts "Generated log placed in #{Dir.pwd}/#{output_filename}"
