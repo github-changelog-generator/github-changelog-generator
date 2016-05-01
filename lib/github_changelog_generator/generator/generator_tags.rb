@@ -54,13 +54,14 @@ module GitHubChangelogGenerator
 
     # @return [Object] try to find newest tag using #Reader and :base option if specified otherwise returns nil
     def detect_since_tag
-      @since_tag ||= @options[:since_tag]
-      if @since_tag.nil? && @options[:base] && File.file?(@options[:base])
-        reader = GitHubChangelogGenerator::Reader.new
-        content = reader.read(@options[:base])
-        @since_tag = content[0]["version"] if content.count && content
-      end
-      @since_tag
+      @since_tag ||= @options.fetch(:since_tag) { version_of_first_item }
+    end
+
+    def version_of_first_item
+      return unless File.file?(@options[:base].to_s)
+
+      sections = GitHubChangelogGenerator::Reader.new.read(@options[:base])
+      sections.first["version"] if sections && sections.any?
     end
 
     # Return tags after filtering tags in lists provided by option: --between-tags & --exclude-tags
@@ -129,26 +130,34 @@ module GitHubChangelogGenerator
     end
 
     # @param [Array] all_tags all tags
-    # @return [Array] filtered tags according :exclude_tags option
+    # @return [Array] filtered tags according :exclude_tags or :exclude_tags_regex option
     def filter_excluded_tags(all_tags)
-      return all_tags unless @options[:exclude_tags]
-
-      apply_exclude_tags(all_tags)
+      if @options[:exclude_tags]
+        apply_exclude_tags(all_tags)
+      elsif @options[:exclude_tags_regex]
+        apply_exclude_tags_regex(all_tags)
+      else
+        all_tags
+      end
     end
 
     private
 
     def apply_exclude_tags(all_tags)
       if @options[:exclude_tags].is_a?(Regexp)
-        filter_tags_with_regex(all_tags)
+        filter_tags_with_regex(all_tags, @options[:exclude_tags])
       else
         filter_exact_tags(all_tags)
       end
     end
 
-    def filter_tags_with_regex(all_tags)
+    def apply_exclude_tags_regex(all_tags)
+      filter_tags_with_regex(all_tags, Regexp.new(@options[:exclude_tags_regex]))
+    end
+
+    def filter_tags_with_regex(all_tags, regex)
       warn_if_nonmatching_regex(all_tags)
-      all_tags.reject { |tag| @options[:exclude_tags] =~ tag.name }
+      all_tags.reject { |tag| regex =~ tag.name }
     end
 
     def filter_exact_tags(all_tags)

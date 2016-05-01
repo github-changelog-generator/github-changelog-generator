@@ -1,5 +1,104 @@
 # Change Log
 
+## [1.12.0](https://github.com/skywinder/github-changelog-generator/tree/1.12.0) (2016-04-01)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.11.8...1.12.0)
+
+**Closed issues:**
+
+- .github\_changelog\_generator config file is not consistent with the internal options hash [\#312](https://github.com/skywinder/github-changelog-generator/issues/312)
+- Feature request: YAML front matter [\#276](https://github.com/skywinder/github-changelog-generator/issues/276)
+
+**Merged pull requests:**
+
+- Added tag exclusion with a filter \(string or regex\) [\#320](https://github.com/skywinder/github-changelog-generator/pull/320) ([soundstep](https://github.com/soundstep))
+
+## [1.11.8](https://github.com/skywinder/github-changelog-generator/tree/1.11.8) (2016-03-22)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.11.7...1.11.8)
+
+**Implemented enhancements:**
+
+- ParserFile: Allow comments in settings file [\#358](https://github.com/skywinder/github-changelog-generator/pull/358) ([olleolleolle](https://github.com/olleolleolle))
+
+**Fixed bugs:**
+
+- Error when specifying exclude\_labels [\#327](https://github.com/skywinder/github-changelog-generator/issues/327)
+- Parse options file options into arrays, integers, flags, and other [\#354](https://github.com/skywinder/github-changelog-generator/pull/354) ([olleolleolle](https://github.com/olleolleolle))
+
+**Closed issues:**
+
+- Installation fails on Ubuntu [\#352](https://github.com/skywinder/github-changelog-generator/issues/352)
+- Test installing on Windows: use AppVeyor [\#348](https://github.com/skywinder/github-changelog-generator/issues/348)
+- Can't run under RubyGems 2.5.1 and Ruby 2.3.0 [\#325](https://github.com/skywinder/github-changelog-generator/issues/325)
+- Ruby 2.3.0 - Deprecation warning: Github::ResponseWrapper\#respond\_to?\(:to\_ary\) is old fashion which takes only one parameter [\#323](https://github.com/skywinder/github-changelog-generator/issues/323)
+- between-tags and exclude-tags do not work in .github\_changelog\_generator [\#317](https://github.com/skywinder/github-changelog-generator/issues/317)
+- Add a "documentation" label [\#284](https://github.com/skywinder/github-changelog-generator/issues/284)
+
+**Merged pull requests:**
+
+- Replace shelling-out-to-Git w/ Dir call [\#360](https://github.com/skywinder/github-changelog-generator/pull/360) ([olleolleolle](https://github.com/olleolleolle))
+- ParserFile: fail parsing with config file line number; use a File instead of a filename [\#357](https://github.com/skywinder/github-changelog-generator/pull/357) ([olleolleolle](https://github.com/olleolleolle))
+- On gem install, do not try to copy manpage files in the "extensions" step [\#356](https://github.com/skywinder/github-changelog-generator/pull/356) ([olleolleolle](https://github.com/olleolleolle))
+- Refactor: call it option\_name, instead of key\_sym [\#355](https://github.com/skywinder/github-changelog-generator/pull/355) ([olleolleolle](https://github.com/olleolleolle))
+- Add a `bundle install` test [\#353](https://github.com/skywinder/github-changelog-generator/pull/353) ([jkeiser](https://github.com/jkeiser))
+- Add an AppVeyor config [\#350](https://github.com/skywinder/github-changelog-generator/pull/350) ([Arcanemagus](https://github.com/Arcanemagus))
+- README: Document GitHub token URI scope [\#345](https://github.com/skywinder/github-changelog-generator/pull/345) ([olleolleolle](https://github.com/olleolleolle))
+
+## [1.11.7](https://github.com/skywinder/github-changelog-generator/tree/1.11.7) (2016-03-04)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.11.6...1.11.7)
+
+**Merged pull requests:**
+
+- Add Olle Jonsson as co-author [\#347](https://github.com/skywinder/github-changelog-generator/pull/347) ([skywinder](https://github.com/skywinder))
+- Gemspec, default date [\#346](https://github.com/skywinder/github-changelog-generator/pull/346) ([olleolleolle](https://github.com/olleolleolle))
+
+## [1.11.6](https://github.com/skywinder/github-changelog-generator/tree/1.11.6) (2016-03-01)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.11.5...1.11.6)
+
+**Fixed bugs:**
+
+- Can't build on Windows [\#340](https://github.com/skywinder/github-changelog-generator/issues/340)
+
+**Closed issues:**
+
+- install error "Not a git repository" [\#339](https://github.com/skywinder/github-changelog-generator/issues/339)
+
+**Merged pull requests:**
+
+- Gemspec: Calculate date using Date stdlib [\#343](https://github.com/skywinder/github-changelog-generator/pull/343) ([olleolleolle](https://github.com/olleolleolle))
+
+## [1.11.5](https://github.com/skywinder/github-changelog-generator/tree/1.11.5) (2016-03-01)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.11.4...1.11.5)
+
+**Merged pull requests:**
+
+- Test clean install in Travis [\#344](https://github.com/skywinder/github-changelog-generator/pull/344) ([jkeiser](https://github.com/jkeiser))
+- Update Rakefile to avoid install-breaking bug [\#341](https://github.com/skywinder/github-changelog-generator/pull/341) ([olleolleolle](https://github.com/olleolleolle))
+
+## [1.11.4](https://github.com/skywinder/github-changelog-generator/tree/1.11.4) (2016-02-26)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.11.3...1.11.4)
+
+**Merged pull requests:**
+
+- Man page copying: only copy .1 [\#338](https://github.com/skywinder/github-changelog-generator/pull/338) ([olleolleolle](https://github.com/olleolleolle))
+
+## [1.11.3](https://github.com/skywinder/github-changelog-generator/tree/1.11.3) (2016-02-25)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.11.2...1.11.3)
+
+**Closed issues:**
+
+- Cannot install gem [\#335](https://github.com/skywinder/github-changelog-generator/issues/335)
+
+## [1.11.2](https://github.com/skywinder/github-changelog-generator/tree/1.11.2) (2016-02-25)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.11.1...1.11.2)
+
+**Fixed bugs:**
+
+- Getting an error on install [\#329](https://github.com/skywinder/github-changelog-generator/issues/329)
+
+**Merged pull requests:**
+
+- Fix installation by not running the specs - which have dependencies [\#337](https://github.com/skywinder/github-changelog-generator/pull/337) ([skywinder](https://github.com/skywinder))
+
 ## [1.11.1](https://github.com/skywinder/github-changelog-generator/tree/1.11.1) (2016-02-25)
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.11.0...1.11.1)
 
