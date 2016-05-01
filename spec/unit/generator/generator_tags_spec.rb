@@ -1,19 +1,14 @@
-def tag_mash_with_name(tag)
-  mash_tag = Hashie::Mash.new
-  mash_tag.name = tag
-  mash_tag
-end
-
-def tags_mash_from_strings(tags_strings)
-  mash_array = []
-  tags_strings.each do |tag|
-    mash_tag = tag_mash_with_name(tag)
-    mash_array << mash_tag
-  end
-  mash_array
-end
-
 describe GitHubChangelogGenerator::Generator do
+  def tag_mash_with_name(tag)
+    Hashie::Mash.new.tap { |mash_tag| mash_tag.name = tag }
+  end
+
+  def tags_mash_from_strings(tags_strings)
+    tags_strings.map do |tag|
+      tag_mash_with_name(tag)
+    end
+  end
+
   describe "#filter_between_tags" do
     context "when between_tags nil" do
       before do
@@ -105,13 +100,13 @@ describe GitHubChangelogGenerator::Generator do
     subject { generator.filter_excluded_tags(tags_mash_from_strings(%w(1 2 3))) }
 
     context "with matching regex" do
-      let(:generator) { GitHubChangelogGenerator::Generator.new(exclude_tags_regex: '[23]') }
+      let(:generator) { GitHubChangelogGenerator::Generator.new(exclude_tags_regex: "[23]") }
       it { is_expected.to be_a Array }
       it { is_expected.to match_array(tags_mash_from_strings(%w(1))) }
     end
 
     context "with non-matching regex" do
-      let(:generator) { GitHubChangelogGenerator::Generator.new(exclude_tags_regex: '[45]') }
+      let(:generator) { GitHubChangelogGenerator::Generator.new(exclude_tags_regex: "[45]") }
       it { is_expected.to be_a Array }
       it { is_expected.to match_array(tags_mash_from_strings(%w(1 2 3))) }
     end
@@ -206,7 +201,7 @@ describe GitHubChangelogGenerator::Generator do
         @generator.instance_variable_set :@fetcher, mock
       end
       subject do
-        of_tag = @generator.get_time_of_tag tag_mash_with_name("valid_tag")
+        of_tag = @generator.get_time_of_tag(tag_mash_with_name("valid_tag"))
         of_tag
       end
       it { is_expected.to be_a_kind_of(Time) }
@@ -215,31 +210,32 @@ describe GitHubChangelogGenerator::Generator do
   end
 
   describe "#sort_tags_by_date" do
-    time1 = Time.now
-    time2 = Time.now
-    time3 = Time.now
+    let(:time1) { Time.now }
+    let(:time2) { Time.now }
+    let(:time3) { Time.now }
+
     before(:all) do
       @generator = GitHubChangelogGenerator::Generator.new
     end
+
+    before do
+      @generator.instance_variable_set(:@tag_times_hash, "valid_tag1" => time1,
+                                                         "valid_tag2" => time2,
+                                                         "valid_tag3" => time3)
+    end
+
+    subject do
+      @generator.sort_tags_by_date(tags)
+    end
     context "sort unsorted tags" do
-      tags = tags_mash_from_strings %w(valid_tag1 valid_tag2 valid_tag3)
-      before do
-        @generator.instance_variable_set :@tag_times_hash, "valid_tag1" => time1, "valid_tag2" => time2, "valid_tag3" => time3
-      end
-      subject do
-        @generator.sort_tags_by_date tags
-      end
+      let(:tags) { tags_mash_from_strings %w(valid_tag1 valid_tag2 valid_tag3) }
+
       it { is_expected.to be_a_kind_of(Array) }
       it { is_expected.to match_array(tags.reverse!) }
     end
     context "sort sorted tags" do
-      tags = tags_mash_from_strings %w(valid_tag3 valid_tag2 valid_tag1)
-      before do
-        @generator.instance_variable_set :@tag_times_hash, "valid_tag1" => time1, "valid_tag2" => time2, "valid_tag3" => time3
-      end
-      subject do
-        @generator.sort_tags_by_date tags
-      end
+      let(:tags) { tags_mash_from_strings %w(valid_tag3 valid_tag2 valid_tag1) }
+
       it { is_expected.to be_a_kind_of(Array) }
       it { is_expected.to match_array(tags) }
     end
