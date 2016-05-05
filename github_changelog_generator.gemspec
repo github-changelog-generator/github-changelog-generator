@@ -17,7 +17,7 @@ Gem::Specification.new do |spec|
   spec.homepage = "https://github.com/skywinder/Github-Changelog-Generator"
   spec.license = "MIT"
 
-  spec.files = Dir["{bin,lib,man,spec}/**/*", "Rakefile", "README.md"]
+  spec.files = Dir["{bin,lib,man,spec}/**/*"] + %w(LICENSE Rakefile README.md)
 
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
