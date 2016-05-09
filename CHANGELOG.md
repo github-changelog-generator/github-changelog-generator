@@ -3,6 +3,10 @@
 ## [1.12.1](https://github.com/skywinder/github-changelog-generator/tree/1.12.1) (2016-05-09)
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.12.0...1.12.1)
 
+**Fixed bugs:**
+
+- github\_changelog\_generator/generator/generator\_tags.rb:61:in `detect\_since\_tag': undefined method `\[\]' for nil:NilClass \(NoMethodError\) [\#351](https://github.com/skywinder/github-changelog-generator/issues/351)
+
 **Closed issues:**
 
 - Add a LICENSE file [\#369](https://github.com/skywinder/github-changelog-generator/issues/369)
