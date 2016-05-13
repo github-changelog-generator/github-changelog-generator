@@ -1,3 +1,6 @@
+#ruby=2.2
+#ruby-gemset=github-changelog-generator
+
 source "https://rubygems.org"
 
 gemspec

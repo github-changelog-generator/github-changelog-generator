@@ -1,4 +1,301 @@
-#! /usr/bin/env ruby
+#!/usr/bin/env ruby
 
-require_relative "../lib/github_changelog_generator"
-GitHubChangelogGenerator::ChangelogGenerator.new.run
+require 'faraday/http_cache'
+require 'sqlite3'
+require 'yaml'
+require 'octokit'
+#require 'shell-spinner'
+
+require_relative "../lib/github_changelog_generator/parser"
+
+module GitHubChangelogGenerator
+  class SQLiteStore
+    @@db = nil
+    @@options = GitHubChangelogGenerator::Parser.options
+    def self.db
+      if @@db.nil?
+        @@db = SQLite3::Database.new(@@options.cache)
+        @@db.execute("CREATE TABLE IF NOT EXISTS httpcache (k PRIMARY KEY, v)")
+        @@db.execute('PRAGMA synchronous = OFF')
+        @@db.execute('PRAGMA journal_mode = MEMORY')
+        @@db.results_as_hash = true
+      end
+
+      return@@db
+    end
+
+    def read(key)
+      v = @@db.get_first_value("SELECT v FROM httpcache WHERE k = ?", key)
+      v = YAML::load(v) if v
+      print(v ? '+' : '-') if @@options.verbose
+      return v
+    end
+
+    def delete(key)
+      @@db.execute("DELETE FROM httpcache WHERE k = ?", key)
+    end
+
+    def write(key, value)
+      @@db.execute('INSERT OR REPLACE INTO httpcache (k, v) VALUES (?, ?)', [key, YAML::dump(value)])
+    end
+  end
+end
+
+DB = GitHubChangelogGenerator::SQLiteStore.db
+OPTIONS = GitHubChangelogGenerator::Parser.options
+
+Octokit.configure{|c|
+  c.access_token = ENV['CHANGELOG_GITHUB_TOKEN'] || ENV[OPTIONS.token] || OPTIONS.token
+}
+Octokit.middleware = Faraday::RackBuilder.new {|builder|
+  builder.use Faraday::HttpCache, shared_cache: false, serializer: Marshal, store: GitHubChangelogGenerator::SQLiteStore.new
+  builder.use Octokit::Response::RaiseError
+  builder.adapter Faraday.default_adapter
+}
+Octokit.auto_paginate = true
+
+## get the tags
+DB.execute('CREATE TABLE IF NOT EXISTS tag (sha PRIMARY KEY, name, date)')
+Octokit.tags(OPTIONS.repo).each{|tag|
+  DB.execute('INSERT INTO tag (sha, name) SELECT ?, ? WHERE NOT EXISTS (SELECT 1 FROM tag WHERE sha = ?)', [tag.commit.sha, tag.name, tag.commit.sha])
+  DB.execute('UPDATE tag SET name = ? WHERE sha = ?', [tag.name, tag.commit.sha])
+}
+DB.execute('SELECT sha, name FROM tag WHERE date IS NULL').each{|tag|
+  tag = OpenStruct.new(tag.reject{|k, v| k.is_a?(Integer)})
+  date = nil
+  begin
+    date = Octokit.tag(OPTIONS.repo, tag.sha).tagger.date
+  rescue Octokit::NotFound
+    date = Octokit.commit(OPTIONS.repo, tag.sha).commit.committer.date
+  end
+  DB.execute('UPDATE tag SET date = ? WHERE sha = ?', [date.iso8601, tag.sha])
+}
+
+## get the issues
+DB.execute('CREATE TABLE IF NOT EXISTS issue (id PRIMARY KEY, url, number, title, closed, milestone, pr, pr_user, pr_user_url)')
+DB.execute('CREATE TABLE IF NOT EXISTS issue_label (issue, name)')
+# the ordering makes max requests more likely to be idempotent -> better use of http cache
+Octokit.list_issues(OPTIONS.repo, state: 'all', sort: 'created', direction: 'desc').each{|issue|
+  next if issue.pull_request && issue.state == 'open'
+
+  DB.execute("""
+    INSERT INTO issue (id, url, number, pr)
+      SELECT ?, ?, ?, ?
+      WHERE NOT EXISTS (SELECT 1 FROM issue WHERE id = ?)""", [
+    issue.id,
+    (issue.pull_request ? issue.pull_request.html_url : issue.html_url),
+    issue.number,
+    (issue.pull_request ? 'true' : nil),
+    issue.id])
+  pr = issue.pull_request ? Octokit.pull_request(OPTIONS.repo, issue.number) : nil
+  DB.execute("""
+    UPDATE issue
+      SET title = ?,
+      closed = ?,
+      milestone = ?,
+      pr_user = ?,
+      pr_user_url = ?
+      WHERE id = ?""", [
+    issue.title,
+    (issue.state == 'open' ? nil : issue.closed_at.iso8601),
+    (issue.milestone ? issue.milestone.id : nil),
+    (pr ? pr.user.login : nil),
+    (pr ? pr.user.html_url : nil),
+    issue.id
+  ])
+
+  DB.execute('DELETE FROM issue_label WHERE issue = ?', [issue.id])
+  (issue.labels || []).each{|label|
+    DB.execute('INSERT INTO issue_label (issue, name) VALUES (?, ?)', [issue.id, label.name])
+  }
+}
+
+## get the milestones
+DB.execute('CREATE TABLE IF NOT EXISTS milestone (id PRIMARY KEY, url, number, title, closed)')
+Octokit.list_milestones(OPTIONS.repo).each{|milestone|
+  DB.execute('INSERT INTO milestone (id, url, number) SELECT ?, ?, ? WHERE NOT EXISTS (SELECT 1 FROM milestone WHERE id = ?)', [milestone.id, milestone.html_url, milestone.number, milestone.id])
+  DB.execute('UPDATE issue SET title = ?, closed = ? WHERE id = ?', [ milestone.description, (milestone.state == 'open' ? nil : milestone.closed_at.iso8601), milestone.id])
+}
+
+## filter out only the active stuff
+def sqlset(options)
+  options = (options || []).uniq
+  return nil if options.length == 0
+  return '(' + options.collect{|label| "'" + label.gsub("'", "\\'") + "'" }.join(',') + ')'
+end
+
+if OPTIONS.debug
+  File.unlink(OPTIONS.debug) if File.file?(OPTIONS.debug)
+  DB.execute("ATTACH DATABASE '#{OPTIONS.debug}' AS active")
+else
+  DB.execute("ATTACH DATABASE ':memory:' AS active")
+end
+
+# filter tags
+DB.execute('CREATE TABLE active.tag AS SELECT *, NULL AS prev FROM tag')
+
+tags = DB.execute('SELECT distinct name FROM tag').collect{|tag| tag[0]}
+tags.select!{|tag| (OPTIONS.exclude_tags || []).include?(tag) || (OPTIONS.exclude_tags_regex && tag =~ OPTIONS.exclude_tags_regex) }
+DB.execute("DELETE FROM active.tag WHERE name in #{sqlset(tags)}") if sqlset(tags)
+
+if OPTIONS.tag1 && OPTIONS.tag2
+  tags = DB.execute('SELECT date FROM tag WHERE name in (?, ?) ORDER BY date', [OPTIONS.tag1, OPTIONS.tag2]).collect{|tag| tag[0]}
+  raise "No data for between" unless tags.length == 2
+  DB.execute("DELETE FROM active.tag WHERE date BETWEEN '#{tags[0]}' AND '#{tags[1]}'")
+end
+if OPTIONS.since_tag
+  tags = DB.execute('SELECT date FROM tag WHERE name ?', [OPTIONS.since_tag]).collect{|tag| tag[0]}
+  raise "No data for since" unless tags.length == 1
+  DB.execute("DELETE FROM active.tag WHERE date >= '#{tags[0]}'")
+end
+if OPTIONS.due_tag
+  tags = DB.execute('SELECT date FROM tag WHERE name ?', [OPTIONS.due_tag]).collect{|tag| tag[0]}
+  raise "No data for since" unless tags.length == 1
+  DB.execute("DELETE FROM active.tag WHERE date <= '#{tags[0]}'")
+end
+
+### filter issues
+
+DB.execute('CREATE TABLE active.issue AS SELECT *, NULL as tag, NULL as kind FROM issue')
+if OPTIONS.filter_issues_by_milestone
+  DB.execute("""
+    WITH milestone_closed AS (
+      SELECT issue.id, milestone.closed
+      FROM active.issue
+      JOIN milestone ON milestone.id = issue.milestone
+      WHERE milestone.closed IS NOT NULL
+    )
+    UPDATE active.issue SET closed = (SELECT closed FROM milestone_closed WHERE milestone_closed.id = active.issue.id)
+    WHERE issue.closed IS NOT NULL AND EXISTS (SELECT closed FROM milestone_closed WHERE milestone_closed.id = active.issue.id)
+  """)
+end
+
+if OPTIONS.unreleased_only
+  DB.execute('DELETE FROM active.issue WHERE issue.closed IS NULL')
+elsif OPTIONS.issue && OPTIONS.unreleased
+  # do nothing
+elsif !OPTIONS.issues
+  DB.execute('DELETE FROM active.issue WHERE issue.closed IS NOT NULL')
+elsif !OPTIONS.unreleased
+  DB.execute('DELETE FROM active.issue WHERE issue.closed IS NULL')
+end
+
+DB.execute('DELETE FROM active.issue WHERE NOT EXISTS (SELECT 1 FROM issue_label WHERE issue.id = issue_label.id)') unless OPTIONS.add_issues_wo_labels
+
+if sqlset(OPTIONS.exclude_labels) 
+  DB.execute("DELETE FROM active.issue WHERE EXISTS (SELECT 1 FROM issue_label WHERE issue.id = issue_label.issue AND issue_label.name IN #{sqlset(OPTIONS.exclude_labels)})")
+end
+if sqlset(OPTIONS.include_labels) 
+  DB.execute("DELETE FROM active.issue WHERE NOT EXISTS (SELECT 1 FROM issue_label WHERE issue.id = issue_label.id AND issue_label.name IN #{sqlset(OPTIONS.include_labels)})")
+end
+
+DB.execute('DELETE FROM active.issue WHERE pr IS NOT NULL') unless OPTIONS.pulls
+
+# Assign issues to tags
+DB.execute('UPDATE active.issue SET tag = (SELECT sha FROM active.tag WHERE active.tag.date >= active.issue.closed ORDER BY active.tag.date ASC LIMIT 1)')
+DB.execute('DELETE FROM active.tag WHERE sha NOT IN  (SELECT tag FROM active.issue)') if OPTIONS.squash_tags
+
+# categorize issues
+if sqlset(OPTIONS.enhancement_labels)
+  DB.execute("""
+    UPDATE active.issue
+    SET kind = 'enhancement'
+    WHERE EXISTS (SELECT 1 FROM issue_label WHERE issue_label.issue = active.issue.id AND issue_label.name IN #{sqlset(OPTIONS.enhancement_labels)})
+    """)
+end
+if sqlset(OPTIONS.bug_labels)
+  DB.execute("""
+    UPDATE active.issue
+    SET kind = 'bug'
+    WHERE EXISTS (SELECT 1 FROM issue_label WHERE issue_label.issue = active.issue.id AND issue_label.name IN #{sqlset(OPTIONS.bug_labels)})
+    """)
+end
+DB.execute("UPDATE active.issue SET kind = 'merge' WHERE kind IS NULL AND pr IS NOT NULL")
+DB.execute("UPDATE active.issue SET kind = 'issue' WHERE kind IS NULL")
+
+DB.execute('UPDATE active.tag SET prev = (SELECT name FROM active.tag p WHERE p.date < active.tag.date ORDER BY p.date DESC LIMIT 1)')
+
+class String
+  def to_markdown
+    self.gsub(/([\\<>\*_\(\)\[\]#])/, '\\\\\1')
+  end
+end
+
+class ChangeLog
+  def initialize
+    @out = open(OPTIONS.output, 'w')
+    @out.write(open(OPTIONS.base).read) if OPTIONS.base && File.file?(OPTIONS.base)
+    @headers = {}
+  end
+
+  def project_url
+    github_site = OPTIONS.github_site || 'https://github.com'
+    project_url = "#{github_site}/#{OPTIONS.repo}"
+  end
+  def release_url(tag)
+    return format(OPTIONS.release_url, tag) if OPTIONS.release_url
+    return "#{project_url}/tree/#{tag}"
+  end
+
+  def header(tag, section, prev=nil)
+    if !@headers[tag]
+      @headers[tag] = {}
+
+      label = tag == 'HEAD' ? OPTIONS.unreleased_label : tag
+      @out.puts "## [#{label}](#{release_url(tag)})\n\n"
+
+      if OPTIONS.compare_link
+        prev = DB.get_first_value('SELECT name FROM active.tag ORDER BY date DESC LIMIT 1') if tag == 'HEAD'
+        @out.puts "[Full Changelog](#{project_url}/compare/#{prev}...#{tag})\n\n" if prev
+      end
+    end
+    if !@headers[tag][section]
+      @headers[tag][section] = true
+      @out.puts "#{OPTIONS[section + '_prefix']}\n\n"
+    end
+  end
+
+  def generate
+    DB.execute("""
+        SELECT * from active.issue
+        WHERE tag IS NULL AND kind != 'merge'
+        ORDER BY
+          CASE kind
+            WHEN 'enhancement' then 1
+            WHEN 'bug' then 2
+            WHEN 'issue' then 3
+          END,
+        id DESC").each{|issue|
+      issue = OpenStruct.new(issue.reject{|k, v| k.is_a?(Integer)})
+
+      header('HEAD', issue.kind)
+  
+      @out.puts("- #{issue.title.to_markdown} [\\##{issue.number}](#{issue.url})\n\n")
+    }
+  
+    DB.execute("""
+        SELECT i.id, i.url, i.number, i.title, i.closed, i.milestone, i.pr, i.pr_user, i.pr_user_url, i.tag, i.kind,
+              t.name as tag_name, strftime(?, t.date) as tag_date, t.prev as tag_prev
+        from active.issue i
+        JOIN active.tag t on i.tag = t.sha
+        ORDER BY
+          t.date DESC,
+          CASE i.kind
+            WHEN 'enhancement' then 1
+            WHEN 'bug' then 2
+            WHEN 'merge' then 3
+            WHEN 'issue' then 4
+          END,
+          i.id
+      """, [OPTIONS.date_format]).each{|issue|
+      issue = OpenStruct.new(issue.reject{|k, v| k.is_a?(Integer)})
+  
+      header(issue.tag_name, issue.kind, issue.tag_prev)
+      @out.write("- #{issue.title.to_markdown} [\\##{issue.number}](#{issue.url})")
+      @out.write(issue.pr_user ? " ([#{issue.pr_user}](#{issue.pr_user_url}))" : " ({Null user})") if issue.pr && OPTIONS.author
+      @out.write("\n\n")
+    }
+  end
+end
+
+ChangeLog.new.generate

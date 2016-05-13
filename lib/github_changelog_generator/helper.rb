@@ -1,4 +1,6 @@
 require "logger"
+require "colorize"
+
 module GitHubChangelogGenerator
   module Helper
     # @return true if the currently running program is a unit test
