@@ -23,7 +23,7 @@ module GitHubChangelogGenerator
   #   reader = GitHubChangelogGenerator::Reader.new
   #   content = reader.read('./CHANGELOG.md')
   class Reader
-    def initialize(options = {})
+    def initialize
       defaults = {
         heading_level: "##",
         heading_structures: [
@@ -32,7 +32,7 @@ module GitHubChangelogGenerator
         ]
       }
 
-      @options = options.merge(defaults)
+      @options = GitHubChangelogGenerator::Parser.options.to_h.merge(defaults)
 
       @heading_level = @options[:heading_level]
       @heading_structures = @options[:heading_structures]

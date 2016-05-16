@@ -48,134 +48,134 @@ module GitHubChangelogGenerator
       parser = OptionParser.new do |opts|
         opts.banner = "Usage: github_changelog_generator [options]"
 
-        opts.on('--options [OPTIONS]', 'Load options from file') {|option| @@options.options = options }
-        opts.on('-c', '--cache [CACHE]', 'Cache information from Github') {|cache| @@options.cache = cache }
-        opts.on('-r', '--repo [REPO]', 'Github repo in owner/name format') {|repo| @@options.repo = repo }
-        opts.on('-s', '--squash', 'Squash empty tags') {|squash| @@options.squash_tags = squash }
-        opts.on('-d', '--debug [DB]', 'Keep debug data') {|debug| @@options.debug = debug }
+        opts.on("--options [OPTIONS]", "Load options from file") {|option| @@options.options = options }
+        opts.on("-c", "--cache [CACHE]", "Cache information from Github") {|cache| @@options.cache = cache }
+        opts.on("-r", "--repo [REPO]", "Github repo in owner/name format") {|repo| @@options.repo = repo }
+        opts.on("-s", "--squash", "Squash empty tags") {|squash| @@options.squash_tags = squash }
+        opts.on("-d", "--debug [DB]", "Keep debug data") {|debug| @@options.debug = debug }
 
-        opts.on('-u', '--user [USER]', 'Username of the owner of target GitHub repo') do |last|
+        opts.on("-u", "--user [USER]", "Username of the owner of target GitHub repo") do |last|
           @@options[:user] = last
         end
-        opts.on('-p', '--project [PROJECT]', 'Name of project on GitHub') do |last|
+        opts.on("-p", "--project [PROJECT]", "Name of project on GitHub") do |last|
           @@options[:project] = last
         end
-        opts.on('-t', '--token [TOKEN]', 'To make more than 50 requests per hour your GitHub token is required. You can generate it at: https://github.com/settings/tokens/new') do |last|
+        opts.on("-t", "--token [TOKEN]", "To make more than 50 requests per hour your GitHub token is required. You can generate it at: https://github.com/settings/tokens/new") do |last|
           @@options[:token] = last
         end
-        opts.on('-f', '--date-format [FORMAT]', 'Date format. Default is %Y-%m-%d') do |last|
+        opts.on("-f", "--date-format [FORMAT]", "Date format. Default is %Y-%m-%d") do |last|
           @@options[:date_format] = last
         end
-        opts.on('-o', '--output [NAME]', 'Output file. Default is CHANGELOG.md') do |last|
+        opts.on("-o", "--output [NAME]", "Output file. Default is CHANGELOG.md") do |last|
           @@options[:output] = last
         end
-        opts.on('-b', '--base [NAME]', 'Optional base file to append generated changes to.') do |last|
+        opts.on("-b", "--base [NAME]", "Optional base file to append generated changes to.") do |last|
           @@options[:base] = last
         end
-        opts.on('--bugs-label [LABEL]', 'Setup custom label for bug-fixes section. Default is \'**Fixed bugs:**''') do |v|
+        opts.on("--bugs-label [LABEL]", "Setup custom label for bug-fixes section. Default is '**Fixed bugs:**'") do |v|
           @@options[:bug_prefix] = v
         end
-        opts.on('--enhancement-label [LABEL]', 'Setup custom label for enhancements section. Default is \'**Implemented enhancements:**\'') do |v|
+        opts.on("--enhancement-label [LABEL]", "Setup custom label for enhancements section. Default is '**Implemented enhancements:**'") do |v|
           @@options[:enhancement_prefix] = v
         end
-        opts.on('--issues-label [LABEL]', 'Setup custom label for closed-issues section. Default is \'**Closed issues:**\'') do |v|
+        opts.on("--issues-label [LABEL]", "Setup custom label for closed-issues section. Default is '**Closed issues:**'") do |v|
           @@options[:issue_prefix] = v
         end
-        opts.on('--header-label [LABEL]', 'Setup custom header label. Default is \'# Change Log\'') do |v|
+        opts.on("--header-label [LABEL]", "Setup custom header label. Default is '# Change Log'") do |v|
           @@options[:header] = v
         end
-        opts.on('--front-matter [JSON]', "Add YAML front matter. Formatted as JSON because it's easier to add on the command line") do |v|
+        opts.on("--front-matter [JSON]", "Add YAML front matter. Formatted as JSON because it's easier to add on the command line") do |v|
           @@options[:frontmatter] = JSON.parse(v).to_yaml + "---\n"
         end
-        opts.on('--pr-label [LABEL]', "Setup custom label for pull requests section. Default is \"**Merged pull requests:**\"") do |v|
+        opts.on("--pr-label [LABEL]", "Setup custom label for pull requests section. Default is '**Merged pull requests:**'") do |v|
           @@options[:merge_prefix] = v
         end
-        opts.on('--[no-]issues', 'Include closed issues in changelog. Default is true') do |v|
+        opts.on("--[no-]issues", "Include closed issues in changelog. Default is true") do |v|
           @@options[:issues] = v
         end
-        opts.on('--[no-]issues-wo-labels', 'Include closed issues without labels in changelog. Default is true') do |v|
+        opts.on("--[no-]issues-wo-labels", "Include closed issues without labels in changelog. Default is true") do |v|
           @@options[:add_issues_wo_labels] = v
         end
-        opts.on('--[no-]pr-wo-labels', 'Include pull requests without labels in changelog. Default is true') do |v|
+        opts.on("--[no-]pr-wo-labels", "Include pull requests without labels in changelog. Default is true") do |v|
           @@options[:add_pr_wo_labels] = v
         end
-        opts.on('--[no-]pull-requests', 'Include pull-requests in changelog. Default is true') do |v|
+        opts.on("--[no-]pull-requests", "Include pull-requests in changelog. Default is true") do |v|
           @@options[:pulls] = v
         end
-        opts.on('--[no-]filter-by-milestone', 'Use milestone to detect when issue was resolved. Default is true') do |last|
+        opts.on("--[no-]filter-by-milestone", "Use milestone to detect when issue was resolved. Default is true") do |last|
           @@options[:filter_issues_by_milestone] = last
         end
-        opts.on('--[no-]author', 'Add author of pull-request in the end. Default is true') do |author|
+        opts.on("--[no-]author", "Add author of pull-request in the end. Default is true") do |author|
           @@options[:author] = author
         end
-        opts.on('--unreleased-only', 'Generate log from unreleased closed issues only.') do |v|
+        opts.on("--unreleased-only", "Generate log from unreleased closed issues only.") do |v|
           @@options[:unreleased_only] = v
         end
-        opts.on('--[no-]unreleased', 'Add to log unreleased closed issues. Default is true') do |v|
+        opts.on("--[no-]unreleased", "Add to log unreleased closed issues. Default is true") do |v|
           @@options[:unreleased] = v
         end
-        opts.on('--unreleased-label [label]', 'Add to log unreleased closed issues. Default is true') do |v|
+        opts.on("--unreleased-label [label]", "Add to log unreleased closed issues. Default is true") do |v|
           @@options[:unreleased_label] = v
         end
-        opts.on('--[no-]compare-link', 'Include compare link (Full Changelog) between older version and newer version. Default is true') do |v|
+        opts.on("--[no-]compare-link", "Include compare link (Full Changelog) between older version and newer version. Default is true") do |v|
           @@options[:compare_link] = v
         end
-        opts.on('--include-labels  x,y,z', Array, 'Only issues with the specified labels will be included in the changelog.') do |list|
+        opts.on("--include-labels  x,y,z", Array, "Only issues with the specified labels will be included in the changelog.") do |list|
           @@options[:include_labels] = list
         end
-        opts.on('--exclude-labels  x,y,z', Array, "Issues with the specified labels will be always excluded from changelog. Default is \"duplicate,question,invalid,wontfix\"") do |list|
+        opts.on("--exclude-labels  x,y,z", Array, "Issues with the specified labels will be always excluded from changelog. Default is \"duplicate,question,invalid,wontfix\"") do |list|
           @@options[:exclude_labels] = list
         end
-        opts.on('--bug-labels  x,y,z', Array, "Issues with the specified labels will be always added to 'Fixed bugs' section. Default is \"bug,Bug\"") do |list|
+        opts.on("--bug-labels  x,y,z", Array, "Issues with the specified labels will be always added to 'Fixed bugs' section. Default is \"bug,Bug\"") do |list|
           @@options[:bug_labels] = list
         end
         opts.on("--enhancement-labels  x,y,z", Array, "Issues with the specified labels will be always added to 'Implemented enhancements' section. Default is \"enhancement,Enhancement\"") do |list|
           @@options[:enhancement_labels] = list
         end
-        opts.on('--between-tags  x,y,z', Array, 'Change log will be filled only between specified tags') do |list|
+        opts.on("--between-tags  x,y,z", Array, "Change log will be filled only between specified tags") do |list|
           @@options[:between_tags] = list
         end
-        opts.on('--exclude-tags  x,y,z', Array, 'Change log will exclude specified tags') do |list|
+        opts.on("--exclude-tags  x,y,z", Array, "Change log will exclude specified tags") do |list|
           @@options[:exclude_tags] = list
         end
-        opts.on('--exclude-tags-regex [REGEX]', 'Apply a regular expression on tag names so that they can be excluded, for example: --exclude-tags-regex \'.*\+\d{1,}\' ') do |last|
+        opts.on("--exclude-tags-regex [REGEX]", "Apply a regular expression on tag names so that they can be excluded, for example: --exclude-tags-regex '.*\+\d{1,}'") do |last|
           @@options[:exclude_tags_regex] = last
         end
-        opts.on('--since-tag  x', 'Change log will start after specified tag') do |v|
+        opts.on("--since-tag  x", "Change log will start after specified tag") do |v|
           @@options[:since_tag] = v
         end
-        opts.on('--due-tag  x', 'Change log will end before specified tag') do |v|
+        opts.on("--due-tag  x", "Change log will end before specified tag") do |v|
           @@options[:due_tag] = v
         end
-        opts.on('--max-issues [NUMBER]', Integer, 'Max number of issues to fetch from GitHub. Default is unlimited') do |max|
+        opts.on("--max-issues [NUMBER]", Integer, "Max number of issues to fetch from GitHub. Default is unlimited") do |max|
           @@options[:max_issues] = max
         end
-        opts.on('--release-url [URL]', 'The URL to point to for release links, in printf format (with the tag as variable).') do |url|
+        opts.on("--release-url [URL]", "The URL to point to for release links, in printf format (with the tag as variable).") do |url|
           @@options[:release_url] = url
         end
-        opts.on('--github-site [URL]', 'The Enterprise Github site on which your project is hosted.') do |last|
+        opts.on("--github-site [URL]", "The Enterprise Github site on which your project is hosted.") do |last|
           @@options[:github_site] = last
         end
-        opts.on('--github-api [URL]', 'The enterprise endpoint to use for your Github API.') do |last|
+        opts.on("--github-api [URL]", "The enterprise endpoint to use for your Github API.") do |last|
           @@options[:github_endpoint] = last
         end
-        opts.on('--simple-list', 'Create simple list from issues and pull requests. Default is false.') do |v|
+        opts.on("--simple-list", "Create simple list from issues and pull requests. Default is false.") do |v|
           @@options[:simple_list] = v
         end
-        opts.on('--future-release [RELEASE-VERSION]', 'Put the unreleased changes in the specified release number.') do |future_release|
+        opts.on("--future-release [RELEASE-VERSION]", "Put the unreleased changes in the specified release number.") do |future_release|
           @@options[:future_release] = future_release
         end
-        opts.on('--release-branch [RELEASE-BRANCH]', 'Limit pull requests to the release branch, such as master or release') do |release_branch|
+        opts.on("--release-branch [RELEASE-BRANCH]", "Limit pull requests to the release branch, such as master or release") do |release_branch|
           @@options[:release_branch] = release_branch
         end
-        opts.on('--[no-]verbose', 'Run verbosely. Default is true') do |v|
+        opts.on("--[no-]verbose", "Run verbosely. Default is true") do |v|
           @@options[:verbose] = v
         end
-        opts.on('-v', '--version', 'Print version number') do |_v|
+        opts.on("-v", "--version", "Print version number") do |_v|
           puts "Version: #{GitHubChangelogGenerator::VERSION}"
           exit
         end
-        opts.on('-h', '--help', 'Displays Help') do
+        opts.on("-h", "--help", "Displays Help") do
           puts opts
           exit
         end
