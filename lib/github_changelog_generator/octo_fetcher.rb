@@ -3,7 +3,7 @@ module GitHubChangelogGenerator
   # (such as filtering, validating, e.t.c)
   #
   # Example:
-  # fetcher = GitHubChangelogGenerator::Fetcher.new options
+  # fetcher = GitHubChangelogGenerator::OctoFetcher.new options
 
   class OctoFetcher
     PER_PAGE_NUMBER   = 100
@@ -31,18 +31,6 @@ module GitHubChangelogGenerator
       @client     = client_type.new(@github_options)
     end
 
-    # Returns GitHub token. First try to use variable, provided by --token option,
-    # otherwise try to fetch it from CHANGELOG_GITHUB_TOKEN env variable.
-    #
-    # @return [String]
-    def fetch_github_token
-      env_var = @options[:token] ? @options[:token] : (ENV.fetch CHANGELOG_GITHUB_TOKEN, nil)
-
-      Helper.log.warn NO_TOKEN_PROVIDED.yellow unless env_var
-
-      env_var
-    end
-
     # Fetch all tags from repo
     #
     # @return [Array] array of tags
@@ -50,27 +38,6 @@ module GitHubChangelogGenerator
       print "Fetching tags...\r" if @options[:verbose]
 
       check_github_response { github_fetch_tags }
-    end
-
-    # This is wrapper with rescue block
-    #
-    # @return [Object] returns exactly the same, what you put in the block, but wrap it with begin-rescue block
-    def check_github_response
-      begin
-        value = yield
-      rescue Github::Error::Unauthorized => e
-        Helper.log.error e.body.red
-        abort "Error: wrong GitHub token"
-      rescue Github::Error::Forbidden => e
-        Helper.log.warn e.body.red
-        Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
-      end
-      value
-    end
-
-    # @return [String] helper to return Github "user/project"
-    def user_project
-      "#{@options[:user]}/#{@options[:project]}"
     end
 
     # Parses a URI and returns a hash of all GET variables
@@ -98,39 +65,6 @@ module GitHubChangelogGenerator
       else
         1
       end
-    end
-
-    # Iterates through all pages until there are no more :next pages to follow
-    # yields the result per page
-    #
-    # @param [Octokit::Client] client
-    # @param [String] method (eg. 'tags')
-    # @return [Integer] total number of pages
-    def iterate_pages(client, method, *args, &block)
-      if args.size == 1 && args.first.is_a?(Hash)
-        request_options = args.delete_at(0)
-      elsif args.size > 1 && args.last.is_a?(Hash)
-        request_options = args.delete_at(args.length - 1)
-      end
-
-      args.push(@request_options.merge(request_options))
-      # args.push({}.merge(request_options))
-
-      pages = 1
-      client.send(method, user_project, *args)
-      # client.send(method, 'retentionscience/rsapi', *args)
-      last_response = client.last_response
-
-      yield last_response.data
-
-      while !(next_one = last_response.rels[:next]).nil?
-        pages +=1
-
-        last_response = next_one.get
-        yield last_response.data
-      end
-
-      pages
     end
 
 
@@ -225,18 +159,6 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
       pull_requests
     end
 
-    # Print specified line on the same string
-    #
-    # @param [String] log_string
-    def print_in_same_line(log_string)
-      print log_string + "\r"
-    end
-
-    # Print long line with spaces on same line to clear prev message
-    def print_empty_line
-      print_in_same_line("                                                                       ")
-    end
-
     # Fetch event for all issues and add them to :events
     #
     # @param [Array] issues
@@ -288,6 +210,84 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
     # @return [Hash]
     def fetch_commit(event)
       @client.commit(user_project, event[:commit_id])
+    end
+
+    private
+
+    # Iterates through all pages until there are no more :next pages to follow
+    # yields the result per page
+    #
+    # @param [Octokit::Client] client
+    # @param [String] method (eg. 'tags')
+    # @return [Integer] total number of pages
+    def iterate_pages(client, method, *args, &block)
+      if args.size == 1 && args.first.is_a?(Hash)
+        request_options = args.delete_at(0)
+      elsif args.size > 1 && args.last.is_a?(Hash)
+        request_options = args.delete_at(args.length - 1)
+      end
+
+      args.push(@request_options.merge(request_options))
+
+      pages = 1
+      client.send(method, user_project, *args)
+      last_response = client.last_response
+
+      yield last_response.data
+
+      while !(next_one = last_response.rels[:next]).nil?
+        pages +=1
+
+        last_response = next_one.get
+        yield last_response.data
+      end
+
+      pages
+    end
+
+    # This is wrapper with rescue block
+    #
+    # @return [Object] returns exactly the same, what you put in the block, but wrap it with begin-rescue block
+    def check_github_response
+      begin
+        value = yield
+      rescue Github::Error::Unauthorized => e
+        Helper.log.error e.body.red
+        abort "Error: wrong GitHub token"
+      rescue Github::Error::Forbidden => e
+        Helper.log.warn e.body.red
+        Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
+      end
+      value
+    end
+
+    # Print specified line on the same string
+    #
+    # @param [String] log_string
+    def print_in_same_line(log_string)
+      print log_string + "\r"
+    end
+
+    # Print long line with spaces on same line to clear prev message
+    def print_empty_line
+      print_in_same_line("                                                                       ")
+    end
+
+    # Returns GitHub token. First try to use variable, provided by --token option,
+    # otherwise try to fetch it from CHANGELOG_GITHUB_TOKEN env variable.
+    #
+    # @return [String]
+    def fetch_github_token
+      env_var = @options[:token] ? @options[:token] : (ENV.fetch CHANGELOG_GITHUB_TOKEN, nil)
+
+      Helper.log.warn NO_TOKEN_PROVIDED.yellow unless env_var
+
+      env_var
+    end
+
+    # @return [String] helper to return Github "user/project"
+    def user_project
+      "#{@options[:user]}/#{@options[:project]}"
     end
   end
 end
