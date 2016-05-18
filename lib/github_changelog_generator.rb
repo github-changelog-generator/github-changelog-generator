@@ -2,6 +2,7 @@
 # frozen_string_literal: true
 
 require "github_api"
+require "octokit"
 require "json"
 require "benchmark"
 

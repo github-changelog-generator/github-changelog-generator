@@ -27,4 +27,5 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "rake", ">= 10.0"
   spec.add_runtime_dependency "github_api", ">= 0.14"
   spec.add_runtime_dependency "rainbow", ">= 2.1"
+  spec.add_runtime_dependency("octokit", ["~> 4.0"])
 end
