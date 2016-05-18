@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 require_relative "../fetcher"
+require_relative "../octo_fetcher"
 require_relative "generator_generation"
 require_relative "generator_fetcher"
 require_relative "generator_processor"
@@ -21,7 +22,7 @@ module GitHubChangelogGenerator
     def initialize(options = nil)
       @options = options || {}
       @tag_times_hash = {}
-      @fetcher = GitHubChangelogGenerator::Fetcher.new @options
+      @fetcher = GitHubChangelogGenerator::OctoFetcher.new @options
     end
 
     def fetch_issues_and_pr
