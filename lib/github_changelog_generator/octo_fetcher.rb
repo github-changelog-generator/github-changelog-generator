@@ -31,6 +31,7 @@ module GitHubChangelogGenerator
       @client     = client_type.new(@github_options)
     end
 
+
     # Fetch all tags from repo
     #
     # @return [Array] array of tags
@@ -46,7 +47,10 @@ module GitHubChangelogGenerator
     # @return [Integer] number of pages for this API call in total
     def calculate_pages(client, method, request_options)
       # Makes the first API call so that we can call last_response
-      client.send(method, user_project, @request_options.merge(request_options))
+      check_github_response do
+        client.send(method, user_project, @request_options.merge(request_options))
+      end
+
       last_response = client.last_response
 
       if last_pg = last_response.rels[:last]
@@ -92,25 +96,20 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
         :state  => "closed",
         :filter => "all",
         :labels => nil,
-        :since  => @since,
       }
+      options[:since] = @since unless @since.nil?
 
-      begin
-        page_i      = 0
-        count_pages = calculate_pages(@client, 'issues', options)
+      page_i      = 0
+      count_pages = calculate_pages(@client, 'issues', options)
 
-        iterate_pages(@client, 'issues', options) do |new_issues|
-          page_i += PER_PAGE_NUMBER
-          print_in_same_line("Fetching issues... #{page_i}/#{count_pages * PER_PAGE_NUMBER}")
-          issues.concat(new_issues)
-          break if @options[:max_issues] && issues.length >= @options[:max_issues]
-        end
-        print_empty_line
-        Helper.log.info "Received issues: #{issues.count}"
-
-      rescue
-        Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
+      iterate_pages(@client, 'issues', options) do |new_issues|
+        page_i += PER_PAGE_NUMBER
+        print_in_same_line("Fetching issues... #{page_i}/#{count_pages * PER_PAGE_NUMBER}")
+        issues.concat(new_issues)
+        break if @options[:max_issues] && issues.length >= @options[:max_issues]
       end
+      print_empty_line
+      Helper.log.info "Received issues: #{issues.count}"
 
       # separate arrays of issues and pull requests:
       issues.partition do |x|
@@ -129,22 +128,18 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
         options[:base] = @options[:release_branch]
       end
 
-      begin
-        page_i = 0
-        count_pages = calculate_pages(@client, 'pull_requests', options)
+      page_i      = 0
+      count_pages = calculate_pages(@client, 'pull_requests', options)
 
-        iterate_pages(@client, 'pull_requests', options) do |new_pr|
-          page_i += PER_PAGE_NUMBER
-          log_string = "Fetching merged dates... #{page_i}/#{count_pages * PER_PAGE_NUMBER}"
-          print_in_same_line(log_string)
-          pull_requests.concat(new_pr)
-        end
-        print_empty_line
-      rescue
-        Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
+      iterate_pages(@client, 'pull_requests', options) do |new_pr|
+        page_i     += PER_PAGE_NUMBER
+        log_string = "Fetching merged dates... #{page_i}/#{count_pages * PER_PAGE_NUMBER}"
+        print_in_same_line(log_string)
+        pull_requests.concat(new_pr)
       end
+      print_empty_line
 
-      Helper.log.info "Fetching merged dates: #{pull_requests.count}"
+      Helper.log.info "Pull Request count: #{pull_requests.count}"
       pull_requests
     end
 
@@ -159,13 +154,9 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
       issues.each_slice(MAX_THREAD_NUMBER) do |issues_slice|
         issues_slice.each do |issue|
           threads << Thread.new do
-            begin
-              issue[:events] = []
-              iterate_pages(@client, 'issue_events', issue['number'], {}) do |new_event|
-                issue[:events].concat(new_event)
-              end
-            rescue
-              Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
+            issue[:events] = []
+            iterate_pages(@client, 'issue_events', issue['number'], {}) do |new_event|
+              issue[:events].concat(new_event)
             end
             print_in_same_line("Fetching events for issues and PR: #{i + 1}/#{issues.count}")
             i += 1
@@ -186,19 +177,18 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
     # @param [Hash] tag
     # @return [Time] time of specified tag
     def fetch_date_of_tag(tag)
-      begin
-        commit_data = @client.commit(user_project, tag['commit']['sha'])
-        commit_data[:commit][:committer][:date]
-      rescue
-        Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
-      end
+      commit_data = check_github_response { @client.commit(user_project, tag['commit']['sha']) }
+
+      commit_data[:commit][:committer][:date]
     end
 
     # Fetch commit for specified event
     #
     # @return [Hash]
     def fetch_commit(event)
-      @client.commit(user_project, event[:commit_id])
+      check_github_response do
+        @client.commit(user_project, event[:commit_id])
+      end
     end
 
     private
@@ -219,7 +209,10 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
       args.push(@request_options.merge(request_options))
 
       pages = 1
-      client.send(method, user_project, *args)
+
+      check_github_response do
+        client.send(method, user_project, *args)
+      end
       last_response = client.last_response
 
       yield last_response.data
@@ -227,7 +220,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
       while !(next_one = last_response.rels[:next]).nil?
         pages +=1
 
-        last_response = next_one.get
+        last_response = check_github_response { next_one.get }
         yield last_response.data
       end
 
