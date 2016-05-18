@@ -77,7 +77,7 @@ module GitHubChangelogGenerator
 
       issues.select do |issue|
         if issue[hash_key]
-          time = Time.parse(issue[hash_key]).utc
+          time = Time.parse(issue[hash_key].to_s).utc
 
           tag_in_range_old = tag_newer_old_tag?(older_tag_time, time)
 
