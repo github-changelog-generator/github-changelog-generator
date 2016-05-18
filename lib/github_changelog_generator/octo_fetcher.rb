@@ -40,17 +40,6 @@ module GitHubChangelogGenerator
       check_github_response { github_fetch_tags }
     end
 
-    # Parses a URI and returns a hash of all GET variables
-    #
-    # @param [String] uri eg. https://api.github.com/repositories/43914960/tags?page=37&foo=1
-    # @return [Hash] of all GET variables. eg. { 'page' => 37, 'foo' => 1 }
-    def parse_url_for_vars(uri)
-      URI(uri).query.split("&").inject({}) do |params, get_var|
-        k,v = get_var.split("=")
-        params[k] = v
-        params
-      end
-    end
 
     # Returns the number of pages for a API call
     #
@@ -289,5 +278,18 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
     def user_project
       "#{@options[:user]}/#{@options[:project]}"
     end
+
+    # Parses a URI and returns a hash of all GET variables
+    #
+    # @param [String] uri eg. https://api.github.com/repositories/43914960/tags?page=37&foo=1
+    # @return [Hash] of all GET variables. eg. { 'page' => 37, 'foo' => 1 }
+    def parse_url_for_vars(uri)
+      URI(uri).query.split("&").inject({}) do |params, get_var|
+        k,v = get_var.split("=")
+        params[k] = v
+        params
+      end
+    end
+
   end
 end
