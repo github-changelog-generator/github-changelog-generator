@@ -28,4 +28,6 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "github_api", ">= 0.14"
   spec.add_runtime_dependency "rainbow", ">= 2.1"
   spec.add_runtime_dependency("octokit", ["~> 4.0"])
+  spec.add_runtime_dependency("faraday-http-cache")
+  spec.add_runtime_dependency("activesupport")
 end

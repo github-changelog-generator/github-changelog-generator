@@ -27,10 +27,26 @@ module GitHubChangelogGenerator
       @github_options[:access_token] = @github_token unless @github_token.nil?
       @github_options[:api_endpoint] = @options[:github_endpoint] unless @options[:github_endpoint].nil?
 
+      init_middleware
       client_type = @options[:github_endpoint].nil? ? Octokit::Client : Octokit::EnterpriseAdminClient
       @client     = client_type.new(@github_options)
     end
 
+    def init_middleware
+      middleware_opts = {
+        :serializer   => Marshal,
+        :store        => ActiveSupport::Cache::FileStore.new('/tmp/cache'),
+        :logger       => Logger.new('/tmp/github-changelog-logger.log'),
+        :shared_cache => false
+      }
+      stack = Faraday::RackBuilder.new do |builder|
+        builder.use Faraday::HttpCache, middleware_opts
+        builder.use Octokit::Response::RaiseError
+        builder.adapter Faraday.default_adapter
+        # builder.response :logger
+      end
+      Octokit.middleware = stack
+    end
 
     # Fetch all tags from repo
     #
