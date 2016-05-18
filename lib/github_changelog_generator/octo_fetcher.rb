@@ -240,10 +240,10 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
     def check_github_response
       begin
         value = yield
-      rescue Github::Error::Unauthorized => e
+      rescue Octokit::Unauthorized => e
         Helper.log.error e.body.red
         abort "Error: wrong GitHub token"
-      rescue Github::Error::Forbidden => e
+      rescue Octokit::Forbidden => e
         Helper.log.warn e.body.red
         Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
       end
