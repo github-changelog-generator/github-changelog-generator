@@ -1,0 +1,65 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.github.com/repos/skywinder/changelog_test/tags?access_token=0000000000000000
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.github.v3+json,application/vnd.github.beta+json;q=0.5,application/json;q=0.1
+      Accept-Charset:
+      - utf-8
+      User-Agent:
+      - Github API Ruby Gem 0.13.1
+      Authorization:
+      - token 0000000000000000
+  response:
+    status:
+      code: 401
+      message: 
+    headers:
+      server:
+      - GitHub.com
+      date:
+      - Thu, 19 May 2016 18:14:28 GMT
+      content-type:
+      - application/json; charset=utf-8
+      content-length:
+      - '83'
+      connection:
+      - close
+      status:
+      - 401 Unauthorized
+      x-github-media-type:
+      - github.v3; format=json
+      x-ratelimit-limit:
+      - '60'
+      x-ratelimit-remaining:
+      - '48'
+      x-ratelimit-reset:
+      - '1463684440'
+      access-control-expose-headers:
+      - ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset,
+        X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
+      access-control-allow-origin:
+      - "*"
+      content-security-policy:
+      - default-src 'none'
+      strict-transport-security:
+      - max-age=31536000; includeSubdomains; preload
+      x-content-type-options:
+      - nosniff
+      x-frame-options:
+      - deny
+      x-xss-protection:
+      - 1; mode=block
+      x-github-request-id:
+      - 6C2F0F69:1C0C3:706D8F5:573E0284
+    body:
+      encoding: UTF-8
+      string: '{"message":"Bad credentials","documentation_url":"https://developer.github.com/v3"}'
+    http_version: 
+  recorded_at: Thu, 19 May 2016 18:14:31 GMT
+recorded_with: VCR 3.0.1
