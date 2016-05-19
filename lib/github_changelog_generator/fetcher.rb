@@ -215,7 +215,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
     # Fetch commit for specified event
     # @return [Hash]
     def fetch_commit(event)
-      @github.git_data.commits.get @options[:user], @options[:project], event[:commit_id]
+      @github.git_data.commits.get @options[:user], @options[:project], event['commit_id']
     end
   end
 end

@@ -7,6 +7,7 @@ group :test do
   gem "bundler"
   gem "rubocop"
   gem "overcommit"
+  gem "vcr"
   gem "coveralls", "~>0.8", require: false
   gem "simplecov", "~>0.10", require: false
   gem "codeclimate-test-reporter", "~>0.4"
