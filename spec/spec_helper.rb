@@ -19,6 +19,7 @@
 require "codeclimate-test-reporter"
 require "simplecov"
 require "coveralls"
+require "vcr"
 
 # This module is only used to check the environment is currently a testing env
 module SpecHelper
@@ -33,6 +34,15 @@ SimpleCov.start
 
 require "github_changelog_generator"
 require "github_changelog_generator/task"
+
+
+VCR.configure do |c|
+  c.allow_http_connections_when_no_cassette = true
+  c.cassette_library_dir = 'spec/vcr'
+  c.ignore_localhost = true
+  c.default_cassette_options = { :record => :new_episodes }
+  c.hook_into :faraday
+end
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
@@ -53,4 +63,8 @@ RSpec.configure do |config|
   config.order = :random
 
   Kernel.srand config.seed
+
+  config.extend VCR::RSpec::Macros
+
 end
+

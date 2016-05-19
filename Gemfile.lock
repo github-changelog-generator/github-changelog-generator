@@ -109,6 +109,7 @@ GEM
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     unicode-display_width (1.1.1)
+    vcr (3.0.1)
 
 PLATFORMS
   ruby
@@ -124,6 +125,7 @@ DEPENDENCIES
   rspec (< 4)
   rubocop (>= 0.43)
   simplecov (~> 0.10)
+  vcr
 
 BUNDLED WITH
    1.13.1
