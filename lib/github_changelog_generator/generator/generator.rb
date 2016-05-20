@@ -107,13 +107,13 @@ module GitHubChangelogGenerator
 
       issues.each do |dict|
         added = false
-        dict.labels.each do |label|
-          if @options[:bug_labels].include? label.name
+        dict['labels'].each do |label|
+          if @options[:bug_labels].include? label['name']
             bugs_a.push dict
             added = true
             next
           end
-          if @options[:enhancement_labels].include? label.name
+          if @options[:enhancement_labels].include? label['name']
             enhancement_a.push dict
             added = true
             next
@@ -123,16 +123,16 @@ module GitHubChangelogGenerator
       end
 
       added_pull_requests = []
-      pull_requests.each do |dict|
-        dict.labels.each do |label|
-          if @options[:bug_labels].include? label.name
-            bugs_a.push dict
-            added_pull_requests.push dict
+      pull_requests.each do |pr|
+        pr['labels'].each do |label|
+          if @options[:bug_labels].include? label['name']
+            bugs_a.push pr
+            added_pull_requests.push pr
             next
           end
-          if @options[:enhancement_labels].include? label.name
-            enhancement_a.push dict
-            added_pull_requests.push dict
+          if @options[:enhancement_labels].include? label['name']
+            enhancement_a.push pr
+            added_pull_requests.push pr
             next
           end
         end
