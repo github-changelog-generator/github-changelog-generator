@@ -34,7 +34,7 @@ module GitHubChangelogGenerator
 
     # Fetch all tags from repo
     #
-    # @return [Array] array of tags
+    # @return [Array <Hash>] array of tags
     def get_all_tags
       print "Fetching tags...\r" if @options[:verbose]
 
@@ -63,7 +63,7 @@ module GitHubChangelogGenerator
 
     # Fill input array with tags
     #
-    # @return [Array] array of tags in repo
+    # @return [Array <Hash>] array of tags in repo
     def github_fetch_tags
       tags        = []
       page_i      = 0
@@ -82,13 +82,15 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
       else
         Helper.log.info "Found #{tags.count} tags"
       end
+      # tags are a Sawyer::Resource. Convert to hash
+      tags = tags.map{|h| h.to_hash.stringify_keys_deep! }
       tags
     end
 
     # This method fetch all closed issues and separate them to pull requests and pure issues
     # (pull request is kind of issue in term of GitHub)
     #
-    # @return [Tuple] with (issues, pull-requests)
+    # @return [Tuple] with (issues [Array <Hash>], pull-requests [Array <Hash>])
     def fetch_closed_issues_and_pr
       print "Fetching closed issues...\r" if @options[:verbose]
       issues = []
@@ -111,15 +113,17 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
       print_empty_line
       Helper.log.info "Received issues: #{issues.count}"
 
+      issues = issues.map{|h| h.to_hash.stringify_keys_deep! }
+
       # separate arrays of issues and pull requests:
       issues.partition do |x|
-        x[:pull_request].nil?
+        x['pull_request'].nil?
       end
     end
 
     # Fetch all pull requests. We need them to detect :merged_at parameter
     #
-    # @return [Array] all pull requests
+    # @return [Array <Hash>] all pull requests
     def fetch_closed_pull_requests
       pull_requests = []
       options = { :state => 'closed' }
@@ -140,6 +144,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
       print_empty_line
 
       Helper.log.info "Pull Request count: #{pull_requests.count}"
+      pull_requests = pull_requests.map{|h| h.to_hash.stringify_keys_deep! }
       pull_requests
     end
 
@@ -158,6 +163,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
             iterate_pages(@client, 'issue_events', issue['number'], {}) do |new_event|
               issue[:events].concat(new_event)
             end
+            issue[:events] = issue[:events].map{|h| h.to_hash.stringify_keys_deep! }
             print_in_same_line("Fetching events for issues and PR: #{i + 1}/#{issues.count}")
             i += 1
           end
@@ -187,7 +193,8 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
     # @return [Hash]
     def fetch_commit(event)
       check_github_response do
-        @client.commit(user_project, event[:commit_id])
+        commit = @client.commit(user_project, event['commit_id'])
+        commit = commit.to_hash.stringify_keys_deep!
       end
     end
 
@@ -234,10 +241,10 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
       begin
         value = yield
       rescue Octokit::Unauthorized => e
-        Helper.log.error e.body.red
+        Helper.log.error e.message.red
         abort "Error: wrong GitHub token"
       rescue Octokit::Forbidden => e
-        Helper.log.warn e.body.red
+        Helper.log.warn e.message.red
         Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
       end
       value

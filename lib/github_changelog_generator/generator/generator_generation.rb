@@ -165,16 +165,16 @@ module GitHubChangelogGenerator
     # @param [Hash] issue Fetched issue from GitHub
     # @return [String] Markdown-formatted single issue
     def get_string_for_issue(issue)
-      encapsulated_title = encapsulate_string issue[:title]
+      encapsulated_title = encapsulate_string issue['title']
 
-      title_with_number = "#{encapsulated_title} [\\##{issue[:number]}](#{issue.html_url})"
+      title_with_number = "#{encapsulated_title} [\\##{issue['number']}](#{issue['html_url']})"
 
-      unless issue.pull_request.nil?
+      unless issue['pull_request'].nil?
         if @options[:author]
-          title_with_number += if issue.user.nil?
+          title_with_number += if issue['user'].nil?
                                  " ({Null user})"
                                else
-                                 " ([#{issue.user.login}](#{issue.user.html_url}))"
+                                 " ([#{issue['user']['login']}](#{issue['user']['html_url']}))"
                                end
         end
       end
