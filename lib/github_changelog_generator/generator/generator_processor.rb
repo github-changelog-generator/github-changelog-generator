@@ -8,7 +8,7 @@ module GitHubChangelogGenerator
       return issues if !@options[:exclude_labels] || @options[:exclude_labels].empty?
 
       issues.reject do |issue|
-        labels = issue.labels.map(&:name)
+        labels = issue['labels'].map{|l| l['name'] }
         (labels & @options[:exclude_labels]).any?
       end
     end
@@ -123,7 +123,7 @@ module GitHubChangelogGenerator
     def filter_wo_labels(issues)
       if @options[:add_issues_wo_labels]
         issues_wo_labels = issues.select do |issue|
-          !issue.labels.map(&:name).any?
+          !issue['labels'].map{|l| l['name'] }.any?
         end
         return issues_wo_labels
       end
@@ -135,7 +135,7 @@ module GitHubChangelogGenerator
         issues
       else
         issues.select do |issue|
-          labels = issue.labels.map(&:name) & @options[:include_labels]
+          labels = issue['labels'].map { |l| l['name'] } & @options[:include_labels]
           labels.any?
         end
       end
@@ -179,16 +179,16 @@ module GitHubChangelogGenerator
 
       pull_requests.each do |pr|
         fetched_pr = closed_pull_requests.find do |fpr|
-          fpr.number == pr.number
+          fpr['number'] == pr['number']
         end
         if fetched_pr
-          pr[:merged_at] = fetched_pr[:merged_at]
+          pr['merged_at'] = fetched_pr['merged_at']
           closed_pull_requests.delete(fetched_pr)
         end
       end
 
       pull_requests.select! do |pr|
-        !pr[:merged_at].nil?
+        !pr['merged_at'].nil?
       end
 
       pull_requests
