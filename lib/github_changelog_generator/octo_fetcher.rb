@@ -200,6 +200,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
     # @return [Time] time of specified tag
     def fetch_date_of_tag(tag)
       commit_data = check_github_response { @client.commit(user_project, tag['commit']['sha']) }
+      commit_data = commit_data.to_hash.stringify_keys_deep!
 
       commit_data['commit']['committer']['date']
     end
