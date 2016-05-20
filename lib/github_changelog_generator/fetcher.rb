@@ -178,9 +178,9 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
               response = @github.issues.events.list user: @options[:user],
                                                     repo: @options[:project],
                                                     issue_number: issue["number"]
-              issue[:events] = []
+              issue['events'] = []
               response.each_page do |page|
-                issue[:events].concat(page)
+                issue['events'].concat(page)
               end
             rescue Github::Error::Forbidden => e
               Helper.log.warn e.error_messages.map { |m| m[:message] }.join(", ")
