@@ -201,7 +201,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
     def fetch_date_of_tag(tag)
       commit_data = check_github_response { @client.commit(user_project, tag['commit']['sha']) }
 
-      commit_data[:commit][:committer][:date]
+      commit_data['commit']['committer']['date']
     end
 
     # Fetch commit for specified event
