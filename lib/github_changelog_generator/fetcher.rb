@@ -161,7 +161,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
       print_in_same_line("                                                                       ")
     end
 
-    # Fetch event for all issues and add them to :events
+    # Fetch event for all issues and add them to events
     # @param [Array] issues
     # @return [Void]
     def fetch_events_async(issues)

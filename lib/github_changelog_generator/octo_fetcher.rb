@@ -148,7 +148,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
       pull_requests
     end
 
-    # Fetch event for all issues and add them to :events
+    # Fetch event for all issues and add them to 'events'
     #
     # @param [Array] issues
     # @return [Void]
@@ -159,11 +159,11 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
       issues.each_slice(MAX_THREAD_NUMBER) do |issues_slice|
         issues_slice.each do |issue|
           threads << Thread.new do
-            issue[:events] = []
+            issue['events'] = []
             iterate_pages(@client, 'issue_events', issue['number'], {}) do |new_event|
-              issue[:events].concat(new_event)
+              issue['events'].concat(new_event)
             end
-            issue[:events] = issue[:events].map{|h| h.to_hash.stringify_keys_deep! }
+            issue['events'] = issue['events'].map{|h| h.to_hash.stringify_keys_deep! }
             print_in_same_line("Fetching events for issues and PR: #{i + 1}/#{issues.count}")
             i += 1
           end
