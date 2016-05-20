@@ -175,9 +175,9 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
               response = @github.issues.events.list user: @options[:user],
                                                     repo: @options[:project],
                                                     issue_number: issue["number"]
-              issue[:events] = []
+              issue['events'] = []
               response.each_page do |page|
-                issue[:events].concat(page)
+                issue['events'].concat(page)
               end
             rescue
               Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
