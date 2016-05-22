@@ -91,6 +91,28 @@ module GitHubChangelogGenerator
       end
     end
 
+    def detect_commits_by_time(commits, older_tag = nil, newer_tag = nil)
+      # in case if not tags specified - return unchanged array
+      return [] if older_tag.nil? && newer_tag.nil?
+
+      newer_tag_time = newer_tag && get_time_of_tag(newer_tag)
+      older_tag_time = older_tag && get_time_of_tag(older_tag)
+
+      commits.select do |commit|
+        time = Time.parse(commit.commit.author.date).utc
+        (commit_newer_to_old_tag?(older_tag_time, time) &&
+          commit_older_to_new_tag?(newer_tag_time, time))
+      end
+    end
+
+    def commit_older_to_new_tag?(newer_tag_time, time)
+      newer_tag_time.nil? ? true : (time <= newer_tag_time)
+    end
+
+    def commit_newer_to_old_tag?(older_tag_time, time)
+      older_tag_time.nil? ? true : (time > older_tag_time)
+    end
+
     def tag_older_new_tag?(newer_tag_time, time)
       tag_in_range_new = if newer_tag_time.nil?
                            true

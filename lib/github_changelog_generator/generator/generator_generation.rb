@@ -7,6 +7,7 @@ module GitHubChangelogGenerator
       fetch_and_filter_tags
       sort_tags_by_date(@filtered_tags)
       fetch_issues_and_pr
+      fetch_commits_on_master
 
       log = ""
       log += @options[:frontmatter] if @options[:frontmatter]
@@ -102,7 +103,7 @@ module GitHubChangelogGenerator
     # @param [String] older_tag all issues before this tag date will be excluded. May be nil, if it's first tag
     # @param [String] newer_tag all issue after this tag will be excluded. May be nil for unreleased section
     def generate_log_between_tags(older_tag, newer_tag)
-      filtered_issues, filtered_pull_requests = filter_issues_for_tags(newer_tag, older_tag)
+      filtered_issues, filtered_pull_requests, filtered_commits_on_master = filter_issues_for_tags(newer_tag, older_tag)
 
       older_tag_name = older_tag.nil? ? detect_since_tag : older_tag["name"]
 
@@ -111,7 +112,7 @@ module GitHubChangelogGenerator
         return ""
       end
 
-      create_log_for_tag(filtered_pull_requests, filtered_issues, newer_tag, older_tag_name)
+      create_log_for_tag(filtered_pull_requests, filtered_issues, filtered_commits_on_master, newer_tag, older_tag_name)
     end
 
     # Apply all filters to issues and pull requests
@@ -121,6 +122,8 @@ module GitHubChangelogGenerator
       filtered_pull_requests = delete_by_time(@pull_requests, :actual_date, older_tag, newer_tag)
       filtered_issues = delete_by_time(@issues, :actual_date, older_tag, newer_tag)
 
+      filtered_commits_on_master = detect_commits_by_time(master_commits, older_tag, newer_tag)
+
       newer_tag_name = newer_tag.nil? ? nil : newer_tag["name"]
 
       if @options[:filter_issues_by_milestone]
@@ -128,7 +131,7 @@ module GitHubChangelogGenerator
         filtered_issues = filter_by_milestone(filtered_issues, newer_tag_name, @issues)
         filtered_pull_requests = filter_by_milestone(filtered_pull_requests, newer_tag_name, @pull_requests)
       end
-      [filtered_issues, filtered_pull_requests]
+      [filtered_issues, filtered_pull_requests, filtered_commits_on_master]
     end
 
     # The full cycle of generation for whole project
@@ -155,6 +158,29 @@ module GitHubChangelogGenerator
         log += unreleased_log if unreleased_log
       end
       log
+    end
+
+    def generate_log_for_commits_on_master(commits_on_master)
+      log = "**Commits on Master:**\n\n"
+      commits_on_master.each do |commit|
+        log += create_log_for_each_commit(commit)
+      end
+      log
+    end
+
+    def create_log_for_each_commit(commit)
+      "<a href='#{commit.author.url}' title='By: #{commit.commit.author.name}
+        (#{commit.commit.author.email})'>
+        <img src='#{commit.author.avatar_url}' align='left' height='36' width='36' />
+      </a>
+      [#{commit_message(commit.commit.message)}](#{commit.html_url})
+      (#{Time.parse(commit.commit.author.date)})<br />
+      *By:* *#{commit.commit.author.name}*,
+      *commit:* [#{commit.sha}](#{commit.html_url})\n\n"
+    end
+
+    def commit_message(message)
+      message.strip.delete("\n").squeeze(" ").slice(0, 70)
     end
 
     # Parse issue and generate single line formatted issue line.
