@@ -1,6 +1,6 @@
 module GitHubChangelogGenerator
   class Generator
-    MAX_THREAD_NUMBER = 4
+    MAX_THREAD_NUMBER = 1
 
     # Fetch event for issues and pull requests
     # @return [Array] array of fetched issues
