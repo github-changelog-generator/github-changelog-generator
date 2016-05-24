@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 module GitHubChangelogGenerator
   class Generator
+    MAX_THREAD_NUMBER = 4
+
     # Fetch event for issues and pull requests
     # @return [Array] array of fetched issues
     def fetch_events_for_issues_and_pr
@@ -35,8 +37,7 @@ module GitHubChangelogGenerator
     def detect_actual_closed_dates(issues)
       print "Fetching closed dates for issues...\r" if @options[:verbose]
 
-      max_thread_number = 50
-      issues.each_slice(max_thread_number) do |issues_slice|
+      issues.each_slice(MAX_THREAD_NUMBER) do |issues_slice|
         threads = []
         issues_slice.each do |issue|
           threads << Thread.new { find_closed_date_by_commit(issue) }
