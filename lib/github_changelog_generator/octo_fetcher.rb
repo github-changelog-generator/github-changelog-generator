@@ -7,7 +7,7 @@ module GitHubChangelogGenerator
 
   class OctoFetcher
     PER_PAGE_NUMBER   = 100
-    MAX_THREAD_NUMBER = 4
+    MAX_THREAD_NUMBER = 1
     CHANGELOG_GITHUB_TOKEN = "CHANGELOG_GITHUB_TOKEN"
     GH_RATE_LIMIT_EXCEEDED_MSG = "Warning: Can't finish operation: GitHub API rate limit exceeded, change log may be " \
     "missing some issues. You can limit the number of issues fetched using the `--max-issues NUM` argument."
