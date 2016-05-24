@@ -161,6 +161,15 @@ module GitHubChangelogGenerator
         opts.on("--release-branch [RELEASE-BRANCH]", "Limit pull requests to the release branch, such as master or release") do |release_branch|
           options[:release_branch] = release_branch
         end
+        opts.on("--[no-]http-cache", "Use HTTP Cache to cache Github API requests (useful for large repos) Default is true.") do |http_cache|
+          options[:http_cache] = http_cache
+        end
+        opts.on("--cache-file [CACHE-FILE]", "Filename to use for cache. Default is /tmp/github-changelog-http-cache") do |cache_file|
+          options[:cache_file] = cache_file
+        end
+        opts.on("--cache-log [CACHE-LOG]", "Filename to use for cache log. Default is /tmp/github-changelog-logger.log") do |cache_log|
+          options[:cache_log] = cache_log
+        end
         opts.on("--[no-]verbose", "Run verbosely. Default is true") do |v|
           options[:verbose] = v
         end
@@ -204,7 +213,10 @@ module GitHubChangelogGenerator
         issue_prefix: "**Closed issues:**",
         bug_prefix: "**Fixed bugs:**",
         enhancement_prefix: "**Implemented enhancements:**",
-        git_remote: "origin"
+        git_remote: "origin",
+        http_cache: true,
+        cache_file: '/tmp/github-changelog-http-cache',
+        cache_log: '/tmp/github-changelog-logger.log',
       }
     end
 
