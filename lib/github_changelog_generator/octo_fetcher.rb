@@ -20,6 +20,12 @@ module GitHubChangelogGenerator
       @project      = @options[:project]
       # Only issues updated at or after this time are returned. This is a timestamp in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ.
       @since        = @options[:since] # eg. Time.parse("2016-01-01 10:00:00").iso8601
+      # Use ActiveSupport::Cache::FileStore to cache http requests
+      @http_cache   = @options[:http_cache]
+      @cache_file   = @options.fetch(:cache_file, '/tmp/github-changelog-http-cache') if @http_cache
+      @cache_log    = @options.fetch(:cache_log, '/tmp/github-changelog-logger.log') if @http_cache
+      init_cache if @http_cache
+
       @github_token = fetch_github_token
 
       @request_options               = { :per_page => PER_PAGE_NUMBER }
@@ -27,16 +33,16 @@ module GitHubChangelogGenerator
       @github_options[:access_token] = @github_token unless @github_token.nil?
       @github_options[:api_endpoint] = @options[:github_endpoint] unless @options[:github_endpoint].nil?
 
-      init_middleware
+
       client_type = @options[:github_endpoint].nil? ? Octokit::Client : Octokit::EnterpriseAdminClient
       @client     = client_type.new(@github_options)
     end
 
-    def init_middleware
+    def init_cache
       middleware_opts = {
         :serializer   => Marshal,
-        :store        => ActiveSupport::Cache::FileStore.new('/tmp/cache'),
-        :logger       => Logger.new('/tmp/github-changelog-logger.log'),
+        :store        => ActiveSupport::Cache::FileStore.new(@cache_file),
+        :logger       => Logger.new(@cache_log),
         :shared_cache => false
       }
       stack = Faraday::RackBuilder.new do |builder|
