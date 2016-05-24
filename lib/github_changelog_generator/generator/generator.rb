@@ -19,9 +19,9 @@ module GitHubChangelogGenerator
     #   generator = GitHubChangelogGenerator::Generator.new
     #   content = generator.compound_changelog
     def initialize(options = nil)
-      @options = options || {}
+      @options        = options || {}
       @tag_times_hash = {}
-      @fetcher = GitHubChangelogGenerator::OctoFetcher.new @options
+      @fetcher        = GitHubChangelogGenerator::OctoFetcher.new @options
     end
 
     def fetch_issues_and_pr
