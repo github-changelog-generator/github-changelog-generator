@@ -35,16 +35,15 @@ SimpleCov.start
 require "github_changelog_generator"
 require "github_changelog_generator/task"
 
-
 VCR.configure do |c|
   c.allow_http_connections_when_no_cassette = true
-  c.cassette_library_dir = 'spec/vcr'
+  c.cassette_library_dir = "spec/vcr"
   c.ignore_localhost = true
   c.default_cassette_options = {
-    :record => :new_episodes,
-    :serialize_with             => :json,
-    :preserve_exact_body_bytes  => true,
-    :decode_compressed_response => true,
+    record: :new_episodes,
+    serialize_with: :json,
+    preserve_exact_body_bytes: true,
+    decode_compressed_response: true
   }
 
   c.hook_into :webmock, :faraday
@@ -71,6 +70,4 @@ RSpec.configure do |config|
   Kernel.srand config.seed
 
   config.extend VCR::RSpec::Macros
-
 end
-

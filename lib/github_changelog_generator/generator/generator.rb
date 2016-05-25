@@ -1,4 +1,3 @@
-require_relative "../fetcher"
 require_relative "../octo_fetcher"
 require_relative "generator_generation"
 require_relative "generator_fetcher"
@@ -106,13 +105,13 @@ module GitHubChangelogGenerator
 
       issues.each do |dict|
         added = false
-        dict['labels'].each do |label|
-          if @options[:bug_labels].include? label['name']
+        dict["labels"].each do |label|
+          if @options[:bug_labels].include? label["name"]
             bugs_a.push dict
             added = true
             next
           end
-          if @options[:enhancement_labels].include? label['name']
+          if @options[:enhancement_labels].include? label["name"]
             enhancement_a.push dict
             added = true
             next
@@ -123,13 +122,13 @@ module GitHubChangelogGenerator
 
       added_pull_requests = []
       pull_requests.each do |pr|
-        pr['labels'].each do |label|
-          if @options[:bug_labels].include? label['name']
+        pr["labels"].each do |label|
+          if @options[:bug_labels].include? label["name"]
             bugs_a.push pr
             added_pull_requests.push pr
             next
           end
-          if @options[:enhancement_labels].include? label['name']
+          if @options[:enhancement_labels].include? label["name"]
             enhancement_a.push pr
             added_pull_requests.push pr
             next

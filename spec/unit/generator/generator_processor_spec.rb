@@ -1,10 +1,10 @@
 module GitHubChangelogGenerator
   describe Generator do
     context "#exclude_issues_by_labels" do
-      let(:label) { { 'name' => "BAD" } }
-      let(:issue) { { 'labels' => [label] } }
-      let(:good_label) { { 'name' => "GOOD" } }
-      let(:good_issue) { { 'labels' => [good_label] } }
+      let(:label) { { "name" => "BAD" } }
+      let(:issue) { { "labels" => [label] } }
+      let(:good_label) { { "name" => "GOOD" } }
+      let(:good_issue) { { "labels" => [good_label] } }
       let(:issues) { [issue, good_issue] }
       subject(:generator) { described_class.new(exclude_labels: %w(BAD BOO)) }
 
