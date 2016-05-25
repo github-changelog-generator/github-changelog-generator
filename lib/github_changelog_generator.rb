@@ -1,6 +1,5 @@
 #!/usr/bin/env ruby
 
-require "github_api"
 require "octokit"
 require 'faraday-http-cache'
 require "logger"
