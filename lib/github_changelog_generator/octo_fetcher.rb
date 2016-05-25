@@ -28,7 +28,7 @@ module GitHubChangelogGenerator
 
       @github_token = fetch_github_token
 
-      @request_options               = { :per_page => PER_PAGE_NUMBER }
+      @request_options               = { per_page: PER_PAGE_NUMBER }
       @github_options                = {}
       @github_options[:access_token] = @github_token unless @github_token.nil?
       @github_options[:api_endpoint] = @options[:github_endpoint] unless @options[:github_endpoint].nil?
@@ -63,7 +63,6 @@ module GitHubChangelogGenerator
       check_github_response { github_fetch_tags }
     end
 
-
     # Returns the number of pages for a API call
     #
     # @return [Integer] number of pages for this API call in total
@@ -75,13 +74,12 @@ module GitHubChangelogGenerator
 
       last_response = client.last_response
 
-      if last_pg = last_response.rels[:last]
-        parse_url_for_vars(last_pg.href)['page'].to_i
+      if (last_pg = last_response.rels[:last])
+        parse_url_for_vars(last_pg.href)["page"].to_i
       else
         1
       end
     end
-
 
     # Fill input array with tags
     #
@@ -89,9 +87,9 @@ module GitHubChangelogGenerator
     def github_fetch_tags
       tags        = []
       page_i      = 0
-      count_pages = calculate_pages(@client, 'tags', {})
+      count_pages = calculate_pages(@client, "tags", {})
 
-      iterate_pages(@client, 'tags', {}) do |new_tags|
+      iterate_pages(@client, "tags", {}) do |new_tags|
         page_i += PER_PAGE_NUMBER
         print_in_same_line("Fetching tags... #{page_i}/#{count_pages * PER_PAGE_NUMBER}")
         tags.concat(new_tags)
@@ -105,7 +103,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
         Helper.log.info "Found #{tags.count} tags"
       end
       # tags are a Sawyer::Resource. Convert to hash
-      tags = tags.map{|h| h.to_hash.stringify_keys_deep! }
+      tags = tags.map { |h| h.to_hash.stringify_keys_deep! }
       tags
     end
 
@@ -117,16 +115,16 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
       print "Fetching closed issues...\r" if @options[:verbose]
       issues = []
       options = {
-        :state  => "closed",
-        :filter => "all",
-        :labels => nil,
+        state: "closed",
+        filter: "all",
+        labels: nil
       }
       options[:since] = @since unless @since.nil?
 
       page_i      = 0
-      count_pages = calculate_pages(@client, 'issues', options)
+      count_pages = calculate_pages(@client, "issues", options)
 
-      iterate_pages(@client, 'issues', options) do |new_issues|
+      iterate_pages(@client, "issues", options) do |new_issues|
         page_i += PER_PAGE_NUMBER
         print_in_same_line("Fetching issues... #{page_i}/#{count_pages * PER_PAGE_NUMBER}")
         issues.concat(new_issues)
@@ -135,11 +133,11 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
       print_empty_line
       Helper.log.info "Received issues: #{issues.count}"
 
-      issues = issues.map{|h| h.to_hash.stringify_keys_deep! }
+      issues = issues.map { |h| h.to_hash.stringify_keys_deep! }
 
       # separate arrays of issues and pull requests:
       issues.partition do |x|
-        x['pull_request'].nil?
+        x["pull_request"].nil?
       end
     end
 
@@ -148,17 +146,17 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
     # @return [Array <Hash>] all pull requests
     def fetch_closed_pull_requests
       pull_requests = []
-      options = { :state => 'closed' }
+      options = { state: "closed" }
 
-      if !@options[:release_branch].nil?
+      unless @options[:release_branch].nil?
         options[:base] = @options[:release_branch]
       end
 
       page_i      = 0
-      count_pages = calculate_pages(@client, 'pull_requests', options)
+      count_pages = calculate_pages(@client, "pull_requests", options)
 
-      iterate_pages(@client, 'pull_requests', options) do |new_pr|
-        page_i     += PER_PAGE_NUMBER
+      iterate_pages(@client, "pull_requests", options) do |new_pr|
+        page_i += PER_PAGE_NUMBER
         log_string = "Fetching merged dates... #{page_i}/#{count_pages * PER_PAGE_NUMBER}"
         print_in_same_line(log_string)
         pull_requests.concat(new_pr)
@@ -166,7 +164,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
       print_empty_line
 
       Helper.log.info "Pull Request count: #{pull_requests.count}"
-      pull_requests = pull_requests.map{|h| h.to_hash.stringify_keys_deep! }
+      pull_requests = pull_requests.map { |h| h.to_hash.stringify_keys_deep! }
       pull_requests
     end
 
@@ -181,11 +179,11 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
       issues.each_slice(MAX_THREAD_NUMBER) do |issues_slice|
         issues_slice.each do |issue|
           threads << Thread.new do
-            issue['events'] = []
-            iterate_pages(@client, 'issue_events', issue['number'], {}) do |new_event|
-              issue['events'].concat(new_event)
+            issue["events"] = []
+            iterate_pages(@client, "issue_events", issue["number"], {}) do |new_event|
+              issue["events"].concat(new_event)
             end
-            issue['events'] = issue['events'].map{|h| h.to_hash.stringify_keys_deep! }
+            issue["events"] = issue["events"].map { |h| h.to_hash.stringify_keys_deep! }
             print_in_same_line("Fetching events for issues and PR: #{i + 1}/#{issues.count}")
             i += 1
           end
@@ -205,10 +203,10 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
     # @param [Hash] tag
     # @return [Time] time of specified tag
     def fetch_date_of_tag(tag)
-      commit_data = check_github_response { @client.commit(user_project, tag['commit']['sha']) }
+      commit_data = check_github_response { @client.commit(user_project, tag["commit"]["sha"]) }
       commit_data = commit_data.to_hash.stringify_keys_deep!
 
-      commit_data['commit']['committer']['date']
+      commit_data["commit"]["committer"]["date"]
     end
 
     # Fetch commit for specified event
@@ -216,8 +214,9 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
     # @return [Hash]
     def fetch_commit(event)
       check_github_response do
-        commit = @client.commit(user_project, event['commit_id'])
+        commit = @client.commit(user_project, event["commit_id"])
         commit = commit.to_hash.stringify_keys_deep!
+        commit
       end
     end
 
@@ -229,7 +228,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
     # @param [Octokit::Client] client
     # @param [String] method (eg. 'tags')
     # @return [Integer] total number of pages
-    def iterate_pages(client, method, *args, &block)
+    def iterate_pages(client, method, *args)
       if args.size == 1 && args.first.is_a?(Hash)
         request_options = args.delete_at(0)
       elsif args.size > 1 && args.last.is_a?(Hash)
@@ -247,8 +246,8 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
 
       yield last_response.data
 
-      while !(next_one = last_response.rels[:next]).nil?
-        pages +=1
+      until (next_one = last_response.rels[:next]).nil?
+        pages += 1
 
         last_response = check_github_response { next_one.get }
         yield last_response.data
@@ -307,12 +306,11 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
     # @param [String] uri eg. https://api.github.com/repositories/43914960/tags?page=37&foo=1
     # @return [Hash] of all GET variables. eg. { 'page' => 37, 'foo' => 1 }
     def parse_url_for_vars(uri)
-      URI(uri).query.split("&").inject({}) do |params, get_var|
-        k,v = get_var.split("=")
+      URI(uri).query.split("&").each_with_object({}) do |params, get_var|
+        k, v = get_var.split("=")
         params[k] = v
         params
       end
     end
-
   end
 end

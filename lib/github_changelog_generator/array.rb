@@ -1,9 +1,9 @@
 class Array
   def stringify_keys_deep!
     new_ar = []
-    self.each do |value|
+    each do |value|
       new_value = value
-      if value.is_a? Hash or value.is_a? Array
+      if value.is_a?(Hash) || value.is_a?(Array)
         new_value = value.stringify_keys_deep!
       end
       new_ar << new_value

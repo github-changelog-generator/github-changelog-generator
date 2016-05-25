@@ -80,8 +80,8 @@ module GitHubChangelogGenerator
       filtered_tags = all_tags
       tag = detect_since_tag
       if tag
-        if all_tags.map(&:name).include? tag
-          idx = all_tags.index { |t| t.name == tag }
+        if all_tags.map { |t| t["name"] }.include? tag
+          idx = all_tags.index { |t| t["name"] == tag }
           filtered_tags = if idx > 0
                             all_tags[0..idx - 1]
                           else
@@ -100,8 +100,8 @@ module GitHubChangelogGenerator
       filtered_tags = all_tags
       tag = @options[:due_tag]
       if tag
-        if all_tags.any? && all_tags.map(&:name).include?(tag)
-          idx = all_tags.index { |t| t.name == tag }
+        if all_tags.any? && all_tags.map { |t| t["name"] }.include?(tag)
+          idx = all_tags.index { |t| t["name"] == tag }
           last_index = all_tags.count - 1
           filtered_tags = if idx > 0 && idx < last_index
                             all_tags[idx + 1..last_index]
@@ -121,11 +121,11 @@ module GitHubChangelogGenerator
       filtered_tags = all_tags
       if @options[:between_tags]
         @options[:between_tags].each do |tag|
-          unless all_tags.map(&:name).include? tag
+          unless all_tags.map { |t| t["name"] }.include? tag
             Helper.log.warn "Warning: can't find tag #{tag}, specified with --between-tags option."
           end
         end
-        filtered_tags = all_tags.select { |tag| @options[:between_tags].include? tag.name }
+        filtered_tags = all_tags.select { |tag| @options[:between_tags].include? tag["name"] }
       end
       filtered_tags
     end
@@ -158,18 +158,18 @@ module GitHubChangelogGenerator
 
     def filter_tags_with_regex(all_tags, regex)
       warn_if_nonmatching_regex(all_tags)
-      all_tags.reject { |tag| regex =~ tag.name }
+      all_tags.reject { |tag| regex =~ tag["name"] }
     end
 
     def filter_exact_tags(all_tags)
       @options[:exclude_tags].each do |tag|
         warn_if_tag_not_found(all_tags, tag)
       end
-      all_tags.reject { |tag| @options[:exclude_tags].include? tag.name }
+      all_tags.reject { |tag| @options[:exclude_tags].include? tag["name"] }
     end
 
     def warn_if_nonmatching_regex(all_tags)
-      unless all_tags.map(&:name).any? { |t| @options[:exclude_tags] =~ t }
+      unless all_tags.map { |t| t["name"] }.any? { |t| @options[:exclude_tags] =~ t }
         Helper.log.warn "Warning: unable to reject any tag, using regex "\
                         "#{@options[:exclude_tags].inspect} in --exclude-tags "\
                         "option."
@@ -177,7 +177,7 @@ module GitHubChangelogGenerator
     end
 
     def warn_if_tag_not_found(all_tags, tag)
-      unless all_tags.map(&:name).include? tag
+      unless all_tags.map { |t| t["name"] }.include? tag
         Helper.log.warn "Warning: can't find tag #{tag}, specified with --exclude-tags option."
       end
     end

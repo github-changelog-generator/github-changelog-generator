@@ -8,7 +8,7 @@ module GitHubChangelogGenerator
       return issues if !@options[:exclude_labels] || @options[:exclude_labels].empty?
 
       issues.reject do |issue|
-        labels = issue['labels'].map{|l| l['name'] }
+        labels = issue["labels"].map { |l| l["name"] }
         (labels & @options[:exclude_labels]).any?
       end
     end
@@ -32,18 +32,18 @@ module GitHubChangelogGenerator
     # @return [Array] issues with milestone #tag_name
     def find_issues_to_add(all_issues, tag_name)
       all_issues.select do |issue|
-        if issue['milestone'].nil?
+        if issue["milestone"].nil?
           false
         else
           # check, that this milestone in tag list:
           milestone_is_tag = @filtered_tags.find do |tag|
-            tag['name'] == issue['milestone']['title']
+            tag["name"] == issue["milestone"]["title"]
           end
 
           if milestone_is_tag.nil?
             false
           else
-            issue['milestone']['title'] == tag_name
+            issue["milestone"]["title"] == tag_name
           end
         end
       end
@@ -53,11 +53,11 @@ module GitHubChangelogGenerator
     def remove_issues_in_milestones(filtered_issues)
       filtered_issues.select! do |issue|
         # leave issues without milestones
-        if issue['milestone'].nil?
+        if issue["milestone"].nil?
           true
         else
           # check, that this milestone in tag list:
-          @filtered_tags.find { |tag| tag['name'] == issue['milestone']['title'] }.nil?
+          @filtered_tags.find { |tag| tag["name"] == issue["milestone"]["title"] }.nil?
         end
       end
     end
@@ -68,7 +68,7 @@ module GitHubChangelogGenerator
     # @param [String] older_tag all issues before this tag date will be excluded. May be nil, if it's first tag
     # @param [String] newer_tag all issue after this tag will be excluded. May be nil for unreleased section
     # @return [Array] filtered issues
-    def delete_by_time(issues, hash_key = 'actual_date', older_tag = nil, newer_tag = nil)
+    def delete_by_time(issues, hash_key = "actual_date", older_tag = nil, newer_tag = nil)
       # in case if not tags specified - return unchanged array
       return issues if older_tag.nil? && newer_tag.nil?
 
@@ -123,7 +123,7 @@ module GitHubChangelogGenerator
     def filter_wo_labels(issues)
       if @options[:add_issues_wo_labels]
         issues_wo_labels = issues.select do |issue|
-          !issue['labels'].map{|l| l['name'] }.any?
+          !issue["labels"].map { |l| l["name"] }.any?
         end
         return issues_wo_labels
       end
@@ -135,7 +135,7 @@ module GitHubChangelogGenerator
         issues
       else
         issues.select do |issue|
-          labels = issue['labels'].map { |l| l['name'] } & @options[:include_labels]
+          labels = issue["labels"].map { |l| l["name"] } & @options[:include_labels]
           labels.any?
         end
       end
@@ -179,16 +179,16 @@ module GitHubChangelogGenerator
 
       pull_requests.each do |pr|
         fetched_pr = closed_pull_requests.find do |fpr|
-          fpr['number'] == pr['number']
+          fpr["number"] == pr["number"]
         end
         if fetched_pr
-          pr['merged_at'] = fetched_pr['merged_at']
+          pr["merged_at"] = fetched_pr["merged_at"]
           closed_pull_requests.delete(fetched_pr)
         end
       end
 
       pull_requests.select! do |pr|
-        !pr['merged_at'].nil?
+        !pr["merged_at"].nil?
       end
 
       pull_requests
