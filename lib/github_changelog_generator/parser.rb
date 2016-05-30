@@ -163,6 +163,22 @@ module GitHubChangelogGenerator
           puts opts
           exit
         end
+
+        opts.on("--slack_notifier", "Sends changelog to Slack. Default is false ") do |v|
+          options[:slack_notifier] = v
+        end
+
+        opts.on("--slack_webhook_url [URL]", "Slack Webhook URL.") do |v|
+          options[:slack_webhook_url] = v
+        end
+
+        opts.on("--slack_username [NAME]", "Slack username, default is changelogNotifier") do |v|
+          options[:slack_username] = v
+        end
+
+        opts.on("--slack_channel [NAME]", "Slack channel, default is #default") do |v|
+          options[:slack_channel] = v
+        end
       end
       parser
     end

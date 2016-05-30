@@ -2,6 +2,7 @@ source "https://rubygems.org"
 
 gemspec
 
+gem "slack-notifier"
 group :test do
   gem "rake"
   gem "bundler"

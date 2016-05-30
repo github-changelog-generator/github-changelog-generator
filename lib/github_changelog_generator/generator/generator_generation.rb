@@ -86,9 +86,9 @@ module GitHubChangelogGenerator
                       "#{project_url}/tree/#{newer_tag_link}"
                     end
       log += if newer_tag_name.equal? @options[:unreleased_label]
-               "## [#{newer_tag_name}](#{release_url})\n\n"
+               "*Release: * [#{newer_tag_name}](#{release_url})\n\n"
              else
-               "## [#{newer_tag_name}](#{release_url}) (#{time_string})\n"
+               "*Release: * [#{newer_tag_name}](#{release_url}) (#{time_string})\n"
              end
 
       if @options[:compare_link] && older_tag_link
@@ -169,14 +169,8 @@ module GitHubChangelogGenerator
     end
 
     def create_log_for_each_commit(commit)
-      "<a href='#{commit.author.url}' title='By: #{commit.commit.author.name}
-        (#{commit.commit.author.email})'>
-        <img src='#{commit.author.avatar_url}' align='left' height='36' width='36' />
-      </a>
-      [#{commit_message(commit.commit.message)}](#{commit.html_url})
-      (#{Time.parse(commit.commit.author.date)})<br />
-      *By:* *#{commit.commit.author.name}*,
-      *commit:* [#{commit.sha}](#{commit.html_url})\n\n"
+      "[#{commit_message(commit.commit.message)}](#{commit.html_url})(#{Time.parse(commit.commit.author.date)}) \n
+      *By:* [#{commit.commit.author.name}](#{commit.author.url}), *commit:* [#{commit.sha}](#{commit.html_url})\n\n"
     end
 
     def commit_message(message)
