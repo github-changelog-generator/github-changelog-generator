@@ -247,6 +247,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
       rescue Octokit::Forbidden => e
         Helper.log.warn e.message.red
         Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
+        Helper.log.warn @client.rate_limit
       end
       value
     end
@@ -285,8 +286,8 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
     # @param [String] uri eg. https://api.github.com/repositories/43914960/tags?page=37&foo=1
     # @return [Hash] of all GET variables. eg. { 'page' => 37, 'foo' => 1 }
     def parse_url_for_vars(uri)
-      URI(uri).query.split("&").inject({}) do |params, get_var|
-        k,v = get_var.split("=")
+      URI(uri).query.split("&").each_with_object({}) do |get_var, params|
+        k, v = get_var.split("=")
         params[k] = v
         params
       end
