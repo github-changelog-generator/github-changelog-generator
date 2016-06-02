@@ -6,9 +6,10 @@ module GitHubChangelogGenerator
       detect_due_tag
 
       all_tags = @fetcher.get_all_tags
-      fetch_tags_dates(all_tags)       # Creates a Hash @tag_times_hash
-      sorted_tags = sort_tags_by_date(all_tags)
-      @filtered_tags = get_filtered_tags(sorted_tags)
+      fetch_tags_dates(all_tags) # Creates a Hash @tag_times_hash
+      sorted_tags          = sort_tags_by_date(all_tags)
+      @filtered_tags       = get_filtered_tags(sorted_tags)
+
       @tag_section_mapping = build_tag_section_mapping(@filtered_tags, all_tags)
 
       @filtered_tags

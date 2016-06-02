@@ -137,7 +137,7 @@ module GitHubChangelogGenerator
 
       log = generate_unreleased_section
 
-      @tag_section_mapping.each_pair do |tag_section, left_right_tags|
+      @tag_section_mapping.each_pair do |_tag_section, left_right_tags|
         older_tag, newer_tag = left_right_tags
         log += generate_log_between_tags(older_tag, newer_tag)
       end
