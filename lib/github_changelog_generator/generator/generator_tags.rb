@@ -2,11 +2,41 @@ module GitHubChangelogGenerator
   class Generator
     # fetch, filter tags, fetch dates and sort them in time order
     def fetch_and_filter_tags
-      @filtered_tags = get_filtered_tags(@fetcher.get_all_tags)
-      fetch_tags_dates
+      detect_since_tag
+      detect_due_tag
+
+      all_tags = @fetcher.get_all_tags
+      fetch_tags_dates(all_tags)       # Creates a Hash @tag_times_hash
+
+      sorted_tags = sort_tags_by_date(all_tags)
+      @filtered_tags = get_filtered_tags(sorted_tags)
+
+      puts "FILTERED TAGS: "
+      puts @filtered_tags.inspect
+
+      @tag_section_mapping = build_tag_section_mapping(@filtered_tags, all_tags)
+
+      puts "TAG SECTION MAPPING"
+      puts @tag_section_mapping.inspect
+
+      @filtered_tags
     end
 
-    # Sort all tags by date
+    # @param [Array] filtered_tags are the tags that need a subsection output
+    # @param [Array] all_tags is the list of all tags ordered from newest -> oldest
+    # @return [Hash] key is the tag to output, value is an array of [Left Tag, Right Tag]
+    # PRs to include in this section will be >= [Left Tag Date] and <= [Right Tag Date]
+    def build_tag_section_mapping(filtered_tags, all_tags)
+      tag_mapping = {}
+      filtered_tags.each do |tag|
+        older_tag_idx = all_tags.index(tag) + 1
+        older_tag = all_tags[older_tag_idx]
+        tag_mapping[tag] = [older_tag, tag]
+      end
+      tag_mapping
+    end
+
+    # Sort all tags by date, newest to oldest
     def sort_tags_by_date(tags)
       puts "Sorting tags..." if @options[:verbose]
       tags.sort_by! do |x|
@@ -57,6 +87,10 @@ module GitHubChangelogGenerator
       @since_tag ||= @options.fetch(:since_tag) { version_of_first_item }
     end
 
+    def detect_due_tag
+      @due_tag ||= @options.fetch(:due_tag, nil)
+    end
+
     def version_of_first_item
       return unless File.file?(@options[:base].to_s)
 
@@ -69,6 +103,7 @@ module GitHubChangelogGenerator
     # @return [Array]
     def get_filtered_tags(all_tags)
       filtered_tags = filter_since_tag(all_tags)
+      filtered_tags = filter_due_tag(filtered_tags)
       filtered_tags = filter_between_tags(filtered_tags)
       filter_excluded_tags(filtered_tags)
     end
@@ -97,13 +132,13 @@ module GitHubChangelogGenerator
     # @return [Array] filtered tags according :due_tag option
     def filter_due_tag(all_tags)
       filtered_tags = all_tags
-      tag = @options[:due_tag]
+      tag = detect_due_tag
       if tag
         if (all_tags.count > 0) && (all_tags.map(&:name).include? tag)
           idx = all_tags.index { |t| t.name == tag }
-          last_index = all_tags.count - 1
-          filtered_tags = if idx > 0 && idx < last_index
-                            all_tags[idx + 1..last_index]
+
+          filtered_tags = if idx > 0
+                            all_tags[(idx + 1)..-1]
                           else
                             []
                           end
@@ -118,9 +153,11 @@ module GitHubChangelogGenerator
     # @return [Array] filtered tags according :between_tags option
     def filter_between_tags(all_tags)
       filtered_tags = all_tags
+      tag_names     = filtered_tags.map(&:name)
+
       if @options[:between_tags]
         @options[:between_tags].each do |tag|
-          unless all_tags.map(&:name).include? tag
+          unless tag_names.include? tag
             Helper.log.warn "Warning: can't find tag #{tag}, specified with --between-tags option."
           end
         end

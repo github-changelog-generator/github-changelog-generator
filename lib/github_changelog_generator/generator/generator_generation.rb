@@ -5,7 +5,6 @@ module GitHubChangelogGenerator
     # @return [String] Generated change log file
     def compound_changelog
       fetch_and_filter_tags
-      sort_tags_by_date(@filtered_tags)
       fetch_issues_and_pr
 
       log = ""
@@ -138,12 +137,16 @@ module GitHubChangelogGenerator
 
       log = generate_unreleased_section
 
-      (1...filtered_tags.size).each do |index|
-        log += generate_log_between_tags(filtered_tags[index], filtered_tags[index - 1])
+      @tag_section_mapping.each_pair do |tag_section, left_right_tags|
+        older_tag, newer_tag = left_right_tags
+        log += generate_log_between_tags(older_tag, newer_tag)
       end
-      if @filtered_tags.count != 0
-        log += generate_log_between_tags(nil, filtered_tags.last)
-      end
+      # (1...filtered_tags.size).each do |index|
+      #   log += generate_log_between_tags(filtered_tags[index], filtered_tags[index - 1])
+      # end
+      # if @filtered_tags.count != 0
+      #   log += generate_log_between_tags(nil, filtered_tags.last)
+      # end
 
       log
     end
