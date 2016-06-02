@@ -141,12 +141,6 @@ module GitHubChangelogGenerator
         older_tag, newer_tag = left_right_tags
         log += generate_log_between_tags(older_tag, newer_tag)
       end
-      # (1...filtered_tags.size).each do |index|
-      #   log += generate_log_between_tags(filtered_tags[index], filtered_tags[index - 1])
-      # end
-      # if @filtered_tags.count != 0
-      #   log += generate_log_between_tags(nil, filtered_tags.last)
-      # end
 
       log
     end
