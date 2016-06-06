@@ -71,7 +71,7 @@ module GitHubChangelogGenerator
       response.each_page do |page|
         page_i += PER_PAGE_NUMBER
         print_in_same_line("Fetching tags... #{page_i}/#{count_pages * PER_PAGE_NUMBER}")
-        tags.concat(page)
+        tags.concat(page) unless page.nil?
       end
       print_empty_line
 
