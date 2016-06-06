@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require "github_api"
+require "octokit"
 require "json"
 require "colorize"
 require "benchmark"
@@ -11,6 +12,8 @@ require_relative "github_changelog_generator/parser_file"
 require_relative "github_changelog_generator/generator/generator"
 require_relative "github_changelog_generator/version"
 require_relative "github_changelog_generator/reader"
+require_relative "github_changelog_generator/hash"
+require_relative "github_changelog_generator/array"
 
 # The main module, where placed all classes (now, at least)
 module GitHubChangelogGenerator

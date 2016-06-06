@@ -1,0 +1,76 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.github.com/repos/skywinder/changelog_test/git/commits/decfe840d1a1b86e0c28700de5362d3365a29555
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.github.v3+json,application/vnd.github.beta+json;q=0.5,application/json;q=0.1
+      Accept-Charset:
+      - utf-8
+      User-Agent:
+      - Github API Ruby Gem 0.13.1
+  response:
+    status:
+      code: 200
+      message: 
+    headers:
+      server:
+      - GitHub.com
+      date:
+      - Thu, 19 May 2016 19:00:27 GMT
+      content-type:
+      - application/json; charset=utf-8
+      transfer-encoding:
+      - chunked
+      connection:
+      - close
+      status:
+      - 200 OK
+      x-ratelimit-limit:
+      - '60'
+      x-ratelimit-remaining:
+      - '43'
+      x-ratelimit-reset:
+      - '1463684440'
+      cache-control:
+      - public, max-age=60, s-maxage=60
+      vary:
+      - Accept, Accept-Encoding
+      etag:
+      - W/"391047306d50dcb964a83bc94e45c33d"
+      last-modified:
+      - Thu, 16 Jul 2015 12:11:01 GMT
+      x-github-media-type:
+      - github.v3; format=json
+      access-control-expose-headers:
+      - ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset,
+        X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
+      access-control-allow-origin:
+      - "*"
+      content-security-policy:
+      - default-src 'none'
+      strict-transport-security:
+      - max-age=31536000; includeSubdomains; preload
+      x-content-type-options:
+      - nosniff
+      x-frame-options:
+      - deny
+      x-xss-protection:
+      - 1; mode=block
+      x-served-by:
+      - ef96c2e493b28ffea49b891b085ed2dd
+      x-github-request-id:
+      - 6C2F0F69:7F90:A1B77F1:573E0D4B
+    body:
+      encoding: ASCII-8BIT
+      string: '{"sha":"decfe840d1a1b86e0c28700de5362d3365a29555","url":"https://api.github.com/repos/skywinder/changelog_test/git/commits/decfe840d1a1b86e0c28700de5362d3365a29555","html_url":"https://github.com/skywinder/changelog_test/commit/decfe840d1a1b86e0c28700de5362d3365a29555","author":{"name":"Petr
+        Korolev","email":"sky4winder@gmail.com","date":"2015-07-16T12:11:01Z"},"committer":{"name":"Petr
+        Korolev","email":"sky4winder@gmail.com","date":"2015-07-16T12:11:01Z"},"tree":{"sha":"0699c15258a7c2b2e157051fe19851d4f705cac8","url":"https://api.github.com/repos/skywinder/changelog_test/git/trees/0699c15258a7c2b2e157051fe19851d4f705cac8"},"message":"fix
+        #14","parents":[{"sha":"7ec095e5e3caceacedabf44d0b9b10da17c92e51","url":"https://api.github.com/repos/skywinder/changelog_test/git/commits/7ec095e5e3caceacedabf44d0b9b10da17c92e51","html_url":"https://github.com/skywinder/changelog_test/commit/7ec095e5e3caceacedabf44d0b9b10da17c92e51"}]}'
+    http_version: 
+  recorded_at: Thu, 19 May 2016 19:00:30 GMT
+recorded_with: VCR 3.0.1

@@ -161,7 +161,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
       print_in_same_line("                                                                       ")
     end
 
-    # Fetch event for all issues and add them to :events
+    # Fetch event for all issues and add them to events
     # @param [Array] issues
     # @return [Void]
     def fetch_events_async(issues)
@@ -175,9 +175,9 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
               response = @github.issues.events.list user: @options[:user],
                                                     repo: @options[:project],
                                                     issue_number: issue["number"]
-              issue[:events] = []
+              issue['events'] = []
               response.each_page do |page|
-                issue[:events].concat(page)
+                issue['events'].concat(page)
               end
             rescue
               Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
@@ -215,7 +215,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
     # Fetch commit for specified event
     # @return [Hash]
     def fetch_commit(event)
-      @github.git_data.commits.get @options[:user], @options[:project], event[:commit_id]
+      @github.git_data.commits.get @options[:user], @options[:project], event['commit_id']
     end
   end
 end

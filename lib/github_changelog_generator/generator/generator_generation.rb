@@ -118,8 +118,9 @@ module GitHubChangelogGenerator
     #
     # @return [Array] filtered issues and pull requests
     def filter_issues_for_tags(newer_tag, older_tag)
-      filtered_pull_requests = delete_by_time(@pull_requests, :actual_date, older_tag, newer_tag)
-      filtered_issues = delete_by_time(@issues, :actual_date, older_tag, newer_tag)
+
+      filtered_pull_requests = delete_by_time(@pull_requests, 'actual_date', older_tag, newer_tag)
+      filtered_issues        = delete_by_time(@issues, 'actual_date', older_tag, newer_tag)
 
       newer_tag_name = newer_tag.nil? ? nil : newer_tag["name"]
 
@@ -165,16 +166,16 @@ module GitHubChangelogGenerator
     # @param [Hash] issue Fetched issue from GitHub
     # @return [String] Markdown-formatted single issue
     def get_string_for_issue(issue)
-      encapsulated_title = encapsulate_string issue[:title]
+      encapsulated_title = encapsulate_string issue['title']
 
-      title_with_number = "#{encapsulated_title} [\\##{issue[:number]}](#{issue.html_url})"
+      title_with_number = "#{encapsulated_title} [\\##{issue['number']}](#{issue['html_url']})"
 
-      unless issue.pull_request.nil?
+      unless issue['pull_request'].nil?
         if @options[:author]
-          title_with_number += if issue.user.nil?
+          title_with_number += if issue['user'].nil?
                                  " ({Null user})"
                                else
-                                 " ([#{issue.user.login}](#{issue.user.html_url}))"
+                                 " ([#{issue['user']['login']}](#{issue['user']['html_url']}))"
                                end
         end
       end
