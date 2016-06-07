@@ -64,7 +64,7 @@ describe GitHubChangelogGenerator::Generator do
     context "with excluded and between tags" do
       let(:generator) { GitHubChangelogGenerator::Generator.new(between_tags: %w(1 2 3), exclude_tags: %w(2)) }
       it { is_expected.to be_a Array }
-      it { is_expected.to match_array(tags_mash_from_strings(%w(1 3))) }
+      it { is_expected.to match_array(tags_mash_from_strings(%w(1 2 3))) }
     end
   end
 
