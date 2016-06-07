@@ -5,12 +5,14 @@ module GitHubChangelogGenerator
       detect_since_tag
       detect_due_tag
 
-      all_tags = @fetcher.get_all_tags
-      fetch_tags_dates(all_tags) # Creates a Hash @tag_times_hash
-      sorted_tags          = sort_tags_by_date(all_tags)
-      @filtered_tags       = get_filtered_tags(sorted_tags)
+      all_tags      = @fetcher.get_all_tags
+      included_tags = filter_excluded_tags(all_tags)
 
-      @tag_section_mapping = build_tag_section_mapping(@filtered_tags, all_tags)
+      fetch_tags_dates(all_tags) # Creates a Hash @tag_times_hash
+      sorted_tags          = sort_tags_by_date(included_tags)
+      @filtered_tags       = get_filtered_tags(included_tags)
+
+      @tag_section_mapping = build_tag_section_mapping(@filtered_tags, sorted_tags)
 
       @filtered_tags
     end
@@ -97,8 +99,7 @@ module GitHubChangelogGenerator
     def get_filtered_tags(all_tags)
       filtered_tags = filter_since_tag(all_tags)
       filtered_tags = filter_due_tag(filtered_tags)
-      filtered_tags = filter_between_tags(filtered_tags)
-      filter_excluded_tags(filtered_tags)
+      filter_between_tags(filtered_tags)
     end
 
     # @param [Array] all_tags all tags
