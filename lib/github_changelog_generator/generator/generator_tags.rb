@@ -11,7 +11,7 @@ module GitHubChangelogGenerator
 
       fetch_tags_dates(all_tags) # Creates a Hash @tag_times_hash
       sorted_tags          = sort_tags_by_date(included_tags)
-      @filtered_tags       = get_filtered_tags(sorted_tags)
+      @filtered_tags       = get_filtered_tags(included_tags)
 
       @tag_section_mapping = build_tag_section_mapping(@filtered_tags, sorted_tags)
 
