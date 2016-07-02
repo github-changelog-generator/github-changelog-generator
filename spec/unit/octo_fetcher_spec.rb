@@ -59,8 +59,7 @@ describe GitHubChangelogGenerator::OctoFetcher do
   end
 
   describe "#github_fetch_tags" do
-    context "when wrong token provided" do
-      use_vcr_cassette
+    context "when wrong token provided", vcr: true do
 
       let(:options) do
         {
@@ -75,8 +74,7 @@ describe GitHubChangelogGenerator::OctoFetcher do
       end
     end
 
-    context "when API call is valid" do
-      use_vcr_cassette
+    context "when API call is valid", :vcr do
 
       it "should return tags" do
         expected_tags = [{ "name"        => "v0.0.3",
@@ -127,8 +125,7 @@ describe GitHubChangelogGenerator::OctoFetcher do
   end
 
   describe "#fetch_closed_issues_and_pr" do
-    context "when API call is valid" do
-      use_vcr_cassette
+  context "when API call is valid", :vcr do
 
       it "returns issues" do
         issues, pull_requests = fetcher.fetch_closed_issues_and_pr
@@ -138,6 +135,7 @@ describe GitHubChangelogGenerator::OctoFetcher do
 
       it "returns issue with proper key/values" do
         issues, _pull_requests = fetcher.fetch_closed_issues_and_pr
+
         expected_issue = { "url"            => "https://api.github.com/repos/skywinder/changelog_test/issues/14",
                            "repository_url" => "https://api.github.com/repos/skywinder/changelog_test",
                            "labels_url"     =>
@@ -181,6 +179,7 @@ describe GitHubChangelogGenerator::OctoFetcher do
                            "updated_at"     => "2015-07-16T12:21:42Z",
                            "closed_at"      => "2015-07-16T12:21:42Z",
                            "body"           => "" }
+
         # Convert times to Time
         expected_issue.each_pair do |k, v|
           expected_issue[k] = Time.parse(v) if v =~ /^2015-/
@@ -191,6 +190,7 @@ describe GitHubChangelogGenerator::OctoFetcher do
 
       it "returns pull request with proper key/values" do
         _issues, pull_requests = fetcher.fetch_closed_issues_and_pr
+
         expected_pr = { "url"            => "https://api.github.com/repos/skywinder/changelog_test/issues/21",
                         "repository_url" => "https://api.github.com/repos/skywinder/changelog_test",
                         "labels_url"     =>
@@ -240,6 +240,7 @@ describe GitHubChangelogGenerator::OctoFetcher do
                             "patch_url" => "https://github.com/skywinder/changelog_test/pull/21.patch" },
                         "body"           =>
                           "to test https://github.com/skywinder/github-changelog-generator/pull/305\r\nshould appear in change log with #20" }
+
         # Convert times to Time
         expected_pr.each_pair do |k, v|
           expected_pr[k] = Time.parse(v) if v =~ /^2016-01/
@@ -263,9 +264,7 @@ describe GitHubChangelogGenerator::OctoFetcher do
   end
 
   describe "#fetch_closed_pull_requests" do
-    context "when API call is valid" do
-      use_vcr_cassette
-
+    context "when API call is valid", :vcr do
       it "returns pull requests" do
         pull_requests = fetcher.fetch_closed_pull_requests
         expect(pull_requests.size).to eq(14)
@@ -275,15 +274,13 @@ describe GitHubChangelogGenerator::OctoFetcher do
         pull_requests = fetcher.fetch_closed_pull_requests
 
         pr = pull_requests.first
-        expect(pr.keys).to eq(%w(url id html_url diff_url patch_url issue_url number state locked title user body created_at updated_at closed_at merged_at merge_commit_sha assignee milestone commits_url review_comments_url review_comment_url comments_url statuses_url head base _links))
+        expect(pr.keys).to eq(%w(url id html_url diff_url patch_url issue_url number state locked title user body created_at updated_at closed_at merged_at merge_commit_sha assignee assignees milestone commits_url review_comments_url review_comment_url comments_url statuses_url head base _links))
       end
     end
   end
 
   describe "#fetch_events_async" do
-    context "when API call is valid" do
-      use_vcr_cassette
-
+    context "when API call is valid", :vcr do
       it "populates issues" do
         issues = [{ "url"            => "https://api.github.com/repos/skywinder/changelog_test/issues/14",
                     "repository_url" => "https://api.github.com/repos/skywinder/changelog_test",
@@ -410,8 +407,7 @@ describe GitHubChangelogGenerator::OctoFetcher do
   end
 
   describe "#fetch_date_of_tag" do
-    context "when API call is valid" do
-      use_vcr_cassette
+    context "when API call is valid", :vcr do
 
       it "returns date" do
         tag = { "name"        => "v0.0.3",
@@ -431,8 +427,7 @@ describe GitHubChangelogGenerator::OctoFetcher do
   end
 
   describe "#fetch_commit" do
-    context "when API call is valid" do
-      use_vcr_cassette
+    context "when API call is valid", :vcr do
 
       it "returns commit" do
         event = { "id"         => 357_462_189,

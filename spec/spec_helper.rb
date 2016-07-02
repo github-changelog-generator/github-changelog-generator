@@ -48,6 +48,7 @@ VCR.configure do |c|
     preserve_exact_body_bytes: true,
     decode_compressed_response: true
   }
+  c.configure_rspec_metadata!
 
   c.hook_into :webmock, :faraday
 end
@@ -71,6 +72,4 @@ RSpec.configure do |config|
   config.order = :random
 
   Kernel.srand config.seed
-
-  config.extend VCR::RSpec::Macros
 end
