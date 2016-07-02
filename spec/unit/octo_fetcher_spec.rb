@@ -59,7 +59,7 @@ describe GitHubChangelogGenerator::OctoFetcher do
   end
 
   describe "#github_fetch_tags" do
-    context "when wrong token provided", vcr: true do
+    context "when wrong token provided", :vcr do
 
       let(:options) do
         {
