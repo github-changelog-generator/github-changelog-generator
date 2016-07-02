@@ -275,8 +275,8 @@ module GitHubChangelogGenerator
     # https://github.com/skywinder/ChangelogMerger
     # ```
     GIT_REMOTE_PATTERNS = [
-      /.*(?:[:\/])((?:-|\w|\.)*)\/((?:-|\w|\.)*)(?:\.git).*/,
-      /.*\/((?:-|\w|\.)*)\/((?:-|\w|\.)*).*/
+      /.*(?:[:\/])(?<user>(?:-|\w|\.)*)\/(?<project>(?:-|\w|\.)*)(?:\.git).*/,
+      /.*\/(?<user>(?:-|\w|\.)*)\/(?<project>(?:-|\w|\.)*).*/
     ]
 
     # Returns GitHub username and project from git remote output
@@ -288,15 +288,13 @@ module GitHubChangelogGenerator
       user = nil
       project = nil
       GIT_REMOTE_PATTERNS.each do |git_remote_pattern|
-        matches = Regexp.new(git_remote_pattern).match(git_remote_output)
+        git_remote_pattern =~ git_remote_output
 
-        if matches && matches[1] && matches[2]
-          puts "Detected user:#{matches[1]}, project:#{matches[2]}"
-          user = matches[1]
-          project = matches[2]
+        if Regexp.last_match
+          user = Regexp.last_match(:user)
+          project = Regexp.last_match(:project)
+          break
         end
-
-        break if matches
       end
 
       [user, project]
