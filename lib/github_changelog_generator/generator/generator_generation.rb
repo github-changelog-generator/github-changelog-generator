@@ -179,7 +179,7 @@ module GitHubChangelogGenerator
       user = issue.user
       return "#{line} ({Null user})" unless user
 
-      if user.html_url.include?("github.com")
+      if @options[:usernames_as_github_logins]
         "#{line} (@#{user.login})"
       else
         "#{line} ([#{user.login}](#{user.html_url}))"
