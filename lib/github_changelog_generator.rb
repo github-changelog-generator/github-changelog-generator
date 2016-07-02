@@ -5,7 +5,9 @@ require "octokit"
 require 'faraday-http-cache'
 require "logger"
 require "active_support"
+
 require "json"
+require "multi_json"
 require "benchmark"
 
 require_relative "github_changelog_generator/helper"
