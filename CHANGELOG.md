@@ -1,5 +1,12 @@
 # Change Log
 
+## [1.13.0](https://github.com/skywinder/github-changelog-generator/tree/1.13.0) (2016-07-04)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.12.1...1.13.0)
+
+**Merged pull requests:**
+
+- Carry PR \#301: usernames\_as\_github\_logins [\#392](https://github.com/skywinder/github-changelog-generator/pull/392) ([olleolleolle](https://github.com/olleolleolle))
+
 ## [1.12.1](https://github.com/skywinder/github-changelog-generator/tree/1.12.1) (2016-05-09)
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.12.0...1.12.1)
 
@@ -508,10 +515,6 @@
 **Fixed bugs:**
 
 - Encapsulate \[ \> \* \_ \ \] signs in issues names [\#34](https://github.com/skywinder/github-changelog-generator/issues/34)
-
-**Merged pull requests:**
-
-- Add a Bitdeli Badge to README [\#36](https://github.com/skywinder/github-changelog-generator/pull/36) ([bitdeli-chef](https://github.com/bitdeli-chef))
 
 ## [1.2.1](https://github.com/skywinder/github-changelog-generator/tree/1.2.1) (2014-11-22)
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.2.0...1.2.1)
