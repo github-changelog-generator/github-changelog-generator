@@ -77,6 +77,11 @@ Because software tools are for people. If you don’t care, why are you contribu
     - `github_changelog_generator -u github_username -p github_project`
     - `github_changelog_generator  github_username/github_project`
 
+- If you are running it against a repository on a Github Enterprise install, you must specify *both* `--github-site` and `--github-api` command line options:
+
+		github_changelog_generator --github-site="https://github.yoursite.com" \
+                           --github-api="https://github.yoursite.com/api/v3/"
+
 This generates a changelog to the `CHANGELOG.md` file, with pretty markdown formatting.
 
 ### Params
