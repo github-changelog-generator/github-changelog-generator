@@ -138,6 +138,8 @@ we've provided a `rake` task library for your changelog generation.
 Just put something like this in your `Rakefile`:
 
 ```ruby
+require 'github_changelog_generator/task'
+
 GitHubChangelogGenerator::RakeTask.new :changelog do |config|
   config.since_tag = '0.1.14'
   config.future_release = '0.2.0'
