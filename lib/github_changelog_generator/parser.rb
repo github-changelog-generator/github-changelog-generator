@@ -248,7 +248,6 @@ module GitHubChangelogGenerator
       if arg0 && !arg1
         # this match should parse  strings such "https://github.com/skywinder/Github-Changelog-Generator" or
         # "skywinder/Github-Changelog-Generator" to user and name
-        puts arg0
         match = /(?:.+#{Regexp.escape(github_site)}\/)?(.+)\/(.+)/.match(arg0)
 
         begin
