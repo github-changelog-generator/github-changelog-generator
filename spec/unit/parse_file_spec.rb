@@ -48,7 +48,7 @@ describe GitHubChangelogGenerator::ParserFile do
                                           header: "=== Changelog ==="))
       end
 
-      context "turns exclude-labels into an Array", bug: '#327' do
+      context "turns exclude-labels into an Array", bug: "#327" do
         let(:file) do
           StringIO.new(<<EOF
 exclude-labels=73a91042-da6f-11e5-9335-1040f38d7f90,7adf83b4-da6f-11e5-ae18-1040f38d7f90
