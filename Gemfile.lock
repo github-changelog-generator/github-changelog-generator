@@ -37,7 +37,7 @@ GEM
       oauth2 (~> 1.0.0)
     hashie (3.4.4)
     iniparse (1.4.2)
-    json (2.0.1)
+    json (1.8.3)
     jwt (1.5.4)
     multi_json (1.12.1)
     multi_xml (0.5.5)
@@ -97,6 +97,7 @@ DEPENDENCIES
   codeclimate-test-reporter (~> 0.4)
   coveralls (~> 0.8)
   github_changelog_generator!
+  json (< 2.0)
   overcommit
   rake
   rspec (>= 3.2)
