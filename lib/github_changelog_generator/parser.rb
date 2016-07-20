@@ -23,7 +23,12 @@ module GitHubChangelogGenerator
       options
     end
 
-    # @param [Hash] options to display
+    # If options set to verbose, print the parsed options.
+    #
+    # The GitHub `:token` key is censored in the output.
+    #
+    # @param options [Hash] The options to display
+    # @option options [Boolean] :verbose If false this method does nothing
     def self.print_options(options)
       if options[:verbose]
         Helper.log.info "Performing task with options:"
@@ -170,7 +175,7 @@ module GitHubChangelogGenerator
       parser
     end
 
-    # just get default options
+    # @return [Hash] Default options
     def self.default_options
       {
         tag1: nil,
@@ -202,13 +207,14 @@ module GitHubChangelogGenerator
       }
     end
 
+    # If `:user` or `:project` not set in options, try setting them
     def self.user_and_project_from_git(options)
       if options[:user].nil? || options[:project].nil?
         detect_user_and_project(options, ARGV[0], ARGV[1])
       end
     end
 
-    # Detects user and project from git
+    # Sets `:user` and `:project` in `options` from CLI arguments or `git remote`
     def self.detect_user_and_project(options, arg0 = nil, arg1 = nil)
       options[:user], options[:project] = user_project_from_option(arg0, arg1, options[:github_site])
       return if options[:user] && options[:project]
@@ -222,16 +228,23 @@ module GitHubChangelogGenerator
       end
     end
 
-    # Try to find user and project name from git remote output
+    # Returns GitHub username and project from CLI arguments
     #
-    # @param [String] output of git remote command
-    # @return [Array] user and project
+    # @param arg0 [String] This parameter takes two forms: Either a full
+    #                      GitHub URL, or a 'username/projectname', or
+    #                      simply a GitHub username
+    # @param arg1 [String] If arg0 is given as a username,
+    #                      then arg1 can given as a projectname
+    # @param github_site [String] Domain name of GitHub site
+    #
+    # @return [Array, nil] user and project, or nil if unsuccessful
     def self.user_project_from_option(arg0, arg1, github_site)
       user = nil
       project = nil
       github_site ||= "github.com"
       if arg0 && !arg1
-        # this match should parse  strings such "https://github.com/skywinder/Github-Changelog-Generator" or "skywinder/Github-Changelog-Generator" to user and name
+        # this match should parse  strings such "https://github.com/skywinder/Github-Changelog-Generator" or
+        # "skywinder/Github-Changelog-Generator" to user and name
         puts arg0
         match = /(?:.+#{Regexp.escape(github_site)}\/)?(.+)\/(.+)/.match(arg0)
 
@@ -251,35 +264,40 @@ module GitHubChangelogGenerator
       [user, project]
     end
 
-    # Try to find user and project name from git remote output
+    # These patterns match these formats:
     #
-    # @param [String] output of git remote command
+    # ```
+    # origin	git@github.com:skywinder/Github-Changelog-Generator.git (fetch)
+    # git@github.com:skywinder/Github-Changelog-Generator.git
+    # ```
+    #
+    # and
+    #
+    # ```
+    # origin	https://github.com/skywinder/ChangelogMerger (fetch)
+    # https://github.com/skywinder/ChangelogMerger
+    # ```
+    GIT_REMOTE_PATTERNS = [
+      /.*(?:[:\/])(?<user>(?:-|\w|\.)*)\/(?<project>(?:-|\w|\.)*)(?:\.git).*/,
+      /.*\/(?<user>(?:-|\w|\.)*)\/(?<project>(?:-|\w|\.)*).*/
+    ]
+
+    # Returns GitHub username and project from git remote output
+    #
+    # @param git_remote_output [String] Output of git remote command
+    #
     # @return [Array] user and project
-    def self.user_project_from_remote(remote)
-      # try to find repo in format:
-      # origin	git@github.com:skywinder/Github-Changelog-Generator.git (fetch)
-      # git@github.com:skywinder/Github-Changelog-Generator.git
-      regex1 = /.*(?:[:\/])((?:-|\w|\.)*)\/((?:-|\w|\.)*)(?:\.git).*/
-
-      # try to find repo in format:
-      # origin	https://github.com/skywinder/ChangelogMerger (fetch)
-      # https://github.com/skywinder/ChangelogMerger
-      regex2 = /.*\/((?:-|\w|\.)*)\/((?:-|\w|\.)*).*/
-
-      remote_structures = [regex1, regex2]
-
+    def self.user_project_from_remote(git_remote_output)
       user = nil
       project = nil
-      remote_structures.each do |regex|
-        matches = Regexp.new(regex).match(remote)
+      GIT_REMOTE_PATTERNS.each do |git_remote_pattern|
+        git_remote_pattern =~ git_remote_output
 
-        if matches && matches[1] && matches[2]
-          puts "Detected user:#{matches[1]}, project:#{matches[2]}"
-          user = matches[1]
-          project = matches[2]
+        if Regexp.last_match
+          user = Regexp.last_match(:user)
+          project = Regexp.last_match(:project)
+          break
         end
-
-        break unless matches.nil?
       end
 
       [user, project]
