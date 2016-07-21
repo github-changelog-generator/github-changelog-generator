@@ -14,7 +14,7 @@ module GitHubChangelogGenerator
       parser = setup_parser(options)
       parser.parse!
 
-      user_and_project_from_git(options)
+      fetch_user_and_project(options)
 
       abort(parser.banner) unless options[:user] && options[:project]
 
@@ -208,14 +208,17 @@ module GitHubChangelogGenerator
     end
 
     # If `:user` or `:project` not set in options, try setting them
-    def self.user_and_project_from_git(options)
+    # Valid unnamed parameters:
+    # 1) in 1 param: repo_name/project
+    # 2) in 2 params: repo name project
+    def self.fetch_user_and_project(options)
       if options[:user].nil? || options[:project].nil?
-        detect_user_and_project(options, ARGV[0], ARGV[1])
+        user_and_project_from_git(options, ARGV[0], ARGV[1])
       end
     end
 
     # Sets `:user` and `:project` in `options` from CLI arguments or `git remote`
-    def self.detect_user_and_project(options, arg0 = nil, arg1 = nil)
+    def self.user_and_project_from_git(options, arg0 = nil, arg1 = nil)
       options[:user], options[:project] = user_project_from_option(arg0, arg1, options[:github_site])
       return if options[:user] && options[:project]
 
