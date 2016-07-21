@@ -56,5 +56,10 @@ describe GitHubChangelogGenerator::Parser do
       it { is_expected.to be_a(Array) }
       it { is_expected.to match_array([nil, nil]) }
     end
+    context "when all args is not nil" do
+      subject { GitHubChangelogGenerator::Parser.user_project_from_option("skywinder/ActionSheetPicker-3.0", "blah", "https://codeclimate.com") }
+      it { is_expected.to be_a(Array) }
+      it { is_expected.to match_array([nil, nil]) }
+    end
   end
 end
