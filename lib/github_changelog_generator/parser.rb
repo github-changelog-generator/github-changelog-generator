@@ -61,7 +61,7 @@ module GitHubChangelogGenerator
         opts.on("-b", "--base [NAME]", "Optional base file to append generated changes to.") do |last|
           options[:base] = last
         end
-        opts.on("--bugs-label [LABEL]", "Setup custom label for bug-fixes section. Default is \"**Fixed bugs:**" "") do |v|
+        opts.on("--bugs-label [LABEL]", "Setup custom label for bug-fixes section. Default is \"**Fixed bugs:**\"") do |v|
           options[:bug_prefix] = v
         end
         opts.on("--enhancement-label [LABEL]", "Setup custom label for enhancements section. Default is \"**Implemented enhancements:**\"") do |v|
