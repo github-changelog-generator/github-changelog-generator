@@ -1,5 +1,29 @@
 # Change Log
 
+## [1.13.1](https://github.com/skywinder/github-changelog-generator/tree/1.13.1) (2016-07-22)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.13.0...1.13.1)
+
+**Implemented enhancements:**
+
+- Don't constrain runtime deps. [\#400](https://github.com/skywinder/github-changelog-generator/pull/400) ([jkeiser](https://github.com/jkeiser))
+
+**Fixed bugs:**
+
+- `--user` flag should not be ignored [\#397](https://github.com/skywinder/github-changelog-generator/issues/397)
+- GHE not working with --github-site set to an enterprise site [\#395](https://github.com/skywinder/github-changelog-generator/issues/395)
+
+**Closed issues:**
+
+- Contributors Section [\#398](https://github.com/skywinder/github-changelog-generator/issues/398)
+
+**Merged pull requests:**
+
+- Ability to implicity set user and project from command line [\#401](https://github.com/skywinder/github-changelog-generator/pull/401) ([skywinder](https://github.com/skywinder))
+- Show how to use it with Rakefile [\#399](https://github.com/skywinder/github-changelog-generator/pull/399) ([edusantana](https://github.com/edusantana))
+- Adds documentation on using a GHE endpoint [\#396](https://github.com/skywinder/github-changelog-generator/pull/396) ([cormacmccarthy](https://github.com/cormacmccarthy))
+- Rake task usage: Added a missing option exclude\_tags\_regex [\#393](https://github.com/skywinder/github-changelog-generator/pull/393) ([perlun](https://github.com/perlun))
+- Parser: YARD docstrings and a rename, and RegExp named capture groups [\#391](https://github.com/skywinder/github-changelog-generator/pull/391) ([olleolleolle](https://github.com/olleolleolle))
+
 ## [1.13.0](https://github.com/skywinder/github-changelog-generator/tree/1.13.0) (2016-07-04)
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.12.1...1.13.0)
 
