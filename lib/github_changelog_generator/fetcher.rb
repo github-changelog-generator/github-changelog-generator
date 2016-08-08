@@ -52,10 +52,10 @@ module GitHubChangelogGenerator
       begin
         value = yield
       rescue Github::Error::Unauthorized => e
-        Helper.log.error e.body.red
+        Helper.log.warn e.error_messages.map { |m| m[:message] }.join(", ").red
         abort "Error: wrong GitHub token"
       rescue Github::Error::Forbidden => e
-        Helper.log.warn e.body.red
+        Helper.log.warn e.error_messages.map { |m| m[:message] }.join(", ").red
         Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
       end
       value
