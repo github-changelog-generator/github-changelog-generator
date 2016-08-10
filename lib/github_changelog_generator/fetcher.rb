@@ -7,6 +7,7 @@ module GitHubChangelogGenerator
 
   class Fetcher
     PER_PAGE_NUMBER = 30
+    MAX_SIMULTANEOUS_REQUESTS = 25
     CHANGELOG_GITHUB_TOKEN = "CHANGELOG_GITHUB_TOKEN"
     GH_RATE_LIMIT_EXCEEDED_MSG = "Warning: Can't finish operation: GitHub API rate limit exceeded, change log may be " \
     "missing some issues. You can limit the number of issues fetched using the `--max-issues NUM` argument."
@@ -166,9 +167,8 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
     # @return [Void]
     def fetch_events_async(issues)
       i = 0
-      max_thread_number = 50
       threads = []
-      issues.each_slice(max_thread_number) do |issues_slice|
+      issues.each_slice(MAX_SIMULTANEOUS_REQUESTS) do |issues_slice|
         issues_slice.each do |issue|
           threads << Thread.new do
             begin
