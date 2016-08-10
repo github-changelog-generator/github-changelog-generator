@@ -53,10 +53,10 @@ module GitHubChangelogGenerator
       begin
         value = yield
       rescue Github::Error::Unauthorized => e
-        Helper.log.warn e.error_messages.map { |m| m[:message] }.join(", ").red
+        Helper.log.error e.response_message.red
         abort "Error: wrong GitHub token"
       rescue Github::Error::Forbidden => e
-        Helper.log.warn e.error_messages.map { |m| m[:message] }.join(", ").red
+        Helper.log.warn e.response_message.red
         Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
       end
       value
@@ -109,7 +109,8 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
         print_empty_line
         Helper.log.info "Received issues: #{issues.count}"
 
-      rescue
+      rescue Github::Error::Forbidden => e
+        Helper.log.warn e.error_messages.map { |m| m[:message] }.join(", ").red
         Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
       end
 
@@ -143,7 +144,8 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
           pull_requests.concat(page)
         end
         print_empty_line
-      rescue
+      rescue Github::Error::Forbidden => e
+        Helper.log.warn e.error_messages.map { |m| m[:message] }.join(", ").red
         Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
       end
 
@@ -179,7 +181,8 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
               response.each_page do |page|
                 issue[:events].concat(page)
               end
-            rescue
+            rescue Github::Error::Forbidden => e
+              Helper.log.warn e.error_messages.map { |m| m[:message] }.join(", ").red
               Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
             end
             print_in_same_line("Fetching events for issues and PR: #{i + 1}/#{issues.count}")
@@ -205,7 +208,8 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
         commit_data = @github.git_data.commits.get @options[:user],
                                                    @options[:project],
                                                    tag["commit"]["sha"]
-      rescue
+      rescue Github::Error::Forbidden => e
+        Helper.log.warn e.error_messages.map { |m| m[:message] }.join(", ").red
         Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
       end
       time_string = commit_data["committer"]["date"]
