@@ -2,7 +2,7 @@
 
 require "github_api"
 require "json"
-require "colorize"
+require "rainbow/ext/string"
 require "benchmark"
 
 require_relative "github_changelog_generator/helper"

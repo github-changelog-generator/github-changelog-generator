@@ -39,10 +39,10 @@ module GitHubChangelogGenerator
           index2 = hash[tag2]
           log += generate_log_between_tags(all_tags[index1], all_tags[index2])
         else
-          raise ChangelogGeneratorError, "Can't find tag #{tag2} -> exit".red
+          raise ChangelogGeneratorError, "Can't find tag #{tag2} -> exit".color(:red)
         end
       else
-        raise ChangelogGeneratorError, "Can't find tag #{tag1} -> exit".red
+        raise ChangelogGeneratorError, "Can't find tag #{tag1} -> exit".color(:red)
       end
       log
     end

@@ -34,7 +34,7 @@ module GitHubChangelogGenerator
     def fetch_github_token
       env_var = @options[:token] ? @options[:token] : (ENV.fetch CHANGELOG_GITHUB_TOKEN, nil)
 
-      Helper.log.warn NO_TOKEN_PROVIDED.yellow unless env_var
+      Helper.log.warn NO_TOKEN_PROVIDED.color(:yellow) unless env_var
 
       env_var
     end
@@ -53,11 +53,11 @@ module GitHubChangelogGenerator
       begin
         value = yield
       rescue Github::Error::Unauthorized => e
-        Helper.log.error e.response_message.red
+        Helper.log.error e.response_message.color(:red)
         abort "Error: wrong GitHub token"
       rescue Github::Error::Forbidden => e
-        Helper.log.warn e.response_message.red
-        Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
+        Helper.log.warn e.response_message.color(:red)
+        Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG.color(:yellow)
       end
       value
     end
@@ -78,7 +78,7 @@ module GitHubChangelogGenerator
 
       if tags.count == 0
         Helper.log.warn "Warning: Can't find any tags in repo.\
-Make sure, that you push tags to remote repo via 'git push --tags'".yellow
+Make sure, that you push tags to remote repo via 'git push --tags'".color(:yellow)
       else
         Helper.log.info "Found #{tags.count} tags"
       end
@@ -110,8 +110,8 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
         Helper.log.info "Received issues: #{issues.count}"
 
       rescue Github::Error::Forbidden => e
-        Helper.log.warn e.error_messages.map { |m| m[:message] }.join(", ").red
-        Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
+        Helper.log.warn e.error_messages.map { |m| m[:message] }.join(", ").color(:red)
+        Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG.color(:yellow)
       end
 
       # separate arrays of issues and pull requests:
@@ -145,8 +145,8 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
         end
         print_empty_line
       rescue Github::Error::Forbidden => e
-        Helper.log.warn e.error_messages.map { |m| m[:message] }.join(", ").red
-        Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
+        Helper.log.warn e.error_messages.map { |m| m[:message] }.join(", ").color(:red)
+        Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG.color(:yellow)
       end
 
       Helper.log.info "Fetching merged dates: #{pull_requests.count}"
@@ -182,8 +182,8 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
                 issue[:events].concat(page)
               end
             rescue Github::Error::Forbidden => e
-              Helper.log.warn e.error_messages.map { |m| m[:message] }.join(", ").red
-              Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
+              Helper.log.warn e.error_messages.map { |m| m[:message] }.join(", ").color(:red)
+              Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG.color(:yellow)
             end
             print_in_same_line("Fetching events for issues and PR: #{i + 1}/#{issues.count}")
             i += 1
@@ -209,8 +209,8 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
                                                    @options[:project],
                                                    tag["commit"]["sha"]
       rescue Github::Error::Forbidden => e
-        Helper.log.warn e.error_messages.map { |m| m[:message] }.join(", ").red
-        Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
+        Helper.log.warn e.error_messages.map { |m| m[:message] }.join(", ").color(:red)
+        Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG.color(:yellow)
       end
       time_string = commit_data["committer"]["date"]
       Time.parse(time_string)

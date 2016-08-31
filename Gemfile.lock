@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     github_changelog_generator (1.13.1)
-      colorize (>= 0.7)
+      rainbow (>= 2.1)
       github_api (>= 0.12)
       rake (>= 10.0)
 
@@ -15,7 +15,6 @@ GEM
       ffi (~> 1.0, >= 1.0.11)
     codeclimate-test-reporter (0.6.0)
       simplecov (>= 0.7.1, < 1.0.0)
-    colorize (0.8.1)
     coveralls (0.8.14)
       json (>= 1.8, < 3)
       simplecov (~> 0.12.0)

@@ -19,7 +19,7 @@ module GitHubChangelogGenerator
     # @param [Hash] tag_name name of the tag
     # @return [Time] time of specified tag
     def get_time_of_tag(tag_name)
-      raise ChangelogGeneratorError, "tag_name is nil".red if tag_name.nil?
+      raise ChangelogGeneratorError, "tag_name is nil".color(:red) if tag_name.nil?
 
       name_of_tag = tag_name["name"]
       time_for_name = @tag_times_hash[name_of_tag]

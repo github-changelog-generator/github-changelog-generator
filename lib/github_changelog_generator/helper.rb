@@ -15,15 +15,15 @@ module GitHubChangelogGenerator
       string = "#{msg}\n"
 
       if severity == "DEBUG"
-        string = string.magenta
+        string = string.color(:magenta)
       elsif severity == "INFO"
-        string = string.white
+        string = string.color(:white)
       elsif severity == "WARN"
-        string = string.yellow
+        string = string.color(:yellow)
       elsif severity == "ERROR"
-        string = string.red
+        string = string.color(:red)
       elsif severity == "FATAL"
-        string = string.red.bold
+        string = string.color(:red).bright
       end
 
       string
