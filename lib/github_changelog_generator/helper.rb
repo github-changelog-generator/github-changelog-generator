@@ -1,5 +1,5 @@
 require "logger"
-require "rainbow/ext/string"
+require "rainbow"
 
 module GitHubChangelogGenerator
   module Helper
@@ -16,11 +16,11 @@ module GitHubChangelogGenerator
     @log.formatter = proc do |severity, _datetime, _progname, msg|
       string = "#{msg}\n"
       case severity
-      when "DEBUG" then string.color(:magenta)
-      when "INFO" then string.color(:white)
-      when "WARN" then string.color(:yellow)
-      when "ERROR" then string.color(:red)
-      when "FATAL" then string.color(:red).bright
+      when "DEBUG" then Rainbow(string).magenta
+      when "INFO" then Rainbow(string).white
+      when "WARN" then Rainbow(string).yellow
+      when "ERROR" then Rainbow(string).red
+      when "FATAL" then Rainbow(string).red.bright
       else string
       end
     end
