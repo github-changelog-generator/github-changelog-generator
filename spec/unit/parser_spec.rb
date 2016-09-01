@@ -63,9 +63,10 @@ describe GitHubChangelogGenerator::Parser do
     end
   end
   describe ".fetch_user_and_project" do
-    before :each do
-      ARGV = ["https://github.com/skywinder/github-changelog-generator"]
+    before do
+      stub_const("ARGV", ["https://github.com/skywinder/github-changelog-generator"])
     end
+
     context do
       let(:valid_user) { "initialized_user" }
       let(:options) { { user: valid_user } }
