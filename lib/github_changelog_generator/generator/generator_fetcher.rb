@@ -74,7 +74,7 @@ module GitHubChangelogGenerator
           commit = @fetcher.fetch_commit(event)
           issue[:actual_date] = commit[:author][:date]
         rescue
-          puts "Warning: Can't fetch commit #{event[:commit_id]}. It is probably referenced from another repo.".yellow
+          puts "Warning: Can't fetch commit #{event[:commit_id]}. It is probably referenced from another repo."
           issue[:actual_date] = issue[:closed_at]
         end
       end
