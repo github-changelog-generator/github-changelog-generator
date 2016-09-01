@@ -1,4 +1,6 @@
 require "logger"
+require "rainbow/ext/string"
+
 module GitHubChangelogGenerator
   module Helper
     # @return true if the currently running program is a unit test
@@ -13,20 +15,14 @@ module GitHubChangelogGenerator
              end
     @log.formatter = proc do |severity, _datetime, _progname, msg|
       string = "#{msg}\n"
-
-      if severity == "DEBUG"
-        string = string.color(:magenta)
-      elsif severity == "INFO"
-        string = string.color(:white)
-      elsif severity == "WARN"
-        string = string.color(:yellow)
-      elsif severity == "ERROR"
-        string = string.color(:red)
-      elsif severity == "FATAL"
-        string = string.color(:red).bright
+      case severity
+      when "DEBUG" then string.color(:magenta)
+      when "INFO" then string.color(:white)
+      when "WARN" then string.color(:yellow)
+      when "ERROR" then string.color(:red)
+      when "FATAL" then string.color(:red).bright
+      else string
       end
-
-      string
     end
 
     # Logging happens using this method
