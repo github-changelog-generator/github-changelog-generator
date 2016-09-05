@@ -8,6 +8,8 @@
 GitHub Changelog Generator ![GitHub Logo](../master/images/logo.jpg)
 ==================
 
+[![Join the chat at https://gitter.im/github-changelog-generator/chat](https://badges.gitter.im/github-changelog-generator/chat.svg)](https://gitter.im/github-changelog-generator/chat?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
   - [Installation](#installation)
   - [Output example](#output-example)
   - [Usage](#usage)
