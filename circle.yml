@@ -1,0 +1,8 @@
+notify:
+  webhooks:
+    # A list of hook hashes, containing the url field
+    # gitter hook
+    - url: https://webhooks.gitter.im/e/2d81eb1ae7695fdc82c4
+    - url: https://webhooks.gitter.im/e/3ec6a35fad7e9991058e
+
+
