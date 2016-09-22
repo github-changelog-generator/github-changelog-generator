@@ -14,7 +14,7 @@ end
 
 group :test do
   gem 'rack', '< 2', platform: [:mri_21, :mri_22]
-  gem 'rack', '>= 2', platform: :mri_23
+  gem 'rack', '>= 2', platform: :mri
 
   gem "coveralls", "~>0.8", require: false
   gem "simplecov", "~>0.10", require: false
