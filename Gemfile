@@ -13,7 +13,7 @@ group :development, :test do
 end
 
 group :test do
-  gem 'rack', '< 2', platform: :mri_2
+  gem 'rack', '< 2', platform: [:mri_21, :mri22]
   gem 'rack', '>= 2', platform: :mri_23
 
   gem "coveralls", "~>0.8", require: false
