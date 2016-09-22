@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 describe GitHubChangelogGenerator::Parser do
   describe ".user_project_from_remote" do
     context "when remote is type 1" do

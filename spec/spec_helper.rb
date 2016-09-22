@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #
 # Author:: Enrico Stahn <mail@enricostahn.com>
 #

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 VALID_TOKEN = "0123456789abcdef"
 INVALID_TOKEN = "0000000000000000"
 

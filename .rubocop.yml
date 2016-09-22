@@ -1,5 +1,10 @@
 inherit_from: .rubocop_todo.yml
 
+AllCops:
+  Exclude:
+    - 'vendor/**/*'
+    - 'gemfiles/**/*'
+
 Metrics/LineLength:
   Enabled: false
 

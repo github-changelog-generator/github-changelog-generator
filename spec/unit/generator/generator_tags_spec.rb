@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 describe GitHubChangelogGenerator::Generator do
   def tag_mash_with_name(tag)
     Hashie::Mash.new.tap { |mash_tag| mash_tag.name = tag }
