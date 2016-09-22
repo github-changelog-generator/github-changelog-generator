@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module GitHubChangelogGenerator
   class Generator
     # Fetch event for issues and pull requests

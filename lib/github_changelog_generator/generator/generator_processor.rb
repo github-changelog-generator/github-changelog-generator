@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module GitHubChangelogGenerator
   class Generator
     # delete all labels with labels from @options[:exclude_labels] array

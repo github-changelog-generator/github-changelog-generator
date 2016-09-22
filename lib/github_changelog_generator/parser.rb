@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 require "optparse"
 require "pp"
 require_relative "version"
