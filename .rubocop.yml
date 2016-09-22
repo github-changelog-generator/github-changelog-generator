@@ -1,6 +1,8 @@
 inherit_from: .rubocop_todo.yml
 
 AllCops:
+  DisplayCopNames: true
+  DisplayStyleGuide: true
   Exclude:
     - 'vendor/**/*'
     - 'gemfiles/**/*'
@@ -58,4 +60,10 @@ Style/RegexpLiteral:
 
 Style/MutableConstant:
     Enabled: false
-    
+
+# "Use idx.positive? instead of idx > 0."
+Style/NumericPredicate:
+  Enabled: false
+
+Style/SafeNavigation:
+  Enabled: false
