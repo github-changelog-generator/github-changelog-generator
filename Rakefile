@@ -36,4 +36,4 @@ task :copy_man_page_to_manpath do |_t|
 end
 
 task checks: [:rubocop, :rspec]
-task default: [:copy_man_page_to_manpath]
+task default: [:rubocop, :rspec]

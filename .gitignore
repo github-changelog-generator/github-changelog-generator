@@ -7,3 +7,4 @@ coverage/
 spec/*.lock
 doc
 .yardoc
+Gemfile.lock
