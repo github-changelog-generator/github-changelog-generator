@@ -131,11 +131,14 @@ module GitHubChangelogGenerator
     end
 
     def filter_by_include_labels(issues)
-      filtered_issues = @options[:include_labels].nil? ? issues : issues.select do |issue|
-        labels = issue.labels.map(&:name) & @options[:include_labels]
-        labels.any?
+      if @options[:include_labels].nil?
+        issues
+      else
+        issues.select do |issue|
+          labels = issue.labels.map(&:name) & @options[:include_labels]
+          labels.any?
+        end
       end
-      filtered_issues
     end
 
     # General filtered function
