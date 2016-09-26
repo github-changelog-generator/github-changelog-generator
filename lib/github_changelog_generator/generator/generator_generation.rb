@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module GitHubChangelogGenerator
   class Generator
     # Main function to start change log generation

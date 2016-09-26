@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module GitHubChangelogGenerator
   describe Generator do
     context "#exclude_issues_by_labels" do

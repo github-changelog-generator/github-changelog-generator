@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "rake"
 require "rake/tasklib"
 require "github_changelog_generator"

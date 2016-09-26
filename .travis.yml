@@ -1,23 +1,23 @@
+language: ruby
 cache:
   - bundler
-language: ruby
 before_install:
   - gem update --system
   - gem install bundler
-rvm:
-  - 2.1
-script: bundle exec rake checks
 matrix:
   include:
-    # Test install on clean system
-    - install: true
-      script:
-        - gem build github_changelog_generator
-        - gem install *.gem
-    - install: true
-      script:
-        - gem build github_changelog_generator
-        - bundle install --gemfile spec/install-gem-in-bundler.gemfile
+    - rvm: 2.2.2
+      install: true # This skips 'bundle install'
+      script: gem build github_changelog_generator && gem install *.gem
+    - rvm: 2.2.2
+      install: true # This skips 'bundle install'
+      script: gem build github_changelog_generator && bundle install
+      gemfile: spec/install-gem-in-bundler.gemfile
+    - rvm: 2.1
+      gemfile: gemfiles/Gemfile.with_rack16
+    - rvm: 2.3.1
+      gemfile: gemfiles/Gemfile.with_rack2
+
 notifications:
   email:
     recipients:
