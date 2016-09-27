@@ -44,13 +44,13 @@ module GitHubChangelogGenerator
     #
     # Memoize the date by tag name.
     #
-    # @param [Hash] tag_hash
+    # @param [Hash] tag_name
     #
     # @return [Time] time of specified tag
     def get_time_of_tag(tag_name)
       raise ChangelogGeneratorError, "tag_name is nil" if tag_name.nil?
 
-      name_of_tag = tag_hash.fetch("name")
+      name_of_tag = tag_name.fetch("name")
       time_for_tag_name = @tag_times_hash[name_of_tag]
       return time_for_tag_name if time_for_tag_name
 
