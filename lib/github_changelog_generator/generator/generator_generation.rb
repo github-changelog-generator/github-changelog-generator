@@ -178,9 +178,9 @@ module GitHubChangelogGenerator
       return "#{line} ({Null user})" unless user
 
       if @options[:usernames_as_github_logins]
-        "#{line} (@#{user["login"]})"
+        "#{line} (@#{user['login']})"
       else
-        "#{line} ([#{user["login"]}](#{user["html_url"]}))"
+        "#{line} ([#{user['login']}](#{user['html_url']}))"
       end
     end
   end

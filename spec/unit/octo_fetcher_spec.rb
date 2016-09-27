@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 VALID_TOKEN = "0123456789abcdef"
 INVALID_TOKEN = "0000000000000000"
 
@@ -60,7 +61,6 @@ describe GitHubChangelogGenerator::OctoFetcher do
 
   describe "#github_fetch_tags" do
     context "when wrong token provided", :vcr do
-
       let(:options) do
         {
           user: "skywinder",
@@ -75,7 +75,6 @@ describe GitHubChangelogGenerator::OctoFetcher do
     end
 
     context "when API call is valid", :vcr do
-
       it "should return tags" do
         expected_tags = [{ "name"        => "v0.0.3",
                            "zipball_url" =>
@@ -125,8 +124,7 @@ describe GitHubChangelogGenerator::OctoFetcher do
   end
 
   describe "#fetch_closed_issues_and_pr" do
-  context "when API call is valid", :vcr do
-
+    context "when API call is valid", :vcr do
       it "returns issues" do
         issues, pull_requests = fetcher.fetch_closed_issues_and_pr
         expect(issues.size).to eq(7)
@@ -173,7 +171,7 @@ describe GitHubChangelogGenerator::OctoFetcher do
                            "state"          => "closed",
                            "locked"         => false,
                            "assignee"       => nil,
-                           "assignees"       => [],
+                           "assignees" => [],
                            "milestone"      => nil,
                            "comments"       => 0,
                            "created_at"     => "2015-07-16T12:06:08Z",
@@ -229,7 +227,7 @@ describe GitHubChangelogGenerator::OctoFetcher do
                         "state"          => "closed",
                         "locked"         => false,
                         "assignee"       => nil,
-                        "assignees"       => [],
+                        "assignees" => [],
                         "milestone"      => nil,
                         "comments"       => 0,
                         "created_at"     => "2016-01-05T09:24:08Z",
@@ -322,7 +320,7 @@ describe GitHubChangelogGenerator::OctoFetcher do
                     "state"          => "closed",
                     "locked"         => false,
                     "assignee"       => nil,
-                    "assignees"       => [],
+                    "assignees" => [],
                     "milestone"      => nil,
                     "comments"       => 0,
                     "created_at"     => "2015-07-16T12:06:08Z",
@@ -411,7 +409,6 @@ describe GitHubChangelogGenerator::OctoFetcher do
 
   describe "#fetch_date_of_tag" do
     context "when API call is valid", :vcr do
-
       it "returns date" do
         tag = { "name"        => "v0.0.3",
                 "zipball_url" =>
@@ -431,7 +428,6 @@ describe GitHubChangelogGenerator::OctoFetcher do
 
   describe "#fetch_commit" do
     context "when API call is valid", :vcr do
-
       it "returns commit" do
         event = { "id"         => 357_462_189,
                   "url"        =>
@@ -481,8 +477,7 @@ describe GitHubChangelogGenerator::OctoFetcher do
                "https://api.github.com/repos/skywinder/changelog_test/commits/7ec095e5e3caceacedabf44d0b9b10da17c92e51",
               # OLD API: "https://api.github.com/repos/skywinder/changelog_test/git/commits/7ec095e5e3caceacedabf44d0b9b10da17c92e51",
               "html_url" =>
-               "https://github.com/skywinder/changelog_test/commit/7ec095e5e3caceacedabf44d0b9b10da17c92e51" }]
-          ]
+               "https://github.com/skywinder/changelog_test/commit/7ec095e5e3caceacedabf44d0b9b10da17c92e51" }]]
         ]
 
         expectations.each do |property, val|

@@ -215,8 +215,8 @@ module GitHubChangelogGenerator
         enhancement_prefix: "**Implemented enhancements:**",
         git_remote: "origin",
         http_cache: true,
-        cache_file: '/tmp/github-changelog-http-cache',
-        cache_log: '/tmp/github-changelog-logger.log',
+        cache_file: "/tmp/github-changelog-http-cache",
+        cache_log: "/tmp/github-changelog-logger.log"
       }
     end
 

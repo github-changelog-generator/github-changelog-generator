@@ -1,10 +1,10 @@
+# frozen_string_literal: true
 module GitHubChangelogGenerator
   # A Fetcher responsible for all requests to GitHub and all basic manipulation with related data
   # (such as filtering, validating, e.t.c)
   #
   # Example:
-  # fetcher = GitHubChangelogGenerator::OctoFetcher.new options
-
+  # fetcher = GitHubChangelogGenerator::OctoFetcher.new(options)
   class OctoFetcher
     PER_PAGE_NUMBER   = 100
     MAX_THREAD_NUMBER = 1
@@ -14,16 +14,21 @@ module GitHubChangelogGenerator
     NO_TOKEN_PROVIDED = "Warning: No token provided (-t option) and variable $CHANGELOG_GITHUB_TOKEN was not found. " \
     "This script can make only 50 requests to GitHub API per hour without token!"
 
-    def initialize(options = {})
+    # @param options [Hash] Options passed in
+    # @option options [String] :user GitHub username
+    # @option options [String] :project GitHub project
+    # @option options [String] :since Only issues updated at or after this time are returned. This is a timestamp in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ. eg. Time.parse("2016-01-01 10:00:00").iso8601
+    # @option options [Boolean] :http_cache Use ActiveSupport::Cache::FileStore to cache http requests
+    # @option options [Boolean] :cache_file If using http_cache, this is the cache file path
+    # @option options [Boolean] :cache_log If using http_cache, this is the cache log file path
+    def initialize(options = {}) # rubocop:disable Metrics/CyclomaticComplexity
       @options      = options || {}
       @user         = @options[:user]
       @project      = @options[:project]
-      # Only issues updated at or after this time are returned. This is a timestamp in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ.
-      @since        = @options[:since] # eg. Time.parse("2016-01-01 10:00:00").iso8601
-      # Use ActiveSupport::Cache::FileStore to cache http requests
+      @since        = @options[:since]
       @http_cache   = @options[:http_cache]
-      @cache_file   = @options.fetch(:cache_file, '/tmp/github-changelog-http-cache') if @http_cache
-      @cache_log    = @options.fetch(:cache_log, '/tmp/github-changelog-logger.log') if @http_cache
+      @cache_file   = @options.fetch(:cache_file, "/tmp/github-changelog-http-cache") if @http_cache
+      @cache_log    = @options.fetch(:cache_log, "/tmp/github-changelog-logger.log") if @http_cache
       init_cache if @http_cache
 
       @github_token = fetch_github_token
@@ -33,17 +38,16 @@ module GitHubChangelogGenerator
       @github_options[:access_token] = @github_token unless @github_token.nil?
       @github_options[:api_endpoint] = @options[:github_endpoint] unless @options[:github_endpoint].nil?
 
-
       client_type = @options[:github_endpoint].nil? ? Octokit::Client : Octokit::EnterpriseAdminClient
       @client     = client_type.new(@github_options)
     end
 
     def init_cache
       middleware_opts = {
-        :serializer   => Marshal,
-        :store        => ActiveSupport::Cache::FileStore.new(@cache_file),
-        :logger       => Logger.new(@cache_log),
-        :shared_cache => false
+        serializer: Marshal,
+        store: ActiveSupport::Cache::FileStore.new(@cache_file),
+        logger: Logger.new(@cache_log),
+        shared_cache: false
       }
       stack = Faraday::RackBuilder.new do |builder|
         builder.use Faraday::HttpCache, middleware_opts
@@ -98,7 +102,7 @@ module GitHubChangelogGenerator
 
       if tags.count == 0
         Helper.log.warn "Warning: Can't find any tags in repo.\
-Make sure, that you push tags to remote repo via 'git push --tags'".yellow
+Make sure, that you push tags to remote repo via 'git push --tags'"
       else
         Helper.log.info "Found #{tags.count} tags"
       end
@@ -264,11 +268,11 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
       begin
         value = yield
       rescue Octokit::Unauthorized => e
-        Helper.log.error e.message.red
+        Helper.log.error e.message
         abort "Error: wrong GitHub token"
       rescue Octokit::Forbidden => e
-        Helper.log.warn e.message.red
-        Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG.yellow
+        Helper.log.warn e.message
+        Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG
         Helper.log.warn @client.rate_limit
       end
       value
@@ -293,7 +297,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'".yellow
     def fetch_github_token
       env_var = @options[:token] ? @options[:token] : (ENV.fetch CHANGELOG_GITHUB_TOKEN, nil)
 
-      Helper.log.warn NO_TOKEN_PROVIDED.yellow unless env_var
+      Helper.log.warn NO_TOKEN_PROVIDED unless env_var
 
       env_var
     end

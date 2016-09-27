@@ -75,7 +75,7 @@ module GitHubChangelogGenerator
         begin
           commit = @fetcher.fetch_commit(event)
           issue["actual_date"] = commit["commit"]["author"]["date"]
-          
+
           # issue['actual_date'] = commit['author']['date']
         rescue
           puts "Warning: Can't fetch commit #{event['commit_id']}. It is probably referenced from another repo."

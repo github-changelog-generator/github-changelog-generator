@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Array
   def stringify_keys_deep!
     new_ar = []
