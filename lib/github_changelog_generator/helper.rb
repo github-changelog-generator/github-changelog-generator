@@ -9,6 +9,7 @@ module GitHubChangelogGenerator
       defined? SpecHelper
     end
 
+    # :nocov:
     @log ||= if test?
                Logger.new(nil) # don't show any logs when running tests
              else
@@ -25,6 +26,7 @@ module GitHubChangelogGenerator
       else string
       end
     end
+    # :nocov:
 
     # Logging happens using this method
     class << self
