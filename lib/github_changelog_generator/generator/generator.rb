@@ -18,18 +18,18 @@ module GitHubChangelogGenerator
     # Example:
     #   generator = GitHubChangelogGenerator::Generator.new
     #   content = generator.compound_changelog
-    def initialize(options = nil)
-      @options        = options || {}
+    def initialize(options = {})
+      @options        = options
       @tag_times_hash = {}
-      @fetcher        = GitHubChangelogGenerator::OctoFetcher.new @options
+      @fetcher        = GitHubChangelogGenerator::OctoFetcher.new(options)
     end
 
     def fetch_issues_and_pr
       issues, pull_requests = @fetcher.fetch_closed_issues_and_pr
 
-      @pull_requests = @options[:pulls] ? get_filtered_pull_requests(pull_requests) : []
+      @pull_requests = options[:pulls] ? get_filtered_pull_requests(pull_requests) : []
 
-      @issues = @options[:issues] ? get_filtered_issues(issues) : []
+      @issues = options[:issues] ? get_filtered_issues(issues) : []
 
       fetch_events_for_issues_and_pr
       detect_actual_closed_dates(@issues + @pull_requests)
@@ -61,18 +61,18 @@ module GitHubChangelogGenerator
       newer_tag_link, newer_tag_name, newer_tag_time = detect_link_tag_time(newer_tag)
 
       github_site = options[:github_site] || "https://github.com"
-      project_url = "#{github_site}/#{@options[:user]}/#{@options[:project]}"
+      project_url = "#{github_site}/#{options[:user]}/#{options[:project]}"
 
       log = generate_header(newer_tag_name, newer_tag_link, newer_tag_time, older_tag_name, project_url)
 
-      if @options[:issues]
+      if options[:issues]
         # Generate issues:
         log += issues_to_log(issues, pull_requests)
       end
 
-      if @options[:pulls]
+      if options[:pulls]
         # Generate pull requests:
-        log += generate_sub_section(pull_requests, @options[:merge_prefix])
+        log += generate_sub_section(pull_requests, options[:merge_prefix])
       end
 
       log
@@ -87,9 +87,9 @@ module GitHubChangelogGenerator
       log = ""
       bugs_a, enhancement_a, issues_a = parse_by_sections(issues, pull_requests)
 
-      log += generate_sub_section(enhancement_a, @options[:enhancement_prefix])
-      log += generate_sub_section(bugs_a, @options[:bug_prefix])
-      log += generate_sub_section(issues_a, @options[:issue_prefix])
+      log += generate_sub_section(enhancement_a, options[:enhancement_prefix])
+      log += generate_sub_section(bugs_a, options[:bug_prefix])
+      log += generate_sub_section(issues_a, options[:issue_prefix])
       log
     end
 
@@ -107,31 +107,31 @@ module GitHubChangelogGenerator
       issues.each do |dict|
         added = false
         dict["labels"].each do |label|
-          if @options[:bug_labels].include? label["name"]
-            bugs_a.push dict
+          if options[:bug_labels].include?(label["name"])
+            bugs_a.push(dict)
             added = true
             next
           end
-          if @options[:enhancement_labels].include? label["name"]
-            enhancement_a.push dict
+          if options[:enhancement_labels].include?(label["name"])
+            enhancement_a.push(dict)
             added = true
             next
           end
         end
-        issues_a.push dict unless added
+        issues_a.push(dict) unless added
       end
 
       added_pull_requests = []
       pull_requests.each do |pr|
         pr["labels"].each do |label|
-          if @options[:bug_labels].include? label["name"]
-            bugs_a.push pr
-            added_pull_requests.push pr
+          if options[:bug_labels].include?(label["name"])
+            bugs_a.push(pr)
+            added_pull_requests.push(pr)
             next
           end
-          if @options[:enhancement_labels].include? label["name"]
-            enhancement_a.push pr
-            added_pull_requests.push pr
+          if options[:enhancement_labels].include?(label["name"])
+            enhancement_a.push(pr)
+            added_pull_requests.push(pr)
             next
           end
         end

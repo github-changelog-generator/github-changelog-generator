@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 module GitHubChangelogGenerator
   class Generator
-    # delete all labels with labels from @options[:exclude_labels] array
+    # delete all labels with labels from options[:exclude_labels] array
     # @param [Array] issues
     # @return [Array] filtered array
     def exclude_issues_by_labels(issues)
-      return issues if !@options[:exclude_labels] || @options[:exclude_labels].empty?
+      return issues if !options[:exclude_labels] || options[:exclude_labels].empty?
 
       issues.reject do |issue|
         labels = issue["labels"].map { |l| l["name"] }
-        (labels & @options[:exclude_labels]).any?
+        (labels & options[:exclude_labels]).any?
       end
     end
 
@@ -121,7 +121,7 @@ module GitHubChangelogGenerator
 
     # @return [Array] issues without labels or empty array if add_issues_wo_labels is false
     def filter_wo_labels(issues)
-      if @options[:add_issues_wo_labels]
+      if options[:add_issues_wo_labels]
         issues_wo_labels = issues.select do |issue|
           !issue["labels"].map { |l| l["name"] }.any?
         end
@@ -131,11 +131,11 @@ module GitHubChangelogGenerator
     end
 
     def filter_by_include_labels(issues)
-      if @options[:include_labels].nil?
+      if options[:include_labels].nil?
         issues
       else
         issues.select do |issue|
-          labels = issue["labels"].map { |l| l["name"] } & @options[:include_labels]
+          labels = issue["labels"].map { |l| l["name"] } & options[:include_labels]
           labels.any?
         end
       end
@@ -154,18 +154,18 @@ module GitHubChangelogGenerator
     # @return [Array] Filtered issues
     def get_filtered_issues(issues)
       issues = filter_array_by_labels(issues)
-      puts "Filtered issues: #{issues.count}" if @options[:verbose]
+      puts "Filtered issues: #{issues.count}" if options[:verbose]
       issues
     end
 
     # This method fetches missing params for PR and filter them by specified options
-    # It include add all PR's with labels from @options[:include_labels] array
+    # It include add all PR's with labels from options[:include_labels] array
     # And exclude all from :exclude_labels array.
     # @return [Array] filtered PR's
     def get_filtered_pull_requests(pull_requests)
       pull_requests = filter_array_by_labels(pull_requests)
       pull_requests = filter_merged_pull_requests(pull_requests)
-      puts "Filtered pull requests: #{pull_requests.count}" if @options[:verbose]
+      puts "Filtered pull requests: #{pull_requests.count}" if options[:verbose]
       pull_requests
     end
 
@@ -174,7 +174,7 @@ module GitHubChangelogGenerator
     # :merged_at - is a date, when issue PR was merged.
     # More correct to use merged date, rather than closed date.
     def filter_merged_pull_requests(pull_requests)
-      print "Fetching merged dates...\r" if @options[:verbose]
+      print "Fetching merged dates...\r" if options[:verbose]
       closed_pull_requests = @fetcher.fetch_closed_pull_requests
 
       pull_requests.each do |pr|
