@@ -222,5 +222,11 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     def fetch_commit(event)
       @github.git_data.commits.get @options[:user], @options[:project], event[:commit_id]
     end
+
+    # Fetch commits on master
+    # @return [Array] array of fetched commits
+    def fetch_master_commits
+      @github.repos.commits.list @options[:user], @options[:project], sha: "master"
+    end
   end
 end

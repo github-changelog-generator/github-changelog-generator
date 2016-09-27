@@ -4,6 +4,7 @@ require_relative "generator_generation"
 require_relative "generator_fetcher"
 require_relative "generator_processor"
 require_relative "generator_tags"
+require_relative "generator_commits"
 
 module GitHubChangelogGenerator
   # Default error for ChangelogGenerator
@@ -11,7 +12,7 @@ module GitHubChangelogGenerator
   end
 
   class Generator
-    attr_accessor :options, :filtered_tags, :github
+    attr_accessor :options, :filtered_tags, :github, :master_commits
 
     # A Generator responsible for all logic, related with change log generation from ready-to-parse issues
     #
@@ -54,10 +55,11 @@ module GitHubChangelogGenerator
     #
     # @param [Array] pull_requests List or PR's in new section
     # @param [Array] issues List of issues in new section
+    # @param [Array] commits_on_master List of master in new section
     # @param [String] newer_tag Name of the newer tag. Could be nil for `Unreleased` section
     # @param [String] older_tag_name Older tag, used for the links. Could be nil for last tag.
     # @return [String] Ready and parsed section
-    def create_log_for_tag(pull_requests, issues, newer_tag, older_tag_name = nil)
+    def create_log_for_tag(pull_requests, issues, commits_on_master, newer_tag, older_tag_name = nil)
       newer_tag_link, newer_tag_name, newer_tag_time = detect_link_tag_time(newer_tag)
 
       github_site = options[:github_site] || "https://github.com"
@@ -74,6 +76,8 @@ module GitHubChangelogGenerator
         # Generate pull requests:
         log += generate_sub_section(pull_requests, @options[:merge_prefix])
       end
+
+      log += generate_log_for_commits_on_master(commits_on_master) unless commits_on_master.empty?
 
       log
     end
