@@ -54,7 +54,7 @@ module GitHubChangelogGenerator
       time_for_tag_name = @tag_times_hash[name_of_tag]
       return time_for_tag_name if time_for_tag_name
 
-      @fetcher.fetch_date_of_tag(tag_hash).tap do |time_string|
+      @fetcher.fetch_date_of_tag(tag_name).tap do |time_string|
         @tag_times_hash[name_of_tag] = time_string
       end
     end
