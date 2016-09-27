@@ -14,9 +14,9 @@ matrix:
       script: gem build github_changelog_generator && bundle install
       gemfile: spec/install-gem-in-bundler.gemfile
     - rvm: 2.1
-      gemfile: gemfiles/Gemfile.with_rack16
+      gemfile: gemfiles/Gemfile.2_1
     - rvm: 2.3.1
-      gemfile: gemfiles/Gemfile.with_rack2
+      gemfile: gemfiles/Gemfile.2_3_1
 
 notifications:
   email:
