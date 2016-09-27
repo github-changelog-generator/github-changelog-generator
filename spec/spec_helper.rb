@@ -49,7 +49,7 @@ VCR.configure do |c|
     decode_compressed_response: true
   }
   c.filter_sensitive_data("<GITHUB_TOKEN>") do
-    "token #{ENV.fetch('CHANGELOG_GITHUB_TOKEN')}"
+    "token #{ENV.fetch('CHANGELOG_GITHUB_TOKEN') { 'frobnitz' }}"
   end
 
   c.configure_rspec_metadata!
