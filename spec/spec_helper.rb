@@ -29,7 +29,9 @@ SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
                                                                  SimpleCov::Formatter::HTMLFormatter,
                                                                  CodeClimate::TestReporter::Formatter
                                                                ])
-SimpleCov.start
+SimpleCov.start do
+  add_filter "gemfiles/"
+end
 
 require "github_changelog_generator"
 require "github_changelog_generator/task"
