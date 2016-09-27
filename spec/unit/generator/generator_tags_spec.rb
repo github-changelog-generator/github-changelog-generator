@@ -2,7 +2,7 @@
 describe GitHubChangelogGenerator::Generator do
   def tag_with_name(tag)
     {
-      'name' => tag
+      "name" => tag
     }
   end
 

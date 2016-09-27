@@ -101,7 +101,7 @@ module GitHubChangelogGenerator
     def get_filtered_tags(all_tags)
       filtered_tags = filter_since_tag(all_tags)
       filtered_tags = filter_due_tag(filtered_tags)
-      filtered_tags = filter_between_tags(filtered_tags)
+      filter_between_tags(filtered_tags)
     end
 
     # @param [Array] all_tags all tags
@@ -148,7 +148,7 @@ module GitHubChangelogGenerator
     # @return [Array] filtered tags according :between_tags option
     def filter_between_tags(all_tags)
       filtered_tags = all_tags
-      tag_names     = filtered_tags.map { |ft| ft['name'] }
+      tag_names     = filtered_tags.map { |ft| ft["name"] }
 
       if @options[:between_tags]
         @options[:between_tags].each do |tag|

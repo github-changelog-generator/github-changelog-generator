@@ -46,9 +46,9 @@ VCR.configure do |c|
     preserve_exact_body_bytes: true,
     decode_compressed_response: true
   }
-  c.filter_sensitive_data('<GITHUB_TOKEN>') {
+  c.filter_sensitive_data("<GITHUB_TOKEN>") do
     "token #{ENV.fetch('CHANGELOG_GITHUB_TOKEN')}"
-  }
+  end
 
   c.configure_rspec_metadata!
 
