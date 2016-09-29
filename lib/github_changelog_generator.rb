@@ -1,8 +1,12 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require "github_api"
+require "octokit"
+require "faraday-http-cache"
+require "logger"
+require "active_support"
 require "json"
+require "multi_json"
 require "benchmark"
 
 require_relative "github_changelog_generator/helper"
@@ -11,6 +15,8 @@ require_relative "github_changelog_generator/parser_file"
 require_relative "github_changelog_generator/generator/generator"
 require_relative "github_changelog_generator/version"
 require_relative "github_changelog_generator/reader"
+require_relative "github_changelog_generator/hash"
+require_relative "github_changelog_generator/array"
 
 # The main module, where placed all classes (now, at least)
 module GitHubChangelogGenerator
