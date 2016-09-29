@@ -17,6 +17,8 @@ matrix:
       gemfile: gemfiles/Gemfile.with_rack16
     - rvm: 2.3.1
       gemfile: gemfiles/Gemfile.with_rack2
+    - rvm: 2.4.0-preview2
+      gemfile: gemfiles/Gemfile.2_4_0
 
 notifications:
   email:

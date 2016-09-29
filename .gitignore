@@ -8,3 +8,4 @@ spec/*.lock
 doc
 .yardoc
 Gemfile.lock
+gemfiles/Gemfile.2_4_0.lock
