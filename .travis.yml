@@ -19,6 +19,11 @@ matrix:
       gemfile: gemfiles/Gemfile.2_3_1
     - rvm: 2.4.0-preview2
       gemfile: gemfiles/Gemfile.2_4_0
+    - rvm: jruby-9.1.5.0
+      jdk: oraclejdk8
+      gemfile: gemfiles/Gemfile.jruby-9.1.5.0
+      env:
+        - JRUBY_OPTS=--debug
 
 notifications:
   email:
