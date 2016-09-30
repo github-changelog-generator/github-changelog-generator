@@ -1,15 +1,5 @@
 # Change Log
 
-## [Unreleased](https://github.com/skywinder/github-changelog-generator/tree/HEAD)
-
-[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.7.0...HEAD)
-
-**Merged pull requests:**
-
-- Add a rake task [\#260](https://github.com/skywinder/github-changelog-generator/pull/260) ([raphink](https://github.com/raphink))
-- Add release\_url option [\#259](https://github.com/skywinder/github-changelog-generator/pull/259) ([raphink](https://github.com/raphink))
-- Add --since-tag, close  [\#257](https://github.com/skywinder/github-changelog-generator/pull/257) ([raphink](https://github.com/raphink))
-
 ## [1.7.0](https://github.com/skywinder/github-changelog-generator/tree/1.7.0) (2015-07-16)
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.6.2...1.7.0)
 
