@@ -426,6 +426,20 @@ describe GitHubChangelogGenerator::OctoFetcher do
     end
   end
 
+  describe "#querystring_as_hash" do
+    it "works on the blank URL" do
+      expect { fetcher.send(:querystring_as_hash, "") }.not_to raise_error
+    end
+
+    it "where there are no querystring params" do
+      expect { fetcher.send(:querystring_as_hash, "http://example.com") }.not_to raise_error
+    end
+
+    it "returns a String-keyed Hash of querystring params" do
+      expect(fetcher.send(:querystring_as_hash, "http://example.com/o.html?str=18&wis=12")).to include("wis" => "12", "str" => "18")
+    end
+  end
+
   describe "#fetch_commit" do
     context "when API call is valid", :vcr do
       it "returns commit" do
