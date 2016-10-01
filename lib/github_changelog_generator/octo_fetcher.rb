@@ -79,7 +79,7 @@ module GitHubChangelogGenerator
       last_response = client.last_response
 
       if (last_pg = last_response.rels[:last])
-        parse_url_for_vars(last_pg.href)["page"].to_i
+        querystring_as_hash(last_pg.href)["page"].to_i
       else
         1
       end
@@ -307,16 +307,12 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       "#{@options[:user]}/#{@options[:project]}"
     end
 
-    # Parses a URI and returns a hash of all GET variables
+    # Returns Hash of all querystring variables in given URI.
     #
     # @param [String] uri eg. https://api.github.com/repositories/43914960/tags?page=37&foo=1
     # @return [Hash] of all GET variables. eg. { 'page' => 37, 'foo' => 1 }
-    def parse_url_for_vars(uri)
-      URI(uri).query.split("&").each_with_object({}) do |get_var, params|
-        k, v = get_var.split("=")
-        params[k] = v
-        params
-      end
+    def querystring_as_hash(uri)
+      Hash[URI.decode_www_form(URI(uri).query || "")]
     end
   end
 end
