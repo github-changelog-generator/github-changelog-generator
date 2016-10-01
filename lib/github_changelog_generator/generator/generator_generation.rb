@@ -149,7 +149,7 @@ module GitHubChangelogGenerator
     private
 
     def issue_line_with_user(line, issue)
-      return line if !options[:author] || issue.pull_request.nil?
+      return line if !options[:author] || issue["pull_request"].nil?
 
       user = issue["user"]
       return "#{line} ({Null user})" unless user
