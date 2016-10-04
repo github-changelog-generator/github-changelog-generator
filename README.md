@@ -228,7 +228,7 @@ If you're seeing this warning, please do the following:
 
 - ***My Ruby version is very old, can I use this?***
 
-When your Ruby is old, and you don't want to upgrade, and your want to
+When your Ruby is old, and you don't want to upgrade, and you want to
 control which libraries you use, you can use Bundler.
 
 In a Gemfile, perhaps in a non-deployed `:development` group, add this
