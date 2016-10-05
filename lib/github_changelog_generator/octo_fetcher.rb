@@ -107,7 +107,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
         Helper.log.info "Found #{tags.count} tags"
       end
       # tags are a Sawyer::Resource. Convert to hash
-      tags = tags.map { |h| h.to_hash.stringify_keys_deep! }
+      tags = tags.map { |h| stringify_keys_deep(h.to_hash) }
       tags
     end
 
@@ -137,7 +137,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       print_empty_line
       Helper.log.info "Received issues: #{issues.count}"
 
-      issues = issues.map { |h| h.to_hash.stringify_keys_deep! }
+      issues = issues.map { |h| stringify_keys_deep(h.to_hash) }
 
       # separate arrays of issues and pull requests:
       issues.partition do |x|
@@ -168,7 +168,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       print_empty_line
 
       Helper.log.info "Pull Request count: #{pull_requests.count}"
-      pull_requests = pull_requests.map { |h| h.to_hash.stringify_keys_deep! }
+      pull_requests = pull_requests.map { |h| stringify_keys_deep(h.to_hash) }
       pull_requests
     end
 
@@ -187,7 +187,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
             iterate_pages(@client, "issue_events", issue["number"], {}) do |new_event|
               issue["events"].concat(new_event)
             end
-            issue["events"] = issue["events"].map { |h| h.to_hash.stringify_keys_deep! }
+            issue["events"] = issue["events"].map { |h| stringify_keys_deep(h.to_hash) }
             print_in_same_line("Fetching events for issues and PR: #{i + 1}/#{issues.count}")
             i += 1
           end
@@ -209,7 +209,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     # @return [Time] time of specified tag
     def fetch_date_of_tag(tag)
       commit_data = check_github_response { @client.commit(user_project, tag["commit"]["sha"]) }
-      commit_data = commit_data.to_hash.stringify_keys_deep!
+      commit_data = stringify_keys_deep(commit_data.to_hash)
 
       commit_data["commit"]["committer"]["date"]
     end
@@ -220,12 +220,27 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     def fetch_commit(event)
       check_github_response do
         commit = @client.commit(user_project, event["commit_id"])
-        commit = commit.to_hash.stringify_keys_deep!
+        commit = stringify_keys_deep(commit.to_hash)
         commit
       end
     end
 
     private
+
+    def stringify_keys_deep(indata)
+      case indata
+      when Array
+        indata.map do |value|
+          stringify_keys_deep(value)
+        end
+      when Hash
+        indata.each_with_object({}) do |(k, v), output|
+          output[k.to_s] = stringify_keys_deep(v)
+        end
+      else
+        indata
+      end
+    end
 
     # Iterates through all pages until there are no more :next pages to follow
     # yields the result per page
