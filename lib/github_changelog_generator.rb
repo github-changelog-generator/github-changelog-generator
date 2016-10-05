@@ -10,6 +10,7 @@ require "multi_json"
 require "benchmark"
 
 require_relative "github_changelog_generator/helper"
+require_relative "github_changelog_generator/options"
 require_relative "github_changelog_generator/parser"
 require_relative "github_changelog_generator/parser_file"
 require_relative "github_changelog_generator/generator/generator"

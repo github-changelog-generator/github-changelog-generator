@@ -85,10 +85,6 @@ describe GitHubChangelogGenerator::Reader do
     context "angular.js.md" do
       it { is_expected.to be_an(Array) }
       it { is_expected.not_to be_empty }
-      it do
-        pending("Implement heading_level for parser.")
-        expect(subject.count).to eq(134)
-      end
       # it do
       #   pending('Implement heading_level for parser.')
       #   expect(subject.first).to include('version' => '1.4.0-beta.6 cookie-liberation')
