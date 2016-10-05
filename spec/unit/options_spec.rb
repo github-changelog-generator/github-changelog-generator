@@ -9,13 +9,13 @@ RSpec.describe GitHubChangelogGenerator::Options do
 
     context "with unknown options" do
       it "raises an error" do
-        expect {
+        expect do
           described_class.new(
             git_remote: "origin",
             strength: "super-strength",
             wisdom: "deep"
           )
-        }.to raise_error("[:strength, :wisdom]")
+        end.to raise_error("[:strength, :wisdom]")
       end
     end
   end
@@ -25,17 +25,17 @@ RSpec.describe GitHubChangelogGenerator::Options do
 
     context "with known options" do
       it "sets the option value" do
-        expect {
+        expect do
           options[:git_remote] = "in the cloud"
-        }.to change { options[:git_remote] }.to "in the cloud"
+        end.to change { options[:git_remote] }.to "in the cloud"
       end
     end
 
     context "with unknown options" do
       it "raises an error" do
-        expect {
+        expect do
           options[:charisma] = 8
-        }.to raise_error(":charisma")
+        end.to raise_error(":charisma")
       end
     end
   end

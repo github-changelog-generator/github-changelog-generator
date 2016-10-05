@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'delegate'
+require "delegate"
 module GitHubChangelogGenerator
   class Options < SimpleDelegator
     UnsupportedOptionError = Class.new(ArgumentError)
@@ -48,12 +48,12 @@ module GitHubChangelogGenerator
       :unreleased_only,
       :user,
       :usernames_as_github_logins,
-      :verbose,
+      :verbose
     ]
 
     THESE_ARE_DIFFERENT = [
       :tag1,
-      :tag2,
+      :tag2
     ]
 
     def initialize(values)

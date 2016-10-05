@@ -217,7 +217,7 @@ module GitHubChangelogGenerator
         http_cache: true,
         cache_file: "/tmp/github-changelog-http-cache",
         cache_log: "/tmp/github-changelog-logger.log"
-      )      
+      )
     end
 
     # If `:user` or `:project` not set in options, try setting them
