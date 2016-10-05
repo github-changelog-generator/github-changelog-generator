@@ -2,6 +2,8 @@
 require 'delegate'
 module GitHubChangelogGenerator
   class Options < SimpleDelegator
+    UnsupportedOptionError = Class.new(ArgumentError)
+
     KNOWN_OPTIONS = [
       :add_issues_wo_labels,
       :add_pr_wo_labels,
@@ -56,9 +58,12 @@ module GitHubChangelogGenerator
 
     def initialize(values)
       super(values)
-      if unsupported_options.any?
-        raise ArgumentError, "Unsupported options #{unsupported_options}"
-      end
+      unsupported_options.any? && raise(UnsupportedOptionError, unsupported_options.inspect)
+    end
+
+    def []=(key, val)
+      supported_option?(key) || raise(UnsupportedOptionError, key.inspect)
+      values[key] = val
     end
 
     def to_hash
@@ -72,7 +77,15 @@ module GitHubChangelogGenerator
     end
 
     def unsupported_options
-      values.keys - (KNOWN_OPTIONS + THESE_ARE_DIFFERENT)
+      values.keys - supported_options
+    end
+
+    def supported_option?(key)
+      supported_options.include?(key)
+    end
+
+    def supported_options
+      KNOWN_OPTIONS + THESE_ARE_DIFFERENT
     end
   end
 end
