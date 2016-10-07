@@ -8,6 +8,7 @@ module GitHubChangelogGenerator
   class OctoFetcher
     PER_PAGE_NUMBER   = 100
     MAX_THREAD_NUMBER = 25
+    MAX_FORBIDDEN_RETRIES = 100
     CHANGELOG_GITHUB_TOKEN = "CHANGELOG_GITHUB_TOKEN"
     GH_RATE_LIMIT_EXCEEDED_MSG = "Warning: Can't finish operation: GitHub API rate limit exceeded, change log may be " \
     "missing some issues. You can limit the number of issues fetched using the `--max-issues NUM` argument."
@@ -285,22 +286,33 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
         value = yield
       rescue Octokit::Unauthorized => e
         Helper.log.error e.message
-        abort "Error: wrong GitHub token"
+        sys_abort("Error: wrong GitHub token")
       rescue Octokit::Forbidden => e
         attempt += 1
         sleep_time = exp_backoff(attempt)
         Helper.log.warn("sleeping #{sleep_time} second")
-        sleep(sleep_time)
+        sys_sleep(sleep_time)
 
         Helper.log.warn e.message
         Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG
         Helper.log.warn @client.rate_limit
 
-        retry
+        if attempt >= MAX_FORBIDDEN_RETRIES
+          sys_abort("Exceeded retry limit")
+        else
+          retry
+        end
       end
       value
     end
 
+    def sys_sleep(seconds)
+      sleep(seconds)
+    end
+
+    def sys_abort(msg)
+      abort(msg)
+    end
     # Returns the exponential backoff (seconds) for this attempt number
     #
     # @param [Integer] attempt the attempt number

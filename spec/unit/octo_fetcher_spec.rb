@@ -12,6 +12,32 @@ describe GitHubChangelogGenerator::OctoFetcher do
 
   let(:fetcher) { GitHubChangelogGenerator::OctoFetcher.new(options) }
 
+  describe "#check_github_response" do
+    context "when returns successfully" do
+      it "returns block value" do
+        expect(fetcher.send(:check_github_response) { 1+1 }).to eq(2)
+      end
+    end
+
+    context "when raises Octokit::Unauthorized" do
+      it "aborts" do
+        expect(fetcher).to receive(:sys_abort).with("Error: wrong GitHub token")
+        fetcher.send(:check_github_response) { raise(Octokit::Unauthorized) }
+      end
+    end
+
+    context "when raises Octokit::Forbidden" do
+      it "sleeps and retries and then aborts" do
+        retry_limit = GitHubChangelogGenerator::OctoFetcher::MAX_FORBIDDEN_RETRIES - 1
+
+        expect(fetcher).to receive(:sys_abort).with("Exceeded retry limit")
+        expect(fetcher).to receive(:sys_sleep).exactly(retry_limit).times
+        fetcher.send(:check_github_response) { raise(Octokit::Forbidden) }
+      end
+    end
+
+  end
+
   describe "#fetch_github_token" do
     token = GitHubChangelogGenerator::OctoFetcher::CHANGELOG_GITHUB_TOKEN
     context "when token in ENV exist" do
