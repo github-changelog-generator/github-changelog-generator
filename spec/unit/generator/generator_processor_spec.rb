@@ -1,10 +1,11 @@
+# frozen_string_literal: true
 module GitHubChangelogGenerator
   describe Generator do
     context "#exclude_issues_by_labels" do
-      let(:label) { double("the-bad-label", name: "BAD") }
-      let(:issue) { double("the-issue-to-be-excluded", labels: [label]) }
-      let(:good_label) { double("a-good-label", name: "GOOD") }
-      let(:good_issue) { double("an-issue-to-be-kept", labels: [good_label]) }
+      let(:label) { { "name" => "BAD" } }
+      let(:issue) { { "labels" => [label] } }
+      let(:good_label) { { "name" => "GOOD" } }
+      let(:good_issue) { { "labels" => [good_label] } }
       let(:issues) { [issue, good_issue] }
       subject(:generator) { described_class.new(exclude_labels: %w(BAD BOO)) }
 

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "rake"
 require "rake/tasklib"
 require "github_changelog_generator"
@@ -14,7 +15,7 @@ module GitHubChangelogGenerator
                   unreleased_only unreleased unreleased_label
                   compare_link include_labels exclude_labels
                   bug_labels enhancement_labels
-                  between_tags exclude_tags since_tag max_issues
+                  between_tags exclude_tags exclude_tags_regex since_tag max_issues
                   github_site github_endpoint simple_list
                   future_release release_branch verbose release_url
                   base )
@@ -46,7 +47,7 @@ module GitHubChangelogGenerator
         # mimick parse_options
         options = Parser.default_options
 
-        Parser.user_and_project_from_git(options)
+        Parser.fetch_user_and_project(options)
 
         OPTIONS.each do |o|
           v = instance_variable_get("@#{o}")

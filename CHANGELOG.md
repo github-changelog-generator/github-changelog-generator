@@ -1,5 +1,61 @@
 # Change Log
 
+## [1.13.2](https://github.com/skywinder/github-changelog-generator/tree/1.13.2) (2016-09-29)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.13.1...1.13.2)
+
+**Implemented enhancements:**
+
+- Replace GPL'd colorize gem with MIT-licensed rainbow [\#408](https://github.com/skywinder/github-changelog-generator/pull/408) ([jamesc](https://github.com/jamesc))
+- Limit number of simultaneous requests to 25 [\#407](https://github.com/skywinder/github-changelog-generator/pull/407) ([jkeiser](https://github.com/jkeiser))
+- Report actual github error when rate limit exceeded [\#405](https://github.com/skywinder/github-changelog-generator/pull/405) ([jkeiser](https://github.com/jkeiser))
+- Make error messages print on error [\#404](https://github.com/skywinder/github-changelog-generator/pull/404) ([jkeiser](https://github.com/jkeiser))
+
+**Fixed bugs:**
+
+- Fetching events for issues and PRs triggers abuse rate limits [\#406](https://github.com/skywinder/github-changelog-generator/issues/406)
+
+**Merged pull requests:**
+
+- Add bump gem to development deps [\#423](https://github.com/skywinder/github-changelog-generator/pull/423) ([olleolleolle](https://github.com/olleolleolle))
+- Skip logger helper in coverage [\#421](https://github.com/skywinder/github-changelog-generator/pull/421) ([olleolleolle](https://github.com/olleolleolle))
+- Travis: Test on 2.4.0-preview2 [\#420](https://github.com/skywinder/github-changelog-generator/pull/420) ([olleolleolle](https://github.com/olleolleolle))
+- Travis: Collecting the config, gemspec: extract development deps to Gemfile [\#417](https://github.com/skywinder/github-changelog-generator/pull/417) ([olleolleolle](https://github.com/olleolleolle))
+- Update README.md [\#415](https://github.com/skywinder/github-changelog-generator/pull/415) ([dijonkitchen](https://github.com/dijonkitchen))
+- README: Add Gitter badge [\#413](https://github.com/skywinder/github-changelog-generator/pull/413) ([olleolleolle](https://github.com/olleolleolle))
+- CircleCI hook for Gitter notification [\#411](https://github.com/skywinder/github-changelog-generator/pull/411) ([olleolleolle](https://github.com/olleolleolle))
+- Spec: avoid Ruby warning about already-defined constant [\#409](https://github.com/skywinder/github-changelog-generator/pull/409) ([olleolleolle](https://github.com/olleolleolle))
+
+## [1.13.1](https://github.com/skywinder/github-changelog-generator/tree/1.13.1) (2016-07-22)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.13.0...1.13.1)
+
+**Implemented enhancements:**
+
+- Don't constrain runtime deps. [\#400](https://github.com/skywinder/github-changelog-generator/pull/400) ([jkeiser](https://github.com/jkeiser))
+
+**Fixed bugs:**
+
+- `--user` flag should not be ignored [\#397](https://github.com/skywinder/github-changelog-generator/issues/397)
+- GHE not working with --github-site set to an enterprise site [\#395](https://github.com/skywinder/github-changelog-generator/issues/395)
+
+**Closed issues:**
+
+- Contributors Section [\#398](https://github.com/skywinder/github-changelog-generator/issues/398)
+
+**Merged pull requests:**
+
+- Ability to implicity set user and project from command line [\#401](https://github.com/skywinder/github-changelog-generator/pull/401) ([skywinder](https://github.com/skywinder))
+- Show how to use it with Rakefile [\#399](https://github.com/skywinder/github-changelog-generator/pull/399) ([edusantana](https://github.com/edusantana))
+- Adds documentation on using a GHE endpoint [\#396](https://github.com/skywinder/github-changelog-generator/pull/396) ([cormacmccarthy](https://github.com/cormacmccarthy))
+- Rake task usage: Added a missing option exclude\_tags\_regex [\#393](https://github.com/skywinder/github-changelog-generator/pull/393) ([perlun](https://github.com/perlun))
+- Parser: YARD docstrings and a rename, and RegExp named capture groups [\#391](https://github.com/skywinder/github-changelog-generator/pull/391) ([olleolleolle](https://github.com/olleolleolle))
+
+## [1.13.0](https://github.com/skywinder/github-changelog-generator/tree/1.13.0) (2016-07-04)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.12.1...1.13.0)
+
+**Merged pull requests:**
+
+- Carry PR \#301: usernames\_as\_github\_logins [\#392](https://github.com/skywinder/github-changelog-generator/pull/392) ([olleolleolle](https://github.com/olleolleolle))
+
 ## [1.12.1](https://github.com/skywinder/github-changelog-generator/tree/1.12.1) (2016-05-09)
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.12.0...1.12.1)
 
@@ -508,10 +564,6 @@
 **Fixed bugs:**
 
 - Encapsulate \[ \> \* \_ \ \] signs in issues names [\#34](https://github.com/skywinder/github-changelog-generator/issues/34)
-
-**Merged pull requests:**
-
-- Add a Bitdeli Badge to README [\#36](https://github.com/skywinder/github-changelog-generator/pull/36) ([bitdeli-chef](https://github.com/bitdeli-chef))
 
 ## [1.2.1](https://github.com/skywinder/github-changelog-generator/tree/1.2.1) (2014-11-22)
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.2.0...1.2.1)

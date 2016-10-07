@@ -4,6 +4,7 @@
 [![Inline docs](http://inch-ci.org/github/skywinder/github-changelog-generator.svg)](http://inch-ci.org/github/skywinder/github-changelog-generator)
 [![Code Climate](https://codeclimate.com/github/skywinder/github-changelog-generator/badges/gpa.svg)](https://codeclimate.com/github/skywinder/github-changelog-generator)
 [![Test Coverage](https://codeclimate.com/github/skywinder/github-changelog-generator/badges/coverage.svg)](https://codeclimate.com/github/skywinder/github-changelog-generator)
+[![Join the chat at https://gitter.im/github-changelog-generator/chat](https://badges.gitter.im/github-changelog-generator/chat.svg)](https://gitter.im/github-changelog-generator/chat?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 GitHub Changelog Generator ![GitHub Logo](../master/images/logo.jpg)
 ==================
@@ -23,7 +24,7 @@ GitHub Changelog Generator ![GitHub Logo](../master/images/logo.jpg)
 
 ### Changelog generation has never been so easy
 
-**Fully automate changelog generation** - This gem generates change log file based on **tags**, **issues** and merged **pull requests** (and splits them into separate lists according labels) from :octocat: GitHub Issue Tracker.
+**Fully automate changelog generation** - This gem generates change log file based on **tags**, **issues** and merged **pull requests** (and splits them into separate lists according to labels) from :octocat: GitHub Issue Tracker.
 
 Since now you don't have to fill your `CHANGELOG.md` manually: just run the script, relax and take a cup of :coffee: before your next release! :tada:
 
@@ -36,7 +37,9 @@ Because software tools are for people. If you don’t care, why are you contribu
 
 ## Installation
 
-	[sudo] gem install github_changelog_generator
+	gem install github_changelog_generator
+
+See also Troubleshooting.
 
 ## Output example
 
@@ -76,6 +79,11 @@ Because software tools are for people. If you don’t care, why are you contribu
 -  Or, run this from anywhere:
     - `github_changelog_generator -u github_username -p github_project`
     - `github_changelog_generator  github_username/github_project`
+
+- If you are running it against a repository on a Github Enterprise install, you must specify *both* `--github-site` and `--github-api` command line options:
+
+        github_changelog_generator --github-site="https://github.yoursite.com" \
+                                   --github-api="https://github.yoursite.com/api/v3/"
 
 This generates a changelog to the `CHANGELOG.md` file, with pretty markdown formatting.
 
@@ -133,6 +141,8 @@ we've provided a `rake` task library for your changelog generation.
 Just put something like this in your `Rakefile`:
 
 ```ruby
+require 'github_changelog_generator/task'
+
 GitHubChangelogGenerator::RakeTask.new :changelog do |config|
   config.since_tag = '0.1.14'
   config.future_release = '0.2.0'
@@ -215,6 +225,31 @@ If you're seeing this warning, please do the following:
 
 1. Make sure you're providing an OAuth token, so you're not making requests anonymously. Using an OAuth token increases your hourly request maximum from 60 to 5000.
 2. If you have a large repo with lots of issues/PRs, you can use `--max-issues NUM` to limit the number of issues that are pulled back. For example: `--max-issues 1000`
+
+- ***My Ruby version is very old, can I use this?***
+
+When your Ruby is old, and you don't want to upgrade, and you want to
+control which libraries you use, you can use Bundler.
+
+In a Gemfile, perhaps in a non-deployed `:development` group, add this
+gem:
+
+```ruby
+group :development do
+  gem 'github_changelog_generator', require: false
+end
+```
+
+Then you can keep back dependencies like rack, which currently is only
+compatible with Ruby >= 2.2.2. So, use an older version for your app by
+adding a line like this to the Gemfile:
+
+```
+gem 'rack', '~> 1.6'
+```
+
+This way, you can keep on using github_changelog_generator, even if you
+can't get the latest version of Ruby installed.
 
 ## Contributing
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 require "optparse"
 require "pp"
 require_relative "version"
@@ -14,7 +15,7 @@ module GitHubChangelogGenerator
       parser = setup_parser(options)
       parser.parse!
 
-      user_and_project_from_git(options)
+      fetch_user_and_project(options)
 
       abort(parser.banner) unless options[:user] && options[:project]
 
@@ -23,7 +24,12 @@ module GitHubChangelogGenerator
       options
     end
 
-    # @param [Hash] options to display
+    # If options set to verbose, print the parsed options.
+    #
+    # The GitHub `:token` key is censored in the output.
+    #
+    # @param options [Hash] The options to display
+    # @option options [Boolean] :verbose If false this method does nothing
     def self.print_options(options)
       if options[:verbose]
         Helper.log.info "Performing task with options:"
@@ -56,7 +62,7 @@ module GitHubChangelogGenerator
         opts.on("-b", "--base [NAME]", "Optional base file to append generated changes to.") do |last|
           options[:base] = last
         end
-        opts.on("--bugs-label [LABEL]", "Setup custom label for bug-fixes section. Default is \"**Fixed bugs:**""") do |v|
+        opts.on("--bugs-label [LABEL]", "Setup custom label for bug-fixes section. Default is \"**Fixed bugs:**\"") do |v|
           options[:bug_prefix] = v
         end
         opts.on("--enhancement-label [LABEL]", "Setup custom label for enhancements section. Default is \"**Implemented enhancements:**\"") do |v|
@@ -91,6 +97,9 @@ module GitHubChangelogGenerator
         end
         opts.on("--[no-]author", "Add author of pull-request in the end. Default is true") do |author|
           options[:author] = author
+        end
+        opts.on("--usernames-as-github-logins", "Use GitHub tags instead of Markdown links for the author of an issue or pull-request.") do |v|
+          options[:usernames_as_github_logins] = v
         end
         opts.on("--unreleased-only", "Generate log from unreleased closed issues only.") do |v|
           options[:unreleased_only] = v
@@ -152,6 +161,15 @@ module GitHubChangelogGenerator
         opts.on("--release-branch [RELEASE-BRANCH]", "Limit pull requests to the release branch, such as master or release") do |release_branch|
           options[:release_branch] = release_branch
         end
+        opts.on("--[no-]http-cache", "Use HTTP Cache to cache Github API requests (useful for large repos) Default is true.") do |http_cache|
+          options[:http_cache] = http_cache
+        end
+        opts.on("--cache-file [CACHE-FILE]", "Filename to use for cache. Default is /tmp/github-changelog-http-cache") do |cache_file|
+          options[:cache_file] = cache_file
+        end
+        opts.on("--cache-log [CACHE-LOG]", "Filename to use for cache log. Default is /tmp/github-changelog-logger.log") do |cache_log|
+          options[:cache_log] = cache_log
+        end
         opts.on("--[no-]verbose", "Run verbosely. Default is true") do |v|
           options[:verbose] = v
         end
@@ -167,9 +185,9 @@ module GitHubChangelogGenerator
       parser
     end
 
-    # just get default options
+    # @return [Hash] Default options
     def self.default_options
-      {
+      Options.new(
         tag1: nil,
         tag2: nil,
         date_format: "%Y-%m-%d",
@@ -195,41 +213,61 @@ module GitHubChangelogGenerator
         issue_prefix: "**Closed issues:**",
         bug_prefix: "**Fixed bugs:**",
         enhancement_prefix: "**Implemented enhancements:**",
-        git_remote: "origin"
-      }
+        git_remote: "origin",
+        http_cache: true,
+        cache_file: "/tmp/github-changelog-http-cache",
+        cache_log: "/tmp/github-changelog-logger.log"
+      )
     end
 
-    def self.user_and_project_from_git(options)
+    # If `:user` or `:project` not set in options, try setting them
+    # Valid unnamed parameters:
+    # 1) in 1 param: repo_name/project
+    # 2) in 2 params: repo name project
+    def self.fetch_user_and_project(options)
       if options[:user].nil? || options[:project].nil?
-        detect_user_and_project(options, ARGV[0], ARGV[1])
+        user, project = user_and_project_from_git(options, ARGV[0], ARGV[1])
+        options[:user] ||= user
+        options[:project] ||= project
       end
     end
 
-    # Detects user and project from git
-    def self.detect_user_and_project(options, arg0 = nil, arg1 = nil)
-      options[:user], options[:project] = user_project_from_option(arg0, arg1, options[:github_site])
-      return if options[:user] && options[:project]
-
-      if ENV["RUBYLIB"] =~ /ruby-debug-ide/
-        options[:user] = "skywinder"
-        options[:project] = "changelog_test"
-      else
-        remote = `git config --get remote.#{options[:git_remote]}.url`
-        options[:user], options[:project] = user_project_from_remote(remote)
+    # Sets `:user` and `:project` in `options` from CLI arguments or `git remote`
+    # @param [String] arg0 first argument in cli
+    # @param [String] arg1 second argument in cli
+    # @return [Array<String>] user and project, or nil if unsuccessful
+    def self.user_and_project_from_git(options, arg0 = nil, arg1 = nil)
+      user, project = user_project_from_option(arg0, arg1, options[:github_site])
+      unless user && project
+        if ENV["RUBYLIB"] =~ /ruby-debug-ide/
+          user = "skywinder"
+          project = "changelog_test"
+        else
+          remote = `git config --get remote.#{options[:git_remote]}.url`
+          user, project = user_project_from_remote(remote)
+        end
       end
+
+      [user, project]
     end
 
-    # Try to find user and project name from git remote output
+    # Returns GitHub username and project from CLI arguments
     #
-    # @param [String] output of git remote command
-    # @return [Array] user and project
+    # @param arg0 [String] This parameter takes two forms: Either a full
+    #                      GitHub URL, or a 'username/projectname', or
+    #                      simply a GitHub username
+    # @param arg1 [String] If arg0 is given as a username,
+    #                      then arg1 can given as a projectname
+    # @param github_site [String] Domain name of GitHub site
+    #
+    # @return [Array, nil] user and project, or nil if unsuccessful
     def self.user_project_from_option(arg0, arg1, github_site)
       user = nil
       project = nil
       github_site ||= "github.com"
       if arg0 && !arg1
-        # this match should parse  strings such "https://github.com/skywinder/Github-Changelog-Generator" or "skywinder/Github-Changelog-Generator" to user and name
-        puts arg0
+        # this match should parse  strings such "https://github.com/skywinder/Github-Changelog-Generator" or
+        # "skywinder/Github-Changelog-Generator" to user and name
         match = /(?:.+#{Regexp.escape(github_site)}\/)?(.+)\/(.+)/.match(arg0)
 
         begin
@@ -248,35 +286,40 @@ module GitHubChangelogGenerator
       [user, project]
     end
 
-    # Try to find user and project name from git remote output
+    # These patterns match these formats:
     #
-    # @param [String] output of git remote command
+    # ```
+    # origin	git@github.com:skywinder/Github-Changelog-Generator.git (fetch)
+    # git@github.com:skywinder/Github-Changelog-Generator.git
+    # ```
+    #
+    # and
+    #
+    # ```
+    # origin	https://github.com/skywinder/ChangelogMerger (fetch)
+    # https://github.com/skywinder/ChangelogMerger
+    # ```
+    GIT_REMOTE_PATTERNS = [
+      /.*(?:[:\/])(?<user>(?:-|\w|\.)*)\/(?<project>(?:-|\w|\.)*)(?:\.git).*/,
+      /.*\/(?<user>(?:-|\w|\.)*)\/(?<project>(?:-|\w|\.)*).*/
+    ]
+
+    # Returns GitHub username and project from git remote output
+    #
+    # @param git_remote_output [String] Output of git remote command
+    #
     # @return [Array] user and project
-    def self.user_project_from_remote(remote)
-      # try to find repo in format:
-      # origin	git@github.com:skywinder/Github-Changelog-Generator.git (fetch)
-      # git@github.com:skywinder/Github-Changelog-Generator.git
-      regex1 = /.*(?:[:\/])((?:-|\w|\.)*)\/((?:-|\w|\.)*)(?:\.git).*/
-
-      # try to find repo in format:
-      # origin	https://github.com/skywinder/ChangelogMerger (fetch)
-      # https://github.com/skywinder/ChangelogMerger
-      regex2 = /.*\/((?:-|\w|\.)*)\/((?:-|\w|\.)*).*/
-
-      remote_structures = [regex1, regex2]
-
+    def self.user_project_from_remote(git_remote_output)
       user = nil
       project = nil
-      remote_structures.each do |regex|
-        matches = Regexp.new(regex).match(remote)
+      GIT_REMOTE_PATTERNS.each do |git_remote_pattern|
+        git_remote_pattern =~ git_remote_output
 
-        if matches && matches[1] && matches[2]
-          puts "Detected user:#{matches[1]}, project:#{matches[2]}"
-          user = matches[1]
-          project = matches[2]
+        if Regexp.last_match
+          user = Regexp.last_match(:user)
+          project = Regexp.last_match(:project)
+          break
         end
-
-        break unless matches.nil?
       end
 
       [user, project]
