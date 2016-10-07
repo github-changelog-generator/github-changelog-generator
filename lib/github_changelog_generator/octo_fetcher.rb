@@ -280,17 +280,33 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     #
     # @return [Object] returns exactly the same, what you put in the block, but wrap it with begin-rescue block
     def check_github_response
+      attempt = 1
       begin
         value = yield
       rescue Octokit::Unauthorized => e
         Helper.log.error e.message
         abort "Error: wrong GitHub token"
       rescue Octokit::Forbidden => e
+        attempt += 1
+        sleep_time = exp_backoff(attempt)
+        Helper.log.warn("sleeping #{sleep_time} second")
+        sleep(sleep_time)
+
         Helper.log.warn e.message
         Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG
         Helper.log.warn @client.rate_limit
+
+        retry
       end
       value
+    end
+
+    # Returns the exponential backoff (seconds) for this attempt number
+    #
+    # @param [Integer] attempt the attempt number
+    # @return [Integer] Exponential backoff seconds
+    def exp_backoff(attempt)
+      (2 ** attempt - 1) / 2
     end
 
     # Print specified line on the same string
