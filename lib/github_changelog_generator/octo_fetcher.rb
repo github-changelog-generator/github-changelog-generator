@@ -313,6 +313,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     def sys_abort(msg)
       abort(msg)
     end
+
     # Returns the exponential backoff (seconds) for this attempt number
     #
     # @param [Integer] attempt the attempt number
