@@ -318,7 +318,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     # @param [Integer] attempt the attempt number
     # @return [Integer] Exponential backoff seconds
     def exp_backoff(attempt)
-      (2 ** attempt - 1) / 2
+      (2**attempt - 1) / 2
     end
 
     # Print specified line on the same string

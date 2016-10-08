@@ -15,7 +15,7 @@ describe GitHubChangelogGenerator::OctoFetcher do
   describe "#check_github_response" do
     context "when returns successfully" do
       it "returns block value" do
-        expect(fetcher.send(:check_github_response) { 1+1 }).to eq(2)
+        expect(fetcher.send(:check_github_response) { 1 + 1 }).to eq(2)
       end
     end
 
@@ -35,7 +35,6 @@ describe GitHubChangelogGenerator::OctoFetcher do
         fetcher.send(:check_github_response) { raise(Octokit::Forbidden) }
       end
     end
-
   end
 
   describe "#fetch_github_token" do
