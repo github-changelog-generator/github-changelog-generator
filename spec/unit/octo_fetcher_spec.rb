@@ -29,9 +29,9 @@ describe GitHubChangelogGenerator::OctoFetcher do
     context "when raises Octokit::Forbidden" do
       it "sleeps and retries and then aborts" do
         retry_limit = GitHubChangelogGenerator::OctoFetcher::MAX_FORBIDDEN_RETRIES - 1
+        allow(fetcher).to receive(:sleep_base_interval).and_return(0)
 
         expect(fetcher).to receive(:sys_abort).with("Exceeded retry limit")
-        expect(fetcher).to receive(:sys_sleep).exactly(retry_limit).times
         fetcher.send(:check_github_response) { raise(Octokit::Forbidden) }
       end
     end
