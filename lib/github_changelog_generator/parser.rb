@@ -42,7 +42,7 @@ module GitHubChangelogGenerator
 
     # setup parsing options
     def self.setup_parser(options)
-      parser = OptionParser.new do |opts|
+      parser = OptionParser.new do |opts| # rubocop:disable Metrics/BlockLength
         opts.banner = "Usage: github_changelog_generator [options]"
         opts.on("-u", "--user [USER]", "Username of the owner of target GitHub repo") do |last|
           options[:user] = last
