@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'retriable'
+require "retriable"
 module GitHubChangelogGenerator
   # A Fetcher responsible for all requests to GitHub and all basic manipulation with related data
   # (such as filtering, validating, e.t.c)
@@ -297,12 +297,12 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     # Exponential backoff
     def retry_options
       {
-        :on            => [Octokit::Forbidden],
-        :tries         => MAX_FORBIDDEN_RETRIES,
-        :base_interval => sleep_base_interval,
-        :multiplier    => 1.0,
-        :rand_factor   => 0.0,
-        :on_retry      => retry_callback
+        on: [Octokit::Forbidden],
+        tries: MAX_FORBIDDEN_RETRIES,
+        base_interval: sleep_base_interval,
+        multiplier: 1.0,
+        rand_factor: 0.0,
+        on_retry: retry_callback
       }
     end
 
@@ -311,7 +311,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     end
 
     def retry_callback
-      Proc.new do |exception, try, elapsed_time, next_interval|
+      proc do |exception, try, elapsed_time, next_interval|
         Helper.log.warn("RETRY - #{exception.class}: '#{exception.message}'")
         Helper.log.warn("#{try} tries in #{elapsed_time} seconds and #{next_interval} seconds until the next try")
         Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG

@@ -30,5 +30,4 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency("faraday-http-cache")
   spec.add_runtime_dependency("activesupport")
   spec.add_runtime_dependency("retriable", ["~> 2.1"])
-
 end
