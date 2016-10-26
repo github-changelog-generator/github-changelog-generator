@@ -125,6 +125,9 @@ module GitHubChangelogGenerator
         opts.on("--enhancement-labels  x,y,z", Array, 'Issues with the specified labels will be always added to "Implemented enhancements" section. Default is \'enhancement,Enhancement\'') do |list|
           options[:enhancement_labels] = list
         end
+        opts.on("--issue-line-labels x,y,z", Array, 'The specified labels will be shown in brackets next to each matching issue. Use "ALL" to show all labels. Default is [].') do |list|
+          options[:issue_line_labels] = list
+        end
         opts.on("--between-tags  x,y,z", Array, "Change log will be filled only between specified tags") do |list|
           options[:between_tags] = list
         end
@@ -205,6 +208,7 @@ module GitHubChangelogGenerator
         enhancement_labels: %w(enhancement Enhancement),
         bug_labels: %w(bug Bug),
         exclude_labels: %w(duplicate question invalid wontfix Duplicate Question Invalid Wontfix),
+        issue_line_labels: [],
         max_issues: nil,
         simple_list: false,
         verbose: true,

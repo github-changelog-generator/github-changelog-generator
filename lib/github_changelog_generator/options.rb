@@ -32,6 +32,7 @@ module GitHubChangelogGenerator
       :http_cache,
       :include_labels,
       :issue_prefix,
+      :issue_line_labels,
       :issues,
       :max_issues,
       :merge_prefix,

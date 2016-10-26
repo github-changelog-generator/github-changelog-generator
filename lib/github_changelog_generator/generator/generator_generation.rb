@@ -25,7 +25,7 @@ module GitHubChangelogGenerator
     end
 
     # @param [Array] issues List of issues on sub-section
-    # @param [String] prefix Nae of sub-section
+    # @param [String] prefix Name of sub-section
     # @return [String] Generate ready-to-go sub-section
     def generate_sub_section(issues, prefix)
       log = ""
@@ -143,10 +143,22 @@ module GitHubChangelogGenerator
       encapsulated_title = encapsulate_string issue["title"]
 
       title_with_number = "#{encapsulated_title} [\\##{issue['number']}](#{issue['html_url']})"
+      if options[:issue_line_labels].present?
+        title_with_number = "#{title_with_number}{line_labels_for(issue)}"
+      end
       issue_line_with_user(title_with_number, issue)
     end
 
     private
+
+    def line_labels_for(issue)
+      labels = if options[:issue_line_labels] == ["ALL"]
+                 issue["labels"]
+               else
+                 issue["labels"].select { |label| options[:issue_line_labels].include?(label["name"]) }
+               end
+      labels.map { |label| " \[[#{label['name']}](#{label['url'].sub('api.github.com/repos', 'github.com')})\]" }.join("")
+    end
 
     def issue_line_with_user(line, issue)
       return line if !options[:author] || issue["pull_request"].nil?
