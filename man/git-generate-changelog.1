@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "GIT\-GENERATE\-CHANGELOG" "1" "October 2015" "" ""
+.TH "GIT\-GENERATE\-CHANGELOG" "1" "November 2016" "" ""
 .
 .SH "NAME"
 \fBgit\-generate\-changelog\fR \- Generate changelog from github
@@ -73,6 +73,12 @@ Setup custom label for closed\-issues section\. Default is "\fBClosed issues:\fR
 Setup custom header label\. Default is "# Change Log"
 .
 .P
+\-\-front\-matter [JSON]
+.
+.P
+Add YAML front matter\. Formatted as JSON because it\'s easier to add on the command line
+.
+.P
 \-\-pr\-label [LABEL]
 .
 .P
@@ -113,6 +119,12 @@ Use milestone to detect when issue was resolved\. Default is true
 .
 .P
 Add author of pull\-request in the end\. Default is true
+.
+.P
+\-\-usernames\-as\-github\-logins
+.
+.P
+Use GitHub tags instead of Markdown links for the author of an issue or pull\-request\.
 .
 .P
 \-\-unreleased\-only
@@ -175,6 +187,12 @@ Change log will be filled only between specified tags
 Change log will exclude specified tags
 .
 .P
+\-\-exclude\-tags\-regex [REGEX]
+.
+.P
+Apply a regular expression on tag names so that they can be excluded, for example: \-\-exclude\-tags\-regex "\.*+\ed{1,}"
+.
+.P
 \-\-since\-tag x
 .
 .P
@@ -221,6 +239,30 @@ Create simple list from issues and pull requests\. Default is false\.
 .
 .P
 Put the unreleased changes in the specified release number\.
+.
+.P
+\-\-release\-branch [RELEASE\-BRANCH]
+.
+.P
+Limit pull requests to the release branch, such as master or release
+.
+.P
+\-\-http\-cache
+.
+.P
+Use HTTP Cache to cache Github API requests (useful for large repos) Default is true\.
+.
+.P
+\-\-[no\-]cache\-file [CACHE\-FILE]
+.
+.P
+Filename to use for cache\. Default is /tmp/github\-changelog\-http\-cache
+.
+.P
+\-\-cache\-log [CACHE\-LOG]
+.
+.P
+Filename to use for cache log\. Default is /tmp/github\-changelog\-logger\.log
 .
 .P
 \-\-[no\-]verbose
