@@ -62,7 +62,7 @@ module GitHubChangelogGenerator
     # @return [Array<Symbol, String>]
     def extract_pair(line)
       key, value = line.split("=", 2)
-      [key.sub("-", "_").to_sym, value.gsub(/[\n\r]+/, "")]
+      [key.tr("-", "_").to_sym, value.gsub(/[\n\r]+/, "")]
     end
 
     KNOWN_ARRAY_KEYS = [:exclude_labels, :include_labels, :bug_labels,
