@@ -97,6 +97,8 @@ module GitHubChangelogGenerator
     def ensure_older_tag(older_tag, newer_tag)
       return older_tag if older_tag
       idx = sorted_tags.index { |t| t["name"] == newer_tag["name"] }
+      # skip if we are already at the oldest element
+      return if idx == sorted_tags.size - 1
       sorted_tags[idx - 1]
     end
 
