@@ -126,8 +126,9 @@ module GitHubChangelogGenerator
     def generate_unreleased_section
       log = ""
       if options[:unreleased]
-        unreleased_log = generate_log_between_tags(filtered_tags[0], nil)
-        log += unreleased_log if unreleased_log
+        start_tag      = filtered_tags[0] || sorted_tags.last
+        unreleased_log = generate_log_between_tags(start_tag, nil)
+        log           += unreleased_log if unreleased_log
       end
       log
     end

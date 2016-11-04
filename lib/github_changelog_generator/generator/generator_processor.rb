@@ -72,6 +72,8 @@ module GitHubChangelogGenerator
       # in case if not tags specified - return unchanged array
       return issues if older_tag.nil? && newer_tag.nil?
 
+      older_tag = ensure_older_tag(older_tag, newer_tag)
+
       newer_tag_time = newer_tag && get_time_of_tag(newer_tag)
       older_tag_time = older_tag && get_time_of_tag(older_tag)
 
@@ -90,6 +92,14 @@ module GitHubChangelogGenerator
           false
         end
       end
+    end
+
+    def ensure_older_tag(older_tag, newer_tag)
+      return older_tag if older_tag
+      idx = sorted_tags.index { |t| t["name"] == newer_tag["name"] }
+      # skip if we are already at the oldest element
+      return if idx == sorted_tags.size - 1
+      sorted_tags[idx - 1]
     end
 
     def tag_older_new_tag?(newer_tag_time, time)
