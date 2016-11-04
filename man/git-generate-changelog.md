@@ -97,7 +97,7 @@ Automatically generate change log from your tags, issues, labels and pull reques
 
    --unreleased-label [label]
 
-   Add to log unreleased closed issues. Default is true
+   Setup custom label for unreleased closed issues section. Default is "**Unreleased:**"
 
    --[no-]compare-link
 

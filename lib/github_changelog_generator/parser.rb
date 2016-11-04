@@ -107,7 +107,7 @@ module GitHubChangelogGenerator
         opts.on("--[no-]unreleased", "Add to log unreleased closed issues. Default is true") do |v|
           options[:unreleased] = v
         end
-        opts.on("--unreleased-label [label]", "Add to log unreleased closed issues. Default is true") do |v|
+        opts.on("--unreleased-label [label]", "Setup custom label for unreleased closed issues section. Default is \"**Unreleased:**\"") do |v|
           options[:unreleased_label] = v
         end
         opts.on("--[no-]compare-link", "Include compare link (Full Changelog) between older version and newer version. Default is true") do |v|
