@@ -51,6 +51,10 @@ Automatically generate change log from your tags, issues, labels and pull reques
 
    Setup custom header label. Default is "# Change Log"
 
+   --front-matter [JSON]
+
+   Add YAML front matter. Formatted as JSON because it's easier to add on the command line
+
    --pr-label [LABEL]
 
    Setup custom label for pull requests section. Default is "**Merged pull requests:**"
@@ -78,6 +82,10 @@ Automatically generate change log from your tags, issues, labels and pull reques
    --[no-]author
 
    Add author of pull-request in the end. Default is true
+
+   --usernames-as-github-logins
+
+   Use GitHub tags instead of Markdown links for the author of an issue or pull-request.
 
    --unreleased-only
 
@@ -119,6 +127,10 @@ Automatically generate change log from your tags, issues, labels and pull reques
 
    Change log will exclude specified tags
 
+   --exclude-tags-regex [REGEX]
+
+   Apply a regular expression on tag names so that they can be excluded, for example: --exclude-tags-regex ".*\+\d{1,}"
+
    --since-tag x
 
    Change log will start after specified tag
@@ -150,6 +162,22 @@ Automatically generate change log from your tags, issues, labels and pull reques
    --future-release [RELEASE-VERSION]
 
    Put the unreleased changes in the specified release number.
+
+   --release-branch [RELEASE-BRANCH]
+
+   Limit pull requests to the release branch, such as master or release
+
+   --http-cache
+
+   Use HTTP Cache to cache Github API requests (useful for large repos) Default is true.
+
+   --[no-]cache-file [CACHE-FILE]
+
+   Filename to use for cache. Default is /tmp/github-changelog-http-cache
+
+   --cache-log [CACHE-LOG]
+
+   Filename to use for cache log. Default is /tmp/github-changelog-logger.log
 
    --[no-]verbose
 
