@@ -1,7 +1,47 @@
 # Change Log
 
+## [v1.14.0](https://github.com/skywinder/github-changelog-generator/tree/v1.14.0) (2016-11-05)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.13.2...v1.14.0)
+
+**Implemented enhancements:**
+
+- On OctoKit::Forbidden error: retry with exponential backoff [\#434](https://github.com/skywinder/github-changelog-generator/pull/434) ([awaage](https://github.com/awaage))
+- Use octokit, carrying awaage commits [\#422](https://github.com/skywinder/github-changelog-generator/pull/422) ([olleolleolle](https://github.com/olleolleolle))
+- Add option to show selected labels in the issue line [\#418](https://github.com/skywinder/github-changelog-generator/pull/418) ([aih](https://github.com/aih))
+
+**Fixed bugs:**
+
+- unreleased and unreleased-label [\#374](https://github.com/skywinder/github-changelog-generator/issues/374)
+- Problems installing 1.11.7 on Windows when git absent [\#349](https://github.com/skywinder/github-changelog-generator/issues/349)
+
+**Closed issues:**
+
+- broken issue-line-labels in log [\#442](https://github.com/skywinder/github-changelog-generator/issues/442)
+- Broken multi hyphen options in param file [\#440](https://github.com/skywinder/github-changelog-generator/issues/440)
+- Install error on Mac: "rack requires Ruby version \>= 2.2.2" [\#425](https://github.com/skywinder/github-changelog-generator/issues/425)
+- Changelog includes issues going back months too far [\#394](https://github.com/skywinder/github-changelog-generator/issues/394)
+
+**Merged pull requests:**
+
+- Fixed issue \#442 - broken issue-line-labels in log. [\#443](https://github.com/skywinder/github-changelog-generator/pull/443) ([thorsteneckel](https://github.com/thorsteneckel))
+- Fixed issue \#440 - broken multi hyphen options in param file. [\#441](https://github.com/skywinder/github-changelog-generator/pull/441) ([thorsteneckel](https://github.com/thorsteneckel))
+- Option --unreleased-label explained [\#439](https://github.com/skywinder/github-changelog-generator/pull/439) ([olleolleolle](https://github.com/olleolleolle))
+- Fixed issue \#304 - entries of previous tags are included. [\#438](https://github.com/skywinder/github-changelog-generator/pull/438) ([thorsteneckel](https://github.com/thorsteneckel))
+- man page: Add undescribed options [\#437](https://github.com/skywinder/github-changelog-generator/pull/437) ([olleolleolle](https://github.com/olleolleolle))
+- On GitHub MAX\_THREAD\_NUMBER is 25 [\#433](https://github.com/skywinder/github-changelog-generator/pull/433) ([olleolleolle](https://github.com/olleolleolle))
+- OctoFetcher, Options: Refactoring [\#432](https://github.com/skywinder/github-changelog-generator/pull/432) ([olleolleolle](https://github.com/olleolleolle))
+- Fix typo in Readme [\#431](https://github.com/skywinder/github-changelog-generator/pull/431) ([rmtheis](https://github.com/rmtheis))
+- Fix: Turn Sawyer method into String-keyed hash access [\#429](https://github.com/skywinder/github-changelog-generator/pull/429) ([olleolleolle](https://github.com/olleolleolle))
+- Spec: Test a url helper function [\#428](https://github.com/skywinder/github-changelog-generator/pull/428) ([olleolleolle](https://github.com/olleolleolle))
+- Rubocop TODO file regenerated [\#427](https://github.com/skywinder/github-changelog-generator/pull/427) ([olleolleolle](https://github.com/olleolleolle))
+- Drop a stray Markdown file [\#426](https://github.com/skywinder/github-changelog-generator/pull/426) ([olleolleolle](https://github.com/olleolleolle))
+- Travis: Add JRuby 9.1.5.0 to matrix [\#424](https://github.com/skywinder/github-changelog-generator/pull/424) ([olleolleolle](https://github.com/olleolleolle))
+
 ## [1.13.2](https://github.com/skywinder/github-changelog-generator/tree/1.13.2) (2016-09-29)
-[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.13.1...1.13.2)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/v1.13.2...1.13.2)
+
+## [v1.13.2](https://github.com/skywinder/github-changelog-generator/tree/v1.13.2) (2016-09-29)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.13.1...v1.13.2)
 
 **Implemented enhancements:**
 
