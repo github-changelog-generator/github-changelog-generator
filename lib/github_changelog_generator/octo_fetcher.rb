@@ -249,33 +249,39 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     #
     # @param [Octokit::Client] client
     # @param [String] method (eg. 'tags')
+    #
+    # @yield [Sawyer::Resource] An OctoKit-provided response (which can be empty)
+    #
     # @return [Integer] total number of pages
     def iterate_pages(client, method, *args)
-      if args.size == 1 && args.first.is_a?(Hash)
-        request_options = args.delete_at(0)
-      elsif args.size > 1 && args.last.is_a?(Hash)
-        request_options = args.delete_at(args.length - 1)
-      end
+      request_opts = extract_request_args(args)
+      args.push(@request_options.merge(request_opts))
 
-      args.push(@request_options.merge(request_options))
+      number_of_pages = 1
 
-      pages = 1
-
-      check_github_response do
-        client.send(method, user_project, *args)
-      end
+      check_github_response { client.send(method, user_project, *args) }
       last_response = client.last_response
 
-      yield last_response.data
+      yield(last_response.data)
 
       until (next_one = last_response.rels[:next]).nil?
-        pages += 1
+        number_of_pages += 1
 
         last_response = check_github_response { next_one.get }
-        yield last_response.data
+        yield(last_response.data)
       end
 
-      pages
+      number_of_pages
+    end
+
+    def extract_request_args(args)
+      if args.size == 1 && args.first.is_a?(Hash)
+        args.delete_at(0)
+      elsif args.size > 1 && args.last.is_a?(Hash)
+        args.delete_at(args.length - 1)
+      else
+        {}
+      end
     end
 
     # This is wrapper with rescue block
