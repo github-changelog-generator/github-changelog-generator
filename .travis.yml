@@ -17,11 +17,11 @@ matrix:
       gemfile: gemfiles/Gemfile.2_1
     - rvm: 2.3.1
       gemfile: gemfiles/Gemfile.2_3_1
-    - rvm: 2.4.0-preview2
+    - rvm: 2.4.0-preview3
       gemfile: gemfiles/Gemfile.2_4_0
-    - rvm: jruby-9.1.5.0
+    - rvm: jruby-9.1.6.0
       jdk: oraclejdk8
-      gemfile: gemfiles/Gemfile.jruby-9.1.5.0
+      gemfile: gemfiles/Gemfile.jruby-9.1
       env:
         - JRUBY_OPTS=--debug
 
