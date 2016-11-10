@@ -103,7 +103,7 @@ module GitHubChangelogGenerator
       print_empty_line
 
       if tags.count == 0
-        Helper.log.warn "Warning: Can't find any tags in repo.\
+        Helper.log.warn "Warning: Can't find any tags in repo. \
 Make sure, that you push tags to remote repo via 'git push --tags'"
       else
         Helper.log.info "Found #{tags.count} tags"
@@ -244,6 +244,8 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       end
     end
 
+    MovedPermanentlyError = Class.new(RuntimeError)
+
     # Iterates through all pages until there are no more :next pages to follow
     # yields the result per page
     #
@@ -261,6 +263,9 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
 
       check_github_response { client.send(method, user_project, *args) }
       last_response = client.last_response
+      if last_response.status == 301
+        raise MovedPermanentlyError, last_response.data[:url]
+      end
 
       yield(last_response.data)
 
@@ -291,7 +296,9 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       Retriable.retriable(retry_options) do
         yield
       end
-
+    rescue MovedPermanentlyError => e
+      Helper.log.error("#{e.class}: #{e.message}")
+      sys_abort("The repository has moved, please update your configuration")
     rescue Octokit::Forbidden => e
       Helper.log.error("#{e.class}: #{e.message}")
       sys_abort("Exceeded retry limit")
