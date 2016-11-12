@@ -1,7 +1,30 @@
 # Change Log
 
+## [v1.14.2](https://github.com/skywinder/github-changelog-generator/tree/v1.14.2) (2016-11-12)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/v1.14.1...v1.14.2)
+
+**Implemented enhancements:**
+
+- We should add a git-generate-changelog command. [\#255](https://github.com/skywinder/github-changelog-generator/issues/255)
+- OctoFetcher: Moved repositories fail explicitly [\#449](https://github.com/skywinder/github-changelog-generator/pull/449) ([olleolleolle](https://github.com/olleolleolle))
+
+**Closed issues:**
+
+- Error: can't convert Sawyer::Resource to Array when iterating over a 301 Moved Permanently [\#448](https://github.com/skywinder/github-changelog-generator/issues/448)
+
+## [v1.14.1](https://github.com/skywinder/github-changelog-generator/tree/v1.14.1) (2016-11-06)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/v1.14.0...v1.14.1)
+
+**Closed issues:**
+
+- multi\_json is required but is listed as a test dependency [\#444](https://github.com/skywinder/github-changelog-generator/issues/444)
+
+**Merged pull requests:**
+
+- Add multi\_json as a runtime dependency [\#445](https://github.com/skywinder/github-changelog-generator/pull/445) ([rnelson0](https://github.com/rnelson0))
+
 ## [v1.14.0](https://github.com/skywinder/github-changelog-generator/tree/v1.14.0) (2016-11-05)
-[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.13.2...v1.14.0)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/v1.13.2...v1.14.0)
 
 **Implemented enhancements:**
 
@@ -37,11 +60,11 @@
 - Drop a stray Markdown file [\#426](https://github.com/skywinder/github-changelog-generator/pull/426) ([olleolleolle](https://github.com/olleolleolle))
 - Travis: Add JRuby 9.1.5.0 to matrix [\#424](https://github.com/skywinder/github-changelog-generator/pull/424) ([olleolleolle](https://github.com/olleolleolle))
 
-## [1.13.2](https://github.com/skywinder/github-changelog-generator/tree/1.13.2) (2016-09-29)
-[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/v1.13.2...1.13.2)
-
 ## [v1.13.2](https://github.com/skywinder/github-changelog-generator/tree/v1.13.2) (2016-09-29)
-[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.13.1...v1.13.2)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.13.2...v1.13.2)
+
+## [1.13.2](https://github.com/skywinder/github-changelog-generator/tree/1.13.2) (2016-09-29)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/1.13.1...1.13.2)
 
 **Implemented enhancements:**
 
