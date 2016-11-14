@@ -25,10 +25,10 @@ module GitHubChangelogGenerator
         -> { from_cli_option },
         -> { FIXED_TEST_PROJECT if in_development? },
         -> { from_git_remote }
-      ].find(-> { proc { [nil, nil] } }) do |strategy|
+      ].find(-> { [nil, nil] }) do |strategy|
         user, project = strategy.call
-        user && project
-      end.call
+        break [user, project] if user && project
+      end
     end
 
     def in_development?
