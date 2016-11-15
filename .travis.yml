@@ -6,16 +6,16 @@ before_install:
   - gem install bundler
 matrix:
   include:
-    - rvm: 2.2.2
+    - rvm: 2.2.6
       install: true # This skips 'bundle install'
       script: gem build github_changelog_generator && gem install *.gem
-    - rvm: 2.2.2
+    - rvm: 2.2.6
       install: true # This skips 'bundle install'
       script: gem build github_changelog_generator && bundle install
       gemfile: spec/install-gem-in-bundler.gemfile
     - rvm: 2.1
       gemfile: gemfiles/Gemfile.2_1
-    - rvm: 2.3.1
+    - rvm: 2.3.2
       gemfile: gemfiles/Gemfile.2_3_1
     - rvm: 2.4.0-preview3
       gemfile: gemfiles/Gemfile.2_4_0
