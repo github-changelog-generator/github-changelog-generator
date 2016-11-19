@@ -24,9 +24,16 @@ module GitHubChangelogGenerator
     # PRs to include in this section will be >= [Left Tag Date] and <= [Right Tag Date]
     def build_tag_section_mapping(filtered_tags, all_tags)
       tag_mapping = {}
-      filtered_tags.each do |tag|
-        older_tag_idx = all_tags.index(tag) + 1
-        older_tag = all_tags[older_tag_idx]
+      for i in 0..(filtered_tags.length - 1)
+        tag = filtered_tags[i]
+
+        # Don't create section header for the "since" tag
+        next if @since_tag && tag["name"] == @since_tag
+
+        # Don't create a section header for the first tag in between_tags
+        next if options[:between_tags] && tag == filtered_tags.last
+
+        older_tag = filtered_tags[i + 1]
         tag_mapping[tag] = [older_tag, tag]
       end
       tag_mapping
@@ -113,7 +120,7 @@ module GitHubChangelogGenerator
         if all_tags.map { |t| t["name"] }.include? tag
           idx = all_tags.index { |t| t["name"] == tag }
           filtered_tags = if idx > 0
-                            all_tags[0..idx - 1]
+                            all_tags[0..idx]
                           else
                             []
                           end
