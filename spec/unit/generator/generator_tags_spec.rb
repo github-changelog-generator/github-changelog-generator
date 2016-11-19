@@ -13,6 +13,174 @@ describe GitHubChangelogGenerator::Generator do
     end
   end
 
+  describe "#build_tag_section_mapping" do
+    let(:sorted_tags) { tags_from_strings(%w(8 7 6 5 4 3 2 1)) }
+    let(:filtered_tags) { generator.get_filtered_tags(sorted_tags) }
+
+    subject do
+      generator.build_tag_section_mapping(filtered_tags, sorted_tags)
+    end
+
+    context "with no constraints" do
+      let(:generator) { GitHubChangelogGenerator::Generator.new() }
+
+      let(:expected_mapping) do
+        {
+          tag_with_name('8') => [tag_with_name('7'), tag_with_name('8')],
+          tag_with_name('7') => [tag_with_name('6'), tag_with_name('7')],
+          tag_with_name('6') => [tag_with_name('5'), tag_with_name('6')],
+          tag_with_name('5') => [tag_with_name('4'), tag_with_name('5')],
+          tag_with_name('4') => [tag_with_name('3'), tag_with_name('4')],
+          tag_with_name('3') => [tag_with_name('2'), tag_with_name('3')],
+          tag_with_name('2') => [tag_with_name('1'), tag_with_name('2')],
+          tag_with_name('1') => [nil, tag_with_name('1')]
+        }
+      end
+
+      it { is_expected.to be_a(Hash) }
+      it { is_expected.to eq(expected_mapping) }
+    end
+
+    context "with between tags only" do
+      let(:generator) { GitHubChangelogGenerator::Generator.new(between_tags: %w(3 5 8)) }
+
+      let(:expected_mapping) do
+        {
+          tag_with_name('8') => [tag_with_name('5'), tag_with_name('8')],
+          tag_with_name('5') => [tag_with_name('3'), tag_with_name('5')]
+        }
+      end
+
+      it { is_expected.to be_a(Hash) }
+      it { is_expected.to eq(expected_mapping) }
+    end
+
+    context "with since only" do
+      let(:generator) { GitHubChangelogGenerator::Generator.new(since_tag: '6') }
+      let(:expected_mapping) do
+        {
+          tag_with_name('8') => [tag_with_name('7'), tag_with_name('8')],
+          tag_with_name('7') => [tag_with_name('6'), tag_with_name('7')]
+        }
+      end
+
+      it { is_expected.to be_a(Hash) }
+      it { is_expected.to eq(expected_mapping) }
+    end
+
+    context "with due only" do
+      let(:generator) { GitHubChangelogGenerator::Generator.new(due_tag: '4') }
+      let(:expected_mapping) do
+        {
+          tag_with_name('3') => [tag_with_name('2'), tag_with_name('3')],
+          tag_with_name('2') => [tag_with_name('1'), tag_with_name('2')],
+          tag_with_name('1') => [nil, tag_with_name('1')]
+        }
+      end
+
+      it { is_expected.to be_a(Hash) }
+      it { is_expected.to eq(expected_mapping) }
+    end
+
+    context "with since and due" do
+      let(:generator) { GitHubChangelogGenerator::Generator.new(since_tag: '2', due_tag: '5') }
+      let(:expected_mapping) do
+        {
+          tag_with_name('4') => [tag_with_name('3'), tag_with_name('4')],
+          tag_with_name('3') => [tag_with_name('2'), tag_with_name('3')]
+        }
+      end
+
+      it { is_expected.to be_a(Hash) }
+      it { is_expected.to eq(expected_mapping) }
+    end
+
+    context "with since, due, and between_tags" do
+      let(:generator) { GitHubChangelogGenerator::Generator.new(since_tag: '2', due_tag: '7', between_tags: %w(3 5 6)) }
+      let(:expected_mapping) do
+        {
+          tag_with_name('6') => [tag_with_name('5'), tag_with_name('6')],
+          tag_with_name('5') => [tag_with_name('3'), tag_with_name('5')]
+        }
+      end
+
+      it { is_expected.to be_a(Hash) }
+      it { is_expected.to eq(expected_mapping) }
+    end
+
+    context "with conflicting since/due/between_tags" do
+      let(:generator) { GitHubChangelogGenerator::Generator.new(since_tag: '2', due_tag: '7', between_tags: %w(1 3 6 8)) }
+      let(:expected_mapping) do
+        {
+          tag_with_name('6') => [tag_with_name('3'), tag_with_name('6')]
+        }
+      end
+
+      it { is_expected.to be_a(Hash) }
+      it { is_expected.to eq(expected_mapping) }
+    end
+  end
+
+  describe "#filter_between_tags" do
+    context "when between_tags nil" do
+      before do
+        @generator = GitHubChangelogGenerator::Generator.new(between_tags: nil)
+      end
+
+      subject do
+        @generator.get_filtered_tags(tags_from_strings(%w(1 2 3)))
+      end
+      it { is_expected.to be_a(Array) }
+      it { is_expected.to match_array(tags_from_strings(%w(1 2 3))) }
+    end
+    context "when between_tags same as input array" do
+      before do
+        @generator = GitHubChangelogGenerator::Generator.new(between_tags: %w(1 2 3))
+      end
+      subject do
+        @generator.get_filtered_tags(tags_from_strings(%w(1 2 3)))
+      end
+      it { is_expected.to be_a(Array) }
+      it { is_expected.to match_array(tags_from_strings(%w(1 2 3))) }
+    end
+
+    context "when between_tags filled with correct values" do
+      before do
+        @generator = GitHubChangelogGenerator::Generator.new(between_tags: %w(1 2))
+      end
+      subject do
+        @generator.get_filtered_tags(tags_from_strings(%w(1 2 3)))
+      end
+      it { is_expected.to be_a(Array) }
+      it { is_expected.to match_array(tags_from_strings(%w(1 2))) }
+    end
+
+    context "when between_tags filled with invalid values" do
+      before do
+        @generator = GitHubChangelogGenerator::Generator.new(between_tags: %w(1 q w))
+      end
+
+      subject do
+        @generator.get_filtered_tags(tags_from_strings(%w(1 2 3)))
+      end
+      it { is_expected.to be_a(Array) }
+      it { is_expected.to match_array(tags_from_strings(%w(1))) }
+    end
+  end
+
+  describe "#get_filtered_tags" do
+    subject do
+      generator.get_filtered_tags(tags_from_strings(%w(1 2 3 4 5)))
+    end
+
+    context "respects between tags" do
+      let(:generator) { GitHubChangelogGenerator::Generator.new(between_tags: %w(1 2 3)) }
+
+      it { is_expected.to be_a Array }
+      it { is_expected.to match_array(tags_from_strings(%w(1 2 3))) }
+    end
+  end
+
   describe "#filter_excluded_tags" do
     subject { generator.filter_excluded_tags(tags_from_strings(%w[1 2 3])) }
 
