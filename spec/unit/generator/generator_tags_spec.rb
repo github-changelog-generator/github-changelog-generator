@@ -232,7 +232,7 @@ describe GitHubChangelogGenerator::Generator do
       context "with valid since tag" do
         let(:generator) { GitHubChangelogGenerator::Generator.new(since_tag: "2") }
         it { is_expected.to be_a Array }
-        it { is_expected.to match_array(tags_from_strings(%w[1])) }
+        it { is_expected.to match_array(tags_from_strings(%w[1 2])) }
       end
 
       context "with invalid since tag" do
