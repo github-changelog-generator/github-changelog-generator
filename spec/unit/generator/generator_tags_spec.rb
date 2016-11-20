@@ -14,13 +14,21 @@ describe GitHubChangelogGenerator::Generator do
   end
 
   describe "#build_tag_section_mapping" do
-    let(:sorted_tags) { tags_from_strings(%w(8 7 6 5 4 3 2 1)) }
-    let(:filtered_tags) { generator.get_filtered_tags(sorted_tags) }
+    let(:all_tags) { tags_from_strings(%w(8 7 6 5 4 3 2 1)) }
+    let(:sorted_tags) { all_tags }
+
     let(:options) { {} }
     let(:generator) { GitHubChangelogGenerator::Generator.new(options) }
 
+    before do
+      allow_any_instance_of(GitHubChangelogGenerator::OctoFetcher).to receive(:get_all_tags).and_return(all_tags)
+      allow(generator).to receive(:fetch_tags_dates).with(all_tags)
+      allow(generator).to receive(:sort_tags_by_date).with(all_tags).and_return(sorted_tags)
+      generator.fetch_and_filter_tags
+    end
+
     subject do
-      generator.build_tag_section_mapping(filtered_tags, sorted_tags)
+      generator.tag_section_mapping
     end
 
     shared_examples_for "a section mapping" do
@@ -38,6 +46,20 @@ describe GitHubChangelogGenerator::Generator do
           tag_with_name("4") => [tag_with_name("3"), tag_with_name("4")],
           tag_with_name("3") => [tag_with_name("2"), tag_with_name("3")],
           tag_with_name("2") => [tag_with_name("1"), tag_with_name("2")],
+          tag_with_name("1") => [nil, tag_with_name("1")]
+        }
+      end
+
+      it_behaves_like "a section mapping"
+    end
+
+    shared_examples_for "a changelog with some exclusions" do
+      let(:expected_mapping) do
+        {
+          tag_with_name("8") => [tag_with_name("7"), tag_with_name("8")],
+          tag_with_name("6") => [tag_with_name("5"), tag_with_name("6")],
+          tag_with_name("4") => [tag_with_name("3"), tag_with_name("4")],
+          tag_with_name("3") => [tag_with_name("2"), tag_with_name("3")],
           tag_with_name("1") => [nil, tag_with_name("1")]
         }
       end
@@ -119,6 +141,26 @@ describe GitHubChangelogGenerator::Generator do
       end
 
       it_behaves_like "a section mapping"
+    end
+
+    context "with excluded tags" do
+      context "as a list of strings" do
+        let(:options) { { exclude_tags: %w(2 5 7) } }
+
+        it_behaves_like "a changelog with some exclusions"
+      end
+
+      context "as a regex" do
+        let(:options) { { exclude_tags: /[257]/ } }
+
+        it_behaves_like "a changelog with some exclusions"
+      end
+
+      context "as a regex string" do
+        let(:options) { { exclude_tags_regex: "[257]" } }
+
+        it_behaves_like "a changelog with some exclusions"
+      end
     end
   end
 
