@@ -12,7 +12,7 @@ describe GitHubChangelogGenerator::Generator do
     end
   end
 
-  describe "#build_tag_section_mapping" do
+  describe "tag_section_mapping" do
     let(:all_tags) { tags_from_strings(%w(8 7 6 5 4 3 2 1)) }
     let(:sorted_tags) { all_tags }
 
