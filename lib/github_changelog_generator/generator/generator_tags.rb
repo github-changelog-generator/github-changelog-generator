@@ -22,7 +22,8 @@ module GitHubChangelogGenerator
     # @param [Array] all_tags is the list of all tags ordered from newest -> oldest
     # @return [Hash] key is the tag to output, value is an array of [Left Tag, Right Tag]
     # PRs to include in this section will be >= [Left Tag Date] and <= [Right Tag Date]
-    def build_tag_section_mapping(filtered_tags, all_tags)
+    # rubocop:disable Style/For - for allows us to be more concise
+    def build_tag_section_mapping(filtered_tags, _all_tags)
       tag_mapping = {}
       for i in 0..(filtered_tags.length - 1)
         tag = filtered_tags[i]
@@ -38,6 +39,7 @@ module GitHubChangelogGenerator
       end
       tag_mapping
     end
+    # rubocop:enable Style/For
 
     # Sort all tags by date, newest to oldest
     def sort_tags_by_date(tags)
