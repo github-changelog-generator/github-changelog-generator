@@ -146,6 +146,8 @@ end
 
 All command line options can be passed to the `rake` task as `config` parameters. And since you're naming the `rake` task yourself, you can create as many as you want.
 
+You can look for params names from the [parser source code (#setup_parser)](https://github.com/skywinder/github-changelog-generator/blob/master/lib/github_changelog_generator/parser.rb). For example, to translate the bugs label to portuguese, instead of setting `config.bugs_label`, you have to set `config.bug_prefix`, and so on.
+
 ## Features and advantages of this project
 - Generate canonical, neat change log file, followed by [basic change log guidelines](http://keepachangelog.com) :gem:
 - Optionally generate **Unreleased** changes (closed issues that have not released yet) :dizzy:
