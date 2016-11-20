@@ -57,7 +57,7 @@ module GitHubChangelogGenerator
     # @param [Array] pull_requests List or PR's in new section
     # @param [Array] issues List of issues in new section
     # @param [String] newer_tag Name of the newer tag. Could be nil for `Unreleased` section
-    # @param [String] older_tag Older tag, used for the links. Could be nil for last tag.
+    # @param [Hash, nil] older_tag Older tag, used for the links. Could be nil for last tag.
     # @return [String] Ready and parsed section
     def create_log_for_tag(pull_requests, issues, newer_tag, older_tag = nil)
       newer_tag_link, newer_tag_name, newer_tag_time = detect_link_tag_time(newer_tag)
