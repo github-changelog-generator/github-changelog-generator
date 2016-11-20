@@ -81,7 +81,7 @@ module GitHubChangelogGenerator
         log += issues_to_log(issues, pull_requests)
       end
 
-      if options[:pulls]
+      if options[:pulls] && options[:add_pr_wo_labels]
         # Generate pull requests:
         log += generate_sub_section(pull_requests, options[:merge_prefix])
       end
