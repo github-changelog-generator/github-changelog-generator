@@ -17,8 +17,9 @@ describe GitHubChangelogGenerator::Generator do
     let(:all_tags) { tags_from_strings(%w(8 7 6 5 4 3 2 1)) }
     let(:sorted_tags) { all_tags }
 
+    let(:default_options) { GitHubChangelogGenerator::Parser.default_options }
     let(:options) { {} }
-    let(:generator) { GitHubChangelogGenerator::Generator.new(options) }
+    let(:generator) { described_class.new(default_options.merge(options)) }
 
     before do
       allow_any_instance_of(GitHubChangelogGenerator::OctoFetcher).to receive(:get_all_tags).and_return(all_tags)
