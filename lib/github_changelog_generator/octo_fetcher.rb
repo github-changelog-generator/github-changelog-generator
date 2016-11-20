@@ -227,6 +227,17 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       end
     end
 
+    # Fetch all commits before certain point
+    #
+    # @return [String]
+    def commits_before(start_time)
+      commits = []
+      iterate_pages(@client, "commits_before", start_time.to_datetime.to_s) do |new_commits|
+        commits.concat(new_commits)
+      end
+      commits
+    end
+
     private
 
     def stringify_keys_deep(indata)
