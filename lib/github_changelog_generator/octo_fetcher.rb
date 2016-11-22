@@ -23,7 +23,7 @@ module GitHubChangelogGenerator
     # @option options [Boolean] :http_cache Use ActiveSupport::Cache::FileStore to cache http requests
     # @option options [Boolean] :cache_file If using http_cache, this is the cache file path
     # @option options [Boolean] :cache_log If using http_cache, this is the cache log file path
-    def initialize(options = {}) # rubocop:disable Metrics/CyclomaticComplexity
+    def initialize(options = {})
       @options      = options || {}
       @user         = @options[:user]
       @project      = @options[:project]
@@ -40,8 +40,7 @@ module GitHubChangelogGenerator
       @github_options[:access_token] = @github_token unless @github_token.nil?
       @github_options[:api_endpoint] = @options[:github_endpoint] unless @options[:github_endpoint].nil?
 
-      client_type = @options[:github_endpoint].nil? ? Octokit::Client : Octokit::EnterpriseAdminClient
-      @client     = client_type.new(@github_options)
+      @client = Octokit::Client.new(@github_options)
     end
 
     def init_cache
