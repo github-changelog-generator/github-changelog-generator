@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 source "https://rubygems.org"
 
+ruby RUBY_VERSION
+
 gemspec
 
 group :development, :test do
-  gem "rake"
   gem "bundler"
   gem "overcommit", ">= 0.31"
+  gem "rake"
   gem "rubocop", ">= 0.43"
 end
 
@@ -15,16 +17,12 @@ group :development do
 end
 
 group :test do
-  gem "vcr"
-  gem "multi_json"
-  gem "webmock"
-  gem "coveralls", "~>0.8", require: false
-  gem "simplecov", "~>0.10", require: false
   gem "codeclimate-test-reporter", "~>0.4"
-  if RUBY_VERSION > "2"
-    gem "json", "~> 2.0", ">= 2.0.2"
-  else
-    gem "json"
-  end
+  gem "coveralls", "~>0.8", require: false
+  gem "json"
+  gem "multi_json"
   gem "rspec", "< 4"
+  gem "simplecov", "~>0.10", require: false
+  gem "vcr"
+  gem "webmock"
 end
