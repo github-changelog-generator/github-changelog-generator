@@ -29,10 +29,11 @@ module GitHubChangelogGenerator
       @project      = @options[:project]
       @since        = @options[:since]
       @http_cache   = @options[:http_cache]
-      @cache_file   = @options.fetch(:cache_file, "/tmp/github-changelog-http-cache") if @http_cache
-      @cache_log    = @options.fetch(:cache_log, "/tmp/github-changelog-logger.log") if @http_cache
-      init_cache if @http_cache
-
+      if @http_cache
+        @cache_file = @options.fetch(:cache_file) { "/tmp/github-changelog-http-cache" }
+        @cache_log  = @options.fetch(:cache_log) { "/tmp/github-changelog-logger.log" }
+        init_cache
+      end
       @github_token = fetch_github_token
 
       @request_options               = { per_page: PER_PAGE_NUMBER }
