@@ -173,11 +173,11 @@ Automatically generate change log from your tags, issues, labels and pull reques
 
    --[no-]cache-file [CACHE-FILE]
 
-   Filename to use for cache. Default is /tmp/github-changelog-http-cache
+   Filename to use for cache. Default is github-changelog-http-cache in a temporary directory.
 
    --cache-log [CACHE-LOG]
 
-   Filename to use for cache log. Default is /tmp/github-changelog-logger.log
+   Filename to use for cache log. Default is github-changelog-logger.log in a temporary directory.
 
    --[no-]verbose
 

@@ -167,10 +167,10 @@ module GitHubChangelogGenerator
         opts.on("--[no-]http-cache", "Use HTTP Cache to cache Github API requests (useful for large repos) Default is true.") do |http_cache|
           options[:http_cache] = http_cache
         end
-        opts.on("--cache-file [CACHE-FILE]", "Filename to use for cache. Default is /tmp/github-changelog-http-cache") do |cache_file|
+        opts.on("--cache-file [CACHE-FILE]", "Filename to use for cache. Default is github-changelog-http-cache in a temporary directory.") do |cache_file|
           options[:cache_file] = cache_file
         end
-        opts.on("--cache-log [CACHE-LOG]", "Filename to use for cache log. Default is /tmp/github-changelog-logger.log") do |cache_log|
+        opts.on("--cache-log [CACHE-LOG]", "Filename to use for cache log. Default is github-changelog-logger.log in a temporary directory.") do |cache_log|
           options[:cache_log] = cache_log
         end
         opts.on("--[no-]verbose", "Run verbosely. Default is true") do |v|
