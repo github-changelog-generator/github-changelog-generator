@@ -9,7 +9,7 @@ module GitHubChangelogGenerator
     #                         GitHub URL, or a 'username/projectname', or
     #                         simply a GitHub username
     # @option args [String] 1 If args[0] is given as a username,
-    #                         then args[1] can given as a projectname
+    #                         then args[1] can be given as a projectname
     def initialize(options, args)
       @options = options
       @args = args
