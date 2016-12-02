@@ -4,18 +4,20 @@ module GitHubChangelogGenerator
     attr_reader :options, :args
 
     # @param options [Options]
-    # @param args [Array] ARGV or the empty list
-    # @option args [String] 0 This parameter takes two forms: Either a full
-    #                         GitHub URL, or a 'username/projectname', or
-    #                         simply a GitHub username
-    # @option args [String] 1 If args[0] is given as a username,
-    #                         then args[1] can be given as a projectname
+    # @param args [Array] ARGV or the empty list.
+    #                     The first element of this argument takes two forms:
+    #                     Either a full GitHub URL, or a 'username/projectname',
+    #                     or simply a GitHub username.
+    #                     If the first element is given as a username,
+    #                     then the second element can be given as a projectname.
     def initialize(options, args)
       @options = options
       @args = args
     end
 
     FIXED_TEST_PROJECT = %w(skywinder changelog_test)
+
+    NO_MATCHING_USER_AND_PROJECT = [nil, nil]
 
     # Returns a tuple of user and project from CLI arguments or git remote.
     #
@@ -25,7 +27,7 @@ module GitHubChangelogGenerator
         -> { from_cli_option },
         -> { FIXED_TEST_PROJECT if in_development? },
         -> { from_git_remote }
-      ].find(-> { [nil, nil] }) do |strategy|
+      ].find(proc { NO_MATCHING_USER_AND_PROJECT }) do |strategy|
         user, project = strategy.call
         break [user, project] if user && project
       end
@@ -39,27 +41,34 @@ module GitHubChangelogGenerator
     #
     # @return [Array, nil] user and project, or nil if unsuccessful
     def from_cli_option
-      user = nil
-      project = nil
       if args[0] && !args[1]
-        # this match should parse  strings such "https://github.com/skywinder/Github-Changelog-Generator" or
-        # "skywinder/Github-Changelog-Generator" to user and name
-        match = /(?:.+#{Regexp.escape(github_site)}\/)?(.+)\/(.+)/.match(args[0])
+        github_site_pattern =~ args.first
 
         begin
-          param = match[2].nil?
+          param = Regexp.last_match(2).nil?
         rescue
-          puts "Can't detect user and name from first parameter: '#{args[0]}' -> exit'"
+          puts "Can't detect user and name from first parameter: '#{args.first}' -> exit'"
           return
         end
         if param
-          return [nil, nil]
+          return NO_MATCHING_USER_AND_PROJECT
         else
-          user = match[1]
-          project = match[2]
+          [Regexp.last_match(:user), Regexp.last_match(:project)]
         end
       end
-      [user, project]
+    end
+
+    # This pattern matches strings such as:
+    #
+    # "https://github.com/skywinder/Github-Changelog-Generator"
+    #
+    # or
+    #
+    # "skywinder/Github-Changelog-Generator"
+    #
+    # to user and name.
+    def github_site_pattern
+      /(?:.*#{Regexp.quote(github_site)}\/)?(?<user>(.+))\/(?<project>(.+))/
     end
 
     # These patterns match these formats:
@@ -84,19 +93,13 @@ module GitHubChangelogGenerator
     #
     # @return [Array] user and project
     def from_git_remote
-      user = nil
-      project = nil
-      GIT_REMOTE_PATTERNS.each do |git_remote_pattern|
+      GIT_REMOTE_PATTERNS.find(proc { NO_MATCHING_USER_AND_PROJECT }) do |git_remote_pattern|
         git_remote_pattern =~ git_remote_content
 
         if Regexp.last_match
-          user = Regexp.last_match(:user)
-          project = Regexp.last_match(:project)
-          break
+          break [Regexp.last_match(:user), Regexp.last_match(:project)]
         end
       end
-
-      [user, project]
     end
 
     # @return [String] Output of git remote command
@@ -107,7 +110,7 @@ module GitHubChangelogGenerator
     private
 
     def github_site
-      options[:github_site] || "github.com"
+      options[:github_site] || "https://github.com"
     end
 
     def git_remote

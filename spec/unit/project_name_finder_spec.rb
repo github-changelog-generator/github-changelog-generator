@@ -57,7 +57,10 @@ RSpec.describe GitHubChangelogGenerator::ProjectNameFinder do
     end
 
     context "when option is invalid" do
-      it("should return the empty tuple") { expect(described_class.new({ github_site: nil }, ["blah", nil]).call).to eq [nil, nil] }
+      it("returns the empty tuple") do
+        result = described_class.new({ github_site: nil }, ["blah", nil]).call
+        expect(result).to eq(described_class::NO_MATCHING_USER_AND_PROJECT)
+      end
     end
 
     context "when option is valid" do
@@ -65,30 +68,32 @@ RSpec.describe GitHubChangelogGenerator::ProjectNameFinder do
       let(:arg2) { nil }
 
       it { is_expected.to be_a(Array) }
-      it { is_expected.to match_array(["skywinder", "ActionSheetPicker-3.0"]) }
+      it { is_expected.to match_array(%w(skywinder ActionSheetPicker-3.0)) }
     end
-    context "when option nil" do
+
+    context "when option is nil" do
       let(:arg1) { nil }
       let(:arg2) { nil }
 
       it { is_expected.to be_a(Array) }
-      it { is_expected.to match_array([nil, nil]) }
+      it { is_expected.to match_array(described_class::NO_MATCHING_USER_AND_PROJECT) }
     end
+
     context "when site is nil" do
       let(:arg1) { "skywinder/ActionSheetPicker-3.0" }
       let(:arg2) { nil }
 
       it { is_expected.to be_a(Array) }
-      it { is_expected.to match_array(["skywinder", "ActionSheetPicker-3.0"]) }
+      it { is_expected.to match_array(%w(skywinder ActionSheetPicker-3.0)) }
     end
 
     context "when site is valid" do
-      let(:arg1) { "skywinder/ActionSheetPicker-3.0" }
+      let(:arg1) { "https://codeclimate.com/skywinder/ActionSheetPicker-3.0" }
       let(:arg2) { nil }
       let(:github_site) { "https://codeclimate.com" }
 
       it { is_expected.to be_a(Array) }
-      it { is_expected.to match_array(["skywinder", "ActionSheetPicker-3.0"]) }
+      it { is_expected.to match_array(%w(skywinder ActionSheetPicker-3.0)) }
     end
 
     context "when second arg is not nil" do
@@ -96,16 +101,16 @@ RSpec.describe GitHubChangelogGenerator::ProjectNameFinder do
       let(:arg2) { "blah" }
 
       it { is_expected.to be_a(Array) }
-      it { is_expected.to match_array([nil, nil]) }
+      it { is_expected.to match_array(described_class::NO_MATCHING_USER_AND_PROJECT) }
     end
 
     context "when all args is not nil" do
-      let(:arg1) { "skywinder/ActionSheetPicker-3.0" }
+      let(:arg1) { "https://codeclimate.com/skywinder/ActionSheetPicker-3.0" }
       let(:arg2) { "blah" }
       let(:github_site) { "https://codeclimate.com" }
 
       it { is_expected.to be_a(Array) }
-      it { is_expected.to match_array([nil, nil]) }
+      it { is_expected.to match_array(described_class::NO_MATCHING_USER_AND_PROJECT) }
     end
   end
 end
