@@ -14,14 +14,10 @@ matrix:
       script: gem build github_changelog_generator && bundle install
       gemfile: spec/install-gem-in-bundler.gemfile
     - rvm: 2.1
-      gemfile: gemfiles/Gemfile.2_1
     - rvm: 2.3.3
-      gemfile: gemfiles/Gemfile.2_3_1
     - rvm: 2.4.0-preview3
-      gemfile: gemfiles/Gemfile.2_4_0
     - rvm: jruby-9.1.6.0
       jdk: oraclejdk8
-      gemfile: gemfiles/Gemfile.jruby-9.1
       env:
         - JRUBY_OPTS=--debug
 

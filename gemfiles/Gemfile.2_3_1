@@ -1,3 +1,0 @@
-eval_gemfile File.expand_path('../../Gemfile', __FILE__)
-gem 'rack', '>= 2'
-gem 'activesupport', '>= 4'
