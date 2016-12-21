@@ -15,8 +15,12 @@ matrix:
       gemfile: spec/install-gem-in-bundler.gemfile
     - rvm: 2.1
     - rvm: 2.3.3
-    - rvm: 2.4.0-preview3
+    - rvm: 2.4.0-rc1
     - rvm: jruby-9.1.6.0
+      jdk: oraclejdk8
+      env:
+        - JRUBY_OPTS=--debug
+    - rvm: jruby-head
       jdk: oraclejdk8
       env:
         - JRUBY_OPTS=--debug
