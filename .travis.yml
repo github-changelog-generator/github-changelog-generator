@@ -15,7 +15,7 @@ matrix:
       gemfile: spec/install-gem-in-bundler.gemfile
     - rvm: 2.1
     - rvm: 2.3.3
-    - rvm: 2.4.0-rc1
+    - rvm: 2.4.0
     - rvm: jruby-9.1.6.0
       jdk: oraclejdk8
       env:
@@ -25,12 +25,6 @@ matrix:
       env:
         - JRUBY_OPTS=--debug
 
-notifications:
-  email:
-    recipients:
-      - sky4winder+githubchangeloggenerator@gmail.com
-    on_success: never
-    on_failure: change
 addons:
   code_climate:
     repo_token:
