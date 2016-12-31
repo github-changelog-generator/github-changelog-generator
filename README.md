@@ -24,7 +24,7 @@ GitHub Changelog Generator ![GitHub Logo](../master/images/logo.jpg)
 
 ### Changelog generation has never been so easy
 
-**Fully automate changelog generation** - This gem generates change log file based on **tags**, **issues** and merged **pull requests** (and splits them into separate lists according to labels) from :octocat: GitHub Issue Tracker.
+**Fully automated changelog generation** - This gem generates a change log file based on **tags**, **issues** and merged **pull requests** (and splits them into separate lists according to labels) from :octocat: GitHub Issue Tracker.
 
 Since now you don't have to fill your `CHANGELOG.md` manually: just run the script, relax and take a cup of :coffee: before your next release! :tada:
 
