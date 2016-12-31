@@ -1,11 +1,31 @@
 # Change Log
 
+## [v1.14.3](https://github.com/skywinder/github-changelog-generator/tree/v1.14.3) (2016-12-31)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/v1.14.2...v1.14.3)
+
+**Fixed bugs:**
+
+- Use Octokit::Client for both .com and Enterprise [\#455](https://github.com/skywinder/github-changelog-generator/pull/455) ([eliperkins](https://github.com/eliperkins))
+
+**Closed issues:**
+
+- Last tag contains too many PRs [\#291](https://github.com/skywinder/github-changelog-generator/issues/291)
+
+**Merged pull requests:**
+
+- CodeClimate configuration file [\#465](https://github.com/skywinder/github-changelog-generator/pull/465) ([olleolleolle](https://github.com/olleolleolle))
+- Travis: Build against 2.4.0 [\#464](https://github.com/skywinder/github-changelog-generator/pull/464) ([olleolleolle](https://github.com/olleolleolle))
+- Travis: add jruby-head, 2.4.0-rc1 [\#463](https://github.com/skywinder/github-changelog-generator/pull/463) ([olleolleolle](https://github.com/olleolleolle))
+- Gemfiles for building versions separately dropped [\#461](https://github.com/skywinder/github-changelog-generator/pull/461) ([olleolleolle](https://github.com/olleolleolle))
+- Order Gemfile gems A-Z; add ruby version marker [\#460](https://github.com/skywinder/github-changelog-generator/pull/460) ([olleolleolle](https://github.com/olleolleolle))
+- README: Documentation update about RakeTask params and how to translate labels [\#454](https://github.com/skywinder/github-changelog-generator/pull/454) ([edusantana](https://github.com/edusantana))
+- Travis: Use ruby 2.3.3 and 2.2.6 [\#452](https://github.com/skywinder/github-changelog-generator/pull/452) ([olleolleolle](https://github.com/olleolleolle))
+
 ## [v1.14.2](https://github.com/skywinder/github-changelog-generator/tree/v1.14.2) (2016-11-12)
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/v1.14.1...v1.14.2)
 
 **Implemented enhancements:**
 
-- We should add a git-generate-changelog command. [\#255](https://github.com/skywinder/github-changelog-generator/issues/255)
 - OctoFetcher: Moved repositories fail explicitly [\#449](https://github.com/skywinder/github-changelog-generator/pull/449) ([olleolleolle](https://github.com/olleolleolle))
 
 **Closed issues:**
@@ -274,6 +294,7 @@
 
 **Implemented enhancements:**
 
+- We should add a git-generate-changelog command. [\#255](https://github.com/skywinder/github-changelog-generator/issues/255)
 - YAML front matter [\#322](https://github.com/skywinder/github-changelog-generator/pull/322) ([retorquere](https://github.com/retorquere))
 - Git Subcommand [\#288](https://github.com/skywinder/github-changelog-generator/pull/288) ([dlanileonardo](https://github.com/dlanileonardo))
 
