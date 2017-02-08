@@ -25,6 +25,8 @@ matrix:
       env:
         - JRUBY_OPTS=--debug
         - DEBUG=1
+  allow_failures:
+    - rvm: jruby-head
 
 addons:
   code_climate:
