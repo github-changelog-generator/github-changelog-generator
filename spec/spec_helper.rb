@@ -27,8 +27,7 @@ end
 
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
                                                                  Coveralls::SimpleCov::Formatter,
-                                                                 SimpleCov::Formatter::HTMLFormatter,
-                                                                 CodeClimate::TestReporter::Formatter
+                                                                 SimpleCov::Formatter::HTMLFormatter
                                                                ])
 SimpleCov.start do
   add_filter "gemfiles/"
