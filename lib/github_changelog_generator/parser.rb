@@ -191,8 +191,6 @@ module GitHubChangelogGenerator
     # @return [Hash] Default options
     def self.default_options
       Options.new(
-        tag1: nil,
-        tag2: nil,
         date_format: "%Y-%m-%d",
         output: "CHANGELOG.md",
         base: "HISTORY.md",
