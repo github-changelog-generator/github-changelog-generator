@@ -125,19 +125,17 @@ module GitHubChangelogGenerator
     # @return [Array] filtered array of issues
     def include_issues_by_labels(issues)
       filtered_issues = filter_by_include_labels(issues)
-      filtered_issues |= filter_wo_labels(issues)
+      filtered_issues = filter_wo_labels(filtered_issues)
       filtered_issues
     end
 
     # @return [Array] issues without labels or empty array if add_issues_wo_labels is false
     def filter_wo_labels(issues)
       if options[:add_issues_wo_labels]
-        issues_wo_labels = issues.select do |issue|
-          !issue["labels"].map { |l| l["name"] }.any?
-        end
-        return issues_wo_labels
+        issues
+      else
+        issues.reject { |issue| !issue["labels"].map { |l| l["name"] }.any? }
       end
-      []
     end
 
     def filter_by_include_labels(issues)
