@@ -10,6 +10,9 @@ AllCops:
 Metrics/LineLength:
   Enabled: false
 
+Performance/RegexpMatch:
+  Enabled: false
+
 #http://viget.com/extend/just-use-double-quoted-ruby-strings
 Style/StringLiterals:
   EnforcedStyle: double_quotes
@@ -67,3 +70,7 @@ Style/NumericPredicate:
 
 Style/SafeNavigation:
   Enabled: false
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
