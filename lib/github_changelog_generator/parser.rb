@@ -173,6 +173,9 @@ module GitHubChangelogGenerator
         opts.on("--cache-log [CACHE-LOG]", "Filename to use for cache log. Default is github-changelog-logger.log in a temporary directory.") do |cache_log|
           options[:cache_log] = cache_log
         end
+        opts.on("--ssl-ca-file [PATH]", "Path to cacert.pem file. Default is a bundled lib/github_changelog_generator/ssl_certs/cacert.pem.") do |ssl_ca_file|
+          options[:ssl_ca_file] = ssl_ca_file
+        end
         opts.on("--[no-]verbose", "Run verbosely. Default is true") do |v|
           options[:verbose] = v
         end
@@ -209,6 +212,7 @@ module GitHubChangelogGenerator
         issue_line_labels: [],
         max_issues: nil,
         simple_list: false,
+        ssl_ca_file: File.expand_path("../ssl_certs/cacert.pem", __FILE__),
         verbose: true,
         header: "# Change Log",
         merge_prefix: "**Merged pull requests:**",

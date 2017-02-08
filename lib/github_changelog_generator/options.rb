@@ -43,6 +43,7 @@ module GitHubChangelogGenerator
       :release_url,
       :simple_list,
       :since_tag,
+      :ssl_ca_file,
       :token,
       :unreleased,
       :unreleased_label,
