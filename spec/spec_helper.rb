@@ -16,7 +16,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-require "codeclimate-test-reporter"
 require "simplecov"
 require "coveralls"
 require "vcr"
@@ -28,8 +27,7 @@ end
 
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
                                                                  Coveralls::SimpleCov::Formatter,
-                                                                 SimpleCov::Formatter::HTMLFormatter,
-                                                                 CodeClimate::TestReporter::Formatter
+                                                                 SimpleCov::Formatter::HTMLFormatter
                                                                ])
 SimpleCov.start do
   add_filter "gemfiles/"
