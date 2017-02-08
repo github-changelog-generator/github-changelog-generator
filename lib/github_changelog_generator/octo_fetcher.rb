@@ -42,8 +42,8 @@ module GitHubChangelogGenerator
       @github_options[:access_token] = @github_token unless @github_token.nil?
       @github_options[:api_endpoint] = @options[:github_endpoint] unless @options[:github_endpoint].nil?
 
+      Octokit.connection_options = { ssl: { ca_file: @options[:ssl_ca_file] } }
       @client = Octokit::Client.new(@github_options)
-      @client.connection_options[:ssl] = { ca_file: @options[:ssl_ca_file] }
     end
 
     def init_cache
