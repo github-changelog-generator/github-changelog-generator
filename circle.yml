@@ -1,3 +1,6 @@
+dependencies:
+  pre:
+    - gem update --system
 notify:
   webhooks:
     # A list of hook hashes, containing the url field
