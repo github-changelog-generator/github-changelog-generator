@@ -52,11 +52,6 @@ module GitHubChangelogGenerator
       :verbose
     ]
 
-    THESE_ARE_DIFFERENT = [
-      :tag1,
-      :tag2
-    ]
-
     def initialize(values)
       super(values)
       unsupported_options.any? && raise(UnsupportedOptionError, unsupported_options.inspect)
@@ -78,15 +73,11 @@ module GitHubChangelogGenerator
     end
 
     def unsupported_options
-      values.keys - supported_options
+      values.keys - KNOWN_OPTIONS
     end
 
     def supported_option?(key)
-      supported_options.include?(key)
-    end
-
-    def supported_options
-      KNOWN_OPTIONS + THESE_ARE_DIFFERENT
+      KNOWN_OPTIONS.include?(key)
     end
   end
 end
