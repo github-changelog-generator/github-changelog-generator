@@ -16,7 +16,7 @@ matrix:
     - rvm: 2.1
     - rvm: 2.3.3
     - rvm: 2.4.0
-    - rvm: jruby-9.1.6.0
+    - rvm: jruby-9.1.7.0
       jdk: oraclejdk8
       env:
         - JRUBY_OPTS=--debug
