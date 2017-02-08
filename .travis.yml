@@ -24,6 +24,7 @@ matrix:
       jdk: oraclejdk8
       env:
         - JRUBY_OPTS=--debug
+        - DEBUG=1
 
 addons:
   code_climate:
