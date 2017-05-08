@@ -173,7 +173,7 @@ You can look for params names from the [parser source code (#setup_parser)](http
 (*See `github_changelog_generator --help`  for details)*
 
 
-###Alternatives
+### Alternatives
 Here is a [wikipage list of alternatives](https://github.com/skywinder/Github-Changelog-Generator/wiki/Alternatives) that I found. But none satisfied my requirements.
 
 *If you know other projects, feel free to edit this Wiki page!*
