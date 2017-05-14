@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "pathname"
 
 module GitHubChangelogGenerator
@@ -65,9 +66,8 @@ module GitHubChangelogGenerator
       [key.tr("-", "_").to_sym, value.gsub(/[\n\r]+/, "")]
     end
 
-    KNOWN_ARRAY_KEYS = [:exclude_labels, :include_labels, :bug_labels,
-                        :enhancement_labels, :issue_line_labels, :between_tags, :exclude_tags]
-    KNOWN_INTEGER_KEYS = [:max_issues]
+    KNOWN_ARRAY_KEYS = %i[exclude_labels include_labels bug_labels enhancement_labels issue_line_labels between_tags exclude_tags]
+    KNOWN_INTEGER_KEYS = %i[max_issues]
 
     def convert_value(value, option_name)
       if KNOWN_ARRAY_KEYS.include?(option_name)

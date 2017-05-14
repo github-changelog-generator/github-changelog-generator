@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 describe GitHubChangelogGenerator::ParserFile do
   describe ".github_changelog_generator" do
     let(:options) { {} }

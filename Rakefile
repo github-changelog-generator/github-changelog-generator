@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "bundler"
 require "bundler/gem_tasks"
 require "rubocop/rake_task"
@@ -11,7 +12,7 @@ RuboCop::RakeTask.new
 RSpec::Core::RakeTask.new(:rspec)
 
 task :copy_man_page_to_manpath do |_t|
-  known_manpath_paths = %w(/etc/manpath.config /etc/manpaths)
+  known_manpath_paths = %w[/etc/manpath.config /etc/manpaths]
   manpath = known_manpath_paths.find do |f|
     path = Pathname(f)
     path.file? && path.readable?
@@ -36,5 +37,5 @@ task :copy_man_page_to_manpath do |_t|
   end
 end
 
-task checks: [:rubocop, :rspec]
-task default: [:rubocop, :rspec]
+task checks: %i[rubocop rspec]
+task default: %i[rubocop rspec]
