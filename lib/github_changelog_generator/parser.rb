@@ -13,7 +13,10 @@ module GitHubChangelogGenerator
       ParserFile.new(options).parse!
 
       parser = setup_parser(options)
-      parser.parse!
+      begin parser.parse!
+      rescue OptionParser::InvalidOption => e
+        abort [e, parser].join("\n")
+      end
 
       fetch_user_and_project(options)
 
