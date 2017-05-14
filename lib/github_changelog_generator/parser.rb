@@ -131,9 +131,6 @@ module GitHubChangelogGenerator
         opts.on("--issue-line-labels x,y,z", Array, 'The specified labels will be shown in brackets next to each matching issue. Use "ALL" to show all labels. Default is [].') do |list|
           options[:issue_line_labels] = list
         end
-        opts.on("--between-tags  x,y,z", Array, "Change log will be filled only between specified tags") do |list|
-          options[:between_tags] = list
-        end
         opts.on("--exclude-tags  x,y,z", Array, "Change log will exclude specified tags") do |list|
           options[:exclude_tags] = list
         end
