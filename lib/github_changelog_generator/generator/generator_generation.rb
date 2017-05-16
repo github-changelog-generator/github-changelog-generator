@@ -91,7 +91,8 @@ module GitHubChangelogGenerator
       create_log_for_tag(filtered_pull_requests, filtered_issues, newer_tag, older_tag_name)
     end
 
-    # Apply all filters to issues and pull requests
+    # Filters issues and pull requests based on, respectively, `closed_at` and `merged_at`
+    #  timestamp fields.
     #
     # @return [Array] filtered issues and pull requests
     def filter_issues_for_tags(newer_tag, older_tag)
