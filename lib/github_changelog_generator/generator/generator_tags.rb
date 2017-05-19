@@ -183,9 +183,9 @@ module GitHubChangelogGenerator
     end
 
     def warn_if_nonmatching_regex(all_tags)
-      unless all_tags.map { |t| t["name"] }.any? { |t| options[:exclude_tags] =~ t }
+      unless all_tags.map { |t| t["name"] }.any? { |t| /#{options[:exclude_tags_regex]}/ =~ t }
         Helper.log.warn "Warning: unable to reject any tag, using regex "\
-                        "#{options[:exclude_tags].inspect} in --exclude-tags "\
+                        "#{options[:exclude_tags_regex].inspect} in --exclude-tags-regex "\
                         "option."
       end
     end
