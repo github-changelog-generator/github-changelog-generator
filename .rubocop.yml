@@ -6,6 +6,7 @@ AllCops:
   Exclude:
     - 'vendor/**/*'
     - 'gemfiles/**/*'
+    - 'spec/**/*'
 
 Metrics/LineLength:
   Enabled: false

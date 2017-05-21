@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
+
 require "optparse"
 require "pp"
 require_relative "version"
@@ -206,9 +207,9 @@ module GitHubChangelogGenerator
         unreleased: true,
         unreleased_label: "Unreleased",
         compare_link: true,
-        enhancement_labels: %w(enhancement Enhancement),
-        bug_labels: %w(bug Bug),
-        exclude_labels: %w(duplicate question invalid wontfix Duplicate Question Invalid Wontfix),
+        enhancement_labels: %w[enhancement Enhancement],
+        bug_labels: %w[bug Bug],
+        exclude_labels: %w[duplicate question invalid wontfix Duplicate Question Invalid Wontfix],
         issue_line_labels: [],
         max_issues: nil,
         simple_list: false,

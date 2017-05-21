@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 # Author:: Enrico Stahn <mail@enricostahn.com>
 #
 # Copyright 2014, Zanui, <engineering@zanui.com.au>
