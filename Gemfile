@@ -7,9 +7,9 @@ gemspec
 
 group :development, :test do
   gem "bundler"
-  gem "overcommit", ">= 0.31"
+  gem "overcommit"
   gem "rake"
-  gem "rubocop", ">= 0.43"
+  gem "rubocop"
 end
 
 group :development do
@@ -17,12 +17,12 @@ group :development do
 end
 
 group :test do
-  gem "codeclimate-test-reporter", "~> 1.0"
-  gem "coveralls", "~>0.8", require: false
+  gem "codeclimate-test-reporter"
+  gem "coveralls", require: false
   gem "json"
   gem "multi_json"
-  gem "rspec", "< 4"
-  gem "simplecov", "~>0.10", require: false
+  gem "rspec"
+  gem "simplecov", require: false
   gem "vcr"
   gem "webmock"
 end
