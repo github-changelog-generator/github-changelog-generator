@@ -25,11 +25,11 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_runtime_dependency "rake", "~>12.0.0"
-  spec.add_runtime_dependency "rainbow", "~>2.2.2"
-  spec.add_runtime_dependency("octokit", ["~>4.7.0"])
+  spec.add_runtime_dependency "rake", "~> 12.0.0"
+  spec.add_runtime_dependency "rainbow", "~> 2.2.2"
+  spec.add_runtime_dependency("octokit", ["~> 4.7.0"])
   spec.add_runtime_dependency("faraday-http-cache")
   spec.add_runtime_dependency("activesupport")
-  spec.add_runtime_dependency("retriable", ["~>3.0.2"])
+  spec.add_runtime_dependency("retriable", ["~> 3.0.2"])
   spec.add_runtime_dependency("multi_json")
 end
