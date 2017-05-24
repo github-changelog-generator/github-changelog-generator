@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module GitHubChangelogGenerator
   class Generator
     # delete all labels with labels from options[:exclude_labels] array
@@ -132,8 +133,8 @@ module GitHubChangelogGenerator
     # @return [Array] issues without labels or empty array if add_issues_wo_labels is false
     def filter_wo_labels(issues)
       if options[:add_issues_wo_labels]
-        issues_wo_labels = issues.select do |issue|
-          !issue["labels"].map { |l| l["name"] }.any?
+        issues_wo_labels = issues.reject do |issue|
+          issue["labels"].map { |l| l["name"] }.none?
         end
         return issues_wo_labels
       end
@@ -197,8 +198,8 @@ module GitHubChangelogGenerator
         end
       end
 
-      pull_requests.select! do |pr|
-        !pr["merged_at"].nil?
+      pull_requests.reject! do |pr|
+        pr["merged_at"].nil?
       end
 
       pull_requests
