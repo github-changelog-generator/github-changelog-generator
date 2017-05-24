@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
+
 require "optparse"
 require "pp"
 require_relative "version"
@@ -176,6 +177,9 @@ module GitHubChangelogGenerator
         opts.on("--cache-log [CACHE-LOG]", "Filename to use for cache log. Default is github-changelog-logger.log in a temporary directory.") do |cache_log|
           options[:cache_log] = cache_log
         end
+        opts.on("--ssl-ca-file [PATH]", "Path to cacert.pem file. Default is a bundled lib/github_changelog_generator/ssl_certs/cacert.pem. Respects SSL_CA_PATH.") do |ssl_ca_file|
+          options[:ssl_ca_file] = ssl_ca_file
+        end
         opts.on("--[no-]verbose", "Run verbosely. Default is true") do |v|
           options[:verbose] = v
         end
@@ -206,12 +210,13 @@ module GitHubChangelogGenerator
         unreleased: true,
         unreleased_label: "Unreleased",
         compare_link: true,
-        enhancement_labels: %w(enhancement Enhancement),
-        bug_labels: %w(bug Bug),
-        exclude_labels: %w(duplicate question invalid wontfix Duplicate Question Invalid Wontfix),
+        enhancement_labels: %w[enhancement Enhancement],
+        bug_labels: %w[bug Bug],
+        exclude_labels: %w[duplicate question invalid wontfix Duplicate Question Invalid Wontfix],
         issue_line_labels: [],
         max_issues: nil,
         simple_list: false,
+        ssl_ca_file: nil,
         verbose: true,
         header: "# Change Log",
         merge_prefix: "**Merged pull requests:**",

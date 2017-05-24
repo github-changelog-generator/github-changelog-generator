@@ -179,6 +179,10 @@ Automatically generate change log from your tags, issues, labels and pull reques
 
    Filename to use for cache log. Default is github-changelog-logger.log in a temporary directory.
 
+    --ssl-ca-file [PATH]
+
+   Path to cacert.pem file. Default is a bundled lib/github_changelog_generator/ssl_certs/cacert.pem.  Respects SSL_CA_PATH.
+
    --[no-]verbose
 
    Run verbosely. Default is true
