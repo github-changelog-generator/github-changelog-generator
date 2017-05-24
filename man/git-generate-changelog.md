@@ -119,10 +119,6 @@ Automatically generate change log from your tags, issues, labels and pull reques
 
    Issues with the specified labels will be always added to "Implemented enhancements" section. Default is 'enhancement,Enhancement'
 
-   --between-tags x,y,z
-
-   Change log will be filled only between specified tags
-
    --exclude-tags x,y,z
 
    Change log will exclude specified tags
