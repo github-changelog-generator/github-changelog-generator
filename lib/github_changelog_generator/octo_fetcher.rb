@@ -49,7 +49,7 @@ module GitHubChangelogGenerator
     end
 
     def configure_octokit_ssl
-      ca_file = ENV["SSL_CA_FILE"] || @options[:ssl_ca_file] || File.expand_path("../ssl_certs/cacert.pem", __FILE__)
+      ca_file = @options[:ssl_ca_file] || ENV["SSL_CA_FILE"] || File.expand_path("../ssl_certs/cacert.pem", __FILE__)
       Octokit.connection_options = { ssl: { ca_file: ca_file } }
     end
 
