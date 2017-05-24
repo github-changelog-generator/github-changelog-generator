@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module GitHubChangelogGenerator
   class Generator
     # fetch, filter tags, fetch dates and sort them in time order
