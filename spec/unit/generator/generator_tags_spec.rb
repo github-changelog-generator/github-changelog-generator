@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 describe GitHubChangelogGenerator::Generator do
   def tag_with_name(tag)
     {
@@ -19,167 +20,167 @@ describe GitHubChangelogGenerator::Generator do
       end
 
       subject do
-        @generator.get_filtered_tags(tags_from_strings(%w(1 2 3)))
+        @generator.get_filtered_tags(tags_from_strings(%w[1 2 3]))
       end
       it { is_expected.to be_a(Array) }
-      it { is_expected.to match_array(tags_from_strings(%w(1 2 3))) }
+      it { is_expected.to match_array(tags_from_strings(%w[1 2 3])) }
     end
     context "when between_tags same as input array" do
       before do
-        @generator = GitHubChangelogGenerator::Generator.new(between_tags: %w(1 2 3))
+        @generator = GitHubChangelogGenerator::Generator.new(between_tags: %w[1 2 3])
       end
       subject do
-        @generator.get_filtered_tags(tags_from_strings(%w(1 2 3)))
+        @generator.get_filtered_tags(tags_from_strings(%w[1 2 3]))
       end
       it { is_expected.to be_a(Array) }
-      it { is_expected.to match_array(tags_from_strings(%w(1 2 3))) }
+      it { is_expected.to match_array(tags_from_strings(%w[1 2 3])) }
     end
 
     context "when between_tags filled with correct values" do
       before do
-        @generator = GitHubChangelogGenerator::Generator.new(between_tags: %w(1 2))
+        @generator = GitHubChangelogGenerator::Generator.new(between_tags: %w[1 2])
       end
       subject do
-        @generator.get_filtered_tags(tags_from_strings(%w(1 2 3)))
+        @generator.get_filtered_tags(tags_from_strings(%w[1 2 3]))
       end
       it { is_expected.to be_a(Array) }
-      it { is_expected.to match_array(tags_from_strings(%w(1 2))) }
+      it { is_expected.to match_array(tags_from_strings(%w[1 2])) }
     end
 
     context "when between_tags filled with invalid values" do
       before do
-        @generator = GitHubChangelogGenerator::Generator.new(between_tags: %w(1 q w))
+        @generator = GitHubChangelogGenerator::Generator.new(between_tags: %w[1 q w])
       end
 
       subject do
-        @generator.get_filtered_tags(tags_from_strings(%w(1 2 3)))
+        @generator.get_filtered_tags(tags_from_strings(%w[1 2 3]))
       end
       it { is_expected.to be_a(Array) }
-      it { is_expected.to match_array(tags_from_strings(%w(1))) }
+      it { is_expected.to match_array(tags_from_strings(%w[1])) }
     end
   end
 
   describe "#get_filtered_tags" do
     subject do
-      generator.get_filtered_tags(tags_from_strings(%w(1 2 3 4 5)))
+      generator.get_filtered_tags(tags_from_strings(%w[1 2 3 4 5]))
     end
 
     context "respects between tags" do
-      let(:generator) { GitHubChangelogGenerator::Generator.new(between_tags: %w(1 2 3)) }
+      let(:generator) { GitHubChangelogGenerator::Generator.new(between_tags: %w[1 2 3]) }
 
       it { is_expected.to be_a Array }
-      it { is_expected.to match_array(tags_from_strings(%w(1 2 3))) }
+      it { is_expected.to match_array(tags_from_strings(%w[1 2 3])) }
     end
   end
 
   describe "#filter_excluded_tags" do
-    subject { generator.filter_excluded_tags(tags_from_strings(%w(1 2 3))) }
+    subject { generator.filter_excluded_tags(tags_from_strings(%w[1 2 3])) }
 
     context "with matching string" do
-      let(:generator) { GitHubChangelogGenerator::Generator.new(exclude_tags: %w(3)) }
+      let(:generator) { GitHubChangelogGenerator::Generator.new(exclude_tags: %w[3]) }
       it { is_expected.to be_a Array }
-      it { is_expected.to match_array(tags_from_strings(%w(1 2))) }
+      it { is_expected.to match_array(tags_from_strings(%w[1 2])) }
     end
 
     context "with non-matching string" do
-      let(:generator) { GitHubChangelogGenerator::Generator.new(exclude_tags: %w(invalid tags)) }
+      let(:generator) { GitHubChangelogGenerator::Generator.new(exclude_tags: %w[invalid tags]) }
       it { is_expected.to be_a Array }
-      it { is_expected.to match_array(tags_from_strings(%w(1 2 3))) }
+      it { is_expected.to match_array(tags_from_strings(%w[1 2 3])) }
     end
 
     context "with matching regex" do
       let(:generator) { GitHubChangelogGenerator::Generator.new(exclude_tags: /[23]/) }
       it { is_expected.to be_a Array }
-      it { is_expected.to match_array(tags_from_strings(%w(1))) }
+      it { is_expected.to match_array(tags_from_strings(%w[1])) }
     end
 
     context "with non-matching regex" do
       let(:generator) { GitHubChangelogGenerator::Generator.new(exclude_tags: /[abc]/) }
       it { is_expected.to be_a Array }
-      it { is_expected.to match_array(tags_from_strings(%w(1 2 3))) }
+      it { is_expected.to match_array(tags_from_strings(%w[1 2 3])) }
     end
   end
 
   describe "#filter_excluded_tags_regex" do
-    subject { generator.filter_excluded_tags(tags_from_strings(%w(1 2 3))) }
+    subject { generator.filter_excluded_tags(tags_from_strings(%w[1 2 3])) }
 
     context "with matching regex" do
       let(:generator) { GitHubChangelogGenerator::Generator.new(exclude_tags_regex: "[23]") }
       it { is_expected.to be_a Array }
-      it { is_expected.to match_array(tags_from_strings(%w(1))) }
+      it { is_expected.to match_array(tags_from_strings(%w[1])) }
     end
 
     context "with non-matching regex" do
       let(:generator) { GitHubChangelogGenerator::Generator.new(exclude_tags_regex: "[45]") }
       it { is_expected.to be_a Array }
-      it { is_expected.to match_array(tags_from_strings(%w(1 2 3))) }
+      it { is_expected.to match_array(tags_from_strings(%w[1 2 3])) }
     end
   end
 
   describe "#filter_since_tag" do
     context "with filled array" do
-      subject { generator.filter_since_tag(tags_from_strings(%w(1 2 3))) }
+      subject { generator.filter_since_tag(tags_from_strings(%w[1 2 3])) }
 
       context "with valid since tag" do
         let(:generator) { GitHubChangelogGenerator::Generator.new(since_tag: "2") }
         it { is_expected.to be_a Array }
-        it { is_expected.to match_array(tags_from_strings(%w(1))) }
+        it { is_expected.to match_array(tags_from_strings(%w[1])) }
       end
 
       context "with invalid since tag" do
         let(:generator) { GitHubChangelogGenerator::Generator.new(since_tag: "Invalid tag") }
         it { is_expected.to be_a Array }
-        it { is_expected.to match_array(tags_from_strings(%w(1 2 3))) }
+        it { is_expected.to match_array(tags_from_strings(%w[1 2 3])) }
       end
     end
 
     context "with empty array" do
-      subject { generator.filter_since_tag(tags_from_strings(%w())) }
+      subject { generator.filter_since_tag(tags_from_strings(%w[])) }
 
       context "with valid since tag" do
         let(:generator) { GitHubChangelogGenerator::Generator.new(since_tag: "2") }
         it { is_expected.to be_a Array }
-        it { is_expected.to match_array(tags_from_strings(%w())) }
+        it { is_expected.to match_array(tags_from_strings(%w[])) }
       end
 
       context "with invalid since tag" do
         let(:generator) { GitHubChangelogGenerator::Generator.new(since_tag: "Invalid tag") }
         it { is_expected.to be_a Array }
-        it { is_expected.to match_array(tags_from_strings(%w())) }
+        it { is_expected.to match_array(tags_from_strings(%w[])) }
       end
     end
   end
 
   describe "#filter_due_tag" do
     context "with filled array" do
-      subject { generator.filter_due_tag(tags_from_strings(%w(1 2 3))) }
+      subject { generator.filter_due_tag(tags_from_strings(%w[1 2 3])) }
 
       context "with valid due tag" do
         let(:generator) { GitHubChangelogGenerator::Generator.new(due_tag: "2") }
         it { is_expected.to be_a Array }
-        it { is_expected.to match_array(tags_from_strings(%w(3))) }
+        it { is_expected.to match_array(tags_from_strings(%w[3])) }
       end
 
       context "with invalid due tag" do
         let(:generator) { GitHubChangelogGenerator::Generator.new(due_tag: "Invalid tag") }
         it { is_expected.to be_a Array }
-        it { is_expected.to match_array(tags_from_strings(%w(1 2 3))) }
+        it { is_expected.to match_array(tags_from_strings(%w[1 2 3])) }
       end
     end
 
     context "with empty array" do
-      subject { generator.filter_due_tag(tags_from_strings(%w())) }
+      subject { generator.filter_due_tag(tags_from_strings(%w[])) }
 
       context "with valid due tag" do
         let(:generator) { GitHubChangelogGenerator::Generator.new(due_tag: "2") }
         it { is_expected.to be_a Array }
-        it { is_expected.to match_array(tags_from_strings(%w())) }
+        it { is_expected.to match_array(tags_from_strings(%w[])) }
       end
 
       context "with invalid due tag" do
         let(:generator) { GitHubChangelogGenerator::Generator.new(due_tag: "Invalid tag") }
         it { is_expected.to be_a Array }
-        it { is_expected.to match_array(tags_from_strings(%w())) }
+        it { is_expected.to match_array(tags_from_strings(%w[])) }
       end
     end
   end
@@ -232,13 +233,13 @@ describe GitHubChangelogGenerator::Generator do
       @generator.sort_tags_by_date(tags)
     end
     context "sort unsorted tags" do
-      let(:tags) { tags_from_strings %w(valid_tag1 valid_tag2 valid_tag3) }
+      let(:tags) { tags_from_strings %w[valid_tag1 valid_tag2 valid_tag3] }
 
       it { is_expected.to be_a_kind_of(Array) }
       it { is_expected.to match_array(tags.reverse!) }
     end
     context "sort sorted tags" do
-      let(:tags) { tags_from_strings %w(valid_tag3 valid_tag2 valid_tag1) }
+      let(:tags) { tags_from_strings %w[valid_tag3 valid_tag2 valid_tag1] }
 
       it { is_expected.to be_a_kind_of(Array) }
       it { is_expected.to match_array(tags) }
