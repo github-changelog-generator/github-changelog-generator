@@ -23,7 +23,7 @@ group :test do
   gem "json"
   gem "multi_json"
   gem "rspec", "~> 3.6.0"
-  gem "simplecov", "~> 0.14.1", require: false
+  gem "simplecov", "~> 0.14", require: false
   gem "vcr"
   gem "webmock"
 end
