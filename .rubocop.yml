@@ -1,6 +1,7 @@
 inherit_from: .rubocop_todo.yml
 
 AllCops:
+  TargetRubyVersion: 2.2
   DisplayCopNames: true
   DisplayStyleGuide: true
   Exclude:

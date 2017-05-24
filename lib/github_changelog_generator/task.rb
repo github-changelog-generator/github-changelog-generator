@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rake"
 require "rake/tasklib"
 require "github_changelog_generator"
@@ -7,7 +8,7 @@ module GitHubChangelogGenerator
   class RakeTask < ::Rake::TaskLib
     include ::Rake::DSL if defined?(::Rake::DSL)
 
-    OPTIONS = %w( user project token date_format output
+    OPTIONS = %w[ user project token date_format output
                   bug_prefix enhancement_prefix issue_prefix
                   header merge_prefix issues
                   add_issues_wo_labels add_pr_wo_labels
@@ -18,7 +19,7 @@ module GitHubChangelogGenerator
                   between_tags exclude_tags exclude_tags_regex since_tag max_issues
                   github_site github_endpoint simple_list
                   future_release release_branch verbose release_url
-                  base )
+                  base ]
 
     OPTIONS.each do |o|
       attr_accessor o.to_sym

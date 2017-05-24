@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "tmpdir"
 require "retriable"
 module GitHubChangelogGenerator
@@ -42,7 +43,14 @@ module GitHubChangelogGenerator
       @github_options[:access_token] = @github_token unless @github_token.nil?
       @github_options[:api_endpoint] = @options[:github_endpoint] unless @options[:github_endpoint].nil?
 
+      configure_octokit_ssl
+
       @client = Octokit::Client.new(@github_options)
+    end
+
+    def configure_octokit_ssl
+      ca_file = @options[:ssl_ca_file] || ENV["SSL_CA_FILE"] || File.expand_path("../ssl_certs/cacert.pem", __FILE__)
+      Octokit.connection_options = { ssl: { ca_file: ca_file } }
     end
 
     def init_cache
