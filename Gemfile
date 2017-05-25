@@ -9,6 +9,7 @@ gemspec
 group :development, :test do
   gem "bundler", "~> 1.15.0", ">= 1.15.0"
   gem "overcommit", "~> 0.39.1", ">= 0.39.1"
+  gem "simplecov", "<= 0.13", "~> 0.14.1"
   gem "rake", "~> 12.0.0", ">= 12.0.0"
   gem "rubocop", "~> 0.49", ">= 0.49"
 end
