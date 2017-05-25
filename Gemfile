@@ -18,12 +18,12 @@ group :development do
 end
 
 group :test do
-  gem "codeclimate-test-reporter", "~> 1.0", ">= 1.0"
+  gem "codeclimate-test-reporter", "~> 1.0.7", ">= 1.0.7"
   gem "coveralls", "~> 0.8", ">= 0.8", require: false
   gem "json", "~> 2.1", ">= 2.1"
   gem "multi_json", "~> 1.12.1", ">= 1.12.1"
   gem "rspec", "~> 3.6", ">= 3.6"
-  gem "simplecov", "~>0.10", require: false
+  gem "simplecov", "~> 0.14.1", ">= 0.14.1" require: false
   gem "vcr", "~> 3.0.3", ">= 3.0.3"
   gem "webmock", "~> 3.0.1", ">= 3.0.1"
 end

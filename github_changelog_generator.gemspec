@@ -29,7 +29,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "rainbow", "~> 2.2.1", ">= 2.2.1"
   spec.add_runtime_dependency "octokit", "~> 4.7", ">= 4.7"
   spec.add_runtime_dependency "faraday-http-cache", "~> 2.0", ">= 2.0"
-  spec.add_runtime_dependency "activesupport", "~> 5.0", ">= 5.0"
+  spec.add_runtime_dependency "activesupport", "~> 5.1", ">= 5.1"
   spec.add_runtime_dependency "retriable", "~> 3.0.2", ">= 3.0.2"
   spec.add_runtime_dependency "multi_json", "~>1.12.1", ">= 1.12.1"
 end
