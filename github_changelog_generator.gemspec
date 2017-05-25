@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.version            = GitHubChangelogGenerator::VERSION
   spec.default_executable = "github_changelog_generator"
 
-  spec.required_ruby_version = ">= 1.9.3"
+  spec.required_ruby_version = ">= 2.0"
   spec.authors = ["Petr Korolev", "Olle Jonsson"]
   spec.email = "sky4winder+github_changelog_generator@gmail.com"
 
@@ -25,11 +25,11 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_runtime_dependency "rake", ">= 10.0"
-  spec.add_runtime_dependency "rainbow", ">= 2.2.1"
-  spec.add_runtime_dependency("octokit", ["~> 4.6"])
-  spec.add_runtime_dependency("faraday-http-cache")
-  spec.add_runtime_dependency("activesupport")
-  spec.add_runtime_dependency("retriable", ["~> 3.0"])
-  spec.add_runtime_dependency("multi_json")
+  spec.add_runtime_dependency "rake", "~> 12.0", ">= 12.0"
+  spec.add_runtime_dependency "rainbow", "~> 2.2.1", ">= 2.2.1"
+  spec.add_runtime_dependency "octokit", "~> 4.7", ">= 4.7"
+  spec.add_runtime_dependency "faraday-http-cache", "~> 2.0", ">= 2.0"
+  spec.add_runtime_dependency "activesupport", "~> 5.0", ">= 5.0"
+  spec.add_runtime_dependency "retriable", "~> 3.0.2", ">= 3.0.2"
+  spec.add_runtime_dependency "multi_json", "~>1.12.1", ">= 1.12.1"
 end

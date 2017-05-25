@@ -7,10 +7,10 @@ ruby RUBY_VERSION
 gemspec
 
 group :development, :test do
-  gem "bundler"
-  gem "overcommit", ">= 0.31"
-  gem "rake"
-  gem "rubocop", ">= 0.43"
+  gem "bundler", "~> 1.15", ">= 1.15"
+  gem "overcommit", "~> 0.39.1", ">= 0.39.1"
+  gem "rake", "~> 12.0", ">= 12.0"
+  gem "rubocop", "~> 0.49", ">= 0.49"
 end
 
 group :development do
@@ -18,12 +18,12 @@ group :development do
 end
 
 group :test do
-  gem "codeclimate-test-reporter", "~> 1.0"
-  gem "coveralls", "~>0.8", require: false
-  gem "json"
-  gem "multi_json"
-  gem "rspec", "< 4"
+  gem "codeclimate-test-reporter", "~> 1.0", ">= 1.0"
+  gem "coveralls", "~> 0.8", ">= 0.8", require: false
+  gem "json", "~> 2.1", ">= 2.1"
+  gem "multi_json", "~> 1.12.1", ">= 1.12.1"
+  gem "rspec", "~> 3.6", ">= 3.6"
   gem "simplecov", "~>0.10", require: false
-  gem "vcr"
-  gem "webmock"
+  gem "vcr", "~> 3.0.3", ">= 3.0.3"
+  gem "webmock", "~> 3.0.1", ">= 3.0.1"
 end
