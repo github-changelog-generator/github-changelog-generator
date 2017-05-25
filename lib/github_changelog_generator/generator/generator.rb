@@ -36,16 +36,17 @@ module GitHubChangelogGenerator
       detect_actual_closed_dates(@issues + @pull_requests)
     end
 
-    # Encapsulate characters to make markdown look as expected.
+    ENCAPSULATED_CHARACTERS = %w(< > * _ \( \) [ ] #)
+
+    # Encapsulate characters to make Markdown look as expected.
     #
     # @param [String] string
     # @return [String] encapsulated input string
     def encapsulate_string(string)
-      string.gsub! '\\', '\\\\'
+      string = string.gsub('\\', '\\\\')
 
-      encpas_chars = %w(< > * _ \( \) [ ] #)
-      encpas_chars.each do |char|
-        string.gsub! char, "\\#{char}"
+      ENCAPSULATED_CHARACTERS.each do |char|
+        string = string.gsub(char, "\\#{char}")
       end
 
       string
