@@ -19,7 +19,7 @@ end
 
 group :test do
   gem "codeclimate-test-reporter", "~> 1.0.7", ">= 1.0.7"
-  gem "coveralls", "~> 0.8", ">= 0.8", require: false
+  gem "coveralls", "~> 0.8.21", ">= 0.8.21", require: false
   gem "json", "~> 2.1", ">= 2.1"
   gem "multi_json", "~> 1.12.1", ">= 1.12.1"
   gem "rspec", "~> 3.6", ">= 3.6"
