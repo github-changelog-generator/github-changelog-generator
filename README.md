@@ -254,6 +254,9 @@ adding a line like this to the Gemfile:
 gem 'rack', '~> 1.6'
 ```
 
+
+lalal
+
 This way, you can keep on using github_changelog_generator, even if you
 can't get the latest version of Ruby installed.
 
