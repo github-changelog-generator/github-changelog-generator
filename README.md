@@ -26,7 +26,7 @@ GitHub Changelog Generator ![GitHub Logo](../master/images/logo.jpg)
 
 **Fully automated changelog generation** - This gem generates a change log file based on **tags**, **issues** and merged **pull requests** (and splits them into separate lists according to labels) from :octocat: GitHub Issue Tracker.
 
-Since now you don't have to fill your `CHANGELOG.md` manually: just run the script, relax and take a cup of :coffee: before your next release! :tada:
+Since you don't have to fill your `CHANGELOG.md` manually now: just run the script, relax and take a cup of :coffee: before your next release! :tada:
 
 >### *What’s the point of a change log?*
 To make it easier for users and contributors to see precisely what notable changes have been made between each release (or version) of the project.
@@ -104,7 +104,7 @@ since-tag=1.0.0
 
 ### GitHub token
 
-GitHub only allows only 50 unauthenticated requests per hour. 
+GitHub only allows 50 unauthenticated requests per hour.
 Therefore, it's recommended to run this script with authentication by using a **token**.
 
 Here's how:
@@ -118,8 +118,12 @@ You can set an environment variable by running the following command at the prom
 
         export CHANGELOG_GITHUB_TOKEN="«your-40-digit-github-token»"
 
-So, if you got an error like this:
->! /Library/Ruby/Gems/2.0.0/gems/github_api-0.12.2/lib/github_api/response/raise_error.rb:14:in `on_complete'
+So, if you get a message like this:
+
+``` markdown
+API rate limit exceeded for github_username.
+See: https://developer.github.com/v3/#rate-limiting
+```
 
 It's time to create this token! (Or, wait an hour for GitHub to reset your unauthenticated request limit.)
 
@@ -135,7 +139,7 @@ If you have a `HISTORY.md` file in your project, it will automatically be picked
 
 ### Rake task
 
-You love `rake`? We do, too! So, we've made it even easier for you: 
+You love `rake`? We do, too! So, we've made it even easier for you:
 we've provided a `rake` task library for your changelog generation.
 
 Just put something like this in your `Rakefile`:
@@ -208,14 +212,14 @@ An auto-generated changelog really helps, even if you manually fill in the relea
 
 For example:
 
-When I found a closed bug, it's very useful know which release fixed it. 
-In this case, you can easily find the issue by \# in `CHANGELOG.md`.
+When you find a closed bug, it is very useful to know which release fixed it.
+So that you can easily find the issue by \# in `CHANGELOG.md`.
 
 - it's not quite as easy to find this in handwritten releases notes
 - a generated file saves you the trouble of remembering everything;
   sometimes people forget to add things to a handwritten file
 
-Ultimately, I think GitHub Releases is ideal for end-users. 
+Ultimately, I think GitHub Releases are ideal for end-users.
 Meanwhile, `CHANGELOG.md` lives right in the repository, with its detailed list of changes, which is handy for developers.
 Finally, there's nothing wrong with using GitHub Releases alongside `CHANGELOG.md` in this combination.
 

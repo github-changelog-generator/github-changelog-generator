@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 describe GitHubChangelogGenerator::ParserFile do
   describe ".github_changelog_generator" do
     let(:options) { {} }
@@ -13,7 +14,7 @@ describe GitHubChangelogGenerator::ParserFile do
       let(:parser) { GitHubChangelogGenerator::ParserFile.new(options, StringIO.new("")) }
 
       it "does not change the options" do
-        expect { parser.parse! }.to_not change { options }
+        expect { parser.parse! }.to_not(change { options })
       end
     end
 
@@ -51,12 +52,11 @@ describe GitHubChangelogGenerator::ParserFile do
 
       context "turns exclude-labels into an Array", bug: "#327" do
         let(:file) do
-          StringIO.new(<<EOF
-exclude-labels=73a91042-da6f-11e5-9335-1040f38d7f90,7adf83b4-da6f-11e5-ae18-1040f38d7f90
-header_label=# My changelog
-EOF
-                      )
+          line1 = "exclude-labels=73a91042-da6f-11e5-9335-1040f38d7f90,7adf83b4-da6f-11e5-ae18-1040f38d7f90\n"
+          line2 = "header_label=# My changelog\n"
+          StringIO.new(line1 + line2)
         end
+
         it "reads exclude_labels into an Array" do
           expect { parser.parse! }.to change { options[:exclude_labels] }
             .from(default_options[:exclude_labels])

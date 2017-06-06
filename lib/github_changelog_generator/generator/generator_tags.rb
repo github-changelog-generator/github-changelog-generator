@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module GitHubChangelogGenerator
   class Generator
     # fetch, filter tags, fetch dates and sort them in time order
@@ -95,13 +96,12 @@ module GitHubChangelogGenerator
       sections.first["version"] if sections && sections.any?
     end
 
-    # Return tags after filtering tags in lists provided by option: --between-tags & --exclude-tags
+    # Return tags after filtering tags in lists provided by option: --exclude-tags
     #
     # @return [Array]
     def get_filtered_tags(all_tags)
       filtered_tags = filter_since_tag(all_tags)
-      filtered_tags = filter_due_tag(filtered_tags)
-      filter_between_tags(filtered_tags)
+      filter_due_tag(filtered_tags)
     end
 
     # @param [Array] all_tags all tags
@@ -140,23 +140,6 @@ module GitHubChangelogGenerator
         else
           Helper.log.warn "Warning: can't find tag #{tag}, specified with --due-tag option."
         end
-      end
-      filtered_tags
-    end
-
-    # @param [Array] all_tags all tags
-    # @return [Array] filtered tags according :between_tags option
-    def filter_between_tags(all_tags)
-      filtered_tags = all_tags
-      tag_names     = filtered_tags.map { |ft| ft["name"] }
-
-      if options[:between_tags]
-        options[:between_tags].each do |tag|
-          unless tag_names.include?(tag)
-            Helper.log.warn "Warning: can't find tag #{tag}, specified with --between-tags option."
-          end
-        end
-        filtered_tags = all_tags.select { |tag| options[:between_tags].include?(tag["name"]) }
       end
       filtered_tags
     end

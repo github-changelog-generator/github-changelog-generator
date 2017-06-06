@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module GitHubChangelogGenerator
   class Generator
     MAX_THREAD_NUMBER = 25
