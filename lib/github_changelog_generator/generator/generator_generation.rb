@@ -92,12 +92,13 @@ module GitHubChangelogGenerator
       create_log_for_tag(filtered_pull_requests, filtered_issues, newer_tag, older_tag_name)
     end
 
-    # Apply all filters to issues and pull requests
+    # Filters issues and pull requests based on, respectively, `closed_at` and `merged_at`
+    #  timestamp fields.
     #
     # @return [Array] filtered issues and pull requests
     def filter_issues_for_tags(newer_tag, older_tag)
-      filtered_pull_requests = delete_by_time(@pull_requests, "actual_date", older_tag, newer_tag)
-      filtered_issues        = delete_by_time(@issues, "actual_date", older_tag, newer_tag)
+      filtered_pull_requests = delete_by_time(@pull_requests, "merged_at", older_tag, newer_tag)
+      filtered_issues        = delete_by_time(@issues, "closed_at", older_tag, newer_tag)
 
       newer_tag_name = newer_tag.nil? ? nil : newer_tag["name"]
 
