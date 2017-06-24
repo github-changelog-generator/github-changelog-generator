@@ -67,7 +67,7 @@ module GitHubChangelogGenerator
     end
 
     KNOWN_ARRAY_KEYS = %i[exclude_labels include_labels bug_labels
-                          enhancement_labels issue_line_labels between_tags exclude_tags]
+                          enhancement_labels breaking_labels issue_line_labels between_tags exclude_tags]
     KNOWN_INTEGER_KEYS = [:max_issues]
 
     def convert_value(value, option_name)
@@ -91,6 +91,7 @@ module GitHubChangelogGenerator
       header_label: :header,
       front_matter: :frontmatter,
       pr_label: :merge_prefix,
+      breaking_label: :breaking_prefix,
       issues_wo_labels: :add_issues_wo_labels,
       pr_wo_labels: :add_pr_wo_labels,
       pull_requests: :pulls,

@@ -96,24 +96,27 @@ module GitHubChangelogGenerator
     # @return [String] generated log for issues
     def issues_to_log(issues, pull_requests)
       log = ""
-      bugs_a, enhancement_a, issues_a = parse_by_sections(issues, pull_requests)
+      bugs_a, enhancement_a, breaking_a, issues_a = parse_by_sections(issues, pull_requests)
 
+      log += generate_sub_section(breaking_a, options[:breaking_prefix])
       log += generate_sub_section(enhancement_a, options[:enhancement_prefix])
       log += generate_sub_section(bugs_a, options[:bug_prefix])
       log += generate_sub_section(issues_a, options[:issue_prefix])
       log
     end
 
+    # rubocop:disable  Metrics/CyclomaticComplexity
     # This method sort issues by types
     # (bugs, features, or just closed issues) by labels
     #
     # @param [Array] issues
     # @param [Array] pull_requests
-    # @return [Array] tuple of filtered arrays: (Bugs, Enhancements Issues)
+    # @return [Array] tuple of filtered arrays: (Bugs, Enhancements, Breaking stuff,  Issues)
     def parse_by_sections(issues, pull_requests)
       issues_a = []
       enhancement_a = []
       bugs_a = []
+      breaking_a = []
 
       issues.each do |dict|
         added = false
@@ -128,9 +131,15 @@ module GitHubChangelogGenerator
             added = true
             next
           end
+          if options[:breaking_labels].include?(label["name"])
+            breaking_a.push(dict)
+            added = true
+            next
+          end
         end
         issues_a.push(dict) unless added
       end
+      # rubocop:enable Metrics/CyclomaticComplexity
 
       added_pull_requests = []
       pull_requests.each do |pr|
@@ -145,11 +154,16 @@ module GitHubChangelogGenerator
             added_pull_requests.push(pr)
             next
           end
+          if options[:breaking_labels].include?(label["name"])
+            breaking_a.push(pr)
+            added_pull_requests.push(pr)
+            next
+          end
         end
       end
       added_pull_requests.each { |p| pull_requests.delete(p) }
 
-      [bugs_a, enhancement_a, issues_a]
+      [bugs_a, enhancement_a, breaking_a, issues_a]
     end
   end
 end

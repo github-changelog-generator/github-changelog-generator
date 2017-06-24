@@ -20,6 +20,8 @@ module GitHubChangelogGenerator
       due_tag
       enhancement_labels
       enhancement_prefix
+      breaking_labels
+      breaking_prefix
       exclude_labels
       exclude_tags
       exclude_tags_regex
