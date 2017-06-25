@@ -28,12 +28,12 @@ GitHub Changelog Generator ![GitHub Logo](../master/images/logo.jpg)
 
 Since you don't have to fill your `CHANGELOG.md` manually now: just run the script, relax and take a cup of :coffee: before your next release! :tada:
 
->### *What’s the point of a change log?*
+### *What’s the point of a change log?*
 To make it easier for users and contributors to see precisely what notable changes have been made between each release (or version) of the project.
 ### *Why should I care?*
 Because software tools are for people. If you don’t care, why are you contributing to open source? Surely, there must be a kernel (ha!) of care somewhere in that lovely little brain of yours.
 
-> :arrow_right: *[http://keepachangelog.com](http://keepachangelog.com)*
+:arrow_right: *[http://keepachangelog.com](http://keepachangelog.com)*
 
 ## Installation
 
@@ -74,16 +74,16 @@ See also Troubleshooting.
 
 - If your **`git remote`** `origin` refers to your GitHub repo, just go to your project folder and run:
 
-		github_changelog_generator
+      github_changelog_generator
 
 -  Or, run this from anywhere:
-    - `github_changelog_generator -u github_username -p github_project`
-    - `github_changelog_generator  github_username/github_project`
+      `github_changelog_generator -u github_username -p github_project`
+      `github_changelog_generator  github_username/github_project`
 
 - If you are running it against a repository on a Github Enterprise install, you must specify *both* `--github-site` and `--github-api` command line options:
 
-        github_changelog_generator --github-site="https://github.yoursite.com" \
-                                   --github-api="https://github.yoursite.com/api/v3/"
+      github_changelog_generator --github-site="https://github.yoursite.com" \
+                                 --github-api="https://github.yoursite.com/api/v3/"
 
 This generates a changelog to the `CHANGELOG.md` file, with pretty markdown formatting.
 
@@ -116,7 +116,7 @@ Here's how:
 
 You can set an environment variable by running the following command at the prompt, or by adding it to your shell profile (e.g., `~/.bash_profile` or `~/.zshrc`):
 
-        export CHANGELOG_GITHUB_TOKEN="«your-40-digit-github-token»"
+      export CHANGELOG_GITHUB_TOKEN="«your-40-digit-github-token»"
 
 So, if you get a message like this:
 
