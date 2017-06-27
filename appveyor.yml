@@ -17,6 +17,9 @@ environment:
     - ruby_version: "21" # Older version, but matches Travis-CI
     - ruby_version: "21-x64"
 
+init:
+  - git config --global core.autocrlf true
+
 install:
   - SET PATH=C:\Ruby%ruby_version%\bin;%PATH%
 
@@ -48,3 +51,8 @@ notifications:
       - sky4winder+githubchangeloggenerator@gmail.com
     on_build_success: false
     on_build_status_changed: true
+  - provider: GitHubPullRequest
+    on_build_success: true
+    on_build_failure: true
+    on_build_status_changed: true
+
