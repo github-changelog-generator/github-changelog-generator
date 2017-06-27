@@ -17,6 +17,9 @@ environment:
     - ruby_version: "21" # Older version, but matches Travis-CI
     - ruby_version: "21-x64"
 
+init:
+  - git config --global core.autocrlf true
+
 install:
   - SET PATH=C:\Ruby%ruby_version%\bin;%PATH%
 
