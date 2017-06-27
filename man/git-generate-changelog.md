@@ -119,10 +119,6 @@ Automatically generate change log from your tags, issues, labels and pull reques
 
    Issues with the specified labels will be always added to "Implemented enhancements" section. Default is 'enhancement,Enhancement'
 
-   --between-tags x,y,z
-
-   Change log will be filled only between specified tags
-
    --exclude-tags x,y,z
 
    Change log will exclude specified tags
@@ -178,6 +174,10 @@ Automatically generate change log from your tags, issues, labels and pull reques
    --cache-log [CACHE-LOG]
 
    Filename to use for cache log. Default is github-changelog-logger.log in a temporary directory.
+
+    --ssl-ca-file [PATH]
+
+   Path to cacert.pem file. Default is a bundled lib/github_changelog_generator/ssl_certs/cacert.pem.  Respects SSL_CA_PATH.
 
    --[no-]verbose
 

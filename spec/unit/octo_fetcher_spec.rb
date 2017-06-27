@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 VALID_TOKEN = "0123456789abcdef"
 INVALID_TOKEN = "0000000000000000"
 
@@ -299,7 +300,7 @@ describe GitHubChangelogGenerator::OctoFetcher do
         pull_requests = fetcher.fetch_closed_pull_requests
 
         pr = pull_requests.first
-        expect(pr.keys).to eq(%w(url id html_url diff_url patch_url issue_url number state locked title user body created_at updated_at closed_at merged_at merge_commit_sha assignee assignees milestone commits_url review_comments_url review_comment_url comments_url statuses_url head base _links))
+        expect(pr.keys).to eq(%w[url id html_url diff_url patch_url issue_url number state locked title user body created_at updated_at closed_at merged_at merge_commit_sha assignee assignees milestone commits_url review_comments_url review_comment_url comments_url statuses_url head base _links])
       end
     end
   end
@@ -500,7 +501,7 @@ describe GitHubChangelogGenerator::OctoFetcher do
         commit = fetcher.fetch_commit(event)
 
         expectations = [
-          %w(sha decfe840d1a1b86e0c28700de5362d3365a29555),
+          %w[sha decfe840d1a1b86e0c28700de5362d3365a29555],
           ["url",
            "https://api.github.com/repos/skywinder/changelog_test/commits/decfe840d1a1b86e0c28700de5362d3365a29555"],
           # OLD API: "https://api.github.com/repos/skywinder/changelog_test/git/commits/decfe840d1a1b86e0c28700de5362d3365a29555"],

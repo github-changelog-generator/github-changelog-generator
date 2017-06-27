@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 RSpec.describe GitHubChangelogGenerator::Options do
   describe "#initialize" do
     context "with known options" do

@@ -13,10 +13,9 @@ matrix:
       install: true # This skips 'bundle install'
       script: gem build github_changelog_generator && bundle install
       gemfile: spec/install-gem-in-bundler.gemfile
-    - rvm: 2.1
     - rvm: 2.3.4
     - rvm: 2.4.1
-    - rvm: jruby-9.1.8.0
+    - rvm: jruby-9.1.12.0
       jdk: oraclejdk8
       env:
         - JRUBY_OPTS=--debug
