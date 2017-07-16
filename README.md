@@ -261,14 +261,14 @@ can't get the latest version of Ruby installed.
 ## Contributing
 
 1. Create an issue and describe your idea
-2. [Fork it] (https://github.com/skywinder/Github-Changelog-Generator/fork)
+2. [Fork it](https://github.com/skywinder/github-changelog-generator/fork)
 3. Create your feature branch (`git checkout -b my-new-feature`)
 4. Commit your changes (`git commit -am 'Add some feature'`)
 5. Publish the branch (`git push origin my-new-feature`)
 6. Create a new Pull Request
 7. Profit! :white_check_mark:
 
-*To test your workflow with changelog generator, you can use [test repo](https://github.com/skywinder/changelog_test/)*
+You can test your workflow with changelog generator with [the skywinder/changelog_test repo](https://github.com/skywinder/changelog_test/).
 
 ## License
 
