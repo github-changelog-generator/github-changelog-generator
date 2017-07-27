@@ -135,7 +135,7 @@ module GitHubChangelogGenerator
       if options[:add_issues_wo_labels]
         issues
       else
-        issues.reject { |issue| !issue["labels"].map { |l| l["name"] }.any? }
+        issues.select { |issue| issue["labels"].map { |l| l["name"] }.any? }
       end
     end
 

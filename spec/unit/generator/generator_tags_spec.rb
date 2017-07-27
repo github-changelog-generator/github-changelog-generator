@@ -13,8 +13,8 @@ describe GitHubChangelogGenerator::Generator do
     end
   end
 
-  describe "tag_section_mapping" do
-    let(:all_tags) { tags_from_strings(%w(8 7 6 5 4 3 2 1)) }
+  describe "#tag_section_mapping" do
+    let(:all_tags) { tags_from_strings(%w[8 7 6 5 4 3 2 1]) }
     let(:sorted_tags) { all_tags }
 
     let(:default_options) { GitHubChangelogGenerator::Parser.default_options }
@@ -72,18 +72,6 @@ describe GitHubChangelogGenerator::Generator do
       it_behaves_like "a full changelog"
     end
 
-    context "with between tags only" do
-      let(:options) { { between_tags: %w(3 5 8) } }
-      let(:expected_mapping) do
-        {
-          tag_with_name("8") => [tag_with_name("5"), tag_with_name("8")],
-          tag_with_name("5") => [tag_with_name("3"), tag_with_name("5")]
-        }
-      end
-
-      it_behaves_like "a section mapping"
-    end
-
     context "with since only" do
       let(:options) { { since_tag: "6" } }
       let(:expected_mapping) do
@@ -121,32 +109,9 @@ describe GitHubChangelogGenerator::Generator do
       it_behaves_like "a section mapping"
     end
 
-    context "with since, due, and between_tags" do
-      let(:options) { { since_tag: "2", due_tag: "7", between_tags: %w(3 5 6) } }
-      let(:expected_mapping) do
-        {
-          tag_with_name("6") => [tag_with_name("5"), tag_with_name("6")],
-          tag_with_name("5") => [tag_with_name("3"), tag_with_name("5")]
-        }
-      end
-
-      it_behaves_like "a section mapping"
-    end
-
-    context "with conflicting since/due/between_tags" do
-      let(:options) { { since_tag: "2", due_tag: "7", between_tags: %w(1 3 6 8) } }
-      let(:expected_mapping) do
-        {
-          tag_with_name("6") => [tag_with_name("3"), tag_with_name("6")]
-        }
-      end
-
-      it_behaves_like "a section mapping"
-    end
-
     context "with excluded tags" do
       context "as a list of strings" do
-        let(:options) { { exclude_tags: %w(2 5 7) } }
+        let(:options) { { exclude_tags: %w[2 5 7] } }
 
         it_behaves_like "a changelog with some exclusions"
       end
@@ -162,67 +127,6 @@ describe GitHubChangelogGenerator::Generator do
 
         it_behaves_like "a changelog with some exclusions"
       end
-    end
-  end
-
-  describe "#filter_between_tags" do
-    context "when between_tags nil" do
-      before do
-        @generator = GitHubChangelogGenerator::Generator.new(between_tags: nil)
-      end
-
-      subject do
-        @generator.get_filtered_tags(tags_from_strings(%w(1 2 3)))
-      end
-      it { is_expected.to be_a(Array) }
-      it { is_expected.to match_array(tags_from_strings(%w(1 2 3))) }
-    end
-
-    context "when between_tags same as input array" do
-      before do
-        @generator = GitHubChangelogGenerator::Generator.new(between_tags: %w(1 2 3))
-      end
-      subject do
-        @generator.get_filtered_tags(tags_from_strings(%w(1 2 3)))
-      end
-      it { is_expected.to be_a(Array) }
-      it { is_expected.to match_array(tags_from_strings(%w(1 2 3))) }
-    end
-
-    context "when between_tags filled with correct values" do
-      before do
-        @generator = GitHubChangelogGenerator::Generator.new(between_tags: %w(1 2))
-      end
-      subject do
-        @generator.get_filtered_tags(tags_from_strings(%w(1 2 3)))
-      end
-      it { is_expected.to be_a(Array) }
-      it { is_expected.to match_array(tags_from_strings(%w(1 2))) }
-    end
-
-    context "when between_tags filled with invalid values" do
-      before do
-        @generator = GitHubChangelogGenerator::Generator.new(between_tags: %w(1 q w))
-      end
-
-      subject do
-        @generator.get_filtered_tags(tags_from_strings(%w(1 2 3)))
-      end
-      it { is_expected.to be_a(Array) }
-      it { is_expected.to match_array(tags_from_strings(%w(1))) }
-    end
-  end
-
-  describe "#get_filtered_tags" do
-    subject do
-      generator.get_filtered_tags(tags_from_strings(%w(1 2 3 4 5)))
-    end
-
-    context "respects between tags" do
-      let(:generator) { GitHubChangelogGenerator::Generator.new(between_tags: %w(1 2 3)) }
-
-      it { is_expected.to be_a Array }
-      it { is_expected.to match_array(tags_from_strings(%w(1 2 3))) }
     end
   end
 
