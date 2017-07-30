@@ -526,4 +526,18 @@ describe GitHubChangelogGenerator::OctoFetcher do
       end
     end
   end
+
+  describe "#commits_before" do
+    context "when API is valid", :vcr do
+      let(:start_time) { Time.parse("Wed Mar 4 18:47:17 2015 +0200") }
+
+      subject do
+        fetcher.commits_before(start_time)
+      end
+
+      it "returns commits" do
+        expect(subject.last["sha"]).to eq("4c2d6d1ed58bdb24b870dcb5d9f2ceed0283d69d")
+      end
+    end
+  end
 end

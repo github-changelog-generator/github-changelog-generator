@@ -13,6 +13,123 @@ describe GitHubChangelogGenerator::Generator do
     end
   end
 
+  describe "#tag_section_mapping" do
+    let(:all_tags) { tags_from_strings(%w[8 7 6 5 4 3 2 1]) }
+    let(:sorted_tags) { all_tags }
+
+    let(:default_options) { GitHubChangelogGenerator::Parser.default_options }
+    let(:options) { {} }
+    let(:generator) { described_class.new(default_options.merge(options)) }
+
+    before do
+      allow_any_instance_of(GitHubChangelogGenerator::OctoFetcher).to receive(:get_all_tags).and_return(all_tags)
+      allow(generator).to receive(:fetch_tags_dates).with(all_tags)
+      allow(generator).to receive(:sort_tags_by_date).with(all_tags).and_return(sorted_tags)
+      generator.fetch_and_filter_tags
+    end
+
+    subject do
+      generator.tag_section_mapping
+    end
+
+    shared_examples_for "a section mapping" do
+      it { is_expected.to be_a(Hash) }
+      it { is_expected.to eq(expected_mapping) }
+    end
+
+    shared_examples_for "a full changelog" do
+      let(:expected_mapping) do
+        {
+          tag_with_name("8") => [tag_with_name("7"), tag_with_name("8")],
+          tag_with_name("7") => [tag_with_name("6"), tag_with_name("7")],
+          tag_with_name("6") => [tag_with_name("5"), tag_with_name("6")],
+          tag_with_name("5") => [tag_with_name("4"), tag_with_name("5")],
+          tag_with_name("4") => [tag_with_name("3"), tag_with_name("4")],
+          tag_with_name("3") => [tag_with_name("2"), tag_with_name("3")],
+          tag_with_name("2") => [tag_with_name("1"), tag_with_name("2")],
+          tag_with_name("1") => [nil, tag_with_name("1")]
+        }
+      end
+
+      it_behaves_like "a section mapping"
+    end
+
+    shared_examples_for "a changelog with some exclusions" do
+      let(:expected_mapping) do
+        {
+          tag_with_name("8") => [tag_with_name("7"), tag_with_name("8")],
+          tag_with_name("6") => [tag_with_name("5"), tag_with_name("6")],
+          tag_with_name("4") => [tag_with_name("3"), tag_with_name("4")],
+          tag_with_name("3") => [tag_with_name("2"), tag_with_name("3")],
+          tag_with_name("1") => [nil, tag_with_name("1")]
+        }
+      end
+
+      it_behaves_like "a section mapping"
+    end
+
+    context "with no constraints" do
+      it_behaves_like "a full changelog"
+    end
+
+    context "with since only" do
+      let(:options) { { since_tag: "6" } }
+      let(:expected_mapping) do
+        {
+          tag_with_name("8") => [tag_with_name("7"), tag_with_name("8")],
+          tag_with_name("7") => [tag_with_name("6"), tag_with_name("7")]
+        }
+      end
+
+      it_behaves_like "a section mapping"
+    end
+
+    context "with due only" do
+      let(:options) { { due_tag: "4" } }
+      let(:expected_mapping) do
+        {
+          tag_with_name("3") => [tag_with_name("2"), tag_with_name("3")],
+          tag_with_name("2") => [tag_with_name("1"), tag_with_name("2")],
+          tag_with_name("1") => [nil, tag_with_name("1")]
+        }
+      end
+
+      it_behaves_like "a section mapping"
+    end
+
+    context "with since and due" do
+      let(:options) { { since_tag: "2", due_tag: "5" } }
+      let(:expected_mapping) do
+        {
+          tag_with_name("4") => [tag_with_name("3"), tag_with_name("4")],
+          tag_with_name("3") => [tag_with_name("2"), tag_with_name("3")]
+        }
+      end
+
+      it_behaves_like "a section mapping"
+    end
+
+    context "with excluded tags" do
+      context "as a list of strings" do
+        let(:options) { { exclude_tags: %w[2 5 7] } }
+
+        it_behaves_like "a changelog with some exclusions"
+      end
+
+      context "as a regex" do
+        let(:options) { { exclude_tags: /[257]/ } }
+
+        it_behaves_like "a changelog with some exclusions"
+      end
+
+      context "as a regex string" do
+        let(:options) { { exclude_tags_regex: "[257]" } }
+
+        it_behaves_like "a changelog with some exclusions"
+      end
+    end
+  end
+
   describe "#filter_excluded_tags" do
     subject { generator.filter_excluded_tags(tags_from_strings(%w[1 2 3])) }
 
@@ -64,7 +181,7 @@ describe GitHubChangelogGenerator::Generator do
       context "with valid since tag" do
         let(:generator) { GitHubChangelogGenerator::Generator.new(since_tag: "2") }
         it { is_expected.to be_a Array }
-        it { is_expected.to match_array(tags_from_strings(%w[1])) }
+        it { is_expected.to match_array(tags_from_strings(%w[1 2])) }
       end
 
       context "with invalid since tag" do

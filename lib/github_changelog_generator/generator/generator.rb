@@ -57,13 +57,22 @@ module GitHubChangelogGenerator
     # @param [Array] pull_requests List or PR's in new section
     # @param [Array] issues List of issues in new section
     # @param [String] newer_tag Name of the newer tag. Could be nil for `Unreleased` section
-    # @param [String] older_tag_name Older tag, used for the links. Could be nil for last tag.
+    # @param [Hash, nil] older_tag Older tag, used for the links. Could be nil for last tag.
     # @return [String] Ready and parsed section
-    def create_log_for_tag(pull_requests, issues, newer_tag, older_tag_name = nil)
+    def create_log_for_tag(pull_requests, issues, newer_tag, older_tag = nil)
       newer_tag_link, newer_tag_name, newer_tag_time = detect_link_tag_time(newer_tag)
 
       github_site = options[:github_site] || "https://github.com"
       project_url = "#{github_site}/#{options[:user]}/#{options[:project]}"
+
+      # If the older tag is nil, go back in time from the latest tag and find
+      # the SHA for the first commit.
+      older_tag_name =
+        if older_tag.nil?
+          @fetcher.commits_before(newer_tag_time).last["sha"]
+        else
+          older_tag["name"]
+        end
 
       log = generate_header(newer_tag_name, newer_tag_link, newer_tag_time, older_tag_name, project_url)
 
@@ -72,7 +81,7 @@ module GitHubChangelogGenerator
         log += issues_to_log(issues, pull_requests)
       end
 
-      if options[:pulls]
+      if options[:pulls] && options[:add_pr_wo_labels]
         # Generate pull requests:
         log += generate_sub_section(pull_requests, options[:merge_prefix])
       end
