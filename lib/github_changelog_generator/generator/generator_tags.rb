@@ -177,18 +177,19 @@ module GitHubChangelogGenerator
 
     def apply_exclude_tags(all_tags)
       if options[:exclude_tags].is_a?(Regexp)
-        filter_tags_with_regex(all_tags, options[:exclude_tags])
+        filter_tags_with_regex(all_tags, options[:exclude_tags], "--exclude-tags")
       else
         filter_exact_tags(all_tags)
       end
     end
 
     def apply_exclude_tags_regex(all_tags)
-      filter_tags_with_regex(all_tags, Regexp.new(options[:exclude_tags_regex]))
+      regex = Regexp.new(options[:exclude_tags_regex])
+      filter_tags_with_regex(all_tags, regex, "--exclude-tags-regex")
     end
 
-    def filter_tags_with_regex(all_tags, regex)
-      warn_if_nonmatching_regex(all_tags)
+    def filter_tags_with_regex(all_tags, regex, regex_option_name)
+      warn_if_nonmatching_regex(all_tags, regex, regex_option_name)
       all_tags.reject { |tag| regex =~ tag["name"] }
     end
 
@@ -199,11 +200,10 @@ module GitHubChangelogGenerator
       all_tags.reject { |tag| options[:exclude_tags].include?(tag["name"]) }
     end
 
-    def warn_if_nonmatching_regex(all_tags)
-      unless all_tags.map { |t| t["name"] }.any? { |t| options[:exclude_tags] =~ t }
+    def warn_if_nonmatching_regex(all_tags, regex, regex_option_name)
+      unless all_tags.map { |t| t["name"] }.any? { |t| regex =~ t }
         Helper.log.warn "Warning: unable to reject any tag, using regex "\
-                        "#{options[:exclude_tags].inspect} in --exclude-tags "\
-                        "option."
+                        "#{regex.inspect} in #{regex_option_name} option."
       end
     end
 
