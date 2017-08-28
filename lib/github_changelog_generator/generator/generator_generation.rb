@@ -64,9 +64,9 @@ module GitHubChangelogGenerator
                       "#{project_url}/tree/#{newer_tag_link}"
                     end
       log += if newer_tag_name.equal?(options[:unreleased_label])
-               "## [#{newer_tag_name}](#{release_url})\n\n"
+               "___\n## [#{newer_tag_name}](#{release_url})\n\n"
              else
-               "## [#{newer_tag_name}](#{release_url}) (#{time_string})\n\n"
+               "___\n## [#{newer_tag_name}](#{release_url}) (#{time_string})\n\n"
              end
 
       if options[:compare_link] && older_tag_link
