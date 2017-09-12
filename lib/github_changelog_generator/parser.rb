@@ -218,7 +218,6 @@ module GitHubChangelogGenerator
         issue_prefix: "**Closed issues:**",
         bug_prefix: "**Fixed bugs:**",
         enhancement_prefix: "**Implemented enhancements:**",
-        git_remote: "origin",
         http_cache: true
       )
     end
