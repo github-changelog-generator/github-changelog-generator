@@ -19,12 +19,7 @@ module GitHubChangelogGenerator
         abort [e, parser].join("\n")
       end
 
-      unless options[:user] && options[:project]
-        user, project = ProjectNameFinder.new(options, ARGV.dup).call
-        options[:user] = user
-        options[:project] = project
-        abort(parser.banner) unless options[:user] && options[:project]
-      end
+      abort(parser.banner) unless options[:user] && options[:project]
 
       print_options(options)
 
