@@ -25,6 +25,7 @@ matrix:
         - DEBUG=1
   allow_failures:
     - rvm: jruby-head
+  fast_finish: true
 
 addons:
   code_climate:
