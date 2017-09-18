@@ -10,7 +10,7 @@ group :development, :test do
   gem "bundler"
   gem "overcommit", ">= 0.31"
   gem "rake"
-  gem "rubocop", ">= 0.43"
+  gem "rubocop", ">= 0.50"
 end
 
 group :development do

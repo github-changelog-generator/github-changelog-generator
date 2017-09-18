@@ -2,7 +2,6 @@ language: ruby
 cache:
   - bundler
 before_install:
-  - gem update --system
   - gem install bundler
 matrix:
   include:
@@ -15,7 +14,7 @@ matrix:
       gemfile: spec/install-gem-in-bundler.gemfile
     - rvm: 2.3.4
     - rvm: 2.4.1
-    - rvm: jruby-9.1.12.0
+    - rvm: jruby-9.1.13.0
       jdk: oraclejdk8
       env:
         - JRUBY_OPTS=--debug
@@ -26,6 +25,7 @@ matrix:
         - DEBUG=1
   allow_failures:
     - rvm: jruby-head
+  fast_finish: true
 
 addons:
   code_climate:

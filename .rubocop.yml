@@ -26,7 +26,7 @@ Metrics/ClassLength:
 Metrics/MethodLength:
     Enabled: false
 
-Style/FileName:
+Naming/FileName:
     Exclude:
       - 'bin/git-generate-changelog'
 
@@ -36,7 +36,7 @@ Metrics/AbcSize:
   Enabled: false
 
 # Offense count: 1
-Style/AccessorMethodName:
+Naming/AccessorMethodName:
   Enabled: false
 
 # Offense count: 10
@@ -75,3 +75,8 @@ Style/SafeNavigation:
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*'
+
+# Re-enable when merged; https://github.com/bbatsov/rubocop/pull/4756
+Lint/InterpolationCheck:
+  Enabled: false
+
