@@ -1,6 +1,6 @@
 language: ruby
 cache:
-  - bundler
+  bundler: true
 before_install:
   - gem install bundler
 matrix:
