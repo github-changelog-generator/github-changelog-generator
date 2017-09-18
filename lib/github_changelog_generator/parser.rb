@@ -277,7 +277,7 @@ module GitHubChangelogGenerator
 
         begin
           param = match[2].nil?
-        rescue
+        rescue StandardError
           puts "Can't detect user and name from first parameter: '#{arg0}' -> exit'"
           return
         end
