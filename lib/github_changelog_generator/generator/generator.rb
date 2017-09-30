@@ -122,22 +122,22 @@ module GitHubChangelogGenerator
         added = false
         dict["labels"].each do |label|
           if options[:bug_labels].include?(label["name"])
-            bugs_a.push(dict)
+            bugs_a << dict
             added = true
             next
           end
           if options[:enhancement_labels].include?(label["name"])
-            enhancement_a.push(dict)
+            enhancement_a << dict
             added = true
             next
           end
           if options[:breaking_labels].include?(label["name"])
-            breaking_a.push(dict)
+            breaking_a << dict
             added = true
             next
           end
         end
-        issues_a.push(dict) unless added
+        issues_a << dict unless added
       end
       # rubocop:enable Metrics/CyclomaticComplexity
 
@@ -145,18 +145,18 @@ module GitHubChangelogGenerator
       pull_requests.each do |pr|
         pr["labels"].each do |label|
           if options[:bug_labels].include?(label["name"])
-            bugs_a.push(pr)
-            added_pull_requests.push(pr)
+            bugs_a << pr
+            added_pull_requests << pr
             next
           end
           if options[:enhancement_labels].include?(label["name"])
-            enhancement_a.push(pr)
-            added_pull_requests.push(pr)
+            enhancement_a << pr
+            added_pull_requests << pr
             next
           end
           if options[:breaking_labels].include?(label["name"])
-            breaking_a.push(pr)
-            added_pull_requests.push(pr)
+            breaking_a << pr
+            added_pull_requests << pr
             next
           end
         end
