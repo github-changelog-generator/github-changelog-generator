@@ -39,7 +39,7 @@ install:
 build_script:
   # Install ruby dependencies
   - bundle install --retry 3
-  - bundle exec rake checks
+  - bundle exec rake
 
 test_script:
   - gem build github_changelog_generator
