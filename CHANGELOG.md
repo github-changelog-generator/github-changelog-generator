@@ -1,5 +1,68 @@
 # Change Log
 
+## [v1.15.0.pre.alpha](https://github.com/skywinder/github-changelog-generator/tree/v1.15.0.pre.alpha) (2017-10-01)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/v1.14.3...v1.15.0.pre.alpha)
+
+**Implemented enhancements:**
+
+- Add newline after version name and Full Changelog link [\#548](https://github.com/skywinder/github-changelog-generator/pull/548) ([ianroberts131](https://github.com/ianroberts131))
+- Update the token failure example to OctoKit 404 failure [\#525](https://github.com/skywinder/github-changelog-generator/pull/525) ([thebyt3](https://github.com/thebyt3))
+- Rescue invalid commands and present the valid options list [\#498](https://github.com/skywinder/github-changelog-generator/pull/498) ([Lucashuang0802](https://github.com/Lucashuang0802))
+- bundled cacert.pem with --ssl-ca-file PATH option [\#480](https://github.com/skywinder/github-changelog-generator/pull/480) ([olleolleolle](https://github.com/olleolleolle))
+- Option parsing: Remove tag1, tag2 cruft [\#479](https://github.com/skywinder/github-changelog-generator/pull/479) ([olleolleolle](https://github.com/olleolleolle))
+
+**Fixed bugs:**
+
+- Credit line bug [\#541](https://github.com/skywinder/github-changelog-generator/issues/541)
+- Bug: Credit line about this project added more than once [\#507](https://github.com/skywinder/github-changelog-generator/issues/507)
+- v1.14.0 Fails with missing /tmp/ path on Windows [\#458](https://github.com/skywinder/github-changelog-generator/issues/458)
+- failure when creating changelog from a repo in an orginazation: can't convert Github::ResponseWrapper to Array [\#253](https://github.com/skywinder/github-changelog-generator/issues/253)
+- warn\_if\_nonmatching\_regex should display proper help message when used with exclude-tags-regex [\#551](https://github.com/skywinder/github-changelog-generator/pull/551) ([lacostej](https://github.com/lacostej))
+- Bugfix: require ActiveSupport core\_ext/blank [\#520](https://github.com/skywinder/github-changelog-generator/pull/520) ([olleolleolle](https://github.com/olleolleolle))
+- Create temporary cache files in Dir.tmpdir [\#459](https://github.com/skywinder/github-changelog-generator/pull/459) ([olleolleolle](https://github.com/olleolleolle))
+
+**Closed issues:**
+
+- error \(Windows: Command exited with code 1\) [\#536](https://github.com/skywinder/github-changelog-generator/issues/536)
+- Error in generating changelog on Windows [\#521](https://github.com/skywinder/github-changelog-generator/issues/521)
+- Crash on start [\#512](https://github.com/skywinder/github-changelog-generator/issues/512)
+- Error On Running Generation Command [\#511](https://github.com/skywinder/github-changelog-generator/issues/511)
+- Not working [\#510](https://github.com/skywinder/github-changelog-generator/issues/510)
+- PR cited in the wrong TAG [\#503](https://github.com/skywinder/github-changelog-generator/issues/503)
+- 404 Not Found Error [\#484](https://github.com/skywinder/github-changelog-generator/issues/484)
+
+**Merged pull requests:**
+
+- Travis: Configure cache: bundler: true [\#563](https://github.com/skywinder/github-changelog-generator/pull/563) ([olleolleolle](https://github.com/olleolleolle))
+- Travis: use JRuby 9.1.13.0; don't redo rvm's job [\#562](https://github.com/skywinder/github-changelog-generator/pull/562) ([olleolleolle](https://github.com/olleolleolle))
+- Travis: update CI matrix [\#561](https://github.com/skywinder/github-changelog-generator/pull/561) ([olleolleolle](https://github.com/olleolleolle))
+- Fix section mapping, hiding untagged PRs, and hiding untagged issues [\#550](https://github.com/skywinder/github-changelog-generator/pull/550) ([hunner](https://github.com/hunner))
+- Update generator\_generation.rb [\#542](https://github.com/skywinder/github-changelog-generator/pull/542) ([Lucashuang0802](https://github.com/Lucashuang0802))
+- AppVeyor: drop init build hook, add .gitattributes instead [\#539](https://github.com/skywinder/github-changelog-generator/pull/539) ([olleolleolle](https://github.com/olleolleolle))
+- AppVeyor: Windows configuration to pass RuboCop [\#538](https://github.com/skywinder/github-changelog-generator/pull/538) ([olleolleolle](https://github.com/olleolleolle))
+- Fix the syntax ambiguity on credit-line-bug [\#537](https://github.com/skywinder/github-changelog-generator/pull/537) ([Lucashuang0802](https://github.com/Lucashuang0802))
+- Credit line bug [\#535](https://github.com/skywinder/github-changelog-generator/pull/535) ([Lucashuang0802](https://github.com/Lucashuang0802))
+- Update README.md [\#534](https://github.com/skywinder/github-changelog-generator/pull/534) ([Lucashuang0802](https://github.com/Lucashuang0802))
+- Delete circle.yml [\#532](https://github.com/skywinder/github-changelog-generator/pull/532) ([Lucashuang0802](https://github.com/Lucashuang0802))
+- Update README.md [\#531](https://github.com/skywinder/github-changelog-generator/pull/531) ([Lucashuang0802](https://github.com/Lucashuang0802))
+- Remove all old credit lines in the output then add a new one [\#526](https://github.com/skywinder/github-changelog-generator/pull/526) ([Enether](https://github.com/Enether))
+- Travis: jruby-9.1.10.0 [\#523](https://github.com/skywinder/github-changelog-generator/pull/523) ([olleolleolle](https://github.com/olleolleolle))
+- Travis CI: Drop 2.1 [\#517](https://github.com/skywinder/github-changelog-generator/pull/517) ([olleolleolle](https://github.com/olleolleolle))
+- Chore: Rubocop 0.49.0 [\#516](https://github.com/skywinder/github-changelog-generator/pull/516) ([olleolleolle](https://github.com/olleolleolle))
+- Travis: use jruby-9.1.9.0 [\#506](https://github.com/skywinder/github-changelog-generator/pull/506) ([olleolleolle](https://github.com/olleolleolle))
+- Use closed\_at and merged\_at when filtering issues/prs [\#504](https://github.com/skywinder/github-changelog-generator/pull/504) ([unicolet](https://github.com/unicolet))
+- Remove --between-tags option [\#501](https://github.com/skywinder/github-changelog-generator/pull/501) ([Lucashuang0802](https://github.com/Lucashuang0802))
+- Fixed headline in README.md [\#496](https://github.com/skywinder/github-changelog-generator/pull/496) ([Dreckiger-Dan](https://github.com/Dreckiger-Dan))
+- Update README.md [\#490](https://github.com/skywinder/github-changelog-generator/pull/490) ([fatData](https://github.com/fatData))
+- Travis: use latest rubies [\#488](https://github.com/skywinder/github-changelog-generator/pull/488) ([olleolleolle](https://github.com/olleolleolle))
+- Use ruby-2.4.1 in CI [\#487](https://github.com/skywinder/github-changelog-generator/pull/487) ([olleolleolle](https://github.com/olleolleolle))
+- Travis: jruby-9.1.8.0 [\#485](https://github.com/skywinder/github-changelog-generator/pull/485) ([olleolleolle](https://github.com/olleolleolle))
+- Update to latest CodeClimate [\#478](https://github.com/skywinder/github-changelog-generator/pull/478) ([olleolleolle](https://github.com/olleolleolle))
+- Gemspec: update retriable to 3.0 [\#477](https://github.com/skywinder/github-changelog-generator/pull/477) ([olleolleolle](https://github.com/olleolleolle))
+- Travis: new JRuby, develop on 2.4.0 [\#476](https://github.com/skywinder/github-changelog-generator/pull/476) ([olleolleolle](https://github.com/olleolleolle))
+- Fix readme typos [\#467](https://github.com/skywinder/github-changelog-generator/pull/467) ([dguo](https://github.com/dguo))
+- Gemspec: demand rainbow 2.2.1+ [\#466](https://github.com/skywinder/github-changelog-generator/pull/466) ([olleolleolle](https://github.com/olleolleolle))
+
 ## [v1.14.3](https://github.com/skywinder/github-changelog-generator/tree/v1.14.3) (2016-12-31)
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/v1.14.2...v1.14.3)
 
