@@ -129,7 +129,7 @@ module GitHubChangelogGenerator
       if tag
         if all_tags.map { |t| t["name"] }.include? tag
           idx = all_tags.index { |t| t["name"] == tag }
-          filtered_tags = if idx > 0
+          filtered_tags = if idx
                             all_tags[0..idx]
                           else
                             []
