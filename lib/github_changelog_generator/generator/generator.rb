@@ -95,75 +95,76 @@ module GitHubChangelogGenerator
     # @param [Array] pull_requests
     # @return [String] generated log for issues
     def issues_to_log(issues, pull_requests)
-      log = ""
-      bugs_a, enhancement_a, breaking_a, issues_a = parse_by_sections(issues, pull_requests)
+      sections = parse_by_sections(issues, pull_requests)
 
-      log += generate_sub_section(breaking_a, options[:breaking_prefix])
-      log += generate_sub_section(enhancement_a, options[:enhancement_prefix])
-      log += generate_sub_section(bugs_a, options[:bug_prefix])
-      log += generate_sub_section(issues_a, options[:issue_prefix])
+      log = ""
+      log += generate_sub_section(sections[:breaking], options[:breaking_prefix])
+      log += generate_sub_section(sections[:enhancement], options[:enhancement_prefix])
+      log += generate_sub_section(sections[:bugs], options[:bug_prefix])
+      log += generate_sub_section(sections[:issues], options[:issue_prefix])
       log
     end
 
-    # rubocop:disable  Metrics/CyclomaticComplexity
     # This method sort issues by types
     # (bugs, features, or just closed issues) by labels
     #
     # @param [Array] issues
     # @param [Array] pull_requests
-    # @return [Array] tuple of filtered arrays: (Bugs, Enhancements, Breaking stuff,  Issues)
+    # @return [Hash] Mapping of filtered arrays: (Bugs, Enhancements, Breaking stuff, Issues)
     def parse_by_sections(issues, pull_requests)
-      issues_a = []
-      enhancement_a = []
-      bugs_a = []
-      breaking_a = []
+      sections = {
+        :issues       => [],
+        :enhancements => [],
+        :bugs         => [],
+        :breaking     => [],
+      }
 
       issues.each do |dict|
         added = false
+
         dict["labels"].each do |label|
           if options[:bug_labels].include?(label["name"])
-            bugs_a << dict
+            sections[:bugs] << dict
             added = true
-            next
-          end
-          if options[:enhancement_labels].include?(label["name"])
-            enhancement_a << dict
+          elsif options[:enhancement_labels].include?(label["name"])
+            sections[:enhancements] << dict
             added = true
-            next
-          end
-          if options[:breaking_labels].include?(label["name"])
-            breaking_a << dict
+          elsif options[:breaking_labels].include?(label["name"])
+            sections[:breaking] << dict
             added = true
-            next
           end
+
+          break if added
         end
-        issues_a << dict unless added
+
+        sections[:issues] << dict unless added
       end
-      # rubocop:enable Metrics/CyclomaticComplexity
 
       added_pull_requests = []
       pull_requests.each do |pr|
+        added = false
+
         pr["labels"].each do |label|
           if options[:bug_labels].include?(label["name"])
-            bugs_a << pr
+            sections[:bugs] << pr
             added_pull_requests << pr
-            next
-          end
-          if options[:enhancement_labels].include?(label["name"])
-            enhancement_a << pr
+            added = true
+          elsif options[:enhancement_labels].include?(label["name"])
+            sections[:enhancements] << pr
             added_pull_requests << pr
-            next
-          end
-          if options[:breaking_labels].include?(label["name"])
-            breaking_a << pr
+            added = true
+          elsif options[:breaking_labels].include?(label["name"])
+            sections[:breaking] << pr
             added_pull_requests << pr
-            next
+            added = true
           end
+
+          break if added
         end
       end
       added_pull_requests.each { |p| pull_requests.delete(p) }
 
-      [bugs_a, enhancement_a, breaking_a, issues_a]
+      sections
     end
   end
 end
