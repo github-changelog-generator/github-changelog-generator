@@ -140,6 +140,15 @@ module GitHubChangelogGenerator
         sections[:issues] << dict unless added
       end
 
+      sort_pull_requests(pull_requests, sections)
+    end
+
+    # This method iterates through PRs and sorts them into sections
+    #
+    # @param [Array] pull_requests
+    # @param [Hash] sections
+    # @return [Hash] sections
+    def sort_pull_requests(pull_requests, sections)
       added_pull_requests = []
       pull_requests.each do |pr|
         added = false
@@ -163,7 +172,6 @@ module GitHubChangelogGenerator
         end
       end
       added_pull_requests.each { |p| pull_requests.delete(p) }
-
       sections
     end
   end
