@@ -151,12 +151,9 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       print_empty_line
       Helper.log.info "Received issues: #{issues.count}"
 
-      issues = issues.map { |h| stringify_keys_deep(h.to_hash) }
-
       # separate arrays of issues and pull requests:
-      issues.partition do |x|
-        x["pull_request"].nil?
-      end
+      issues.map { |issue| stringify_keys_deep(issue.to_hash) }
+            .partition { |issue_or_pr| issue_or_pr["pull_request"].nil? }
     end
 
     # Fetch all pull requests. We need them to detect :merged_at parameter
