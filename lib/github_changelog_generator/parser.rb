@@ -19,8 +19,6 @@ module GitHubChangelogGenerator
         abort [e, parser].join("\n")
       end
 
-      fetch_user_and_project(options)
-
       abort(parser.banner) unless options[:user] && options[:project]
 
       print_options(options)
@@ -228,114 +226,8 @@ module GitHubChangelogGenerator
         bug_prefix: "**Fixed bugs:**",
         enhancement_prefix: "**Implemented enhancements:**",
         breaking_prefix: "**Breaking changes:**",
-        git_remote: "origin",
         http_cache: true
       )
-    end
-
-    # If `:user` or `:project` not set in options, try setting them
-    # Valid unnamed parameters:
-    # 1) in 1 param: repo_name/project
-    # 2) in 2 params: repo name project
-    def self.fetch_user_and_project(options)
-      if options[:user].nil? || options[:project].nil?
-        user, project = user_and_project_from_git(options, ARGV[0], ARGV[1])
-        options[:user] ||= user
-        options[:project] ||= project
-      end
-    end
-
-    # Sets `:user` and `:project` in `options` from CLI arguments or `git remote`
-    # @param [String] arg0 first argument in cli
-    # @param [String] arg1 second argument in cli
-    # @return [Array<String>] user and project, or nil if unsuccessful
-    def self.user_and_project_from_git(options, arg0 = nil, arg1 = nil)
-      user, project = user_project_from_option(arg0, arg1, options[:github_site])
-      unless user && project
-        if ENV["RUBYLIB"] =~ /ruby-debug-ide/
-          user = "skywinder"
-          project = "changelog_test"
-        else
-          remote = `git config --get remote.#{options[:git_remote]}.url`
-          user, project = user_project_from_remote(remote)
-        end
-      end
-
-      [user, project]
-    end
-
-    # Returns GitHub username and project from CLI arguments
-    #
-    # @param arg0 [String] This parameter takes two forms: Either a full
-    #                      GitHub URL, or a 'username/projectname', or
-    #                      simply a GitHub username
-    # @param arg1 [String] If arg0 is given as a username,
-    #                      then arg1 can given as a projectname
-    # @param github_site [String] Domain name of GitHub site
-    #
-    # @return [Array, nil] user and project, or nil if unsuccessful
-    def self.user_project_from_option(arg0, arg1, github_site)
-      user = nil
-      project = nil
-      github_site ||= "github.com"
-      if arg0 && !arg1
-        # this match should parse  strings such "https://github.com/skywinder/Github-Changelog-Generator" or
-        # "skywinder/Github-Changelog-Generator" to user and name
-        match = /(?:.+#{Regexp.escape(github_site)}\/)?(.+)\/(.+)/.match(arg0)
-
-        begin
-          param = match[2].nil?
-        rescue StandardError
-          puts "Can't detect user and name from first parameter: '#{arg0}' -> exit'"
-          return
-        end
-        if param
-          return
-        else
-          user = match[1]
-          project = match[2]
-        end
-      end
-      [user, project]
-    end
-
-    # These patterns match these formats:
-    #
-    # ```
-    # origin	git@github.com:skywinder/Github-Changelog-Generator.git (fetch)
-    # git@github.com:skywinder/Github-Changelog-Generator.git
-    # ```
-    #
-    # and
-    #
-    # ```
-    # origin	https://github.com/skywinder/ChangelogMerger (fetch)
-    # https://github.com/skywinder/ChangelogMerger
-    # ```
-    GIT_REMOTE_PATTERNS = [
-      /.*(?:[:\/])(?<user>(?:-|\w|\.)*)\/(?<project>(?:-|\w|\.)*)(?:\.git).*/,
-      /.*\/(?<user>(?:-|\w|\.)*)\/(?<project>(?:-|\w|\.)*).*/
-    ]
-
-    # Returns GitHub username and project from git remote output
-    #
-    # @param git_remote_output [String] Output of git remote command
-    #
-    # @return [Array] user and project
-    def self.user_project_from_remote(git_remote_output)
-      user = nil
-      project = nil
-      GIT_REMOTE_PATTERNS.each do |git_remote_pattern|
-        git_remote_pattern =~ git_remote_output
-
-        if Regexp.last_match
-          user = Regexp.last_match(:user)
-          project = Regexp.last_match(:project)
-          break
-        end
-      end
-
-      [user, project]
     end
   end
 end

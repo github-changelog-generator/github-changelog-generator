@@ -30,9 +30,14 @@ GitHub Changelog Generator ![GitHub Logo](../master/images/logo.jpg)
 Since you don't have to fill your `CHANGELOG.md` manually now: just run the script, relax and take a cup of :coffee: before your next release! :tada:
 
 ### *What’s the point of a change log?*
+
 To make it easier for users and contributors to see precisely what notable changes have been made between each release (or version) of the project.
+
 ### *Why should I care?*
-Because software tools are for people. If you don’t care, why are you contributing to open source? Surely, there must be a kernel (ha!) of care somewhere in that lovely little brain of yours.
+
+Because software tools are for _people_. "Changelogs make it easier for users and
+contributors to see precisely what notable changes have been made between each
+release (or version) of the project."
 
 :arrow_right: *[http://keepachangelog.com](http://keepachangelog.com)*
 
@@ -71,32 +76,31 @@ See also Troubleshooting.
 
 
 ## Usage
-**It's really simple!**
 
-- If your **`git remote`** `origin` refers to your GitHub repo, just go to your project folder and run:
+-  Run this:
 
-      github_changelog_generator
-
--  Or, run this from anywhere:
       `github_changelog_generator -u github_username -p github_project`
       `github_changelog_generator  github_username/github_project`
 
-- If you are running it against a repository on a Github Enterprise install, you must specify *both* `--github-site` and `--github-api` command line options:
+- For Github Enterprise repos, specify *both* `--github-site` and `--github-api` options:
 
       github_changelog_generator --github-site="https://github.yoursite.com" \
                                  --github-api="https://github.yoursite.com/api/v3/"
 
-This generates a changelog to the `CHANGELOG.md` file, with pretty markdown formatting.
+This generates a `CHANGELOG.md`, with pretty Markdown formatting.
 
 ### Params
+
 Type `github_changelog_generator --help` for details.
 
 For more details about params, read the Wiki page: [**Advanced change log generation examples**](https://github.com/skywinder/github-changelog-generator/wiki/Advanced-change-log-generation-examples)
 
 ### Params File
+
 In your project root, you can put a params file named `.github_changelog_generator` to override default params:
 
 Example:
+
 ```
 unreleased=false
 future-release=5.0.0
@@ -106,6 +110,7 @@ since-tag=1.0.0
 ### GitHub token
 
 GitHub only allows 50 unauthenticated requests per hour.
+
 Therefore, it's recommended to run this script with authentication by using a **token**.
 
 Here's how:
@@ -143,7 +148,7 @@ If you have a `HISTORY.md` file in your project, it will automatically be picked
 You love `rake`? We do, too! So, we've made it even easier for you:
 we've provided a `rake` task library for your changelog generation.
 
-Just put something like this in your `Rakefile`:
+Configure the task in your `Rakefile`:
 
 ```ruby
 require 'github_changelog_generator/task'
@@ -154,11 +159,14 @@ GitHubChangelogGenerator::RakeTask.new :changelog do |config|
 end
 ```
 
-All command line options can be passed to the `rake` task as `config` parameters. And since you're naming the `rake` task yourself, you can create as many as you want.
+All command-line options can be passed to the `rake` task as `config`
+parameters. And since you're naming the `rake` task yourself, you can create
+as many as you want.
 
 You can look for params names from the [parser source code (#setup_parser)](https://github.com/skywinder/github-changelog-generator/blob/master/lib/github_changelog_generator/parser.rb). For example, to translate the bugs label to Portuguese, instead of setting `config.bugs_label`, you have to set `config.bug_prefix`, and so on.
 
 ## Features and advantages of this project
+
 - Generate canonical, neat change log file, followed by [basic change log guidelines](http://keepachangelog.com) :gem:
 - Optionally generate **Unreleased** changes (closed issues that have not released yet) :dizzy:
 - **GitHub Enterprise support** via command line options! :factory:
@@ -179,12 +187,14 @@ You can look for params names from the [parser source code (#setup_parser)](http
 
 
 ### Alternatives
+
 Here is a [wikipage list of alternatives](https://github.com/skywinder/Github-Changelog-Generator/wiki/Alternatives) that I found. But none satisfied my requirements.
 
 *If you know other projects, feel free to edit this Wiki page!*
 
 
 ### Projects using this library
+
 Here's a [wikipage list of projects](https://github.com/skywinder/Github-Changelog-Generator/wiki/Projects-using-Github-Changelog-Generator).
 
 If you've used this project in a live app, please let me know! Nothing makes me happier than seeing someone else take my work and go wild with it.

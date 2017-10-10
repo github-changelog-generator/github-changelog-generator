@@ -48,13 +48,11 @@ module GitHubChangelogGenerator
         # mimick parse_options
         options = Parser.default_options
 
-        Parser.fetch_user_and_project(options)
-
         OPTIONS.each do |o|
           v = instance_variable_get("@#{o}")
           options[o.to_sym] = v unless v.nil?
         end
-
+        abort "user and project are required." unless options[:user] && options[:project]
         generator = Generator.new options
 
         log = generator.compound_changelog
