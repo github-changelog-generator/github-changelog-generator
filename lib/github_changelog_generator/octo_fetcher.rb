@@ -108,7 +108,7 @@ module GitHubChangelogGenerator
       page_i      = 0
       count_pages = calculate_pages(@client, "tags", {})
 
-      iterate_pages(@client, "tags", {}) do |new_tags|
+      iterate_pages(@client, "tags") do |new_tags|
         page_i += PER_PAGE_NUMBER
         print_in_same_line("Fetching tags... #{page_i}/#{count_pages * PER_PAGE_NUMBER}")
         tags.concat(new_tags)
@@ -194,7 +194,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
         issues_slice.each do |issue|
           threads << Thread.new do
             issue["events"] = []
-            iterate_pages(@client, "issue_events", issue["number"], {}) do |new_event|
+            iterate_pages(@client, "issue_events", issue["number"]) do |new_event|
               issue["events"].concat(new_event)
             end
             issue["events"] = issue["events"].map { |event| stringify_keys_deep(event.to_hash) }
