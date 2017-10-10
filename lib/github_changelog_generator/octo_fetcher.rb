@@ -179,8 +179,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       print_empty_line
 
       Helper.log.info "Pull Request count: #{pull_requests.count}"
-      pull_requests = pull_requests.map { |h| stringify_keys_deep(h.to_hash) }
-      pull_requests
+      pull_requests.map { |pull_request| stringify_keys_deep(pull_request.to_hash) }
     end
 
     # Fetch event for all issues and add them to 'events'
@@ -198,7 +197,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
             iterate_pages(@client, "issue_events", issue["number"], {}) do |new_event|
               issue["events"].concat(new_event)
             end
-            issue["events"] = issue["events"].map { |h| stringify_keys_deep(h.to_hash) }
+            issue["events"] = issue["events"].map { |event| stringify_keys_deep(event.to_hash) }
             print_in_same_line("Fetching events for issues and PR: #{i + 1}/#{issues.count}")
             i += 1
           end
