@@ -34,15 +34,8 @@ module GitHubChangelogGenerator
       @cache_file   = nil
       @cache_log    = nil
       prepare_cache
-      @github_token = fetch_github_token
-
-      @github_options                = {}
-      @github_options[:access_token] = @github_token unless @github_token.nil?
-      @github_options[:api_endpoint] = @options[:github_endpoint] unless @options[:github_endpoint].nil?
-
       configure_octokit_ssl
-
-      @client = Octokit::Client.new(@github_options)
+      @client = Octokit::Client.new(github_options)
     end
 
     def prepare_cache
@@ -50,6 +43,15 @@ module GitHubChangelogGenerator
       @cache_file = @options.fetch(:cache_file) { File.join(Dir.tmpdir, "github-changelog-http-cache") }
       @cache_log  = @options.fetch(:cache_log) { File.join(Dir.tmpdir, "github-changelog-logger.log") }
       init_cache
+    end
+
+    def github_options
+      result = {}
+      github_token = fetch_github_token
+      result[:access_token] = github_token if github_token
+      endpoint = @options[:github_endpoint]
+      result[:api_endpoint] = endpoint if endpoint
+      result
     end
 
     def configure_octokit_ssl
@@ -124,8 +126,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
         Helper.log.info "Found #{tags.count} tags"
       end
       # tags are a Sawyer::Resource. Convert to hash
-      tags = tags.map { |h| stringify_keys_deep(h.to_hash) }
-      tags
+      tags.map { |resource| stringify_keys_deep(resource.to_hash) }
     end
 
     # This method fetch all closed issues and separate them to pull requests and pure issues
