@@ -274,12 +274,10 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     #
     # @yield [Sawyer::Resource] An OctoKit-provided response (which can be empty)
     #
-    # @return [Integer] total number of pages
+    # @return [void]
     def iterate_pages(client, method, *args)
       request_opts = extract_request_args(args)
       args.push(@request_options.merge(request_opts))
-
-      number_of_pages = 1
 
       check_github_response { client.send(method, user_project, *args) }
       last_response = client.last_response
@@ -290,13 +288,9 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       yield(last_response.data)
 
       until (next_one = last_response.rels[:next]).nil?
-        number_of_pages += 1
-
         last_response = check_github_response { next_one.get }
         yield(last_response.data)
       end
-
-      number_of_pages
     end
 
     def extract_request_args(args)
