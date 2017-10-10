@@ -113,10 +113,10 @@ module GitHubChangelogGenerator
     # @return [Hash] Mapping of filtered arrays: (Bugs, Enhancements, Breaking stuff, Issues)
     def parse_by_sections(issues, pull_requests)
       sections = {
-        :issues       => [],
-        :enhancements => [],
-        :bugs         => [],
-        :breaking     => [],
+        issues: [],
+        enhancements: [],
+        bugs: [],
+        breaking: []
       }
 
       issues.each do |dict|

@@ -16,15 +16,15 @@ module GitHubChangelogGenerator
 
     describe "#parse_by_sections" do
       def label(name)
-        {"name" => name}
+        { "name" => name }
       end
 
       def issue(title, labels)
-        {"title" => "issue #{title}", "labels" => labels.map { |l| label(l) }}
+        { "title" => "issue #{title}", "labels" => labels.map { |l| label(l) } }
       end
 
       def pr(title, labels)
-        {"title" => "pr #{title}", "labels" => labels.map { |l| label(l) }}
+        { "title" => "pr #{title}", "labels" => labels.map { |l| label(l) } }
       end
 
       def get_titles(issues)
@@ -33,9 +33,9 @@ module GitHubChangelogGenerator
 
       let(:options) do
         {
-          :bug_labels => ["bug"],
-          :enhancement_labels => ["enhancement"],
-          :breaking_labels => ["breaking"],
+          bug_labels: ["bug"],
+          enhancement_labels: ["enhancement"],
+          breaking_labels: ["breaking"]
         }
       end
 
@@ -45,7 +45,7 @@ module GitHubChangelogGenerator
           issue("enhancement", ["enhancement"]),
           issue("bug", ["bug"]),
           issue("breaking", ["breaking"]),
-          issue("all the labels", ["enhancement", "bug", "breaking"]),
+          issue("all the labels", %w[enhancement bug breaking])
         ]
       end
 
@@ -55,7 +55,7 @@ module GitHubChangelogGenerator
           pr("enhancement", ["enhancement"]),
           pr("bug", ["bug"]),
           pr("breaking", ["breaking"]),
-          pr("all the labels", ["enhancement", "bug", "breaking"]),
+          pr("all the labels", %w[enhancement bug breaking])
         ]
       end
 
