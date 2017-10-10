@@ -4,6 +4,7 @@ cache:
 before_install:
   - gem install bundler
 matrix:
+  fast_finish: true
   include:
     - rvm: 2.2.8
       install: true # This skips 'bundle install'
@@ -18,14 +19,6 @@ matrix:
       jdk: oraclejdk8
       env:
         - JRUBY_OPTS=--debug
-    - rvm: jruby-head
-      jdk: oraclejdk8
-      env:
-        - JRUBY_OPTS=--debug
-        - DEBUG=1
-  allow_failures:
-    - rvm: jruby-head
-  fast_finish: true
 
 addons:
   code_climate:
