@@ -78,7 +78,7 @@ module GitHubChangelogGenerator
           issue["actual_date"] = commit["commit"]["author"]["date"]
 
           # issue['actual_date'] = commit['author']['date']
-        rescue
+        rescue StandardError
           puts "Warning: Can't fetch commit #{event['commit_id']}. It is probably referenced from another repo."
           issue["actual_date"] = issue["closed_at"]
         end

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module GitHubChangelogGenerator
-  VERSION = "1.14.3"
+  VERSION = "1.15.0-alpha"
 end

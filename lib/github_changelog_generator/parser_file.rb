@@ -48,7 +48,7 @@ module GitHubChangelogGenerator
       return if non_configuration_line?(line)
       option_name, value = extract_pair(line)
       @options[option_key_for(option_name)] = convert_value(value, option_name)
-    rescue
+    rescue StandardError
       raise ParserError, "Failed on line ##{line_number}: \"#{line.gsub(/[\n\r]+/, '')}\""
     end
 
