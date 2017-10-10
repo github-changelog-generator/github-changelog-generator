@@ -31,21 +31,27 @@ module GitHubChangelogGenerator
       @project      = @options[:project]
       @since        = @options[:since]
       @http_cache   = @options[:http_cache]
-      if @http_cache
-        @cache_file = @options.fetch(:cache_file) { File.join(Dir.tmpdir, "github-changelog-http-cache") }
-        @cache_log  = @options.fetch(:cache_log) { File.join(Dir.tmpdir, "github-changelog-logger.log") }
-        init_cache
-      end
-      @github_token = fetch_github_token
-
-      @request_options               = { per_page: PER_PAGE_NUMBER }
-      @github_options                = {}
-      @github_options[:access_token] = @github_token unless @github_token.nil?
-      @github_options[:api_endpoint] = @options[:github_endpoint] unless @options[:github_endpoint].nil?
-
+      @cache_file   = nil
+      @cache_log    = nil
+      prepare_cache
       configure_octokit_ssl
+      @client = Octokit::Client.new(github_options)
+    end
 
-      @client = Octokit::Client.new(@github_options)
+    def prepare_cache
+      return unless @http_cache
+      @cache_file = @options.fetch(:cache_file) { File.join(Dir.tmpdir, "github-changelog-http-cache") }
+      @cache_log  = @options.fetch(:cache_log) { File.join(Dir.tmpdir, "github-changelog-logger.log") }
+      init_cache
+    end
+
+    def github_options
+      result = {}
+      github_token = fetch_github_token
+      result[:access_token] = github_token if github_token
+      endpoint = @options[:github_endpoint]
+      result[:api_endpoint] = endpoint if endpoint
+      result
     end
 
     def configure_octokit_ssl
@@ -54,20 +60,18 @@ module GitHubChangelogGenerator
     end
 
     def init_cache
-      middleware_opts = {
-        serializer: Marshal,
-        store: ActiveSupport::Cache::FileStore.new(@cache_file),
-        logger: Logger.new(@cache_log),
-        shared_cache: false
-      }
-      stack = Faraday::RackBuilder.new do |builder|
-        builder.use Faraday::HttpCache, middleware_opts
+      Octokit.middleware = Faraday::RackBuilder.new do |builder|
+        builder.use(Faraday::HttpCache, serializer: Marshal,
+                                        store: ActiveSupport::Cache::FileStore.new(@cache_file),
+                                        logger: Logger.new(@cache_log),
+                                        shared_cache: false)
         builder.use Octokit::Response::RaiseError
         builder.adapter Faraday.default_adapter
         # builder.response :logger
       end
-      Octokit.middleware = stack
     end
+
+    DEFAULT_REQUEST_OPTIONS = { per_page: PER_PAGE_NUMBER }
 
     # Fetch all tags from repo
     #
@@ -84,7 +88,7 @@ module GitHubChangelogGenerator
     def calculate_pages(client, method, request_options)
       # Makes the first API call so that we can call last_response
       check_github_response do
-        client.send(method, user_project, @request_options.merge(request_options))
+        client.send(method, user_project, DEFAULT_REQUEST_OPTIONS.merge(request_options))
       end
 
       last_response = client.last_response
@@ -118,8 +122,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
         Helper.log.info "Found #{tags.count} tags"
       end
       # tags are a Sawyer::Resource. Convert to hash
-      tags = tags.map { |h| stringify_keys_deep(h.to_hash) }
-      tags
+      tags.map { |resource| stringify_keys_deep(resource.to_hash) }
     end
 
     # This method fetch all closed issues and separate them to pull requests and pure issues
@@ -148,12 +151,9 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       print_empty_line
       Helper.log.info "Received issues: #{issues.count}"
 
-      issues = issues.map { |h| stringify_keys_deep(h.to_hash) }
-
       # separate arrays of issues and pull requests:
-      issues.partition do |x|
-        x["pull_request"].nil?
-      end
+      issues.map { |issue| stringify_keys_deep(issue.to_hash) }
+            .partition { |issue_or_pr| issue_or_pr["pull_request"].nil? }
     end
 
     # Fetch all pull requests. We need them to detect :merged_at parameter
@@ -179,8 +179,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       print_empty_line
 
       Helper.log.info "Pull Request count: #{pull_requests.count}"
-      pull_requests = pull_requests.map { |h| stringify_keys_deep(h.to_hash) }
-      pull_requests
+      pull_requests.map { |pull_request| stringify_keys_deep(pull_request.to_hash) }
     end
 
     # Fetch event for all issues and add them to 'events'
@@ -198,7 +197,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
             iterate_pages(@client, "issue_events", issue["number"], {}) do |new_event|
               issue["events"].concat(new_event)
             end
-            issue["events"] = issue["events"].map { |h| stringify_keys_deep(h.to_hash) }
+            issue["events"] = issue["events"].map { |event| stringify_keys_deep(event.to_hash) }
             print_in_same_line("Fetching events for issues and PR: #{i + 1}/#{issues.count}")
             i += 1
           end
@@ -256,14 +255,15 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
           stringify_keys_deep(value)
         end
       when Hash
-        indata.each_with_object({}) do |(k, v), output|
-          output[k.to_s] = stringify_keys_deep(v)
+        indata.each_with_object({}) do |(key, value), output|
+          output[key.to_s] = stringify_keys_deep(value)
         end
       else
         indata
       end
     end
 
+    # Exception raised to warn about moved repositories.
     MovedPermanentlyError = Class.new(RuntimeError)
 
     # Iterates through all pages until there are no more :next pages to follow
@@ -276,13 +276,11 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     #
     # @return [void]
     def iterate_pages(client, method, *args)
-      request_opts = extract_request_args(args)
-      args.push(@request_options.merge(request_opts))
+      args << DEFAULT_REQUEST_OPTIONS.merge(extract_request_args(args))
 
       check_github_response { client.send(method, user_project, *args) }
-      last_response = client.last_response
-      if last_response.status == 301
-        raise MovedPermanentlyError, last_response.data[:url]
+      last_response = client.last_response.tap do |response|
+        raise(MovedPermanentlyError, response.data[:url]) if response.status == 301
       end
 
       yield(last_response.data)
@@ -370,7 +368,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     #
     # @return [String]
     def fetch_github_token
-      env_var = @options[:token] ? @options[:token] : (ENV.fetch CHANGELOG_GITHUB_TOKEN, nil)
+      env_var = @options[:token].presence || ENV["CHANGELOG_GITHUB_TOKEN"]
 
       Helper.log.warn NO_TOKEN_PROVIDED unless env_var
 
