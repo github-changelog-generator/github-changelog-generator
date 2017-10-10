@@ -376,7 +376,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     #
     # @return [String]
     def fetch_github_token
-      env_var = @options[:token] ? @options[:token] : (ENV.fetch CHANGELOG_GITHUB_TOKEN, nil)
+      env_var = @options[:token].presence || ENV["CHANGELOG_GITHUB_TOKEN"]
 
       Helper.log.warn NO_TOKEN_PROVIDED unless env_var
 
