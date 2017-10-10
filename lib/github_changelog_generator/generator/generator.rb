@@ -95,12 +95,13 @@ module GitHubChangelogGenerator
     # @param [Array] pull_requests
     # @return [String] generated log for issues
     def issues_to_log(issues, pull_requests)
-      log = ""
-      bugs_a, enhancement_a, issues_a = parse_by_sections(issues, pull_requests)
+      sections = parse_by_sections(issues, pull_requests)
 
-      log += generate_sub_section(enhancement_a, options[:enhancement_prefix])
-      log += generate_sub_section(bugs_a, options[:bug_prefix])
-      log += generate_sub_section(issues_a, options[:issue_prefix])
+      log = ""
+      log += generate_sub_section(sections[:breaking], options[:breaking_prefix])
+      log += generate_sub_section(sections[:enhancement], options[:enhancement_prefix])
+      log += generate_sub_section(sections[:bugs], options[:bug_prefix])
+      log += generate_sub_section(sections[:issues], options[:issue_prefix])
       log
     end
 
@@ -109,47 +110,69 @@ module GitHubChangelogGenerator
     #
     # @param [Array] issues
     # @param [Array] pull_requests
-    # @return [Array] tuple of filtered arrays: (Bugs, Enhancements Issues)
+    # @return [Hash] Mapping of filtered arrays: (Bugs, Enhancements, Breaking stuff, Issues)
     def parse_by_sections(issues, pull_requests)
-      issues_a = []
-      enhancement_a = []
-      bugs_a = []
+      sections = {
+        issues: [],
+        enhancements: [],
+        bugs: [],
+        breaking: []
+      }
 
       issues.each do |dict|
         added = false
+
         dict["labels"].each do |label|
           if options[:bug_labels].include?(label["name"])
-            bugs_a.push(dict)
+            sections[:bugs] << dict
             added = true
-            next
-          end
-          if options[:enhancement_labels].include?(label["name"])
-            enhancement_a.push(dict)
+          elsif options[:enhancement_labels].include?(label["name"])
+            sections[:enhancements] << dict
             added = true
-            next
+          elsif options[:breaking_labels].include?(label["name"])
+            sections[:breaking] << dict
+            added = true
           end
+
+          break if added
         end
-        issues_a.push(dict) unless added
+
+        sections[:issues] << dict unless added
       end
 
+      sort_pull_requests(pull_requests, sections)
+    end
+
+    # This method iterates through PRs and sorts them into sections
+    #
+    # @param [Array] pull_requests
+    # @param [Hash] sections
+    # @return [Hash] sections
+    def sort_pull_requests(pull_requests, sections)
       added_pull_requests = []
       pull_requests.each do |pr|
+        added = false
+
         pr["labels"].each do |label|
           if options[:bug_labels].include?(label["name"])
-            bugs_a.push(pr)
-            added_pull_requests.push(pr)
-            next
+            sections[:bugs] << pr
+            added_pull_requests << pr
+            added = true
+          elsif options[:enhancement_labels].include?(label["name"])
+            sections[:enhancements] << pr
+            added_pull_requests << pr
+            added = true
+          elsif options[:breaking_labels].include?(label["name"])
+            sections[:breaking] << pr
+            added_pull_requests << pr
+            added = true
           end
-          if options[:enhancement_labels].include?(label["name"])
-            enhancement_a.push(pr)
-            added_pull_requests.push(pr)
-            next
-          end
+
+          break if added
         end
       end
       added_pull_requests.each { |p| pull_requests.delete(p) }
-
-      [bugs_a, enhancement_a, issues_a]
+      sections
     end
   end
 end
