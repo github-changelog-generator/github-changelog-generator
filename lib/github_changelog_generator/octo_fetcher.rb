@@ -60,19 +60,15 @@ module GitHubChangelogGenerator
     end
 
     def init_cache
-      middleware_opts = {
-        serializer: Marshal,
-        store: ActiveSupport::Cache::FileStore.new(@cache_file),
-        logger: Logger.new(@cache_log),
-        shared_cache: false
-      }
-      stack = Faraday::RackBuilder.new do |builder|
-        builder.use Faraday::HttpCache, middleware_opts
+      Octokit.middleware = Faraday::RackBuilder.new do |builder|
+        builder.use(Faraday::HttpCache, serializer: Marshal,
+                                        store: ActiveSupport::Cache::FileStore.new(@cache_file),
+                                        logger: Logger.new(@cache_log),
+                                        shared_cache: false)
         builder.use Octokit::Response::RaiseError
         builder.adapter Faraday.default_adapter
         # builder.response :logger
       end
-      Octokit.middleware = stack
     end
 
     DEFAULT_REQUEST_OPTIONS = { per_page: PER_PAGE_NUMBER }
