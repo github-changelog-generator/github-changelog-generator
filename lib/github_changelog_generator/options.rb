@@ -26,7 +26,6 @@ module GitHubChangelogGenerator
       filter_issues_by_milestone
       frontmatter
       future_release
-      git_remote
       github_endpoint
       github_site
       header
