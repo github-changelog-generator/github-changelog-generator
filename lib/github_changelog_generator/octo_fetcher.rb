@@ -311,14 +311,17 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
         yield
       end
     rescue MovedPermanentlyError => e
-      Helper.log.error("#{e.class}: #{e.message}")
-      sys_abort("The repository has moved, please update your configuration")
+      fail_with_message(e, "The repository has moved, update your configuration")
     rescue Octokit::Forbidden => e
-      Helper.log.error("#{e.class}: #{e.message}")
-      sys_abort("Exceeded retry limit")
+      fail_with_message(e, "Exceeded retry limit")
     rescue Octokit::Unauthorized => e
+      fail_with_message(e, "Error: wrong GitHub token")
+    end
+
+    # Presents the exception, and the aborts with the message.
+    def fail_with_message(e, message)
       Helper.log.error("#{e.class}: #{e.message}")
-      sys_abort("Error: wrong GitHub token")
+      sys_abort(message)
     end
 
     # Exponential backoff
