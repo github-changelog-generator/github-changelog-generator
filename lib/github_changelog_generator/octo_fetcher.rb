@@ -125,6 +125,12 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       tags.map { |resource| stringify_keys_deep(resource.to_hash) }
     end
 
+    def closed_pr_options
+      @closed_pr_options ||= {
+        filter: "all", labels: nil, state: "closed"
+      }.tap { |options| options[:since] = @since if @since }
+    end
+
     # This method fetch all closed issues and separate them to pull requests and pure issues
     # (pull request is kind of issue in term of GitHub)
     #
@@ -132,17 +138,10 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     def fetch_closed_issues_and_pr
       print "Fetching closed issues...\r" if @options[:verbose]
       issues = []
-      options = {
-        state: "closed",
-        filter: "all",
-        labels: nil
-      }
-      options[:since] = @since unless @since.nil?
-
       page_i      = 0
-      count_pages = calculate_pages(@client, "issues", options)
+      count_pages = calculate_pages(@client, "issues", closed_pr_options)
 
-      iterate_pages(@client, "issues", options) do |new_issues|
+      iterate_pages(@client, "issues", closed_pr_options) do |new_issues|
         page_i += PER_PAGE_NUMBER
         print_in_same_line("Fetching issues... #{page_i}/#{count_pages * PER_PAGE_NUMBER}")
         issues.concat(new_issues)
