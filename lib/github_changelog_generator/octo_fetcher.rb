@@ -263,14 +263,15 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
           stringify_keys_deep(value)
         end
       when Hash
-        indata.each_with_object({}) do |(k, v), output|
-          output[k.to_s] = stringify_keys_deep(v)
+        indata.each_with_object({}) do |(key, value), output|
+          output[key.to_s] = stringify_keys_deep(value)
         end
       else
         indata
       end
     end
 
+    # Exception raised to warn about moved repositories.
     MovedPermanentlyError = Class.new(RuntimeError)
 
     # Iterates through all pages until there are no more :next pages to follow
