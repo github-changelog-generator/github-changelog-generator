@@ -99,7 +99,7 @@ module GitHubChangelogGenerator
 
       log = ""
       log += generate_sub_section(sections[:breaking], options[:breaking_prefix])
-      log += generate_sub_section(sections[:enhancement], options[:enhancement_prefix])
+      log += generate_sub_section(sections[:enhancements], options[:enhancement_prefix])
       log += generate_sub_section(sections[:bugs], options[:bug_prefix])
       log += generate_sub_section(sections[:issues], options[:issue_prefix])
       log
