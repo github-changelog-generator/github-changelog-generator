@@ -1,5 +1,34 @@
 # Change Log
 
+## [v1.15.0.pre.beta](https://github.com/skywinder/github-changelog-generator/tree/v1.15.0.pre.beta) (2017-10-13)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/v1.15.0.pre.alpha...v1.15.0.pre.beta)
+
+**Implemented enhancements:**
+
+- add breaking-changes section to changelog [\#530](https://github.com/skywinder/github-changelog-generator/pull/530) ([bastelfreak](https://github.com/bastelfreak))
+- Drop Project-and-Username-finding code [\#451](https://github.com/skywinder/github-changelog-generator/pull/451) ([olleolleolle](https://github.com/olleolleolle))
+
+**Fixed bugs:**
+
+- since\_tag doesn't work when tag specified is the latest tag [\#555](https://github.com/skywinder/github-changelog-generator/issues/555)
+- since\_tag seems to not be working [\#304](https://github.com/skywinder/github-changelog-generator/issues/304)
+- filter tags correctly when `since\_tag` is set to most recent tag [\#566](https://github.com/skywinder/github-changelog-generator/pull/566) ([Crunch09](https://github.com/Crunch09))
+
+**Closed issues:**
+
+- SSL Cert issue on Windows [\#475](https://github.com/skywinder/github-changelog-generator/issues/475)
+
+**Merged pull requests:**
+
+- Fix regression w/ enhancements in issues\_to\_log [\#573](https://github.com/skywinder/github-changelog-generator/pull/573) ([ekohl](https://github.com/ekohl))
+- OctoFetcher: Use defaults for request\_options [\#571](https://github.com/skywinder/github-changelog-generator/pull/571) ([olleolleolle](https://github.com/olleolleolle))
+- OctoFetcher: extract methods [\#570](https://github.com/skywinder/github-changelog-generator/pull/570) ([olleolleolle](https://github.com/olleolleolle))
+- OctoFetcher: extract method fail\_with\_message [\#569](https://github.com/skywinder/github-changelog-generator/pull/569) ([olleolleolle](https://github.com/olleolleolle))
+- OctoFetcher: drop unused number\_of\_pages feature [\#568](https://github.com/skywinder/github-changelog-generator/pull/568) ([olleolleolle](https://github.com/olleolleolle))
+- Travis: Do not test on jruby-head [\#567](https://github.com/skywinder/github-changelog-generator/pull/567) ([olleolleolle](https://github.com/olleolleolle))
+- Drop unused Rake task [\#564](https://github.com/skywinder/github-changelog-generator/pull/564) ([olleolleolle](https://github.com/olleolleolle))
+- Update license date [\#553](https://github.com/skywinder/github-changelog-generator/pull/553) ([benhc123](https://github.com/benhc123))
+
 ## [v1.15.0.pre.alpha](https://github.com/skywinder/github-changelog-generator/tree/v1.15.0.pre.alpha) (2017-10-01)
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/v1.14.3...v1.15.0.pre.alpha)
 
