@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "GIT\-GENERATE\-CHANGELOG" "1" "December 2016" "" ""
+.TH "GIT\-GENERATE\-CHANGELOG" "1" "October 2017" "" ""
 .
 .SH "NAME"
 \fBgit\-generate\-changelog\fR \- Generate changelog from github
@@ -175,12 +175,6 @@ Issues with the specified labels will be always added to "Fixed bugs" section\. 
 Issues with the specified labels will be always added to "Implemented enhancements" section\. Default is \'enhancement,Enhancement\'
 .
 .P
-\-\-between\-tags x,y,z
-.
-.P
-Change log will be filled only between specified tags
-.
-.P
 \-\-exclude\-tags x,y,z
 .
 .P
@@ -263,6 +257,25 @@ Filename to use for cache\. Default is github\-changelog\-http\-cache in a tempo
 .
 .P
 Filename to use for cache log\. Default is github\-changelog\-logger\.log in a temporary directory\.
+.
+.IP "" 4
+.
+.nf
+
+\-\-ssl\-ca\-file [PATH]
+.
+.fi
+.
+.IP "" 0
+.
+.P
+Path to cacert\.pem file\. Default is a bundled lib/github_changelog_generator/ssl_certs/cacert\.pem\. Respects SSL_CA_PATH\.
+.
+.P
+\-\-require file1\.rb,file2\.rb
+.
+.P
+Paths to Ruby file(s) to require before generating changelog\.
 .
 .P
 \-\-[no\-]verbose

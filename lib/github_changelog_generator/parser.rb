@@ -181,6 +181,9 @@ module GitHubChangelogGenerator
         opts.on("--ssl-ca-file [PATH]", "Path to cacert.pem file. Default is a bundled lib/github_changelog_generator/ssl_certs/cacert.pem. Respects SSL_CA_PATH.") do |ssl_ca_file|
           options[:ssl_ca_file] = ssl_ca_file
         end
+        opts.on("--require x,y,z", Array, "Path to Ruby file(s) to require.") do |paths|
+          options[:require] = paths
+        end
         opts.on("--[no-]verbose", "Run verbosely. Default is true") do |v|
           options[:verbose] = v
         end
@@ -226,7 +229,8 @@ module GitHubChangelogGenerator
         bug_prefix: "**Fixed bugs:**",
         enhancement_prefix: "**Implemented enhancements:**",
         breaking_prefix: "**Breaking changes:**",
-        http_cache: true
+        http_cache: true,
+        require: []
       )
     end
   end

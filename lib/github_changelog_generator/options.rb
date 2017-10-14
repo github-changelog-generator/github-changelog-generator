@@ -43,6 +43,7 @@ module GitHubChangelogGenerator
       pulls
       release_branch
       release_url
+      require
       simple_list
       since_tag
       ssl_ca_file
@@ -67,6 +68,13 @@ module GitHubChangelogGenerator
 
     def to_hash
       values
+    end
+
+    # Loads the configured Ruby files from the --require option.
+    #
+    # @return [void]
+    def load_custom_ruby_files
+      self[:require].each { |f| require f }
     end
 
     private
