@@ -2,9 +2,14 @@
 
 require "delegate"
 module GitHubChangelogGenerator
+  # This class wraps Options, and knows a list of known options. Others options
+  # will raise exceptions.
   class Options < SimpleDelegator
+    # Raised on intializing with unknown keys in the values hash,
+    # and when trying to store a value on an unknown key.
     UnsupportedOptionError = Class.new(ArgumentError)
 
+    # List of valid option names
     KNOWN_OPTIONS = %i[
       add_issues_wo_labels
       add_pr_wo_labels
@@ -56,23 +61,31 @@ module GitHubChangelogGenerator
       verbose
     ]
 
+    # @param values [Hash]
+    #
+    # @raise [UnsupportedOptionError] if given values contain unknown options
     def initialize(values)
       super(values)
       unsupported_options.any? && raise(UnsupportedOptionError, unsupported_options.inspect)
     end
 
+    # Set option key to val.
+    #
+    # @param key [Symbol]
+    # @param val [Object]
+    #
+    # @raise [UnsupportedOptionError] when trying to set an unknown option
     def []=(key, val)
       supported_option?(key) || raise(UnsupportedOptionError, key.inspect)
       values[key] = val
     end
 
+    # @return [Hash]
     def to_hash
       values
     end
 
     # Loads the configured Ruby files from the --require option.
-    #
-    # @return [void]
     def load_custom_ruby_files
       self[:require].each { |f| require f }
     end
