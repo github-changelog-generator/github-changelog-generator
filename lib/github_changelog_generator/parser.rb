@@ -3,8 +3,9 @@
 
 require "optparse"
 require "pp"
-require_relative "version"
-require_relative "helper"
+require "github_changelog_generator/version"
+require "github_changelog_generator/helper"
+
 module GitHubChangelogGenerator
   class Parser
     # parse options with optparse
@@ -21,30 +22,17 @@ module GitHubChangelogGenerator
 
       abort(parser.banner) unless options[:user] && options[:project]
 
-      print_options(options)
+      options.print_options
 
       options
     end
 
-    # If options set to verbose, print the parsed options.
+    # Setup parsing options
     #
-    # The GitHub `:token` key is censored in the output.
-    #
-    # @param options [Hash] The options to display
-    # @option options [Boolean] :verbose If false this method does nothing
-    def self.print_options(options)
-      if options[:verbose]
-        Helper.log.info "Performing task with options:"
-        options_to_display = options.clone
-        options_to_display[:token] = options_to_display[:token].nil? ? nil : "hidden value"
-        pp options_to_display
-        puts ""
-      end
-    end
-
-    # setup parsing options
+    # @param options [Options]
+    # @return [OptionParser]
     def self.setup_parser(options)
-      parser = OptionParser.new do |opts| # rubocop:disable Metrics/BlockLength
+      OptionParser.new do |opts| # rubocop:disable Metrics/BlockLength
         opts.banner = "Usage: github_changelog_generator [options]"
         opts.on("-u", "--user [USER]", "Username of the owner of target GitHub repo") do |last|
           options[:user] = last
@@ -196,10 +184,9 @@ module GitHubChangelogGenerator
           exit
         end
       end
-      parser
     end
 
-    # @return [Hash] Default options
+    # @return [Options] Default options
     def self.default_options
       Options.new(
         date_format: "%Y-%m-%d",
