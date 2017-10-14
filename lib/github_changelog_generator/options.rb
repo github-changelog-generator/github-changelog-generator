@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require "delegate"
+require "github_changelog_generator/helper"
+
 module GitHubChangelogGenerator
   # This class wraps Options, and knows a list of known options. Others options
   # will raise exceptions.
@@ -90,10 +92,25 @@ module GitHubChangelogGenerator
       self[:require].each { |f| require f }
     end
 
+    # Pretty-prints a censored options hash, if :verbose.
+    def print_options
+      return unless self[:verbose]
+      Helper.log.info "Using these options:"
+      pp(censored_values)
+      puts ""
+    end
+
     private
 
     def values
       __getobj__
+    end
+
+    # Returns a censored options hash.
+    #
+    # @return [Hash] The GitHub `:token` key is censored in the output.
+    def censored_values
+      values.clone.tap { |opts| opts[:token] = opts[:token].nil? ? "No token used" : "hidden value" }
     end
 
     def unsupported_options
