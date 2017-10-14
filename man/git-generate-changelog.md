@@ -177,7 +177,11 @@ Automatically generate change log from your tags, issues, labels and pull reques
 
     --ssl-ca-file [PATH]
 
-   Path to cacert.pem file. Default is a bundled lib/github_changelog_generator/ssl_certs/cacert.pem.  Respects SSL_CA_PATH.
+   Path to cacert.pem file. Default is a bundled lib/github_changelog_generator/ssl_certs/cacert.pem. Respects SSL_CA_PATH.
+
+   --require file1.rb,file2.rb
+
+   Paths to Ruby file(s) to require before generating changelog.
 
    --[no-]verbose
 

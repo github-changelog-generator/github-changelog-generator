@@ -6,6 +6,7 @@ module GitHubChangelogGenerator
     #
     # @return [String] Generated change log file
     def compound_changelog
+      options.load_custom_ruby_files
       fetch_and_filter_tags
       fetch_issues_and_pr
 
