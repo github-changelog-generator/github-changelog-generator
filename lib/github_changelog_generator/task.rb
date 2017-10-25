@@ -10,6 +10,7 @@ module GitHubChangelogGenerator
 
     OPTIONS = %w[ user project token date_format output
                   bug_prefix enhancement_prefix issue_prefix
+                  breaking_labels issue_line_labels
                   header merge_prefix issues
                   add_issues_wo_labels add_pr_wo_labels
                   pulls filter_issues_by_milestone author
