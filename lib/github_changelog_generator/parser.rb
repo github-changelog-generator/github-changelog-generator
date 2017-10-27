@@ -109,7 +109,7 @@ module GitHubChangelogGenerator
         opts.on("--include-labels  x,y,z", Array, "Only issues with the specified labels will be included in the changelog.") do |list|
           options[:include_labels] = list
         end
-        opts.on("--exclude-labels  x,y,z", Array, 'Issues with the specified labels will be always excluded from changelog. Default is \'duplicate,question,invalid,wontfix\'') do |list|
+        opts.on("--exclude-labels  x,y,z", Array, "Issues with the specified labels will be always excluded from changelog. Default is 'duplicate,question,invalid,wontfix'") do |list|
           options[:exclude_labels] = list
         end
         opts.on("--bug-labels  x,y,z", Array, 'Issues with the specified labels will be always added to "Fixed bugs" section. Default is \'bug,Bug\'') do |list|
