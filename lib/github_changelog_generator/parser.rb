@@ -23,7 +23,7 @@ module GitHubChangelogGenerator
       unless options[:user] && options[:project]
         warn "Configure which user and project to work on."
         warn "Options --user and --project, or settings to that effect. See --help for more."
-        abort(parser.banner) 
+        abort(parser.banner)
       end
 
       options.print_options
