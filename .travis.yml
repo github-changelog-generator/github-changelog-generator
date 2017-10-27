@@ -6,15 +6,15 @@ before_install:
 matrix:
   fast_finish: true
   include:
-    - rvm: 2.2.8
+    - rvm: 2.2.7
       install: true # This skips 'bundle install'
       script: gem build github_changelog_generator && gem install *.gem
-    - rvm: 2.2.8
+    - rvm: 2.2.7
       install: true # This skips 'bundle install'
       script: gem build github_changelog_generator && bundle install
       gemfile: spec/install-gem-in-bundler.gemfile
-    - rvm: 2.3.5
-    - rvm: 2.4.2
+    - rvm: 2.3.4
+    - rvm: 2.4.1
     - rvm: jruby-9.1.13.0
       jdk: oraclejdk8
       env:
