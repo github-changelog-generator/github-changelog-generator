@@ -20,7 +20,11 @@ module GitHubChangelogGenerator
         abort [e, parser].join("\n")
       end
 
-      abort(parser.banner) unless options[:user] && options[:project]
+      unless options[:user] && options[:project]
+        warn "Configure which user and project to work on."
+        warn "Options --user and --project, or settings to that effect. See --help for more."
+        abort(parser.banner)
+      end
 
       options.print_options
 
@@ -33,17 +37,17 @@ module GitHubChangelogGenerator
     # @return [OptionParser]
     def self.setup_parser(options)
       OptionParser.new do |opts| # rubocop:disable Metrics/BlockLength
-        opts.banner = "Usage: github_changelog_generator [options]"
-        opts.on("-u", "--user [USER]", "Username of the owner of target GitHub repo") do |last|
+        opts.banner = "Usage: github_changelog_generator --user USER --project PROJECT [options]"
+        opts.on("-u", "--user USER", "Username of the owner of target GitHub repo") do |last|
           options[:user] = last
         end
-        opts.on("-p", "--project [PROJECT]", "Name of project on GitHub") do |last|
+        opts.on("-p", "--project PROJECT", "Name of project on GitHub") do |last|
           options[:project] = last
         end
         opts.on("-t", "--token [TOKEN]", "To make more than 50 requests per hour your GitHub token is required. You can generate it at: https://github.com/settings/tokens/new") do |last|
           options[:token] = last
         end
-        opts.on("-f", "--date-format [FORMAT]", "Date format. Default is %Y-%m-%d") do |last|
+        opts.on("-f", "--date-format FORMAT", "Date format. Default is %Y-%m-%d") do |last|
           options[:date_format] = last
         end
         opts.on("-o", "--output [NAME]", "Output file. Default is CHANGELOG.md") do |last|
