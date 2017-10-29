@@ -1,5 +1,23 @@
 # Change Log
 
+## [v1.15.0-rc](https://github.com/skywinder/github-changelog-generator/tree/v1.15.0-rc) (2017-10-29)
+[Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/v1.15.0.pre.beta...v1.15.0-rc)
+
+**Implemented enhancements:**
+
+- Add option --require to load custom Ruby code before starting [\#574](https://github.com/skywinder/github-changelog-generator/pull/574) ([olleolleolle](https://github.com/olleolleolle))
+
+**Fixed bugs:**
+
+- issue\_line\_labels and breaking\_labels fail as rake file config params [\#583](https://github.com/skywinder/github-changelog-generator/issues/583)
+
+**Merged pull requests:**
+
+- Add Rake options reported missing [\#584](https://github.com/skywinder/github-changelog-generator/pull/584) ([olleolleolle](https://github.com/olleolleolle))
+- Aborting on missing --user and --project prints all of usage [\#578](https://github.com/skywinder/github-changelog-generator/pull/578) ([olleolleolle](https://github.com/olleolleolle))
+- Options\#print\_options + API docs for Options, Parser [\#576](https://github.com/skywinder/github-changelog-generator/pull/576) ([olleolleolle](https://github.com/olleolleolle))
+- \[docs\] Contributing file [\#575](https://github.com/skywinder/github-changelog-generator/pull/575) ([olleolleolle](https://github.com/olleolleolle))
+
 ## [v1.15.0.pre.beta](https://github.com/skywinder/github-changelog-generator/tree/v1.15.0.pre.beta) (2017-10-13)
 [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/v1.15.0.pre.alpha...v1.15.0.pre.beta)
 
@@ -35,7 +53,7 @@
 **Implemented enhancements:**
 
 - Add newline after version name and Full Changelog link [\#548](https://github.com/skywinder/github-changelog-generator/pull/548) ([ianroberts131](https://github.com/ianroberts131))
-- Update the token failure example to OctoKit 404 failure [\#525](https://github.com/skywinder/github-changelog-generator/pull/525) ([thebyt3](https://github.com/thebyt3))
+- Update the token failure example to OctoKit 404 failure [\#525](https://github.com/skywinder/github-changelog-generator/pull/525) ([00xcoffee](https://github.com/00xcoffee))
 - Rescue invalid commands and present the valid options list [\#498](https://github.com/skywinder/github-changelog-generator/pull/498) ([Lucashuang0802](https://github.com/Lucashuang0802))
 - bundled cacert.pem with --ssl-ca-file PATH option [\#480](https://github.com/skywinder/github-changelog-generator/pull/480) ([olleolleolle](https://github.com/olleolleolle))
 - Option parsing: Remove tag1, tag2 cruft [\#479](https://github.com/skywinder/github-changelog-generator/pull/479) ([olleolleolle](https://github.com/olleolleolle))
