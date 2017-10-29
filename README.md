@@ -199,7 +199,7 @@ Here's a [wikipage list of projects](https://github.com/skywinder/Github-Changel
 
 If you've used this project in a live app, please let me know! Nothing makes me happier than seeing someone else take my work and go wild with it.
 
-*If you are using `github_changelog_generator` to generate your project's changelog, or know of other projects using it, please [add it to this list] (https://github.com/skywinder/Github-Changelog-Generator/wiki/Projects-using-Github-Changelog-Generator).*
+*If you are using `github_changelog_generator` to generate your project's changelog, or know of other projects using it, please [add it to this list](https://github.com/skywinder/github-changelog-generator/wiki/Projects-using-Github-Changelog-Generator).*
 
 ## Am I missing some essential feature?
 
