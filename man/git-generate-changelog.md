@@ -187,13 +187,21 @@ Automatically generate changelog from your tags, issues, labels and pull request
 
    Run verbosely. Default is true
 
-  -v, --version
+   --configure-sections [HASH, STRING]
 
-  Print version number
+   Define your own set of sections which overrides all default sections") do |v|
 
-  -h, --help
+   --add-sections [HASH, STRING]
 
-  Displays Help
+   Add new sections but keep the default sections"
+
+   -v, --version
+
+   Print version number
+
+   -h, --help
+
+   Displays Help
 
 
 ## EXAMPLES
