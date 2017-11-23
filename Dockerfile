@@ -1,6 +1,6 @@
 FROM ruby:2.4-alpine3.6
 
-LABEL maintainer "olle.jonsson@gmail.com"
+LABEL maintainer "ferrari.marco@gmail.com"
 
 RUN gem install github_changelog_generator
 
