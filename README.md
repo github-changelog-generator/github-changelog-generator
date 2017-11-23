@@ -47,6 +47,10 @@ release (or version) of the project."
 
 See also Troubleshooting.
 
+## Running with Docker
+
+    docker run -it --rm -v "$(pwd)":/usr/local/src/your-app skywinder/github-changelog-generator
+
 ## Output example
 
 - Look at **[CHANGELOG.md](https://github.com/skywinder/Github-Changelog-Generator/blob/master/CHANGELOG.md)** for this project
