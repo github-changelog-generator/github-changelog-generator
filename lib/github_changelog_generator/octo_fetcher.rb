@@ -13,7 +13,7 @@ module GitHubChangelogGenerator
     MAX_THREAD_NUMBER = 25
     MAX_FORBIDDEN_RETRIES = 100
     CHANGELOG_GITHUB_TOKEN = "CHANGELOG_GITHUB_TOKEN"
-    GH_RATE_LIMIT_EXCEEDED_MSG = "Warning: Can't finish operation: GitHub API rate limit exceeded, change log may be " \
+    GH_RATE_LIMIT_EXCEEDED_MSG = "Warning: Can't finish operation: GitHub API rate limit exceeded, changelog may be " \
     "missing some issues. You can limit the number of issues fetched using the `--max-issues NUM` argument."
     NO_TOKEN_PROVIDED = "Warning: No token provided (-t option) and variable $CHANGELOG_GITHUB_TOKEN was not found. " \
     "This script can make only 50 requests to GitHub API per hour without token!"

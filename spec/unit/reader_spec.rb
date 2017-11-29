@@ -51,7 +51,7 @@ describe GitHubChangelogGenerator::Reader do
       it { is_expected.to be_empty }
     end
     context "when file has only the header" do
-      subject { @reader.parse("# Change Log") }
+      subject { @reader.parse("# Changelog") }
       it { is_expected.to be_an(Array) }
       it { is_expected.to be_empty }
     end

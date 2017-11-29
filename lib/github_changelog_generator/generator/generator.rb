@@ -14,7 +14,7 @@ module GitHubChangelogGenerator
   class Generator
     attr_accessor :options, :filtered_tags, :github, :tag_section_mapping, :sorted_tags
 
-    # A Generator responsible for all logic, related with change log generation from ready-to-parse issues
+    # A Generator responsible for all logic, related with changelog generation from ready-to-parse issues
     #
     # Example:
     #   generator = GitHubChangelogGenerator::Generator.new

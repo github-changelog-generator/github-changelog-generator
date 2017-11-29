@@ -7,7 +7,7 @@ git-generate-changelog(1) - Generate changelog from github
 
 ## DESCRIPTION
 
-Automatically generate change log from your tags, issues, labels and pull requests on GitHub.
+Automatically generate changelog from your tags, issues, labels and pull requests on GitHub.
 
 ## OPTIONS
 
@@ -49,7 +49,7 @@ Automatically generate change log from your tags, issues, labels and pull reques
 
    --header-label [LABEL]
 
-   Setup custom header label. Default is "# Change Log"
+   Setup custom header label. Default is "# Changelog"
 
    --front-matter [JSON]
 
@@ -121,7 +121,7 @@ Automatically generate change log from your tags, issues, labels and pull reques
 
    --exclude-tags x,y,z
 
-   Change log will exclude specified tags
+   Changelog will exclude specified tags
 
    --exclude-tags-regex [REGEX]
 
@@ -129,11 +129,11 @@ Automatically generate change log from your tags, issues, labels and pull reques
 
    --since-tag x
 
-   Change log will start after specified tag
+   Changelog will start after specified tag
 
    --due-tag x
 
-   Change log will end before specified tag
+   Changelog will end before specified tag
 
    --max-issues [NUMBER]
 

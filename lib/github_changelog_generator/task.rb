@@ -38,7 +38,7 @@ module GitHubChangelogGenerator
     end
 
     def define(args, &task_block)
-      desc "Generate a Change log from GitHub"
+      desc "Generate a Changelog from GitHub"
 
       yield(*[self, args].slice(0, task_block.arity)) if task_block
 

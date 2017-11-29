@@ -14,7 +14,7 @@ Gem::Specification.new do |spec|
   spec.email = "sky4winder+github_changelog_generator@gmail.com"
 
   spec.summary = "Script, that automatically generate changelog from your tags, issues, labels and pull requests."
-  spec.description = "Changelog generation has never been so easy. Fully automate changelog generation - this gem generate change log file based on tags, issues and merged pull requests from Github issue tracker."
+  spec.description = "Changelog generation has never been so easy. Fully automate changelog generation - this gem generate changelog file based on tags, issues and merged pull requests from Github issue tracker."
   spec.homepage = "https://github.com/skywinder/Github-Changelog-Generator"
   spec.license = "MIT"
 
