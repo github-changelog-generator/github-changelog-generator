@@ -28,3 +28,4 @@ addons:
       secure: iMpV5IAvH+/EVGZrpWnt2BnmNFzSbsRcIumsr4ZyLC8N5nrCSXyjCSy0g48btL3Sj0bSgK9hcrJsmrFd2bkqFleyAcPAzNyUQzBuIRZx47O8yFmbZ+Pj+l3+KOlmcbzJNHfDfxkxuWTmTAcSDfsiyApin721T/ey3SUuwKpZNUc=
 after_success:
   - bundle exec codeclimate-test-reporter
+  - bash <(curl -s https://copilot.blackducksoftware.com/ci/travis/scripts/upload)
