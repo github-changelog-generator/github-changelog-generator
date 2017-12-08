@@ -17,7 +17,7 @@ matrix:
       after_success: true # This skips 'codeclimate-test-reporter'
     - rvm: 2.3.4
     - rvm: 2.4.1
-    - rvm: jruby-9.1.13.0
+    - rvm: jruby-9.1.15.0
       jdk: oraclejdk8
       env:
         - JRUBY_OPTS=--debug
