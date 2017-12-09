@@ -43,7 +43,7 @@ API documentation is written as [YARD] docblocks in the Ruby code.
 
 This is rendered as Web pages on [Rubydoc.info][github-changelog-generator on Rubydoc.info].
 
-The completeness of the API documentation is measured on [our page on the Inch CI Web site][github-changelog-generator on Inch CI]
+The completeness of the API documentation is measured on [our page on the Inch CI website][github-changelog-generator on Inch CI].
 
 ### man page
 
