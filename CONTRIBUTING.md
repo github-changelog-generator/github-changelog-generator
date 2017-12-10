@@ -1,6 +1,6 @@
 # How to contribute
 
-Bug reports and pull requests from users is what keeps this project working.
+Bug reports and pull requests from users are what keep this project working.
 
 ## Basics
 
