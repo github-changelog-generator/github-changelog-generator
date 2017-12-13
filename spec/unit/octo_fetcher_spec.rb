@@ -227,7 +227,7 @@ describe GitHubChangelogGenerator::OctoFetcher do
                         "html_url"       => "https://github.com/skywinder/changelog_test/pull/21",
                         "id"             => 124_925_759,
                         "number"         => 21,
-                        "title"          => "Merged br (should appear in changelog with  #20)",
+                        "title"          => "Merged br (should appear in change log with  #20)",
                         "user"           =>
                           { "login"               => "skywinder",
                             "id"                  => 3_356_474,
@@ -265,7 +265,7 @@ describe GitHubChangelogGenerator::OctoFetcher do
                             "diff_url"  => "https://github.com/skywinder/changelog_test/pull/21.diff",
                             "patch_url" => "https://github.com/skywinder/changelog_test/pull/21.patch" },
                         "body"           =>
-                          "to test https://github.com/skywinder/github-changelog-generator/pull/305\r\nshould appear in changelog with #20" }
+                          "to test https://github.com/skywinder/github-changelog-generator/pull/305\r\nshould appear in change log with #20" }
 
         # Convert times to Time
         expected_pr.each_pair do |k, v|
