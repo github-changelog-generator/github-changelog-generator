@@ -244,7 +244,7 @@ Ultimately, I think GitHub Releases are ideal for end-users.
 Meanwhile, `CHANGELOG.md` lives right in the repository, with its detailed list of changes, which is handy for developers.
 Finally, there's nothing wrong with using GitHub Releases alongside `CHANGELOG.md` in this combination.
 
-- ***I received a warning: "GitHub API rate limit exceed"  What does this mean?***
+- ***I got an "API rate limit exceeded" error message. What does this mean?***
 
 GitHub [limits the number of API requests](https://developer.github.com/v3/#rate-limiting) you can make in an hour. You can make up to 5,000 requests per hour. For unauthenticated requests, the rate limit is only up to 60 requests per hour. Unauthenticated requests are associated with your IP address (not the user making requests).
 
