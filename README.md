@@ -85,7 +85,7 @@ See also Troubleshooting.
 
 	   $ github_changelog_generator -u github_username -p github_project
 	   
-	or
+	or, on the 1.14.x (current stable release)
 
 	   $ github_changelog_generator github_username/github_project
 	   
