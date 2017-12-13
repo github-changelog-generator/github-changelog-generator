@@ -68,7 +68,7 @@ module GitHubChangelogGenerator
         opts.on("--issues-label [LABEL]", "Setup custom label for closed-issues section. Default is \"**Closed issues:**\"") do |v|
           options[:issue_prefix] = v
         end
-        opts.on("--header-label [LABEL]", "Setup custom header label. Default is \"# Change Log\"") do |v|
+        opts.on("--header-label [LABEL]", "Setup custom header label. Default is \"# Changelog\"") do |v|
           options[:header] = v
         end
         opts.on("--front-matter [JSON]", "Add YAML front matter. Formatted as JSON because it's easier to add on the command line") do |v|
@@ -128,16 +128,16 @@ module GitHubChangelogGenerator
         opts.on("--issue-line-labels x,y,z", Array, 'The specified labels will be shown in brackets next to each matching issue. Use "ALL" to show all labels. Default is [].') do |list|
           options[:issue_line_labels] = list
         end
-        opts.on("--exclude-tags  x,y,z", Array, "Change log will exclude specified tags") do |list|
+        opts.on("--exclude-tags  x,y,z", Array, "Changelog will exclude specified tags") do |list|
           options[:exclude_tags] = list
         end
         opts.on("--exclude-tags-regex [REGEX]", "Apply a regular expression on tag names so that they can be excluded, for example: --exclude-tags-regex \".*\+\d{1,}\" ") do |last|
           options[:exclude_tags_regex] = last
         end
-        opts.on("--since-tag  x", "Change log will start after specified tag") do |v|
+        opts.on("--since-tag  x", "Changelog will start after specified tag") do |v|
           options[:since_tag] = v
         end
-        opts.on("--due-tag  x", "Change log will end before specified tag") do |v|
+        opts.on("--due-tag  x", "Changelog will end before specified tag") do |v|
           options[:due_tag] = v
         end
         opts.on("--max-issues [NUMBER]", Integer, "Max number of issues to fetch from GitHub. Default is unlimited") do |max|
@@ -214,7 +214,7 @@ module GitHubChangelogGenerator
         simple_list: false,
         ssl_ca_file: nil,
         verbose: true,
-        header: "# Change Log",
+        header: "# Changelog",
         merge_prefix: "**Merged pull requests:**",
         issue_prefix: "**Closed issues:**",
         bug_prefix: "**Fixed bugs:**",

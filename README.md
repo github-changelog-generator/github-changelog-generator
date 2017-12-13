@@ -25,11 +25,11 @@ GitHub Changelog Generator ![GitHub Logo](../master/images/logo.jpg)
 
 ### Changelog generation has never been so easy
 
-**Fully automated changelog generation** - This gem generates a change log file based on **tags**, **issues** and merged **pull requests** (and splits them into separate lists according to labels) from :octocat: GitHub Issue Tracker.
+**Fully automated changelog generation** - This gem generates a changelog file based on **tags**, **issues** and merged **pull requests** (and splits them into separate lists according to labels) from :octocat: GitHub Issue Tracker.
 
 Since you don't have to fill your `CHANGELOG.md` manually now: just run the script, relax and take a cup of :coffee: before your next release! :tada:
 
-### *What’s the point of a change log?*
+### *What’s the point of a changelog?*
 
 To make it easier for users and contributors to see precisely what notable changes have been made between each release (or version) of the project.
 
@@ -103,7 +103,7 @@ Print help for all command-line options to learn more details:
 
     $ github_changelog_generator --help
 
-For more details about params, read the Wiki page: [**Advanced change log generation examples**](https://github.com/skywinder/github-changelog-generator/wiki/Advanced-change-log-generation-examples)
+For more details about params, read the Wiki page: [**Advanced changelog generation examples**](https://github.com/skywinder/github-changelog-generator/wiki/Advanced-change-log-generation-examples)
 
 ### Params File
 
@@ -177,7 +177,7 @@ You can look for params names from the [parser source code (#setup_parser)](http
 
 ## Features and advantages of this project
 
-- Generate canonical, neat change log file, followed by [basic change log guidelines](http://keepachangelog.com) :gem:
+- Generate canonical, neat changelog file, followed by [basic changelog guidelines](http://keepachangelog.com) :gem:
 - Optionally generate **Unreleased** changes (closed issues that have not released yet) :dizzy:
 - **GitHub Enterprise support** via command line options! :factory:
 - Flexible format **customization**:

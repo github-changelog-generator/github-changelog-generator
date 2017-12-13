@@ -22,14 +22,14 @@ require "github_changelog_generator/reader"
 module GitHubChangelogGenerator
   # Main class and entry point for this script.
   class ChangelogGenerator
-    # Class, responsible for whole change log generation cycle
+    # Class, responsible for whole changelog generation cycle
     # @return initialised instance of ChangelogGenerator
     def initialize
       @options = Parser.parse_options
       @generator = Generator.new @options
     end
 
-    # The entry point of this script to generate change log
+    # The entry point of this script to generate changelog
     # @raise (ChangelogGeneratorError) Is thrown when one of specified tags was not found in list of tags.
     def run
       log = @generator.compound_changelog
