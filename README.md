@@ -43,7 +43,7 @@ release (or version) of the project."
 
 ## Installation
 
-    # gem install github_changelog_generator
+    $ [sudo] gem install github_changelog_generator
 
 See also Troubleshooting.
 
