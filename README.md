@@ -85,7 +85,7 @@ See also Troubleshooting.
 
 	   $ github_changelog_generator -u github_username -p github_project
 	   
-or
+	or
 
 	   $ github_changelog_generator github_username/github_project
 	   
@@ -99,7 +99,9 @@ This generates a `CHANGELOG.md`, with pretty Markdown formatting.
 
 ### Params
 
-Type `$ github_changelog_generator --help` for details.
+Print help for all command-line options to learn more details:
+
+    $ github_changelog_generator --help
 
 For more details about params, read the Wiki page: [**Advanced change log generation examples**](https://github.com/skywinder/github-changelog-generator/wiki/Advanced-change-log-generation-examples)
 
