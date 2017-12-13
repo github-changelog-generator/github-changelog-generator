@@ -80,3 +80,10 @@ Metrics/BlockLength:
 Lint/InterpolationCheck:
   Enabled: false
 
+Style/FormatStringToken:
+  Exclude:
+    - lib/github_changelog_generator/parser.rb
+
+Style/MixinUsage:
+  Exclude:
+    - lib/github_changelog_generator/task.rb
