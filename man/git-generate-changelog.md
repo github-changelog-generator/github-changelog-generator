@@ -1,4 +1,4 @@
-git-generate-changelog(1) - Generate changelog from github
+git-generate-changelog(1) - Generate changelog from GitHub
 ================================
 
 ## SYNOPSIS
