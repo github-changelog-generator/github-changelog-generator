@@ -15,6 +15,7 @@ module GitHubChangelogGenerator
     KNOWN_OPTIONS = %i[
       add_issues_wo_labels
       add_pr_wo_labels
+      add_sections
       author
       base
       between_tags
@@ -29,6 +30,7 @@ module GitHubChangelogGenerator
       enhancement_prefix
       breaking_labels
       breaking_prefix
+      configure_sections
       exclude_labels
       exclude_tags
       exclude_tags_regex
@@ -98,6 +100,16 @@ module GitHubChangelogGenerator
       Helper.log.info "Using these options:"
       pp(censored_values)
       puts ""
+    end
+
+    # Boolean method for whether the user is using configure_sections
+    def configure_sections?
+      !self[:configure_sections].nil? && !self[:configure_sections].empty?
+    end
+
+    # Boolean method for whether the user is using add_sections
+    def add_sections?
+      !self[:add_sections].nil? && !self[:add_sections].empty?
     end
 
     private

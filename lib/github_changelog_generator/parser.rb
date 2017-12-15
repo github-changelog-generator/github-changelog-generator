@@ -71,6 +71,12 @@ module GitHubChangelogGenerator
         opts.on("--header-label [LABEL]", "Setup custom header label. Default is \"# Changelog\"") do |v|
           options[:header] = v
         end
+        opts.on("--configure-sections [Hash, String]", "Define your own set of sections which overrides all default sections") do |v|
+          options[:configure_sections] = v
+        end
+        opts.on("--add-sections [Hash, String]", "Add new sections but keep the default sections") do |v|
+          options[:add_sections] = v
+        end
         opts.on("--front-matter [JSON]", "Add YAML front matter. Formatted as JSON because it's easier to add on the command line") do |v|
           options[:frontmatter] = JSON.parse(v).to_yaml + "---\n"
         end
@@ -209,6 +215,8 @@ module GitHubChangelogGenerator
         bug_labels: ["bug", "Bug", "Type: Bug"],
         exclude_labels: ["duplicate", "question", "invalid", "wontfix", "Duplicate", "Question", "Invalid", "Wontfix", "Meta: Exclude From Changelog"],
         breaking_labels: %w[backwards-incompatible breaking],
+        configure_sections: {},
+        add_sections: {},
         issue_line_labels: [],
         max_issues: nil,
         simple_list: false,
