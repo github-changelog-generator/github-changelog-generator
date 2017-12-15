@@ -236,9 +236,9 @@ For example:
 When you find a closed bug, it is very useful to know which release fixed it.
 So that you can easily find the issue by \# in `CHANGELOG.md`.
 
-- it's not quite as easy to find this in handwritten releases notes
-- a generated file saves you the trouble of remembering everything;
-  sometimes people forget to add things to a handwritten file
+- It's not quite as easy to find this in handwritten releases notes.
+- A generated file saves you the trouble of remembering everything;
+  sometimes people forget to add things to a handwritten file.
 
 Ultimately, I think GitHub Releases are ideal for end-users.
 Meanwhile, `CHANGELOG.md` lives right in the repository, with its detailed list of changes, which is handy for developers.
