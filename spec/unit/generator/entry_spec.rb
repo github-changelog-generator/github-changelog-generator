@@ -72,34 +72,22 @@ module GitHubChangelogGenerator
       it "generates a header and body" do
         expect(subject.create_entry_for_tag(pull_requests, issues, "1.0.1", "1.0.1", Time.new(2017, 12, 4), "1.0.0")).to eq(<<-CHANGELOG.gsub(/^ {8}/, "")
         ## [1.0.1](https://github.com/owner/repo/tree/1.0.1) (2017-12-04)
-
         [Full Changelog](https://github.com/owner/repo/compare/1.0.0...1.0.1)
-
         **Breaking changes:**
-
         - issue breaking [\\#8](https://github.com/owner/repo/issue/8)
         - pr breaking [\\#13](https://github.com/owner/repo/pull/13) ([user5](https://github.com/user5))
-
         **Implemented enhancements:**
-
         - issue enhancement [\\#6](https://github.com/owner/repo/issue/6)
         - issue all the labels [\\#9](https://github.com/owner/repo/issue/9)
         - pr enhancement [\\#11](https://github.com/owner/repo/pull/11) ([user5](https://github.com/user5))
         - pr all the labels [\\#14](https://github.com/owner/repo/pull/14) ([user5](https://github.com/user5))
-
         **Fixed bugs:**
-
         - issue bug [\\#7](https://github.com/owner/repo/issue/7)
         - pr bug [\\#12](https://github.com/owner/repo/pull/12) ([user5](https://github.com/user5))
-
         **Closed issues:**
-
         - issue no labels [\\#5](https://github.com/owner/repo/issue/5)
-
         **Merged pull requests:**
-
         - pr no labels [\\#10](https://github.com/owner/repo/pull/10) ([user1](https://github.com/user1))
-
       CHANGELOG
                                                                                                                            )
       end
