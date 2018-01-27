@@ -25,26 +25,24 @@ module GitHubChangelogGenerator
     # @param [String] newer_tag_name Name of the newer tag. Could be nil for `Unreleased` section.
     # @param [String] newer_tag_link Name of the newer tag. Could be "HEAD" for `Unreleased` section.
     # @param [Time] newer_tag_time Time of the newer tag
-    # @param [Hash, nil] older_tag Older tag, used for the links. Could be nil for last tag.
-    # @return [String] Ready and parsed section
-    def create_entry_for_tag(pull_requests, issues, newer_tag_name, newer_tag_link, newer_tag_time, older_tag_name) # rubocop:disable Metrics/ParameterLists
+    # @param [Hash, nil] older_tag_name Older tag, used for the links. Could be nil for last tag.
+    # @return [String] Ready and parsed section content.
+    def generate_entry_for_tag(pull_requests, issues, newer_tag_name, newer_tag_link, newer_tag_time, older_tag_name) # rubocop:disable Metrics/ParameterLists
       github_site = @options[:github_site] || "https://github.com"
       project_url = "#{github_site}/#{@options[:user]}/#{@options[:project]}"
 
-      set_sections_and_maps
+      create_sections
 
       @content = generate_header(newer_tag_name, newer_tag_link, newer_tag_time, older_tag_name, project_url)
-
       @content += generate_body(pull_requests, issues)
-
       @content
     end
 
     private
 
-    # Creates section objects and the label and section maps needed for
-    # sorting
-    def set_sections_and_maps
+    # Creates section objects for this entry.
+    # @return [Nil]
+    def create_sections
       @sections = if @options.configure_sections?
                     parse_sections(@options[:configure_sections])
                   elsif @options.add_sections?
@@ -52,15 +50,14 @@ module GitHubChangelogGenerator
                   else
                     default_sections
                   end
-
-      @lmap = label_map
-      @smap = section_map
+      nil
     end
 
-    # Turns a string from the commandline into an array of Section objects
+    # Turns the argument from the commandline of --configure-sections or
+    # --add-sections into an array of Section objects.
     #
-    # @param [String, Hash] either string or hash describing sections
-    # @return [Array] array of Section objects
+    # @param [String, Hash] sections_desc Either string or hash describing sections
+    # @return [Array] Parsed section objects.
     def parse_sections(sections_desc)
       require "json"
 
@@ -77,34 +74,14 @@ module GitHubChangelogGenerator
       end
     end
 
-    # Creates a hash map of labels => section objects
+    # Generates header text for an entry.
     #
-    # @return [Hash] map of labels => section objects
-    def label_map
-      @sections.each_with_object({}) do |section_obj, memo|
-        section_obj.labels.each do |label|
-          memo[label] = section_obj.name
-        end
-      end
-    end
-
-    # Creates a hash map of 'section name' => section object
-    #
-    # @return [Hash] map of 'section name' => section object
-    def section_map
-      @sections.each_with_object({}) do |section, memo|
-        memo[section.name] = section
-      end
-    end
-
-    # It generates header text for an entry with specific parameters.
-    #
-    # @param [String] newer_tag_name - name of newer tag
-    # @param [String] newer_tag_link - used for links. Could be same as #newer_tag_name or some specific value, like HEAD
-    # @param [Time] newer_tag_time - time, when newer tag created
-    # @param [String] older_tag_name - tag name, used for links.
-    # @param [String] project_url - url for current project.
-    # @return [String] - Header text for a changelog entry.
+    # @param [String] newer_tag_name The name of a newer tag
+    # @param [String] newer_tag_link Used for URL generation. Could be same as #newer_tag_name or some specific value, like HEAD
+    # @param [Time] newer_tag_time Time when the newer tag was created
+    # @param [String] older_tag_name The name of an older tag; used for URLs.
+    # @param [String] project_url URL for the current project.
+    # @return [String] Header text content.
     def generate_header(newer_tag_name, newer_tag_link, newer_tag_time, older_tag_name, project_url)
       header = ""
 
@@ -135,94 +112,92 @@ module GitHubChangelogGenerator
     #
     # @param [Array] pull_requests
     # @param [Array] issues
-    # @returns [String] ready-to-go tag body
+    # @return [String] Content generated from sections of sorted issues & PRs.
     def generate_body(pull_requests, issues)
-      body = ""
-      body += main_sections_to_log(pull_requests, issues)
-      body += merged_section_to_log(pull_requests) if @options[:pulls] && @options[:add_pr_wo_labels]
-      body
+      sort_into_sections(pull_requests, issues)
+      @sections.map(&:generate_content).join
     end
 
-    # Generates main sections for a tag
+    # Default sections to used when --configure-sections is not set.
     #
-    # @param [Array] pull_requests
-    # @param [Array] issues
-    # @return [string] ready-to-go sub-sections
-    def main_sections_to_log(pull_requests, issues)
-      if @options[:issues]
-        sections_to_log = parse_by_sections(pull_requests, issues)
-
-        sections_to_log.map(&:generate_content).join
-      end
-    end
-
-    # Generates section for prs with no labels (for a tag)
-    #
-    # @param [Array] pull_requests
-    # @return [string] ready-to-go sub-section
-    def merged_section_to_log(pull_requests)
-      merged = Section.new(name: "merged", prefix: @options[:merge_prefix], labels: [], issues: pull_requests, options: @options)
-      @sections << merged unless @sections.find { |section| section.name == "merged" }
-      merged.generate_content
-    end
-
-    # Set of default sections for backwards-compatibility/defaults
-    #
-    # @return [Array] array of Section objects
+    # @return [Array] Section objects.
     def default_sections
       [
         Section.new(name: "breaking", prefix: @options[:breaking_prefix], labels: @options[:breaking_labels], options: @options),
         Section.new(name: "enhancements", prefix: @options[:enhancement_prefix], labels: @options[:enhancement_labels], options: @options),
-        Section.new(name: "bugs", prefix: @options[:bug_prefix], labels: @options[:bug_labels], options: @options),
-        Section.new(name: "issues", prefix: @options[:issue_prefix], labels: @options[:issue_labels], options: @options)
+        Section.new(name: "bugs", prefix: @options[:bug_prefix], labels: @options[:bug_labels], options: @options)
       ]
     end
 
-    # This method sorts issues by types
-    # (bugs, features, or just closed issues) by labels
+    # Sorts issues and PRs into entry sections by labels and lack of labels.
     #
     # @param [Array] pull_requests
     # @param [Array] issues
-    # @return [Hash] Mapping of filtered arrays: (Bugs, Enhancements, Breaking stuff, Issues)
-    def parse_by_sections(pull_requests, issues)
-      issues.each do |dict|
-        added = false
-
-        dict["labels"].each do |label|
-          break if @lmap[label["name"]].nil?
-          @smap[@lmap[label["name"]]].issues << dict
-          added = true
-
-          break if added
-        end
-        if @smap["issues"]
-          @sections.find { |sect| sect.name == "issues" }.issues << dict unless added
-        end
+    # @return [Nil]
+    def sort_into_sections(pull_requests, issues)
+      if @options[:issues]
+        unmapped_issues = sort_labeled_issues(issues)
+        add_unmapped_section(unmapped_issues)
       end
-      sort_pull_requests(pull_requests)
+      if @options[:pulls]
+        unmapped_pull_requests = sort_labeled_issues(pull_requests)
+        add_unmapped_section(unmapped_pull_requests)
+      end
+      nil
     end
 
-    # This method iterates through PRs and sorts them into sections
+    # Iterates through sections and sorts labeled issues into them based on
+    # the label mapping. Returns any unmapped or unlabeled issues.
     #
-    # @param [Array] pull_requests
-    # @param [Hash] sections
-    # @return [Hash] sections
-    def sort_pull_requests(pull_requests)
-      added_pull_requests = []
-      pull_requests.each do |pr|
-        added = false
+    # @param [Array] issues Issues or pull requests.
+    # @return [Array] Issues that were not mapped into any sections.
+    def sort_labeled_issues(issues)
+      sorted_issues = []
+      issues.each do |issue|
+        label_names = issue["labels"].collect { |l| l["name"] }
 
-        pr["labels"].each do |label|
-          break if @lmap[label["name"]].nil?
-          @smap[@lmap[label["name"]]].issues << pr
-          added_pull_requests << pr
-          added = true
-
-          break if added
+        # Add PRs in the order of the @sections array. This will either be the
+        # default sections followed by any --add-sections sections in
+        # user-defined order, or --configure-sections in user-defined order.
+        # Ignore the order of the issue labels from github which cannot be
+        # controled by the user.
+        @sections.each do |section|
+          unless (section.labels & label_names).empty?
+            section.issues << issue
+            sorted_issues << issue
+            break
+          end
         end
       end
-      added_pull_requests.each { |req| pull_requests.delete(req) }
-      @sections
+      issues - sorted_issues
+    end
+
+    # Creates a section for issues/PRs with no labels or no mapped labels.
+    #
+    # @param [Array] issues
+    # @return [Nil]
+    def add_unmapped_section(issues)
+      unless issues.empty?
+        # Distinguish between issues and pull requests
+        if issues.first.key?("pull_request")
+          name = "merged"
+          prefix = @options[:merge_prefix]
+          add_wo_labels = @options[:add_pr_wo_labels]
+        else
+          name = "issues"
+          prefix = @options[:issue_prefix]
+          add_wo_labels = @options[:add_issues_wo_labels]
+        end
+        add_issues = if add_wo_labels
+                       issues
+                     else
+                       # Only add unmapped issues
+                       issues.select { |issue| issue["labels"].any? }
+                     end
+        merged = Section.new(name: name, prefix: prefix, labels: [], issues: add_issues, options: @options) unless add_issues.empty?
+        @sections << merged
+      end
+      nil
     end
 
     def line_labels_for(issue)

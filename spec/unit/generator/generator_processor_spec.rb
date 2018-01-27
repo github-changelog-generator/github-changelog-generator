@@ -2,7 +2,7 @@
 
 module GitHubChangelogGenerator
   describe Generator do
-    let(:default_options) { GitHubChangelogGenerator::Parser.default_options }
+    let(:default_options) { GitHubChangelogGenerator::Parser.default_options.merge(verbose: false) }
     let(:options) { {} }
     let(:generator) { described_class.new(default_options.merge(options)) }
 

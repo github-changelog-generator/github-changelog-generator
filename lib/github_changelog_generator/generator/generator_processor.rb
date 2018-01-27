@@ -2,7 +2,7 @@
 
 module GitHubChangelogGenerator
   class Generator
-    # delete all labels with labels from options[:exclude_labels] array
+    # delete all issues with labels from options[:exclude_labels] array
     # @param [Array] issues
     # @return [Array] filtered array
     def exclude_issues_by_labels(issues)
@@ -11,6 +11,19 @@ module GitHubChangelogGenerator
       issues.reject do |issue|
         labels = issue["labels"].map { |l| l["name"] }
         (labels & options[:exclude_labels]).any?
+      end
+    end
+
+    # Only include issues without labels if options[:add_issues_wo_labels]
+    # @param [Array] issues
+    # @return [Array] filtered array
+    def exclude_issues_without_labels(issues)
+      return issues if issues.empty?
+      return issues if issues.first.key?("pull_request") && options[:add_pr_wo_labels]
+      return issues if !issues.first.key?("pull_request") && options[:add_issues_wo_labels]
+
+      issues.reject do |issue|
+        issue["labels"].empty?
       end
     end
 
@@ -130,15 +143,18 @@ module GitHubChangelogGenerator
       filtered_issues
     end
 
-    # @return [Array] issues without labels or empty array if add_issues_wo_labels is false
+    # @param [Array] issues Issues & PRs to filter when without labels
+    # @return [Array] Issues & PRs without labels or empty array if
+    #                 add_issues_wo_labels or add_pr_wo_labels are false
     def filter_wo_labels(issues)
-      if options[:add_issues_wo_labels]
+      if (!issues.empty? && issues.first.key?("pull_requests") && options[:add_pr_wo_labels]) || options[:add_issues_wo_labels]
         issues
       else
         issues.select { |issue| issue["labels"].map { |l| l["name"] }.any? }
       end
     end
 
+    # @todo Document this
     def filter_by_include_labels(issues)
       if options[:include_labels].nil?
         issues
@@ -152,11 +168,12 @@ module GitHubChangelogGenerator
 
     # General filtered function
     #
-    # @param [Array] all_issues
+    # @param [Array] all_issues PRs or issues
     # @return [Array] filtered issues
     def filter_array_by_labels(all_issues)
       filtered_issues = include_issues_by_labels(all_issues)
-      exclude_issues_by_labels(filtered_issues)
+      filtered_issues = exclude_issues_by_labels(filtered_issues)
+      exclude_issues_without_labels(filtered_issues)
     end
 
     # Filter issues according labels

@@ -15,8 +15,8 @@ module GitHubChangelogGenerator
       @options = opts[:options] || Options.new({})
     end
 
-    # @param [Array] issues List of issues on sub-section
-    # @param [String] prefix Name of sub-section
+    # Returns the content of a section.
+    #
     # @return [String] Generate section content
     def generate_content
       content = ""
