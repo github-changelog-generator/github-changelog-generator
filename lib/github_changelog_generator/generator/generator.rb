@@ -84,7 +84,7 @@ module GitHubChangelogGenerator
       # the SHA for the first commit.
       older_tag_name =
         if older_tag.nil?
-          @fetcher.commits_before(newer_tag_time).last["sha"]
+          @fetcher.oldest_commit["sha"]
         else
           older_tag["name"]
         end
@@ -97,7 +97,7 @@ module GitHubChangelogGenerator
     #
     # @return [Array] filtered issues and pull requests
     def filter_issues_for_tags(newer_tag, older_tag)
-      filtered_pull_requests = delete_by_time(@pull_requests, "merged_at", older_tag, newer_tag)
+      filtered_pull_requests = filter_by_tag(@pull_requests, newer_tag)
       filtered_issues        = delete_by_time(@issues, "closed_at", older_tag, newer_tag)
 
       newer_tag_name = newer_tag.nil? ? nil : newer_tag["name"]
@@ -135,6 +135,9 @@ module GitHubChangelogGenerator
       entry
     end
 
+    # Fetches @pull_requests and @issues and filters them based on options.
+    #
+    # @return [Nil] No return.
     def fetch_issues_and_pr
       issues, pull_requests = @fetcher.fetch_closed_issues_and_pr
 
@@ -144,6 +147,8 @@ module GitHubChangelogGenerator
 
       fetch_events_for_issues_and_pr
       detect_actual_closed_dates(@issues + @pull_requests)
+      @fetcher.add_first_occurring_tag_to_prs(@sorted_tags, @pull_requests)
+      nil
     end
   end
 end

@@ -33,6 +33,8 @@ module GitHubChangelogGenerator
       @http_cache   = @options[:http_cache]
       @cache_file   = nil
       @cache_log    = nil
+      @commits      = []
+      @compares     = {}
       prepare_cache
       configure_octokit_ssl
       @client = Octokit::Client.new(github_options)
@@ -223,26 +225,94 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       commit_data["commit"]["committer"]["date"]
     end
 
+    # Fetch and cache comparison between two github refs
+    #
+    # @param [String] older The older sha/tag/branch.
+    # @param [String] newer The newer sha/tag/branch.
+    # @return [Hash] Github api response for comparison.
+    def fetch_compare(older, newer)
+      unless @compares["#{older}...#{newer}"]
+        compare_data = check_github_response { @client.compare(user_project, older, newer || "HEAD") }
+        raise StandardError, "Sha #{older} and sha #{newer} are not related; please file a github-changelog-generator issues and describe how to replicate this issue." if compare_data["status"] == "diverged"
+        @compares["#{older}...#{newer}"] = stringify_keys_deep(compare_data.to_hash)
+      end
+      @compares["#{older}...#{newer}"]
+    end
+
     # Fetch commit for specified event
     #
     # @return [Hash]
     def fetch_commit(event)
-      check_github_response do
-        commit = @client.commit(user_project, event["commit_id"])
-        commit = stringify_keys_deep(commit.to_hash)
-        commit
+      found = commits.find do |commit|
+        commit["sha"] == event["commit_id"]
+      end
+      if found
+        stringify_keys_deep(found.to_hash)
+      else
+        # cache miss; don't add to @commits because unsure of order.
+        check_github_response do
+          commit = @client.commit(user_project, event["commit_id"])
+          commit = stringify_keys_deep(commit.to_hash)
+          commit
+        end
       end
     end
 
-    # Fetch all commits before certain point
+    # Fetch all commits
     #
-    # @return [String]
-    def commits_before(start_time)
-      commits = []
-      iterate_pages(@client, "commits_before", start_time.to_datetime.to_s) do |new_commits|
-        commits.concat(new_commits)
+    # @return [Array] Commits in a repo.
+    def commits
+      if @commits.empty?
+        iterate_pages(@client, "commits") do |new_commits|
+          @commits.concat(new_commits)
+        end
       end
-      commits
+      @commits
+    end
+
+    # Return the oldest commit in a repo
+    #
+    # @return [Hash] Oldest commit in the github git history.
+    def oldest_commit
+      commits.last
+    end
+
+    # Adds a key "first_occurring_tag" to each PR with a value of the oldest
+    # tag that a PR's merge commit occurs in in the git history. This should
+    # indicate the release of each PR by git's history regardless of dates and
+    # divergent branches.
+    #
+    # @param [Array] tags The array of tags sorted by time, newest to oldest.
+    # @param [Array] prs The array of PRs to discover the tags of.
+    # @return [Nil] No return; PRs are updated in-place.
+    def add_first_occurring_tag_to_prs(tags, prs)
+      # Shallow-clone tags and prs to avoid modification of passed arrays.
+      # Iterate tags.reverse (oldest to newest) to find first tag of each PR.
+      tags = tags.dup.reverse
+      prs = prs.dup
+      total = prs.length
+      while tags.any? && prs.any?
+        print_in_same_line("Associating PRs with tags: #{total - prs.length}/#{total}")
+        tag = tags.shift
+        # Use oldest commit because comparing two arbitrary tags may be diverged
+        commits_in_tag = fetch_compare(oldest_commit["sha"], tag["name"])
+        shas_in_tag = commits_in_tag["commits"].collect { |commit| commit["sha"] }
+        prs = prs.reject do |pr|
+          # XXX Wish I could use merge_commit_sha, but gcg doesn't currently
+          # fetch that. See https://developer.github.com/v3/pulls/#get-a-single-pull-request
+          if pr["events"] && (event = pr["events"].find { |e| e["event"] == "merged" })
+            pr_sha = event["commit_id"]
+            pr["first_occurring_tag"] = tag["name"] if shas_in_tag.include?(pr_sha)
+          else
+            raise StandardError, "No merge sha found for PR #{pr['number']}"
+          end
+        end
+      end
+      # All tags have been shifted or prs mapped, and as many PRs have been
+      # associated with tags as possible. Any remaining PRs are unreleased.
+      # Any remaining tags have no known PRs.
+      Helper.log.info "Associating PRs with tags: #{total}"
+      nil
     end
 
     private
