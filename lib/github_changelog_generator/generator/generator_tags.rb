@@ -135,7 +135,7 @@ module GitHubChangelogGenerator
                             []
                           end
         else
-          Helper.log.warn "Warning: can't find tag #{tag}, specified with --since-tag option."
+          raise ChangelogGeneratorError, "Error: can't find tag #{tag}, specified with --since-tag option."
         end
       end
       filtered_tags
@@ -155,7 +155,7 @@ module GitHubChangelogGenerator
                             []
                           end
         else
-          Helper.log.warn "Warning: can't find tag #{tag}, specified with --due-tag option."
+          raise ChangelogGeneratorError, "Error: can't find tag #{tag}, specified with --due-tag option."
         end
       end
       filtered_tags
