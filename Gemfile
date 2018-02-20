@@ -11,6 +11,7 @@ group :development, :test do
   gem "overcommit", ">= 0.31"
   gem "rake"
   gem "rubocop", ">= 0.50"
+  gem "yard-junk"
 end
 
 group :development do
