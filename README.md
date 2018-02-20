@@ -6,6 +6,7 @@
 [![Code Climate](https://codeclimate.com/github/skywinder/github-changelog-generator/badges/gpa.svg)](https://codeclimate.com/github/skywinder/github-changelog-generator)
 [![Test Coverage](https://codeclimate.com/github/skywinder/github-changelog-generator/badges/coverage.svg)](https://codeclimate.com/github/skywinder/github-changelog-generator)
 [![Join the chat at https://gitter.im/github-changelog-generator/chat](https://badges.gitter.im/github-changelog-generator/chat.svg)](https://gitter.im/github-changelog-generator/chat?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fskywinder%2Fgithub-changelog-generator.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fskywinder%2Fgithub-changelog-generator?ref=badge_shield)
 
 GitHub Changelog Generator ![GitHub Logo](../master/images/logo.jpg)
 ==================
@@ -22,6 +23,9 @@ GitHub Changelog Generator ![GitHub Logo](../master/images/logo.jpg)
   - [Contributing](#contributing)
   - [License](#license)
 
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fskywinder%2Fgithub-changelog-generator.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fskywinder%2Fgithub-changelog-generator?ref=badge_large)
 
 ### Changelog generation has never been so easy
 
