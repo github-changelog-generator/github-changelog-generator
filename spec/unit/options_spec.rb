@@ -40,4 +40,28 @@ RSpec.describe GitHubChangelogGenerator::Options do
       end
     end
   end
+
+  describe "#write_to_file?" do
+    subject { options.write_to_file? }
+
+    let(:options) { described_class.new(output: output) }
+
+    context "with filename" do
+      let(:output) { "CHANGELOG.md" }
+
+      it { is_expected.to eq true }
+    end
+
+    context "with nil" do
+      let(:output) { nil }
+
+      it { is_expected.to eq false }
+    end
+
+    context "with empty string" do
+      let(:output) { "" }
+
+      it { is_expected.to eq false }
+    end
+  end
 end

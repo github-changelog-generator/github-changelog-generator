@@ -112,6 +112,11 @@ module GitHubChangelogGenerator
       !self[:add_sections].nil? && !self[:add_sections].empty?
     end
 
+    # @return [Boolean] whether write to `:output`
+    def write_to_file?
+      self[:output].present?
+    end
+
     private
 
     def values
