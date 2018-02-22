@@ -50,7 +50,7 @@ module GitHubChangelogGenerator
         opts.on("-f", "--date-format FORMAT", "Date format. Default is %Y-%m-%d") do |last|
           options[:date_format] = last
         end
-        opts.on("-o", "--output [NAME]", "Output file. Default is CHANGELOG.md") do |last|
+        opts.on("-o", "--output [NAME]", "Output file. To print to STDOUT instead, use blank as path. Default is CHANGELOG.md") do |last|
           options[:output] = last
         end
         opts.on("-b", "--base [NAME]", "Optional base file to append generated changes to.") do |last|

@@ -34,10 +34,14 @@ module GitHubChangelogGenerator
     def run
       log = @generator.compound_changelog
 
-      output_filename = @options[:output].to_s
-      File.open(output_filename, "wb") { |file| file.write(log) }
-      puts "Done!"
-      puts "Generated log placed in #{Dir.pwd}/#{output_filename}"
+      if @options.write_to_file?
+        output_filename = @options[:output].to_s
+        File.open(output_filename, "wb") { |file| file.write(log) }
+        puts "Done!"
+        puts "Generated log placed in #{Dir.pwd}/#{output_filename}"
+      else
+        puts log
+      end
     end
   end
 end
