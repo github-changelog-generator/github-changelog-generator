@@ -161,7 +161,7 @@ module GitHubChangelogGenerator
       else
         issues.select do |issue|
           labels = issue["labels"].map { |l| l["name"] } & options[:include_labels]
-          labels.any?
+          labels.any? || issue["labels"].empty?
         end
       end
     end

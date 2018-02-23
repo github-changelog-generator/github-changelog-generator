@@ -356,6 +356,64 @@ module GitHubChangelogGenerator
           expect(titles_for(merged_section.issues)).to eq(["pr no labels", "pr no mapped labels"])
         end
       end
+      context "configure sections and include labels" do
+        let(:options) do
+          Parser.default_options.merge(
+            configure_sections: "{ \"foo\": { \"prefix\": \"foofix\", \"labels\": [\"test1\", \"test2\"]}, \"bar\": { \"prefix\": \"barfix\", \"labels\": [\"test3\", \"test4\"]}}",
+            include_labels: %w[test1 test2 test3 test4],
+            verbose: false
+          )
+        end
+
+        let(:issues) do
+          [
+            issue("no labels", []),
+            issue("test1", ["test1"]),
+            issue("test3", ["test3"]),
+            issue("test4", ["test4"]),
+            issue("all the labels", %w[test4 test2 test3 test1]),
+            issue("some included labels", %w[unincluded test2]),
+            issue("no included labels", %w[unincluded again])
+          ]
+        end
+
+        let(:pull_requests) do
+          [
+            pr("no labels", []),
+            pr("test1", ["test1"]),
+            pr("test3", ["test3"]),
+            pr("test4", ["test4"]),
+            pr("all the labels", %w[test4 test2 test3 test1]),
+            pr("some included labels", %w[unincluded test2]),
+            pr("no included labels", %w[unincluded again])
+          ]
+        end
+
+        subject { described_class.new(options) }
+
+        it "returns 4 sections" do
+          expect(entry_sections.size).to eq 4
+        end
+
+        it "returns only configured sections" do
+          expect(entry_sections.select { |section| section.name == "foo" }.size).to eq 1
+          expect(entry_sections.select { |section| section.name == "bar" }.size).to eq 1
+        end
+
+        it "assigns issues to the correct sections" do
+          foo_section = entry_sections.select { |section| section.name == "foo" }[0]
+          bar_section = entry_sections.select { |section| section.name == "bar" }[0]
+          issue_section = entry_sections.select { |section| section.name == "issues" }[0]
+          merged_section = entry_sections.select { |section| section.name == "merged" }[0]
+
+          aggregate_failures "checks all sections" do
+            expect(titles_for(foo_section.issues)).to eq(["issue test1", "issue all the labels", "issue some included labels", "pr test1", "pr all the labels", "pr some included labels"])
+            expect(titles_for(bar_section.issues)).to eq(["issue test3", "issue test4", "pr test3", "pr test4"])
+            expect(titles_for(merged_section.issues)).to eq(["pr no labels"])
+            expect(titles_for(issue_section.issues)).to eq(["issue no labels"])
+          end
+        end
+      end
       context "configure sections and exclude labels" do
         let(:options) do
           Parser.default_options.merge(
