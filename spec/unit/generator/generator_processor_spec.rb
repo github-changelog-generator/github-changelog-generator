@@ -2,7 +2,7 @@
 
 module GitHubChangelogGenerator
   describe Generator do
-    let(:default_options) { GitHubChangelogGenerator::Parser.default_options }
+    let(:default_options) { GitHubChangelogGenerator::Parser.default_options.merge(verbose: false) }
     let(:options) { {} }
     let(:generator) { described_class.new(default_options.merge(options)) }
 
@@ -67,11 +67,18 @@ module GitHubChangelogGenerator
 
           it { is_expected.to eq(expected_issues) }
         end
+
+        context "with 'include_labels'" do
+          let(:options) { { add_issues_wo_labels: false, include_labels: %w[GOOD] } }
+          let(:expected_issues) { [good_issue] }
+
+          it { is_expected.to eq(expected_issues) }
+        end
       end
 
       context "when 'include_labels' is specified" do
         let(:options) { { include_labels: %w[GOOD] } }
-        let(:expected_issues) { [good_issue] }
+        let(:expected_issues) { [good_issue, unlabeled_issue] }
 
         it { is_expected.to eq(expected_issues) }
       end

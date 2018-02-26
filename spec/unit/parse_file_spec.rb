@@ -36,7 +36,7 @@ describe GitHubChangelogGenerator::ParserFile do
     end
 
     context "when override default values" do
-      let(:default_options) { GitHubChangelogGenerator::Parser.default_options }
+      let(:default_options) { GitHubChangelogGenerator::Parser.default_options.merge(verbose: false) }
       let(:options) { {}.merge(default_options) }
       let(:options_before_change) { options.dup }
       let(:file) { StringIO.new("unreleased_label=staging\nunreleased=false\nheader==== Changelog ===") }
