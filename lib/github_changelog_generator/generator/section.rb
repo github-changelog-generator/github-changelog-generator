@@ -48,7 +48,24 @@ module GitHubChangelogGenerator
       if @options[:issue_line_labels].present?
         title_with_number = "#{title_with_number}#{line_labels_for(issue)}"
       end
-      issue_line_with_user(title_with_number, issue)
+      line = issue_line_with_user(title_with_number, issue)
+      issue_line_with_body(line, issue)
+    end
+
+    def issue_line_with_body(line, issue)
+      return line if !@options[:issue_line_body] || issue["body"].blank?
+      # get issue body till first line break
+      body_paragraph = body_till_first_break(issue["body"])
+      # remove spaces from begining and end of the string
+      body_paragraph.rstrip!
+      # encapsulate to md
+      encapsulated_body = "\s\s\n" + encapsulate_string(body_paragraph)
+
+      "**#{line}** #{encapsulated_body}"
+    end
+
+    def body_till_first_break(body)
+      body.split(/\n/).first
     end
 
     def issue_line_with_user(line, issue)
