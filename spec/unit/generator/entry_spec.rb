@@ -13,7 +13,10 @@ module GitHubChangelogGenerator
         "labels" => labels.map { |l| label(l) },
         "number" => number,
         "html_url" => "https://github.com/owner/repo/issue/#{number}",
-        "user" => user
+        "user" => user,
+        "events" => [{
+          "event" => "closed"
+        }]
       }
     end
 
@@ -25,7 +28,19 @@ module GitHubChangelogGenerator
         "number" => number,
         "html_url" => "https://github.com/owner/repo/pull/#{number}",
         "user" => user.merge("html_url" => "https://github.com/#{user['login']}"),
-        "merged_at" => Time.now.utc
+        "merged_at" => Time.now.utc,
+        "events" => [{
+          "event" => "merged",
+          "commit_id" => "aaaaa#{number}"
+        }]
+      }
+    end
+
+    def tag(name, sha, shas_in_tag)
+      {
+        "name" => name,
+        "commit" => { "sha" => sha },
+        "shas_in_tag" => shas_in_tag
       }
     end
 
@@ -37,9 +52,13 @@ module GitHubChangelogGenerator
       %w[breaking enhancements bugs deprecated removed security issues]
     end
 
-    # Default to no issues or PRs.
+    # Default to no issues, PRs, or tags.
     let(:issues) { [] }
     let(:pull_requests) { [] }
+    let(:tags) { [] }
+    let(:compare_shas) do
+      { "aaaaa1...master" => ["aaaaa1"] }
+    end
 
     # Default to standard options minus verbose to avoid output during testing.
     let(:options) do
@@ -54,10 +73,20 @@ module GitHubChangelogGenerator
         "fetcher",
         fetch_closed_issues_and_pr: [issues, pull_requests],
         fetch_closed_pull_requests: [],
-        fetch_events_async: issues + pull_requests
+        fetch_events_async: issues + pull_requests,
+        fetch_tag_shas_async: nil,
+        fetch_comments_async: nil,
+        default_branch: "master",
+        oldest_commit: { "sha" => "aaaaa1" },
+        fetch_commit: { "commit" => { "author" => { "date" => Time.now.utc } } }
       )
+      allow(fake_fetcher).to receive(:fetch_compare) do |old, new|
+        # Comparisons has a "commits" key of an array of commit hashes each with a "sha" key.
+        { "commits" => compare_shas["#{old}...#{new}"].collect { |sha| { "sha" => sha } } }
+      end
       allow(GitHubChangelogGenerator::OctoFetcher).to receive(:new).and_return(fake_fetcher)
       generator = GitHubChangelogGenerator::Generator.new(options)
+      generator.instance_variable_set :@sorted_tags, tags
       generator.send(:fetch_issues_and_pr)
       generator
     end
@@ -106,6 +135,10 @@ module GitHubChangelogGenerator
           pr("some unmapped labels", %w[tests-fail bug], "26", "login" => "user5"),
           pr("no mapped labels", %w[docs maintenance], "27", "login" => "user5")
         ]
+      end
+
+      let(:tags) do
+        [tag("1.0.0", "aaaaa30", (1..30).collect { |i| "aaaaa#{i}" })]
       end
 
       subject { described_class.new(options) }
@@ -391,8 +424,8 @@ module GitHubChangelogGenerator
             pr("removed", ["removed"]),
             pr("security", ["security"]),
             pr("all the labels", %w[breaking enhancement bug deprecated removed security]),
-            pr("some unmapped labels", %w[tests-fail bug], "15", "login" => "user5"),
-            pr("no mapped labels", %w[docs maintenance], "16", "login" => "user5"),
+            pr("some unmapped labels", %w[tests-fail bug]),
+            pr("no mapped labels", %w[docs maintenance]),
             pr("excluded label", %w[wontfix]),
             pr("excluded and included label", %w[breaking wontfix])
           ]

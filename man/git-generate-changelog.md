@@ -165,7 +165,7 @@ Automatically generate changelog from your tags, issues, labels and pull request
 
    --http-cache
 
-   Use HTTP Cache to cache Github API requests (useful for large repos) Default is true.
+   Use HTTP Cache to cache GitHub API requests (useful for large repos) Default is true.
 
    --[no-]cache-file [CACHE-FILE]
 
@@ -203,6 +203,9 @@ Automatically generate changelog from your tags, issues, labels and pull request
 
    Displays Help
 
+## REBASED COMMITS
+
+GitHub pull requests that have been merged whose merge commit SHA has been modified through rebasing, cherry picking, or some other method may be tracked via a special comment on GitHub. Git commit SHAs found in comments on pull requests matching the regular expression `/rebased commit: ([0-9a-f]{40})/i` will be used in place of the original merge SHA when being added to the changelog.
 
 ## EXAMPLES
 

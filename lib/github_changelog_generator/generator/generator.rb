@@ -147,7 +147,7 @@ module GitHubChangelogGenerator
 
       fetch_events_for_issues_and_pr
       detect_actual_closed_dates(@issues + @pull_requests)
-      @fetcher.add_first_occurring_tag_to_prs(@sorted_tags, @pull_requests)
+      add_first_occurring_tag_to_prs(@sorted_tags, @pull_requests)
       nil
     end
   end

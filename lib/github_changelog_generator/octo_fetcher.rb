@@ -213,6 +213,29 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       Helper.log.info "Fetching events for issues and PR: #{i}"
     end
 
+    # Fetch comments for PRs and add them to "comments"
+    #
+    # @param [Array] prs The array of PRs.
+    # @return [Void] No return; PRs are updated in-place.
+    def fetch_comments_async(prs)
+      threads = []
+
+      prs.each_slice(MAX_THREAD_NUMBER) do |prs_slice|
+        prs_slice.each do |pr|
+          threads << Thread.new do
+            pr["comments"] = []
+            iterate_pages(@client, "issue_comments", pr["number"]) do |new_comment|
+              pr["comments"].concat(new_comment)
+            end
+            pr["comments"] = pr["comments"].map { |comment| stringify_keys_deep(comment.to_hash) }
+          end
+        end
+        threads.each(&:join)
+        threads = []
+      end
+      nil
+    end
+
     # Fetch tag time from repo
     #
     # @param [Hash] tag GitHub data item about a Tag
@@ -277,41 +300,39 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       commits.last
     end
 
-    # Adds a key "first_occurring_tag" to each PR with a value of the oldest
-    # tag that a PR's merge commit occurs in in the git history. This should
-    # indicate the release of each PR by git's history regardless of dates and
-    # divergent branches.
+    # @return [String] Default branch of the repo
+    def default_branch
+      @default_branch ||= @client.repository(user_project)[:default_branch]
+    end
+
+    # Fetch all SHAs occurring in or before a given tag and add them to
+    # "shas_in_tag"
     #
-    # @param [Array] tags The array of tags sorted by time, newest to oldest.
-    # @param [Array] prs The array of PRs to discover the tags of.
-    # @return [Nil] No return; PRs are updated in-place.
-    def add_first_occurring_tag_to_prs(tags, prs)
-      # Shallow-clone tags and prs to avoid modification of passed arrays.
-      # Iterate tags.reverse (oldest to newest) to find first tag of each PR.
-      tags = tags.dup.reverse
-      prs = prs.dup
-      total = prs.length
-      while tags.any? && prs.any?
-        print_in_same_line("Associating PRs with tags: #{total - prs.length}/#{total}")
-        tag = tags.shift
-        # Use oldest commit because comparing two arbitrary tags may be diverged
-        commits_in_tag = fetch_compare(oldest_commit["sha"], tag["name"])
-        shas_in_tag = commits_in_tag["commits"].collect { |commit| commit["sha"] }
-        prs = prs.reject do |pr|
-          # XXX Wish I could use merge_commit_sha, but gcg doesn't currently
-          # fetch that. See https://developer.github.com/v3/pulls/#get-a-single-pull-request
-          if pr["events"] && (event = pr["events"].find { |e| e["event"] == "merged" })
-            pr_sha = event["commit_id"]
-            pr["first_occurring_tag"] = tag["name"] if shas_in_tag.include?(pr_sha)
-          else
-            raise StandardError, "No merge sha found for PR #{pr['number']}"
+    # @param [Array] tags The array of tags.
+    # @return [Nil] No return; tags are updated in-place.
+    def fetch_tag_shas_async(tags)
+      i = 0
+      threads = []
+      print_in_same_line("Fetching SHAs for tags: #{i}/#{tags.count}\r") if @options[:verbose]
+
+      tags.each_slice(MAX_THREAD_NUMBER) do |tags_slice|
+        tags_slice.each do |tag|
+          threads << Thread.new do
+            # Use oldest commit because comparing two arbitrary tags may be diverged
+            commits_in_tag = fetch_compare(oldest_commit["sha"], tag["name"])
+            tag["shas_in_tag"] = commits_in_tag["commits"].collect { |commit| commit["sha"] }
+            print_in_same_line("Fetching SHAs for tags: #{i + 1}/#{tags.count}") if @options[:verbose]
+            i += 1
           end
         end
+        threads.each(&:join)
+        threads = []
       end
-      # All tags have been shifted or prs mapped, and as many PRs have been
-      # associated with tags as possible. Any remaining PRs are unreleased.
-      # Any remaining tags have no known PRs.
-      Helper.log.info "Associating PRs with tags: #{total}"
+
+      # to clear line from prev print
+      print_empty_line
+
+      Helper.log.info "Fetching SHAs for tags: #{i}"
       nil
     end
 

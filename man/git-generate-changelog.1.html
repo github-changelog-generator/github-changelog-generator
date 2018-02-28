@@ -57,6 +57,7 @@
     <a href="#SYNOPSIS">SYNOPSIS</a>
     <a href="#DESCRIPTION">DESCRIPTION</a>
     <a href="#OPTIONS">OPTIONS</a>
+    <a href="#REBASED-COMMITS">REBASED COMMITS</a>
     <a href="#EXAMPLES">EXAMPLES</a>
     <a href="#AUTHOR">AUTHOR</a>
     <a href="#REPORTING-BUGS">REPORTING BUGS</a>
@@ -238,7 +239,7 @@
 
 <p>   --http-cache</p>
 
-<p>   Use HTTP Cache to cache Github API requests (useful for large repos) Default is true.</p>
+<p>   Use HTTP Cache to cache GitHub API requests (useful for large repos) Default is true.</p>
 
 <p>   --[no-]cache-file [CACHE-FILE]</p>
 
@@ -277,6 +278,10 @@
 
 <p>   Displays Help</p>
 
+<h2 id="REBASED-COMMITS">REBASED COMMITS</h2>
+
+<p>GitHub pull requests that have been merged whose merge commit SHA has been modified through rebasing, cherry picking, or some other method may be tracked via a special comment on GitHub. Git commit SHAs found in comments on pull requests matching the regular expression <code>/rebased commit: ([0-9a-f]{40})/i</code> will be used in place of the original merge SHA when being added to the changelog.</p>
+
 <h2 id="EXAMPLES">EXAMPLES</h2>
 
 <h2 id="AUTHOR">AUTHOR</h2>
@@ -294,7 +299,7 @@
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'></li>
-    <li class='tc'>January 2018</li>
+    <li class='tc'>March 2018</li>
     <li class='tr'>git-generate-changelog(1)</li>
   </ol>
 
