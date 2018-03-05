@@ -55,7 +55,7 @@ module GitHubChangelogGenerator
     end
 
     def configure_octokit_ssl
-      ca_file = @options[:ssl_ca_file] || ENV["SSL_CA_FILE"] || File.expand_path("../ssl_certs/cacert.pem", __FILE__)
+      ca_file = @options[:ssl_ca_file] || ENV["SSL_CA_FILE"] || File.expand_path("ssl_certs/cacert.pem", __dir__)
       Octokit.connection_options = { ssl: { ca_file: ca_file } }
     end
 
@@ -316,8 +316,8 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     end
 
     # Presents the exception, and the aborts with the message.
-    def fail_with_message(e, message)
-      Helper.log.error("#{e.class}: #{e.message}")
+    def fail_with_message(error, message)
+      Helper.log.error("#{error.class}: #{error.message}")
       sys_abort(message)
     end
 
