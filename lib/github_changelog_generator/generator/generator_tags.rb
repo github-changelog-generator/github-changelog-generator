@@ -4,8 +4,8 @@ module GitHubChangelogGenerator
   class Generator
     # fetch, filter tags, fetch dates and sort them in time order
     def fetch_and_filter_tags
-      detect_since_tag
-      detect_due_tag
+      since_tag
+      due_tag
 
       all_tags = @fetcher.get_all_tags
       fetch_tags_dates(all_tags) # Creates a Hash @tag_times_hash
@@ -35,7 +35,7 @@ module GitHubChangelogGenerator
         tag = section_tags[i]
 
         # Don't create section header for the "since" tag
-        next if @since_tag && tag["name"] == @since_tag
+        next if since_tag && tag["name"] == since_tag
 
         # Don't create a section header for the first tag in between_tags
         next if options[:between_tags] && tag == section_tags.last
@@ -98,11 +98,11 @@ module GitHubChangelogGenerator
     end
 
     # @return [Object] try to find newest tag using #Reader and :base option if specified otherwise returns nil
-    def detect_since_tag
+    def since_tag
       @since_tag ||= options.fetch(:since_tag) { version_of_first_item }
     end
 
-    def detect_due_tag
+    def due_tag
       @due_tag ||= options.fetch(:due_tag, nil)
     end
 
@@ -125,7 +125,7 @@ module GitHubChangelogGenerator
     # @return [Array] filtered tags according :since_tag option
     def filter_since_tag(all_tags)
       filtered_tags = all_tags
-      tag = detect_since_tag
+      tag = since_tag
       if tag
         if all_tags.map { |t| t["name"] }.include? tag
           idx = all_tags.index { |t| t["name"] == tag }
@@ -145,7 +145,7 @@ module GitHubChangelogGenerator
     # @return [Array] filtered tags according :due_tag option
     def filter_due_tag(all_tags)
       filtered_tags = all_tags
-      tag           = detect_due_tag
+      tag           = due_tag
       if tag
         if all_tags.any? && all_tags.map { |t| t["name"] }.include?(tag)
           idx = all_tags.index { |t| t["name"] == tag }

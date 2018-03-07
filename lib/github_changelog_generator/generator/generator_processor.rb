@@ -125,11 +125,11 @@ module GitHubChangelogGenerator
       tag_in_range_new
     end
 
-    def tag_newer_old_tag?(older_tag_time, t)
+    def tag_newer_old_tag?(older_tag_time, time)
       tag_in_range_old = if older_tag_time.nil?
                            true
                          else
-                           t > older_tag_time
+                           time > older_tag_time
                          end
       tag_in_range_old
     end
