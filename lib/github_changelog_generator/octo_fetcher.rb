@@ -164,10 +164,6 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       pull_requests = []
       options = { state: "closed" }
 
-      unless @options[:release_branch].nil?
-        options[:base] = @options[:release_branch]
-      end
-
       page_i      = 0
       count_pages = calculate_pages(@client, "pull_requests", options)
 
