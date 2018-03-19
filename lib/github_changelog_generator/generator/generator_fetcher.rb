@@ -61,8 +61,12 @@ module GitHubChangelogGenerator
 
       prs_left = associate_tagged_prs(tags, prs, total)
       prs_left = associate_release_branch_prs(prs_left, total)
-      associate_rebase_comment_prs(tags, prs_left, total) if prs_left.any?
-      Helper.log.info "Associating PRs with tags: #{total - prs_left.count}/#{total}"
+      prs_left = associate_rebase_comment_prs(tags, prs_left, total) if prs_left.any?
+      # PRs in prs_left will be untagged, not in release branch, and not
+      # rebased. They should not be included in the changelog as they probably
+      # have been merged to a branch other than the release branch.
+      @pull_requests -= prs_left
+      Helper.log.info "Associating PRs with tags: #{total}/#{total}"
     end
 
     # Associate merged PRs by the merge SHA contained in each tag. If the
@@ -125,20 +129,23 @@ module GitHubChangelogGenerator
     #
     # @param [Array] tags The tags sorted by time, newest to oldest.
     # @param [Array] prs_left The PRs not yet associated with any tag or branch.
-    # @return [Nil] No return. Any remaining PRs are unresolvable as-is.
+    # @return [Array] PRs without rebase comments.
     def associate_rebase_comment_prs(tags, prs_left, total)
       i = total - prs_left.count
       # Any remaining PRs were not found in the list of tags by their merge
       # commit and not found in any specified release branch. Fallback to
       # rebased commit comment.
       @fetcher.fetch_comments_async(prs_left)
-      prs_left.each do |pr|
+      prs_left.reject do |pr|
+        found = false
         if pr["comments"] && (rebased_comment = pr["comments"].reverse.find { |c| c["body"].match(%r{rebased commit: ([0-9a-f]{40})}i) })
           rebased_sha = rebased_comment["body"].match(%r{rebased commit: ([0-9a-f]{40})}i)[1]
           if (oldest_tag = tags.reverse.find { |tag| tag["shas_in_tag"].include?(rebased_sha) })
             pr["first_occurring_tag"] = oldest_tag["name"]
+            found = true
             i += 1
           elsif sha_in_release_branch(rebased_sha)
+            found = true
             i += 1
           else
             raise StandardError, "PR #{pr['number']} has a rebased SHA comment but that SHA was not found in the release branch or any tags"
@@ -147,8 +154,8 @@ module GitHubChangelogGenerator
         else
           puts "Warning: PR #{pr['number']} merge commit was not found in the release branch or tagged git history and no rebased SHA comment was found"
         end
+        found
       end
-      nil
     end
 
     # Fill :actual_date parameter of specified issue by closed date of the commit, if it was closed by commit.
