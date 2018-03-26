@@ -30,6 +30,12 @@ module GitHubChangelogGenerator
       enhancement_prefix
       breaking_labels
       breaking_prefix
+      deprecated_labels
+      deprecated_prefix
+      removed_labels
+      removed_prefix
+      security_labels
+      security_prefix
       configure_sections
       exclude_labels
       exclude_tags

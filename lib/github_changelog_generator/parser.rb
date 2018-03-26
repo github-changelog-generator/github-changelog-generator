@@ -65,6 +65,15 @@ module GitHubChangelogGenerator
         opts.on("--breaking-label [LABEL]", "Setup custom label for the breaking changes section. Default is \"**Breaking changes:**\"") do |v|
           options[:breaking_prefix] = v
         end
+        opts.on("--deprecated-label [LABEL]", "Setup custom label for the deprecated changes section. Default is \"**Deprecated:**\"") do |v|
+          options[:deprecated_prefix] = v
+        end
+        opts.on("--removed-label [LABEL]", "Setup custom label for the removed changes section. Default is \"**Removed:**\"") do |v|
+          options[:removed_prefix] = v
+        end
+        opts.on("--security-label [LABEL]", "Setup custom label for the security changes section. Default is \"**Security fixes:**\"") do |v|
+          options[:security_prefix] = v
+        end
         opts.on("--issues-label [LABEL]", "Setup custom label for closed-issues section. Default is \"**Closed issues:**\"") do |v|
           options[:issue_prefix] = v
         end
@@ -128,8 +137,17 @@ module GitHubChangelogGenerator
         opts.on("--enhancement-labels  x,y,z", Array, 'Issues with the specified labels will be always added to "Implemented enhancements" section. Default is \'enhancement,Enhancement\'') do |list|
           options[:enhancement_labels] = list
         end
-        opts.on("--breaking-labels x,y,z", Array, 'Issues with these labels will be added to a new section, called "Breaking Changes". Default is \'backwards-incompatible\'') do |list|
+        opts.on("--breaking-labels x,y,z", Array, 'Issues with these labels will be added to a new section, called "Breaking changes". Default is \'backwards-incompatible\'') do |list|
           options[:breaking_labels] = list
+        end
+        opts.on("--deprecated-labels x,y,z", Array, 'Issues with these labels will be added to a new section, called "Deprecated". Default is \'deprecated,Deprecated\'') do |list|
+          options[:deprecated_labels] = list
+        end
+        opts.on("--removed-labels x,y,z", Array, 'Issues with these labels will be added to a new section, called "Removed". Default is \'removed,Removed\'') do |list|
+          options[:removed_labels] = list
+        end
+        opts.on("--security-labels x,y,z", Array, 'Issues with these labels will be added to a new section, called "Security fixes". Default is \'security,Security\'') do |list|
+          options[:security_labels] = list
         end
         opts.on("--issue-line-labels x,y,z", Array, 'The specified labels will be shown in brackets next to each matching issue. Use "ALL" to show all labels. Default is [].') do |list|
           options[:issue_line_labels] = list
@@ -215,6 +233,9 @@ module GitHubChangelogGenerator
         bug_labels: ["bug", "Bug", "Type: Bug"],
         exclude_labels: ["duplicate", "question", "invalid", "wontfix", "Duplicate", "Question", "Invalid", "Wontfix", "Meta: Exclude From Changelog"],
         breaking_labels: %w[backwards-incompatible breaking],
+        deprecated_labels: ["deprecated", "Deprecated", "Type: Deprecated"],
+        removed_labels: ["removed", "Removed", "Type: Removed"],
+        security_labels: ["security", "Security", "Type: Security],
         configure_sections: {},
         add_sections: {},
         issue_line_labels: [],
@@ -228,6 +249,9 @@ module GitHubChangelogGenerator
         bug_prefix: "**Fixed bugs:**",
         enhancement_prefix: "**Implemented enhancements:**",
         breaking_prefix: "**Breaking changes:**",
+        deprecated_prefix: "**Deprecated:**",
+        removed_prefix: "**Removed:**",
+        security_prefix: "**Security fixes:**",
         http_cache: true,
         require: []
       )
