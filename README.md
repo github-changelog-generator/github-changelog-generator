@@ -49,7 +49,7 @@ See also Troubleshooting.
 
 ## Running with Docker
 
-    $ docker run -it --rm -v "$(pwd)":/usr/local/src/your-app skywinder/github-changelog-generator
+    $ docker run -it --rm -v "$(pwd)":/usr/local/src/your-app ferrarimarco/github-changelog-generator
 
 ## Output example
 
@@ -84,11 +84,11 @@ See also Troubleshooting.
 -  Run this:
 
 	   $ github_changelog_generator -u github_username -p github_project
-	   
+
 	or, on the 1.14.x (current stable release)
 
 	   $ github_changelog_generator github_username/github_project
-	   
+
 
 - For Github Enterprise repos, specify *both* `--github-site` and `--github-api` options:
 
