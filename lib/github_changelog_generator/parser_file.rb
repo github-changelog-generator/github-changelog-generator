@@ -86,16 +86,13 @@ module GitHubChangelogGenerator
     end
 
     IRREGULAR_OPTIONS = {
-      enhancement_label: :enhancement_prefix,
       bugs_label: :bug_prefix,
-      breaking_label: :breaking_prefix,
-      deprecated_label: :deprecated_prefix,
-      removed_label: :removed_prefix,
-      security_label: :security_prefix,
+      enhancement_label: :enhancement_prefix,
       issues_label: :issue_prefix,
       header_label: :header,
       front_matter: :frontmatter,
       pr_label: :merge_prefix,
+      breaking_label: :breaking_prefix,
       issues_wo_labels: :add_issues_wo_labels,
       pr_wo_labels: :add_pr_wo_labels,
       pull_requests: :pulls,
