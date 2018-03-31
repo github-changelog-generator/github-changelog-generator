@@ -235,7 +235,7 @@ module GitHubChangelogGenerator
         breaking_labels: %w[backwards-incompatible breaking],
         deprecated_labels: ["deprecated", "Deprecated", "Type: Deprecated"],
         removed_labels: ["removed", "Removed", "Type: Removed"],
-        security_labels: ["security", "Security", "Type: Security],
+        security_labels: ["security", "Security", "Type: Security"],
         configure_sections: {},
         add_sections: {},
         issue_line_labels: [],
