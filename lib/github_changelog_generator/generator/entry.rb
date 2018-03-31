@@ -123,9 +123,9 @@ module GitHubChangelogGenerator
     # @return [Array] Section objects.
     def default_sections
       [
+        Section.new(name: "breaking", prefix: @options[:breaking_prefix], labels: @options[:breaking_labels], options: @options),
         Section.new(name: "enhancements", prefix: @options[:enhancement_prefix], labels: @options[:enhancement_labels], options: @options),
         Section.new(name: "bugs", prefix: @options[:bug_prefix], labels: @options[:bug_labels], options: @options),
-        Section.new(name: "breaking", prefix: @options[:breaking_prefix], labels: @options[:breaking_labels], options: @options),
         Section.new(name: "deprecated", prefix: @options[:deprecated_prefix], labels: @options[:deprecated_labels], options: @options),
         Section.new(name: "removed", prefix: @options[:removed_prefix], labels: @options[:removed_labels], options: @options),
         Section.new(name: "security", prefix: @options[:security_prefix], labels: @options[:security_labels], options: @options)
