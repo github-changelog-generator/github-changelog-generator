@@ -130,14 +130,19 @@ module GitHubChangelogGenerator
 
           [Full Changelog](https://github.com/owner/repo/compare/1.0.0...1.0.1)
 
+          **Breaking changes:**
+
+          - issue breaking [\\#8](https://github.com/owner/repo/issue/8)
+          - issue all the labels [\\#9](https://github.com/owner/repo/issue/9)
+          - issue all the labels different order [\\#10](https://github.com/owner/repo/issue/10)
+          - pr breaking [\\#23](https://github.com/owner/repo/pull/23) ([user5](https://github.com/user5))
+          - pr all the labels [\\#24](https://github.com/owner/repo/pull/24) ([user5](https://github.com/user5))
+          - pr all the labels different order [\\#25](https://github.com/owner/repo/pull/25) ([user5](https://github.com/user5))
+
           **Implemented enhancements:**
 
           - issue enhancement [\\#6](https://github.com/owner/repo/issue/6)
-          - issue all the labels [\\#9](https://github.com/owner/repo/issue/9)
-          - issue all the labels different order [\\#10](https://github.com/owner/repo/issue/10)
           - pr enhancement [\\#21](https://github.com/owner/repo/pull/21) ([user5](https://github.com/user5))
-          - pr all the labels [\\#24](https://github.com/owner/repo/pull/24) ([user5](https://github.com/user5))
-          - pr all the labels different order [\\#25](https://github.com/owner/repo/pull/25) ([user5](https://github.com/user5))
 
           **Fixed bugs:**
 
@@ -145,11 +150,6 @@ module GitHubChangelogGenerator
           - issue some unmapped labels [\\#11](https://github.com/owner/repo/issue/11)
           - pr bug [\\#22](https://github.com/owner/repo/pull/22) ([user5](https://github.com/user5))
           - pr some unmapped labels [\\#26](https://github.com/owner/repo/pull/26) ([user5](https://github.com/user5))
-
-          **Breaking changes:**
-
-          - issue breaking [\\#8](https://github.com/owner/repo/issue/8)
-          - pr breaking [\\#23](https://github.com/owner/repo/pull/23) ([user5](https://github.com/user5))
 
           **Deprecated:**
 
@@ -204,14 +204,19 @@ module GitHubChangelogGenerator
 
           [Full Changelog](https://github.com/owner/repo/compare/1.0.0...1.0.1)
 
+          **Breaking changes:**
+
+          - issue breaking [\\#8](https://github.com/owner/repo/issue/8)
+          - issue all the labels [\\#9](https://github.com/owner/repo/issue/9)
+          - issue all the labels different order [\\#10](https://github.com/owner/repo/issue/10)
+          - pr breaking [\\#23](https://github.com/owner/repo/pull/23) ([user5](https://github.com/user5))
+          - pr all the labels [\\#24](https://github.com/owner/repo/pull/24) ([user5](https://github.com/user5))
+          - pr all the labels different order [\\#25](https://github.com/owner/repo/pull/25) ([user5](https://github.com/user5))
+
           **Implemented enhancements:**
 
           - issue enhancement [\\#6](https://github.com/owner/repo/issue/6)
-          - issue all the labels [\\#9](https://github.com/owner/repo/issue/9)
-          - issue all the labels different order [\\#10](https://github.com/owner/repo/issue/10)
           - pr enhancement [\\#21](https://github.com/owner/repo/pull/21) ([user5](https://github.com/user5))
-          - pr all the labels [\\#24](https://github.com/owner/repo/pull/24) ([user5](https://github.com/user5))
-          - pr all the labels different order [\\#25](https://github.com/owner/repo/pull/25) ([user5](https://github.com/user5))
 
           **Fixed bugs:**
 
@@ -219,11 +224,6 @@ module GitHubChangelogGenerator
           - issue some unmapped labels [\\#11](https://github.com/owner/repo/issue/11)
           - pr bug [\\#22](https://github.com/owner/repo/pull/22) ([user5](https://github.com/user5))
           - pr some unmapped labels [\\#26](https://github.com/owner/repo/pull/26) ([user5](https://github.com/user5))
-
-          **Breaking changes:**
-
-          - issue breaking [\\#8](https://github.com/owner/repo/issue/8)
-          - pr breaking [\\#23](https://github.com/owner/repo/pull/23) ([user5](https://github.com/user5))
 
           **Deprecated:**
 
@@ -418,12 +418,12 @@ module GitHubChangelogGenerator
           issue_section = entry_sections.select { |section| section.name == "issues" }[0]
           merged_section = entry_sections.select { |section| section.name == "merged" }[0]
 
+          expect(titles_for(breaking_section.issues)).to eq(["issue breaking", "issue all the labels", "pr breaking", "pr all the labels"])
           expect(titles_for(enhancement_section.issues)).to eq(["issue enhancement", "pr enhancement"])
           expect(titles_for(bug_section.issues)).to eq(["issue bug", "issue some unmapped labels", "pr bug", "pr some unmapped labels"])
-          expect(titles_for(breaking_section.issues)).to eq(["issue breaking", "issue all the labels", "pr breaking", "pr all the labels"])
-          expect(titles_for(deprecated_section.issues)).to eq(["issue deprecated", "issue all the labels", "pr deprecated", "pr all the labels"])
-          expect(titles_for(removed_section.issues)).to eq(["issue removed", "issue all the labels", "pr removed", "pr all the labels"])
-          expect(titles_for(security_section.issues)).to eq(["issue security", "issue all the labels", "pr security", "pr all the labels"])
+          expect(titles_for(deprecated_section.issues)).to eq(["issue deprecated", "pr deprecated"])
+          expect(titles_for(removed_section.issues)).to eq(["issue removed", "pr removed"])
+          expect(titles_for(security_section.issues)).to eq(["issue security", "pr security"])
           expect(titles_for(issue_section.issues)).to eq(["issue no labels", "issue no mapped labels"])
           expect(titles_for(merged_section.issues)).to eq(["pr no labels", "pr no mapped labels"])
         end
@@ -598,22 +598,16 @@ module GitHubChangelogGenerator
 
         it "assigns issues to the correct sections" do
           foo_section = entry_sections.select { |section| section.name == "foo" }[0]
+          breaking_section = entry_sections.select { |section| section.name == "breaking" }[0]
           enhancement_section = entry_sections.select { |section| section.name == "enhancements" }[0]
           bug_section = entry_sections.select { |section| section.name == "bugs" }[0]
-          breaking_section = entry_sections.select { |section| section.name == "breaking" }[0]
-          deprecated_section = entry_sections.select { |section| section.name == "deprecated" }[0]
-          removed_section = entry_sections.select { |section| section.name == "removed" }[0]
-          security_section = entry_sections.select { |section| section.name == "security" }[0]
           issue_section = entry_sections.select { |section| section.name == "issues" }[0]
           merged_section = entry_sections.select { |section| section.name == "merged" }[0]
 
           aggregate_failures "checks all sections" do
+            expect(titles_for(breaking_section.issues)).to eq(["issue all the labels", "pr all the labels"])
             expect(titles_for(enhancement_section.issues)).to eq(["issue default labels first", "pr enhance", "pr default labels first"])
             expect(titles_for(bug_section.issues)).to eq(["issue bugaboo"])
-            expect(titles_for(breaking_section.issues)).to eq(["issue all the labels", "pr all the labels"])
-            expect(titles_for(deprecated_section.issues)).to eq(["issue all the labels", "pr all the labels"])
-            expect(titles_for(removed_section.issues)).to eq(["issue all the labels", "pr all the labels"])
-            expect(titles_for(security_section.issues)).to eq(["issue all the labels", "pr all the labels"])
             expect(titles_for(foo_section.issues)).to eq(["issue test1", "pr test1"])
             expect(titles_for(issue_section.issues)).to eq(["issue no labels"])
             expect(titles_for(merged_section.issues)).to eq(["pr no labels"])
