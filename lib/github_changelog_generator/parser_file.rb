@@ -66,8 +66,9 @@ module GitHubChangelogGenerator
       [key.tr("-", "_").to_sym, value.gsub(/[\n\r]+/, "")]
     end
 
-    KNOWN_ARRAY_KEYS = %i[exclude_labels include_labels bug_labels
-                          enhancement_labels breaking_labels deprecated_labels removed_labels security_labels issue_line_labels between_tags exclude_tags]
+    KNOWN_ARRAY_KEYS = %i[exclude_labels include_labels enhancement_labels bug_labels
+                          breaking_labels deprecated_labels removed_labels security_labels
+                          issue_line_labels between_tags exclude_tags]
     KNOWN_INTEGER_KEYS = [:max_issues]
 
     def convert_value(value, option_name)
@@ -85,16 +86,16 @@ module GitHubChangelogGenerator
     end
 
     IRREGULAR_OPTIONS = {
-      bugs_label: :bug_prefix,
       enhancement_label: :enhancement_prefix,
-      issues_label: :issue_prefix,
-      header_label: :header,
-      front_matter: :frontmatter,
-      pr_label: :merge_prefix,
+      bugs_label: :bug_prefix,
       breaking_label: :breaking_prefix,
       deprecated_label: :deprecated_prefix,
       removed_label: :removed_prefix,
       security_label: :security_prefix,
+      issues_label: :issue_prefix,
+      header_label: :header,
+      front_matter: :frontmatter,
+      pr_label: :merge_prefix,
       issues_wo_labels: :add_issues_wo_labels,
       pr_wo_labels: :add_pr_wo_labels,
       pull_requests: :pulls,

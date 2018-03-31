@@ -56,11 +56,11 @@ module GitHubChangelogGenerator
         opts.on("-b", "--base [NAME]", "Optional base file to append generated changes to.") do |last|
           options[:base] = last
         end
-        opts.on("--bugs-label [LABEL]", "Setup custom label for bug-fixes section. Default is \"**Fixed bugs:**\"") do |v|
-          options[:bug_prefix] = v
-        end
         opts.on("--enhancement-label [LABEL]", "Setup custom label for enhancements section. Default is \"**Implemented enhancements:**\"") do |v|
           options[:enhancement_prefix] = v
+        end
+        opts.on("--bugs-label [LABEL]", "Setup custom label for bug-fixes section. Default is \"**Fixed bugs:**\"") do |v|
+          options[:bug_prefix] = v
         end
         opts.on("--breaking-label [LABEL]", "Setup custom label for the breaking changes section. Default is \"**Breaking changes:**\"") do |v|
           options[:breaking_prefix] = v
@@ -131,11 +131,11 @@ module GitHubChangelogGenerator
         opts.on("--exclude-labels  x,y,z", Array, "Issues with the specified labels will be excluded from changelog. Default is 'duplicate,question,invalid,wontfix'") do |list|
           options[:exclude_labels] = list
         end
-        opts.on("--bug-labels  x,y,z", Array, 'Issues with the specified labels will be always added to "Fixed bugs" section. Default is \'bug,Bug\'') do |list|
-          options[:bug_labels] = list
-        end
         opts.on("--enhancement-labels  x,y,z", Array, 'Issues with the specified labels will be always added to "Implemented enhancements" section. Default is \'enhancement,Enhancement\'') do |list|
           options[:enhancement_labels] = list
+        end
+        opts.on("--bug-labels  x,y,z", Array, 'Issues with the specified labels will be always added to "Fixed bugs" section. Default is \'bug,Bug\'') do |list|
+          options[:bug_labels] = list
         end
         opts.on("--breaking-labels x,y,z", Array, 'Issues with these labels will be added to a new section, called "Breaking changes". Default is \'backwards-incompatible\'') do |list|
           options[:breaking_labels] = list
@@ -229,9 +229,9 @@ module GitHubChangelogGenerator
         unreleased: true,
         unreleased_label: "Unreleased",
         compare_link: true,
+        exclude_labels: ["duplicate", "question", "invalid", "wontfix", "Duplicate", "Question", "Invalid", "Wontfix", "Meta: Exclude From Changelog"],
         enhancement_labels: ["enhancement", "Enhancement", "Type: Enhancement"],
         bug_labels: ["bug", "Bug", "Type: Bug"],
-        exclude_labels: ["duplicate", "question", "invalid", "wontfix", "Duplicate", "Question", "Invalid", "Wontfix", "Meta: Exclude From Changelog"],
         breaking_labels: %w[backwards-incompatible breaking],
         deprecated_labels: ["deprecated", "Deprecated", "Type: Deprecated"],
         removed_labels: ["removed", "Removed", "Type: Removed"],
@@ -246,8 +246,8 @@ module GitHubChangelogGenerator
         header: "# Changelog",
         merge_prefix: "**Merged pull requests:**",
         issue_prefix: "**Closed issues:**",
-        bug_prefix: "**Fixed bugs:**",
         enhancement_prefix: "**Implemented enhancements:**",
+        bug_prefix: "**Fixed bugs:**",
         breaking_prefix: "**Breaking changes:**",
         deprecated_prefix: "**Deprecated:**",
         removed_prefix: "**Removed:**",
