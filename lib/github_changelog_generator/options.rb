@@ -19,24 +19,20 @@ module GitHubChangelogGenerator
       author
       base
       between_tags
+      breaking_labels
+      breaking_prefix
       bug_labels
       bug_prefix
       cache_file
       cache_log
       compare_link
+      configure_sections
       date_format
+      deprecated_labels
+      deprecated_prefix
       due_tag
       enhancement_labels
       enhancement_prefix
-      breaking_labels
-      breaking_prefix
-      deprecated_labels
-      deprecated_prefix
-      removed_labels
-      removed_prefix
-      security_labels
-      security_prefix
-      configure_sections
       exclude_labels
       exclude_tags
       exclude_tags_regex
@@ -58,7 +54,11 @@ module GitHubChangelogGenerator
       pulls
       release_branch
       release_url
+      removed_labels
+      removed_prefix
       require
+      security_labels
+      security_prefix
       simple_list
       since_tag
       ssl_ca_file
