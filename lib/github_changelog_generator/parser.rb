@@ -56,14 +56,14 @@ module GitHubChangelogGenerator
         opts.on("-b", "--base [NAME]", "Optional base file to append generated changes to.") do |last|
           options[:base] = last
         end
+        opts.on("--breaking-label [LABEL]", "Setup custom label for the breaking changes section. Default is \"**Breaking changes:**\"") do |v|
+          options[:breaking_prefix] = v
+        end
         opts.on("--enhancement-label [LABEL]", "Setup custom label for enhancements section. Default is \"**Implemented enhancements:**\"") do |v|
           options[:enhancement_prefix] = v
         end
         opts.on("--bugs-label [LABEL]", "Setup custom label for bug-fixes section. Default is \"**Fixed bugs:**\"") do |v|
           options[:bug_prefix] = v
-        end
-        opts.on("--breaking-label [LABEL]", "Setup custom label for the breaking changes section. Default is \"**Breaking changes:**\"") do |v|
-          options[:breaking_prefix] = v
         end
         opts.on("--deprecated-label [LABEL]", "Setup custom label for the deprecated changes section. Default is \"**Deprecated:**\"") do |v|
           options[:deprecated_prefix] = v
