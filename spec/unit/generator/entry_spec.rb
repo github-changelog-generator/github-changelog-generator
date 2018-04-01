@@ -563,7 +563,7 @@ module GitHubChangelogGenerator
             issue("no labels", []),
             issue("test1", ["test1"]),
             issue("bugaboo", ["bug"]),
-            issue("all the labels", %w[test1 test2 enhancement bug breaking deprecated removed security]),
+            issue("all the labels", %w[test1 test2 breaking enhancement bug deprecated removed security]),
             issue("default labels first", %w[enhancement bug test1 test2]),
             issue("some excluded labels", %w[wontfix breaking]),
             issue("excluded labels", %w[wontfix again])
@@ -575,7 +575,7 @@ module GitHubChangelogGenerator
             pr("no labels", []),
             pr("test1", ["test1"]),
             pr("enhance", ["enhancement"]),
-            pr("all the labels", %w[test1 test2 enhancement bug breaking deprecated removed security]),
+            pr("all the labels", %w[test1 test2 breaking enhancement bug deprecated removed security]),
             pr("default labels first", %w[enhancement bug test1 test2]),
             pr("some excluded labels", %w[wontfix breaking]),
             pr("excluded labels", %w[wontfix again])
