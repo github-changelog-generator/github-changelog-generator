@@ -177,7 +177,7 @@ You can look for params names from the [parser source code (#setup_parser)](http
 
 ## Features and advantages of this project
 
-- Generate canonical, neat changelog file, followed by [basic changelog guidelines](http://keepachangelog.com) :gem:
+- Generate canonical, neat changelog file, with default sections that follow [basic changelog guidelines](http://keepachangelog.com) :gem:
 - Optionally generate **Unreleased** changes (closed issues that have not released yet) :dizzy:
 - **GitHub Enterprise support** via command line options! :factory:
 - Flexible format **customization**:

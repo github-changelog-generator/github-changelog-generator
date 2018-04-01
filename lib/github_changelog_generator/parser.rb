@@ -56,14 +56,23 @@ module GitHubChangelogGenerator
         opts.on("-b", "--base [NAME]", "Optional base file to append generated changes to.") do |last|
           options[:base] = last
         end
-        opts.on("--bugs-label [LABEL]", "Setup custom label for bug-fixes section. Default is \"**Fixed bugs:**\"") do |v|
-          options[:bug_prefix] = v
+        opts.on("--breaking-label [LABEL]", "Setup custom label for the breaking changes section. Default is \"**Breaking changes:**\"") do |v|
+          options[:breaking_prefix] = v
         end
         opts.on("--enhancement-label [LABEL]", "Setup custom label for enhancements section. Default is \"**Implemented enhancements:**\"") do |v|
           options[:enhancement_prefix] = v
         end
-        opts.on("--breaking-label [LABEL]", "Setup custom label for the breaking changes section. Default is \"**Breaking changes:**\"") do |v|
-          options[:breaking_prefix] = v
+        opts.on("--bugs-label [LABEL]", "Setup custom label for bug-fixes section. Default is \"**Fixed bugs:**\"") do |v|
+          options[:bug_prefix] = v
+        end
+        opts.on("--deprecated-label [LABEL]", "Setup custom label for the deprecated changes section. Default is \"**Deprecated:**\"") do |v|
+          options[:deprecated_prefix] = v
+        end
+        opts.on("--removed-label [LABEL]", "Setup custom label for the removed changes section. Default is \"**Removed:**\"") do |v|
+          options[:removed_prefix] = v
+        end
+        opts.on("--security-label [LABEL]", "Setup custom label for the security changes section. Default is \"**Security fixes:**\"") do |v|
+          options[:security_prefix] = v
         end
         opts.on("--issues-label [LABEL]", "Setup custom label for closed-issues section. Default is \"**Closed issues:**\"") do |v|
           options[:issue_prefix] = v
@@ -122,14 +131,23 @@ module GitHubChangelogGenerator
         opts.on("--exclude-labels  x,y,z", Array, "Issues with the specified labels will be excluded from changelog. Default is 'duplicate,question,invalid,wontfix'") do |list|
           options[:exclude_labels] = list
         end
-        opts.on("--bug-labels  x,y,z", Array, 'Issues with the specified labels will be always added to "Fixed bugs" section. Default is \'bug,Bug\'') do |list|
-          options[:bug_labels] = list
+        opts.on("--breaking-labels x,y,z", Array, 'Issues with these labels will be added to a new section, called "Breaking changes". Default is \'backwards-incompatible\'') do |list|
+          options[:breaking_labels] = list
         end
         opts.on("--enhancement-labels  x,y,z", Array, 'Issues with the specified labels will be always added to "Implemented enhancements" section. Default is \'enhancement,Enhancement\'') do |list|
           options[:enhancement_labels] = list
         end
-        opts.on("--breaking-labels x,y,z", Array, 'Issues with these labels will be added to a new section, called "Breaking Changes". Default is \'backwards-incompatible\'') do |list|
-          options[:breaking_labels] = list
+        opts.on("--bug-labels  x,y,z", Array, 'Issues with the specified labels will be always added to "Fixed bugs" section. Default is \'bug,Bug\'') do |list|
+          options[:bug_labels] = list
+        end
+        opts.on("--deprecated-labels x,y,z", Array, 'Issues with these labels will be added to a new section, called "Deprecated". Default is \'deprecated,Deprecated\'') do |list|
+          options[:deprecated_labels] = list
+        end
+        opts.on("--removed-labels x,y,z", Array, 'Issues with these labels will be added to a new section, called "Removed". Default is \'removed,Removed\'') do |list|
+          options[:removed_labels] = list
+        end
+        opts.on("--security-labels x,y,z", Array, 'Issues with these labels will be added to a new section, called "Security fixes". Default is \'security,Security\'') do |list|
+          options[:security_labels] = list
         end
         opts.on("--issue-line-labels x,y,z", Array, 'The specified labels will be shown in brackets next to each matching issue. Use "ALL" to show all labels. Default is [].') do |list|
           options[:issue_line_labels] = list
@@ -211,10 +229,13 @@ module GitHubChangelogGenerator
         unreleased: true,
         unreleased_label: "Unreleased",
         compare_link: true,
-        enhancement_labels: ["enhancement", "Enhancement", "Type: Enhancement"],
-        bug_labels: ["bug", "Bug", "Type: Bug"],
         exclude_labels: ["duplicate", "question", "invalid", "wontfix", "Duplicate", "Question", "Invalid", "Wontfix", "Meta: Exclude From Changelog"],
         breaking_labels: %w[backwards-incompatible breaking],
+        enhancement_labels: ["enhancement", "Enhancement", "Type: Enhancement"],
+        bug_labels: ["bug", "Bug", "Type: Bug"],
+        deprecated_labels: ["deprecated", "Deprecated", "Type: Deprecated"],
+        removed_labels: ["removed", "Removed", "Type: Removed"],
+        security_labels: ["security", "Security", "Type: Security"],
         configure_sections: {},
         add_sections: {},
         issue_line_labels: [],
@@ -225,9 +246,12 @@ module GitHubChangelogGenerator
         header: "# Changelog",
         merge_prefix: "**Merged pull requests:**",
         issue_prefix: "**Closed issues:**",
-        bug_prefix: "**Fixed bugs:**",
-        enhancement_prefix: "**Implemented enhancements:**",
         breaking_prefix: "**Breaking changes:**",
+        enhancement_prefix: "**Implemented enhancements:**",
+        bug_prefix: "**Fixed bugs:**",
+        deprecated_prefix: "**Deprecated:**",
+        removed_prefix: "**Removed:**",
+        security_prefix: "**Security fixes:**",
         http_cache: true,
         require: []
       )
