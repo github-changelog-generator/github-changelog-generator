@@ -21,7 +21,7 @@ Automatically generate changelog from your tags, issues, labels and pull request
 
   -t, --token [TOKEN]
 
-  To make more than 50 requests per hour your GitHub token is required. You can generate it at: https://github.com/settings/tokens/new.
+  To make more than 50 requests per hour your GitHub token is required. You can generate it at: https://github.com/settings/tokens/new
 
   -f, --date-format [FORMAT]
 
@@ -37,35 +37,35 @@ Automatically generate changelog from your tags, issues, labels and pull request
 
   --breaking-label [LABEL]
 
-  Setup custom label for breaking changes section. Default is "**Breaking changes:**".
+  Set up custom label for breaking changes section. Default is "**Breaking changes:**".
 
   --enhancement-label [LABEL]
 
-  Setup custom label for enhancements section. Default is "**Implemented enhancements:**".
+  Set up custom label for enhancements section. Default is "**Implemented enhancements:**".
 
   --bugs-label [LABEL]
 
-  Setup custom label for bug-fixes section. Default is "**Fixed bugs:**.
+  Set up custom label for bug-fixes section. Default is "**Fixed bugs:**".
 
   --deprecated-label [LABEL]
 
-  Setup custom label for deprecated section. Default is "**Deprecated:**.
+  Set up custom label for deprecated section. Default is "**Deprecated:**".
 
   --removed-label [LABEL]
 
-  Setup custom label for removed section. Default is "**Removed:**.
+  Set up custom label for removed section. Default is "**Removed:**".
 
   --security-label [LABEL]
 
-  Setup custom label for security section. Default is "**Security:**.
+  Set up custom label for security section. Default is "**Security:**".
 
   --issues-label [LABEL]
 
-  Setup custom label for closed-issues section. Default is "**Closed issues:**".
+  Set up custom label for closed-issues section. Default is "**Closed issues:**".
 
   --header-label [LABEL]
 
-  Setup custom header label. Default is "# Changelog".
+  Set up custom header label. Default is "# Changelog".
 
   --configure-sections [HASH, STRING]
 
@@ -81,7 +81,7 @@ Automatically generate changelog from your tags, issues, labels and pull request
 
   --pr-label [LABEL]
 
-  Setup custom label for pull requests section. Default is "**Merged pull requests:**".
+  Set up custom label for pull requests section. Default is "**Merged pull requests:**".
 
   --[no-]issues
 
@@ -189,11 +189,11 @@ Automatically generate changelog from your tags, issues, labels and pull request
 
   --github-site [URL]
 
-  The Enterprise Github site where your project is hosted.
+  The Enterprise GitHub site where your project is hosted.
 
   --github-api [URL]
 
-  The enterprise endpoint to use for your Github API.
+  The enterprise endpoint to use for your GitHub API.
 
   --simple-list
 
@@ -209,7 +209,7 @@ Automatically generate changelog from your tags, issues, labels and pull request
 
   --http-cache
 
-  Use HTTP Cache to cache Github API requests (useful for large repos). Default is true.
+  Use HTTP Cache to cache GitHub API requests (useful for large repos). Default is true.
 
   --[no-]cache-file [CACHE-FILE]
 
