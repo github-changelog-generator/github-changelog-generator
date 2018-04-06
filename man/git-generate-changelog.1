@@ -354,6 +354,9 @@ Print version number\.
 .P
 Displays Help\.
 .
+.SH "REBASED COMMITS"
+GitHub pull requests that have been merged whose merge commit SHA has been modified through rebasing, cherry picking, or some other method may be tracked via a special comment on GitHub\. Git commit SHAs found in comments on pull requests matching the regular expression \fB/rebased commit: ([0\-9a\-f]{40})/i\fR will be used in place of the original merge SHA when being added to the changelog\.
+.
 .SH "EXAMPLES"
 .
 .SH "AUTHOR"

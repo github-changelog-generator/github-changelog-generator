@@ -33,6 +33,8 @@ module GitHubChangelogGenerator
       @http_cache   = @options[:http_cache]
       @cache_file   = nil
       @cache_log    = nil
+      @commits      = []
+      @compares     = {}
       prepare_cache
       configure_octokit_ssl
       @client = Octokit::Client.new(github_options)
@@ -162,10 +164,6 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       pull_requests = []
       options = { state: "closed" }
 
-      unless @options[:release_branch].nil?
-        options[:base] = @options[:release_branch]
-      end
-
       page_i      = 0
       count_pages = calculate_pages(@client, "pull_requests", options)
 
@@ -211,6 +209,29 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       Helper.log.info "Fetching events for issues and PR: #{i}"
     end
 
+    # Fetch comments for PRs and add them to "comments"
+    #
+    # @param [Array] prs The array of PRs.
+    # @return [Void] No return; PRs are updated in-place.
+    def fetch_comments_async(prs)
+      threads = []
+
+      prs.each_slice(MAX_THREAD_NUMBER) do |prs_slice|
+        prs_slice.each do |pr|
+          threads << Thread.new do
+            pr["comments"] = []
+            iterate_pages(@client, "issue_comments", pr["number"]) do |new_comment|
+              pr["comments"].concat(new_comment)
+            end
+            pr["comments"] = pr["comments"].map { |comment| stringify_keys_deep(comment.to_hash) }
+          end
+        end
+        threads.each(&:join)
+        threads = []
+      end
+      nil
+    end
+
     # Fetch tag time from repo
     #
     # @param [Hash] tag GitHub data item about a Tag
@@ -223,26 +244,92 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       commit_data["commit"]["committer"]["date"]
     end
 
+    # Fetch and cache comparison between two github refs
+    #
+    # @param [String] older The older sha/tag/branch.
+    # @param [String] newer The newer sha/tag/branch.
+    # @return [Hash] Github api response for comparison.
+    def fetch_compare(older, newer)
+      unless @compares["#{older}...#{newer}"]
+        compare_data = check_github_response { @client.compare(user_project, older, newer || "HEAD") }
+        raise StandardError, "Sha #{older} and sha #{newer} are not related; please file a github-changelog-generator issues and describe how to replicate this issue." if compare_data["status"] == "diverged"
+        @compares["#{older}...#{newer}"] = stringify_keys_deep(compare_data.to_hash)
+      end
+      @compares["#{older}...#{newer}"]
+    end
+
     # Fetch commit for specified event
     #
     # @return [Hash]
     def fetch_commit(event)
-      check_github_response do
-        commit = @client.commit(user_project, event["commit_id"])
-        commit = stringify_keys_deep(commit.to_hash)
-        commit
+      found = commits.find do |commit|
+        commit["sha"] == event["commit_id"]
+      end
+      if found
+        stringify_keys_deep(found.to_hash)
+      else
+        # cache miss; don't add to @commits because unsure of order.
+        check_github_response do
+          commit = @client.commit(user_project, event["commit_id"])
+          commit = stringify_keys_deep(commit.to_hash)
+          commit
+        end
       end
     end
 
-    # Fetch all commits before certain point
+    # Fetch all commits
     #
-    # @return [String]
-    def commits_before(start_time)
-      commits = []
-      iterate_pages(@client, "commits_before", start_time.to_datetime.to_s) do |new_commits|
-        commits.concat(new_commits)
+    # @return [Array] Commits in a repo.
+    def commits
+      if @commits.empty?
+        iterate_pages(@client, "commits") do |new_commits|
+          @commits.concat(new_commits)
+        end
       end
-      commits
+      @commits
+    end
+
+    # Return the oldest commit in a repo
+    #
+    # @return [Hash] Oldest commit in the github git history.
+    def oldest_commit
+      commits.last
+    end
+
+    # @return [String] Default branch of the repo
+    def default_branch
+      @default_branch ||= @client.repository(user_project)[:default_branch]
+    end
+
+    # Fetch all SHAs occurring in or before a given tag and add them to
+    # "shas_in_tag"
+    #
+    # @param [Array] tags The array of tags.
+    # @return [Nil] No return; tags are updated in-place.
+    def fetch_tag_shas_async(tags)
+      i = 0
+      threads = []
+      print_in_same_line("Fetching SHAs for tags: #{i}/#{tags.count}\r") if @options[:verbose]
+
+      tags.each_slice(MAX_THREAD_NUMBER) do |tags_slice|
+        tags_slice.each do |tag|
+          threads << Thread.new do
+            # Use oldest commit because comparing two arbitrary tags may be diverged
+            commits_in_tag = fetch_compare(oldest_commit["sha"], tag["name"])
+            tag["shas_in_tag"] = commits_in_tag["commits"].collect { |commit| commit["sha"] }
+            print_in_same_line("Fetching SHAs for tags: #{i + 1}/#{tags.count}") if @options[:verbose]
+            i += 1
+          end
+        end
+        threads.each(&:join)
+        threads = []
+      end
+
+      # to clear line from prev print
+      print_empty_line
+
+      Helper.log.info "Fetching SHAs for tags: #{i}"
+      nil
     end
 
     private

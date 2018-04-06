@@ -508,9 +508,9 @@ describe GitHubChangelogGenerator::OctoFetcher do
           ["html_url",
            "https://github.com/skywinder/changelog_test/commit/decfe840d1a1b86e0c28700de5362d3365a29555"],
           ["author",
-           { "login" => "skywinder", "id" => 3_356_474, "avatar_url" => "https://avatars.githubusercontent.com/u/3356474?v=3", "gravatar_id" => "", "url" => "https://api.github.com/users/skywinder", "html_url" => "https://github.com/skywinder", "followers_url" => "https://api.github.com/users/skywinder/followers", "following_url" => "https://api.github.com/users/skywinder/following{/other_user}", "gists_url" => "https://api.github.com/users/skywinder/gists{/gist_id}", "starred_url" => "https://api.github.com/users/skywinder/starred{/owner}{/repo}", "subscriptions_url" => "https://api.github.com/users/skywinder/subscriptions", "organizations_url" => "https://api.github.com/users/skywinder/orgs", "repos_url" => "https://api.github.com/users/skywinder/repos", "events_url" => "https://api.github.com/users/skywinder/events{/privacy}", "received_events_url" => "https://api.github.com/users/skywinder/received_events", "type" => "User", "site_admin" => false }],
+           { "login" => "skywinder", "id" => 3_356_474, "avatar_url" => "https://avatars2.githubusercontent.com/u/3356474?v=4", "gravatar_id" => "", "url" => "https://api.github.com/users/skywinder", "html_url" => "https://github.com/skywinder", "followers_url" => "https://api.github.com/users/skywinder/followers", "following_url" => "https://api.github.com/users/skywinder/following{/other_user}", "gists_url" => "https://api.github.com/users/skywinder/gists{/gist_id}", "starred_url" => "https://api.github.com/users/skywinder/starred{/owner}{/repo}", "subscriptions_url" => "https://api.github.com/users/skywinder/subscriptions", "organizations_url" => "https://api.github.com/users/skywinder/orgs", "repos_url" => "https://api.github.com/users/skywinder/repos", "events_url" => "https://api.github.com/users/skywinder/events{/privacy}", "received_events_url" => "https://api.github.com/users/skywinder/received_events", "type" => "User", "site_admin" => false }],
           ["committer",
-           { "login" => "skywinder", "id" => 3_356_474, "avatar_url" => "https://avatars.githubusercontent.com/u/3356474?v=3", "gravatar_id" => "", "url" => "https://api.github.com/users/skywinder", "html_url" => "https://github.com/skywinder", "followers_url" => "https://api.github.com/users/skywinder/followers", "following_url" => "https://api.github.com/users/skywinder/following{/other_user}", "gists_url" => "https://api.github.com/users/skywinder/gists{/gist_id}", "starred_url" => "https://api.github.com/users/skywinder/starred{/owner}{/repo}", "subscriptions_url" => "https://api.github.com/users/skywinder/subscriptions", "organizations_url" => "https://api.github.com/users/skywinder/orgs", "repos_url" => "https://api.github.com/users/skywinder/repos", "events_url" => "https://api.github.com/users/skywinder/events{/privacy}", "received_events_url" => "https://api.github.com/users/skywinder/received_events", "type" => "User", "site_admin" => false }],
+           { "login" => "skywinder", "id" => 3_356_474, "avatar_url" => "https://avatars2.githubusercontent.com/u/3356474?v=4", "gravatar_id" => "", "url" => "https://api.github.com/users/skywinder", "html_url" => "https://github.com/skywinder", "followers_url" => "https://api.github.com/users/skywinder/followers", "following_url" => "https://api.github.com/users/skywinder/following{/other_user}", "gists_url" => "https://api.github.com/users/skywinder/gists{/gist_id}", "starred_url" => "https://api.github.com/users/skywinder/starred{/owner}{/repo}", "subscriptions_url" => "https://api.github.com/users/skywinder/subscriptions", "organizations_url" => "https://api.github.com/users/skywinder/orgs", "repos_url" => "https://api.github.com/users/skywinder/repos", "events_url" => "https://api.github.com/users/skywinder/events{/privacy}", "received_events_url" => "https://api.github.com/users/skywinder/received_events", "type" => "User", "site_admin" => false }],
           ["parents",
            [{ "sha" => "7ec095e5e3caceacedabf44d0b9b10da17c92e51",
               "url" =>
@@ -527,12 +527,10 @@ describe GitHubChangelogGenerator::OctoFetcher do
     end
   end
 
-  describe "#commits_before" do
+  describe "#commits" do
     context "when API is valid", :vcr do
-      let(:start_time) { Time.parse("Wed Mar 4 18:47:17 2015 +0200") }
-
       subject do
-        fetcher.commits_before(start_time)
+        fetcher.commits
       end
 
       it "returns commits" do
