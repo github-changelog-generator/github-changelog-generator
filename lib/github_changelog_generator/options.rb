@@ -7,7 +7,7 @@ module GitHubChangelogGenerator
   # This class wraps Options, and knows a list of known options. Others options
   # will raise exceptions.
   class Options < SimpleDelegator
-    # Raised on intializing with unknown keys in the values hash,
+    # Raised on initializing with unknown keys in the values hash,
     # and when trying to store a value on an unknown key.
     UnsupportedOptionError = Class.new(ArgumentError)
 
