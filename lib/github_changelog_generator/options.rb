@@ -46,6 +46,7 @@ module GitHubChangelogGenerator
       include_labels
       issue_prefix
       issue_line_labels
+      issue_line_body
       issues
       max_issues
       merge_prefix
