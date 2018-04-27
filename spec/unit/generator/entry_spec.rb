@@ -7,20 +7,21 @@ module GitHubChangelogGenerator
       { "name" => name }
     end
 
-    def issue(title, labels, number = "1", user = { "login" => "user" })
+    def issue(title, labels, body = "", number = "1", user = { "login" => "user" })
       {
         "title" => "issue #{title}",
         "labels" => labels.map { |l| label(l) },
         "number" => number,
         "html_url" => "https://github.com/owner/repo/issue/#{number}",
         "user" => user,
+        "body" => body,
         "events" => [{
           "event" => "closed"
         }]
       }
     end
 
-    def pr(title, labels, number = "1", user = { "login" => "user" })
+    def pr(title, labels, body = "", number = "1", user = { "login" => "user" })
       {
         "pull_request" => true,
         "title" => "pr #{title}",
@@ -28,6 +29,7 @@ module GitHubChangelogGenerator
         "number" => number,
         "html_url" => "https://github.com/owner/repo/pull/#{number}",
         "user" => user.merge("html_url" => "https://github.com/#{user['login']}"),
+        "body" => body,
         "merged_at" => Time.now.utc,
         "events" => [{
           "event" => "merged",
@@ -107,33 +109,33 @@ module GitHubChangelogGenerator
     describe "#generate_entry_for_tag" do
       let(:issues) do
         [
-          issue("no labels", [], "5", "login" => "user1"),
-          issue("breaking", ["breaking"], "8", "login" => "user5"),
-          issue("enhancement", ["enhancement"], "6", "login" => "user2"),
-          issue("bug", ["bug"], "7", "login" => "user1"),
-          issue("deprecated", ["deprecated"], "13", "login" => "user5"),
-          issue("removed", ["removed"], "14", "login" => "user2"),
-          issue("security", ["security"], "15", "login" => "user5"),
-          issue("all the labels", %w[breaking enhancement bug deprecated removed security], "9", "login" => "user9"),
-          issue("all the labels different order", %w[bug breaking enhancement security removed deprecated], "10", "login" => "user5"),
-          issue("some unmapped labels", %w[tests-fail bug], "11", "login" => "user5"),
-          issue("no mapped labels", %w[docs maintenance], "12", "login" => "user5")
+          issue("no labels", [], "", "5", "login" => "user1"),
+          issue("breaking", ["breaking"], "", "8", "login" => "user5"),
+          issue("enhancement", ["enhancement"], "", "6", "login" => "user2"),
+          issue("bug", ["bug"], "", "7", "login" => "user1"),
+          issue("deprecated", ["deprecated"], "", "13", "login" => "user5"),
+          issue("removed", ["removed"], "", "14", "login" => "user2"),
+          issue("security", ["security"], "", "15", "login" => "user5"),
+          issue("all the labels", %w[breaking enhancement bug deprecated removed security], "", "9", "login" => "user9"),
+          issue("all the labels different order", %w[bug breaking enhancement security removed deprecated], "", "10", "login" => "user5"),
+          issue("some unmapped labels", %w[tests-fail bug], "", "11", "login" => "user5"),
+          issue("no mapped labels", %w[docs maintenance], "", "12", "login" => "user5")
         ]
       end
 
       let(:pull_requests) do
         [
-          pr("no labels", [], "20", "login" => "user1"),
-          pr("breaking", ["breaking"], "23", "login" => "user5"),
-          pr("enhancement", ["enhancement"], "21", "login" => "user5"),
-          pr("bug", ["bug"], "22", "login" => "user5"),
-          pr("deprecated", ["deprecated"], "28", "login" => "user5"),
-          pr("removed", ["removed"], "29", "login" => "user2"),
-          pr("security", ["security"], "30", "login" => "user5"),
-          pr("all the labels", %w[breaking enhancement bug deprecated removed security], "24", "login" => "user5"),
-          pr("all the labels different order", %w[bug breaking enhancement security remove deprecated], "25", "login" => "user5"),
-          pr("some unmapped labels", %w[tests-fail bug], "26", "login" => "user5"),
-          pr("no mapped labels", %w[docs maintenance], "27", "login" => "user5")
+          pr("no labels", [], "",  "20", "login" => "user1"),
+          pr("breaking", ["breaking"], "", "23", "login" => "user5"),
+          pr("enhancement", ["enhancement"], "",  "21", "login" => "user5"),
+          pr("bug", ["bug"], "", "22", "login" => "user5"),
+          pr("deprecated", ["deprecated"], "", "28", "login" => "user5"),
+          pr("removed", ["removed"], "", "29", "login" => "user2"),
+          pr("security", ["security"], "", "30", "login" => "user5"),
+          pr("all the labels", %w[breaking enhancement bug deprecated removed security], "", "24", "login" => "user5"),
+          pr("all the labels different order", %w[bug breaking enhancement security remove deprecated], "", "25", "login" => "user5"),
+          pr("some unmapped labels", %w[tests-fail bug], "",  "26", "login" => "user5"),
+          pr("no mapped labels", %w[docs maintenance], "", "27", "login" => "user5")
         ]
       end
 
@@ -211,9 +213,112 @@ module GitHubChangelogGenerator
 
           CHANGELOG
 
-          expect(subject.generate_entry_for_tag(pull_requests, issues, "1.0.1", "1.0.1", Time.new(2017, 12, 4).utc, "1.0.0")).to eq(changelog)
+          expect(subject.generate_entry_for_tag(pull_requests, issues, "1.0.1", "1.0.1", Time.new(2017, 12, 4, 12, 0, 0, "+00:00").utc, "1.0.0")).to eq(changelog)
         end
       end
+
+      describe "#create_entry_for_tag_with_body" do
+        let(:options) do
+          Parser.default_options.merge(
+            user: "owner",
+            project: "repo",
+            bug_labels: ["bug"],
+            enhancement_labels: ["enhancement"],
+            breaking_labels: ["breaking"],
+            issue_line_body: true
+          )
+        end
+
+        let(:issues_with_body) do
+          [
+            issue("no labels", [], "Issue body description", "5", "login" => "user1"),
+            issue("breaking", ["breaking"], "Issue body description very long: Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.", "8", "login" => "user5"),
+            issue("enhancement", ["enhancement"], "Issue body description", "6", "login" => "user2"),
+            issue("bug", ["bug"], "Issue body description", "7", "login" => "user1"),
+            issue("deprecated", ["deprecated"], "Issue body description", "13", "login" => "user5"),
+            issue("removed", ["removed"], "Issue body description", "14", "login" => "user2"),
+            issue("security", ["security"], "Issue body description", "15", "login" => "user5"),
+            issue("all the labels", %w[breaking enhancement bug deprecated removed security], "Issue body description. \nThis part should not appear.", "9", "login" => "user9"),
+            issue("all the labels different order", %w[bug breaking enhancement security removed deprecated], "Issue body description", "10", "login" => "user5"),
+            issue("some unmapped labels", %w[tests-fail bug], "Issue body description", "11", "login" => "user5"),
+            issue("no mapped labels", %w[docs maintenance], "Issue body description", "12", "login" => "user5")
+          ]
+        end
+
+        let(:pull_requests_with_body) do
+          [
+            pr("no labels", [], "PR body description", "20", "login" => "user1"),
+            pr("breaking", ["breaking"], "PR body description very long: Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.", "23", "login" => "user5"),
+            pr("enhancement", ["enhancement"], "PR body description", "21", "login" => "user5"),
+            pr("bug", ["bug"], "PR body description", "22", "login" => "user5"),
+            pr("deprecated", ["deprecated"], "PR body description", "28", "login" => "user5"),
+            pr("removed", ["removed"], "PR body description", "29", "login" => "user2"),
+            pr("security", ["security"], "PR body description", "30", "login" => "user5"),
+            pr("all the labels", %w[breaking enhancement bug deprecated removed security], "PR body description. \nThis part should not appear", "24", "login" => "user5"),
+            pr("all the labels different order", %w[bug breaking enhancement security remove deprecated], "PR body description", "25", "login" => "user5"),
+            pr("some unmapped labels", %w[tests-fail bug], "PR body description", "26", "login" => "user5"),
+            pr("no mapped labels", %w[docs maintenance], "PR body description", "27", "login" => "user5")
+          ]
+        end
+
+        subject { described_class.new(options) }
+        it "generates issues and pull requests with body" do
+          changelog = <<-CHANGELOG.gsub(/^ {10}/, "")
+          ## [1.0.1](https://github.com/owner/repo/tree/1.0.1) (2017-12-04)
+
+          [Full Changelog](https://github.com/owner/repo/compare/1.0.0...1.0.1)
+
+          **Breaking changes:**
+
+          - **issue breaking [\\#8](https://github.com/owner/repo/issue/8)**   \nIssue body description very long: Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.
+          - **issue all the labels [\\#9](https://github.com/owner/repo/issue/9)**   \nIssue body description.
+          - **issue all the labels different order [\\#10](https://github.com/owner/repo/issue/10)**   \nIssue body description
+          - **pr breaking [\\#23](https://github.com/owner/repo/pull/23) ([user5](https://github.com/user5))**   \nPR body description very long: Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.
+          - **pr all the labels [\\#24](https://github.com/owner/repo/pull/24) ([user5](https://github.com/user5))**   \nPR body description.
+          - **pr all the labels different order [\\#25](https://github.com/owner/repo/pull/25) ([user5](https://github.com/user5))**   \nPR body description
+
+          **Implemented enhancements:**
+
+          - **issue enhancement [\\#6](https://github.com/owner/repo/issue/6)**   \nIssue body description
+          - **pr enhancement [\\#21](https://github.com/owner/repo/pull/21) ([user5](https://github.com/user5))**   \nPR body description
+
+          **Fixed bugs:**
+
+          - **issue bug [\\#7](https://github.com/owner/repo/issue/7)**   \nIssue body description
+          - **issue some unmapped labels [\\#11](https://github.com/owner/repo/issue/11)**   \nIssue body description
+          - **pr bug [\\#22](https://github.com/owner/repo/pull/22) ([user5](https://github.com/user5))**   \nPR body description
+          - **pr some unmapped labels [\\#26](https://github.com/owner/repo/pull/26) ([user5](https://github.com/user5))**   \nPR body description
+
+          **Deprecated:**
+
+          - **issue deprecated [\\#13](https://github.com/owner/repo/issue/13)**   \nIssue body description
+          - **pr deprecated [\\#28](https://github.com/owner/repo/pull/28) ([user5](https://github.com/user5))**   \nPR body description
+
+          **Removed:**
+
+          - **issue removed [\\#14](https://github.com/owner/repo/issue/14)**   \nIssue body description
+          - **pr removed [\\#29](https://github.com/owner/repo/pull/29) ([user2](https://github.com/user2))**   \nPR body description
+
+          **Security fixes:**
+
+          - **issue security [\\#15](https://github.com/owner/repo/issue/15)**   \nIssue body description
+          - **pr security [\\#30](https://github.com/owner/repo/pull/30) ([user5](https://github.com/user5))**   \nPR body description
+
+          **Closed issues:**
+
+          - **issue no labels [\\#5](https://github.com/owner/repo/issue/5)**   \nIssue body description
+          - **issue no mapped labels [\\#12](https://github.com/owner/repo/issue/12)**   \nIssue body description
+
+          **Merged pull requests:**
+
+          - **pr no labels [\\#20](https://github.com/owner/repo/pull/20) ([user1](https://github.com/user1))**   \nPR body description
+          - **pr no mapped labels [\\#27](https://github.com/owner/repo/pull/27) ([user5](https://github.com/user5))**   \nPR body description
+
+          CHANGELOG
+          expect(subject.generate_entry_for_tag(pull_requests_with_body, issues_with_body, "1.0.1", "1.0.1", Time.new(2017, 12, 4, 12, 0, 0, "+00:00").utc, "1.0.0")).to eq(changelog)
+        end
+      end
+
       describe "exclude issues without labels" do
         let(:options) do
           Parser.default_options.merge(
@@ -283,7 +388,7 @@ module GitHubChangelogGenerator
 
           CHANGELOG
 
-          expect(subject.generate_entry_for_tag(pull_requests, issues, "1.0.1", "1.0.1", Time.new(2017, 12, 4).utc, "1.0.0")).to eq(changelog)
+          expect(subject.generate_entry_for_tag(pull_requests, issues, "1.0.1", "1.0.1", Time.new(2017, 12, 4, 12, 0, 0, "+00:00").utc, "1.0.0")).to eq(changelog)
         end
       end
     end
