@@ -164,6 +164,8 @@ Configure the task in your `Rakefile`:
 require 'github_changelog_generator/task'
 
 GitHubChangelogGenerator::RakeTask.new :changelog do |config|
+  config.user = 'username'
+  config.project = 'project-name'
   config.since_tag = '0.1.14'
   config.future_release = '0.2.0'
 end
