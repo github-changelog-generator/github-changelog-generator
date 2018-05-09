@@ -230,7 +230,7 @@ module GitHubChangelogGenerator
         unreleased_label: "Unreleased",
         compare_link: true,
         exclude_labels: ["duplicate", "question", "invalid", "wontfix", "Duplicate", "Question", "Invalid", "Wontfix", "Meta: Exclude From Changelog"],
-        breaking_labels: %w[backwards-incompatible breaking],
+        breaking_labels: ["backwards-incompatible", "Backwards incompatible", "breaking"],
         enhancement_labels: ["enhancement", "Enhancement", "Type: Enhancement"],
         bug_labels: ["bug", "Bug", "Type: Bug"],
         deprecated_labels: ["deprecated", "Deprecated", "Type: Deprecated"],
