@@ -87,11 +87,11 @@
 
 <p>  -u, --user [USER]</p>
 
-<p>  Username of the owner of target GitHub repo</p>
+<p>  Username of the owner of target GitHub repo.</p>
 
 <p>  -p, --project [PROJECT]</p>
 
-<p>  Name of project on GitHub</p>
+<p>  Name of project on GitHub.</p>
 
 <p>  -t, --token [TOKEN]</p>
 
@@ -99,184 +99,219 @@
 
 <p>  -f, --date-format [FORMAT]</p>
 
-<p>  Date format. Default is %Y-%m-%d</p>
+<p>  Date format. Default is %Y-%m-%d.</p>
 
 <p>  -o, --output [NAME]</p>
 
-<p>  Output file. Default is CHANGELOG.md</p>
+<p>  Output file. To print to STDOUT instead, use blank as path. Default is CHANGELOG.md.</p>
 
 <p>  -b, --base [NAME]</p>
 
 <p>  Optional base file to append generated changes to.</p>
 
-<p>   --bugs-label [LABEL]</p>
+<p>  --breaking-label [LABEL]</p>
 
-<p>   Setup custom label for bug-fixes section. Default is "<strong>Fixed bugs:</strong></p>
+<p>  Set up custom label for breaking changes section. Default is "<strong>Breaking changes:</strong>".</p>
 
-<p>   --enhancement-label [LABEL]</p>
+<p>  --enhancement-label [LABEL]</p>
 
-<p>   Setup custom label for enhancements section. Default is "<strong>Implemented enhancements:</strong>"</p>
+<p>  Set up custom label for enhancements section. Default is "<strong>Implemented enhancements:</strong>".</p>
 
-<p>   --issues-label [LABEL]</p>
+<p>  --bugs-label [LABEL]</p>
 
-<p>   Setup custom label for closed-issues section. Default is "<strong>Closed issues:</strong>"</p>
+<p>  Set up custom label for bug-fixes section. Default is "<strong>Fixed bugs:</strong>".</p>
 
-<p>   --header-label [LABEL]</p>
+<p>  --deprecated-label [LABEL]</p>
 
-<p>   Setup custom header label. Default is "# Changelog"</p>
+<p>  Set up custom label for deprecated section. Default is "<strong>Deprecated:</strong>".</p>
 
-<p>   --front-matter [JSON]</p>
+<p>  --removed-label [LABEL]</p>
 
-<p>   Add YAML front matter. Formatted as JSON because it's easier to add on the command line</p>
+<p>  Set up custom label for removed section. Default is "<strong>Removed:</strong>".</p>
 
-<p>   --pr-label [LABEL]</p>
+<p>  --security-label [LABEL]</p>
 
-<p>   Setup custom label for pull requests section. Default is "<strong>Merged pull requests:</strong>"</p>
+<p>  Set up custom label for security section. Default is "<strong>Security:</strong>".</p>
 
-<p>   --[no-]issues</p>
+<p>  --issues-label [LABEL]</p>
 
-<p>   Include closed issues in changelog. Default is true</p>
+<p>  Set up custom label for closed-issues section. Default is "<strong>Closed issues:</strong>".</p>
 
-<p>   --[no-]issues-wo-labels</p>
+<p>  --header-label [LABEL]</p>
 
-<p>   Include closed issues without labels in changelog. Default is true</p>
+<p>  Set up custom header label. Default is "# Changelog".</p>
 
-<p>   --[no-]pr-wo-labels</p>
+<p>  --configure-sections [HASH, STRING]</p>
 
-<p>   Include pull requests without labels in changelog. Default is true</p>
+<p>  Define your own set of sections which overrides all default sections.</p>
 
-<p>   --[no-]pull-requests</p>
+<p>  --add-sections [HASH, STRING]</p>
 
-<p>   Include pull-requests in changelog. Default is true</p>
+<p>  Add new sections but keep the default sections.</p>
 
-<p>   --[no-]filter-by-milestone</p>
+<p>  --front-matter [JSON]</p>
 
-<p>   Use milestone to detect when issue was resolved. Default is true</p>
+<p>  Add YAML front matter. Formatted as JSON because it's easier to add on the command line.</p>
 
-<p>   --[no-]author</p>
+<p>  --pr-label [LABEL]</p>
 
-<p>   Add author of pull-request in the end. Default is true</p>
+<p>  Set up custom label for pull requests section. Default is "<strong>Merged pull requests:</strong>".</p>
 
-<p>   --usernames-as-github-logins</p>
+<p>  --[no-]issues</p>
 
-<p>   Use GitHub tags instead of Markdown links for the author of an issue or pull-request.</p>
+<p>  Include closed issues in changelog. Default is true.</p>
 
-<p>   --unreleased-only</p>
+<p>  --[no-]issues-wo-labels</p>
 
-<p>   Generate log from unreleased closed issues only.</p>
+<p>  Include closed issues without labels in changelog. Default is true.</p>
 
-<p>   --[no-]unreleased</p>
+<p>  --[no-]pr-wo-labels</p>
 
-<p>   Add to log unreleased closed issues. Default is true</p>
+<p>  Include pull requests without labels in changelog. Default is true.</p>
 
-<p>   --unreleased-label [label]</p>
+<p>  --[no-]pull-requests</p>
 
-<p>   Setup custom label for unreleased closed issues section. Default is "<strong>Unreleased:</strong>"</p>
+<p>  Include pull-requests in changelog. Default is true.</p>
 
-<p>   --[no-]compare-link</p>
+<p>  --[no-]filter-by-milestone</p>
 
-<p>   Include compare link (Full Changelog) between older version and newer version. Default is true</p>
+<p>  Use milestone to detect when issue was resolved. Default is true.</p>
 
-<p>   --include-labels x,y,z</p>
+<p>  --[no-]author</p>
 
-<p>   Only issues with the specified labels will be included in the changelog.</p>
+<p>  Add author of pull request at the end. Default is true.</p>
 
-<p>   --exclude-labels x,y,z</p>
+<p>  --usernames-as-github-logins</p>
 
-<p>   Issues with the specified labels will be always excluded from changelog. Default is 'duplicate,question,invalid,wontfix'</p>
+<p>  Use GitHub tags instead of Markdown links for the author of an issue or pull-request.</p>
 
-<p>   --bug-labels x,y,z</p>
+<p>  --unreleased-only</p>
 
-<p>   Issues with the specified labels will be always added to "Fixed bugs" section. Default is 'bug,Bug'</p>
+<p>  Generate log from unreleased closed issues only.</p>
 
-<p>   --enhancement-labels x,y,z</p>
+<p>  --[no-]unreleased</p>
 
-<p>   Issues with the specified labels will be always added to "Implemented enhancements" section. Default is 'enhancement,Enhancement'</p>
+<p>  Add to log unreleased closed issues. Default is true.</p>
 
-<p>   --exclude-tags x,y,z</p>
+<p>  --unreleased-label [label]</p>
 
-<p>   Changelog will exclude specified tags</p>
+<p>  Set up custom label for unreleased closed issues section. Default is "<strong>Unreleased:</strong>".</p>
 
-<p>   --exclude-tags-regex [REGEX]</p>
+<p>  --[no-]compare-link</p>
 
-<p>   Apply a regular expression on tag names so that they can be excluded, for example: --exclude-tags-regex ".*+\d{1,}"</p>
+<p>  Include compare link (Full Changelog) between older version and newer version. Default is true.</p>
 
-<p>   --since-tag x</p>
+<p>  --include-labels x,y,z</p>
 
-<p>   Changelog will start after specified tag</p>
+<p>  Of the labeled issues, only include the ones with the specified labels.</p>
 
-<p>   --due-tag x</p>
+<p>  --exclude-labels x,y,z</p>
 
-<p>   Changelog will end before specified tag</p>
+<p>  Issues with the specified labels will be excluded from changelog. Default is 'duplicate,question,invalid,wontfix'.</p>
 
-<p>   --max-issues [NUMBER]</p>
+<p>  --breaking-labels x,y,z</p>
 
-<p>   Max number of issues to fetch from GitHub. Default is unlimited</p>
+<p>  Issues with these labels will be added to a new section, called "Breaking changes". Default is 'backwards-incompatible,breaking'.</p>
 
-<p>   --release-url [URL]</p>
+<p>  --enhancement-labels x,y,z</p>
 
-<p>   The URL to point to for release links, in printf format (with the tag as variable).</p>
+<p>  Issues with the specified labels will be added to "Implemented enhancements" section. Default is 'enhancement,Enhancement'.</p>
 
-<p>   --github-site [URL]</p>
+<p>  --bug-labels x,y,z</p>
 
-<p>   The Enterprise Github site on which your project is hosted.</p>
+<p>  Issues with the specified labels will be added to "Fixed bugs" section. Default is 'bug,Bug'.</p>
 
-<p>   --github-api [URL]</p>
+<p>  --deprecated-labels x,y,z</p>
 
-<p>   The enterprise endpoint to use for your Github API.</p>
+<p>  Issues with the specified labels will be added to a section called "Deprecated". Default is 'deprecated,Deprecated'.</p>
 
-<p>   --simple-list</p>
+<p>  --removed-labels x,y,z</p>
 
-<p>   Create simple list from issues and pull requests. Default is false.</p>
+<p>  Issues with the specified labels will be added to a section called "Removed". Default is 'removed,Removed'.</p>
 
-<p>   --future-release [RELEASE-VERSION]</p>
+<p>  --security-labels x,y,z</p>
 
-<p>   Put the unreleased changes in the specified release number.</p>
+<p>  Issues with the specified labels will be added to a section called "Security fixes". Default is 'security,Security'.</p>
 
-<p>   --release-branch [RELEASE-BRANCH]</p>
+<p>  --issue-line-labels x,y,z</p>
 
-<p>   Limit pull requests to the release branch, such as master or release</p>
+<p>  The specified labels will be shown in brackets next to each matching issue. Use "ALL" to show all labels. Default is [].</p>
 
-<p>   --http-cache</p>
+<p>  --exclude-tags x,y,z</p>
 
-<p>   Use HTTP Cache to cache GitHub API requests (useful for large repos) Default is true.</p>
+<p>  Changelog will exclude specified tags.</p>
 
-<p>   --[no-]cache-file [CACHE-FILE]</p>
+<p>  --exclude-tags-regex [REGEX]</p>
 
-<p>   Filename to use for cache. Default is github-changelog-http-cache in a temporary directory.</p>
+<p>  Apply a regular expression on tag names so that they can be excluded, for example: --exclude-tags-regex ".*+\d{1,}".</p>
 
-<p>   --cache-log [CACHE-LOG]</p>
+<p>  --since-tag x</p>
 
-<p>   Filename to use for cache log. Default is github-changelog-logger.log in a temporary directory.</p>
+<p>  Changelog will start after specified tag.</p>
 
-<pre><code>--ssl-ca-file [PATH]
-</code></pre>
+<p>  --due-tag x</p>
 
-<p>   Path to cacert.pem file. Default is a bundled lib/github_changelog_generator/ssl_certs/cacert.pem. Respects SSL_CA_PATH.</p>
+<p>  Changelog will end before specified tag.</p>
 
-<p>   --require file1.rb,file2.rb</p>
+<p>  --max-issues [NUMBER]</p>
 
-<p>   Paths to Ruby file(s) to require before generating changelog.</p>
+<p>  Maximum number of issues to fetch from GitHub. Default is unlimited.</p>
 
-<p>   --[no-]verbose</p>
+<p>  --release-url [URL]</p>
 
-<p>   Run verbosely. Default is true</p>
+<p>  The URL to point to for release links, in printf format (with the tag as variable).</p>
 
-<p>   --configure-sections [HASH, STRING]</p>
+<p>  --github-site [URL]</p>
 
-<p>   Define your own set of sections which overrides all default sections") do |v|</p>
+<p>  The Enterprise GitHub site where your project is hosted.</p>
 
-<p>   --add-sections [HASH, STRING]</p>
+<p>  --github-api [URL]</p>
 
-<p>   Add new sections but keep the default sections"</p>
+<p>  The enterprise endpoint to use for your GitHub API.</p>
 
-<p>   -v, --version</p>
+<p>  --simple-list</p>
 
-<p>   Print version number</p>
+<p>  Create a simple list from issues and pull requests. Default is false.</p>
 
-<p>   -h, --help</p>
+<p>  --future-release [RELEASE-VERSION]</p>
 
-<p>   Displays Help</p>
+<p>  Put the unreleased changes in the specified release number.</p>
+
+<p>  --release-branch [RELEASE-BRANCH]</p>
+
+<p>  Limit pull requests to the release branch, such as master or release.</p>
+
+<p>  --http-cache</p>
+
+<p>  Use HTTP Cache to cache GitHub API requests (useful for large repos). Default is true.</p>
+
+<p>  --[no-]cache-file [CACHE-FILE]</p>
+
+<p>  Filename to use for cache. Default is github-changelog-http-cache in a temporary directory.</p>
+
+<p>  --cache-log [CACHE-LOG]</p>
+
+<p>  Filename to use for cache log. Default is github-changelog-logger.log in a temporary directory.</p>
+
+<p>  --ssl-ca-file [PATH]</p>
+
+<p>  Path to cacert.pem file. Default is a bundled lib/github_changelog_generator/ssl_certs/cacert.pem. Respects SSL_CA_PATH.</p>
+
+<p>  --require file1.rb,file2.rb</p>
+
+<p>  Paths to Ruby file(s) to require before generating changelog.</p>
+
+<p>  --[no-]verbose</p>
+
+<p>  Run verbosely. Default is true.</p>
+
+<p>  -v, --version</p>
+
+<p>  Print version number.</p>
+
+<p>  -h, --help</p>
+
+<p>  Displays Help.</p>
 
 <h2 id="REBASED-COMMITS">REBASED COMMITS</h2>
 
@@ -299,7 +334,7 @@
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'></li>
-    <li class='tc'>March 2018</li>
+    <li class='tc'>April 2018</li>
     <li class='tr'>git-generate-changelog(1)</li>
   </ol>
 
