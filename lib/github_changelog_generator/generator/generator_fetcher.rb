@@ -18,34 +18,24 @@ module GitHubChangelogGenerator
     # Async fetching of all tags dates
     def fetch_tags_dates(tags)
       print "Fetching tag dates...\r" if options[:verbose]
-      # Async fetching tags:
-      threads = []
       i = 0
-      all = tags.count
       tags.each do |tag|
-        print "                                 \r"
-        threads << Thread.new do
-          get_time_of_tag(tag)
-          print "Fetching tags dates: #{i + 1}/#{all}\r" if options[:verbose]
-          i += 1
-        end
+        get_time_of_tag(tag)
+        i += 1
       end
-      threads.each(&:join)
-      puts "Fetching tags dates: #{i}" if options[:verbose]
+      puts "Fetching tags dates: #{i}/#{tags.count}" if options[:verbose]
     end
 
     # Find correct closed dates, if issues was closed by commits
     def detect_actual_closed_dates(issues)
       print "Fetching closed dates for issues...\r" if options[:verbose]
 
-      issues.each_slice(MAX_THREAD_NUMBER) do |issues_slice|
-        threads = []
-        issues_slice.each do |issue|
-          threads << Thread.new { find_closed_date_by_commit(issue) }
-        end
-        threads.each(&:join)
+      i = 0
+      issues.each do |issue|
+        find_closed_date_by_commit(issue)
+        i += 1
       end
-      puts "Fetching closed dates for issues: Done!" if options[:verbose]
+      puts "Fetching closed dates for issues: #{i}/#{issues.count}" if options[:verbose]
     end
 
     # Adds a key "first_occurring_tag" to each PR with a value of the oldest
@@ -190,7 +180,7 @@ module GitHubChangelogGenerator
         issue["actual_date"] = issue["closed_at"]
       else
         begin
-          commit = @fetcher.fetch_commit(event)
+          commit = @fetcher.fetch_commit(event["commit_id"])
           issue["actual_date"] = commit["commit"]["author"]["date"]
 
           # issue['actual_date'] = commit['author']['date']

@@ -238,7 +238,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     #
     # @return [Time] time of specified tag
     def fetch_date_of_tag(tag)
-      commit_data = check_github_response { @client.commit(user_project, tag["commit"]["sha"]) }
+      commit_data = fetch_commit(tag["commit"]["sha"])
       commit_data = stringify_keys_deep(commit_data.to_hash)
 
       commit_data["commit"]["committer"]["date"]
@@ -260,17 +260,18 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
 
     # Fetch commit for specified event
     #
+    # @param [String] commit_id the SHA of a commit to fetch
     # @return [Hash]
-    def fetch_commit(event)
+    def fetch_commit(commit_id)
       found = commits.find do |commit|
-        commit["sha"] == event["commit_id"]
+        commit["sha"] == commit_id
       end
       if found
         stringify_keys_deep(found.to_hash)
       else
         # cache miss; don't add to @commits because unsure of order.
         check_github_response do
-          commit = @client.commit(user_project, event["commit_id"])
+          commit = @client.commit(user_project, commit_id)
           commit = stringify_keys_deep(commit.to_hash)
           commit
         end
