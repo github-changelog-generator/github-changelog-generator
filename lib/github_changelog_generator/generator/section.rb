@@ -5,7 +5,7 @@ module GitHubChangelogGenerator
   #
   # @see GitHubChangelogGenerator::Entry
   class Section
-    attr_accessor :name, :prefix, :issues, :labels
+    attr_accessor :name, :prefix, :issues, :labels, :body_only
 
     def initialize(opts = {})
       @name = opts[:name]
@@ -13,6 +13,7 @@ module GitHubChangelogGenerator
       @labels = opts[:labels] || []
       @issues = opts[:issues] || []
       @options = opts[:options] || Options.new({})
+      @body_only = opts[:body_only] || false
     end
 
     # Returns the content of a section.
@@ -22,10 +23,11 @@ module GitHubChangelogGenerator
       content = ""
 
       if @issues.any?
-        content += "#{@prefix}\n\n" unless @options[:simple_list]
+        content += "#{@prefix}\n\n" unless @options[:simple_list] || @prefix.blank?
         @issues.each do |issue|
           merge_string = get_string_for_issue(issue)
-          content += "- #{merge_string}\n"
+          content += "- " unless @body_only
+          content += "#{merge_string}\n"
         end
         content += "\n"
       end
@@ -54,6 +56,7 @@ module GitHubChangelogGenerator
 
     def issue_line_with_body(line, issue)
       return line if !@options[:issue_line_body] || issue["body"].blank?
+      return encapsulate_string(issue["body"]) if @body_only
       # get issue body till first line break
       body_paragraph = body_till_first_break(issue["body"])
       # remove spaces from begining and end of the string
