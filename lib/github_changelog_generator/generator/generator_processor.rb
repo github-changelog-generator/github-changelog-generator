@@ -77,10 +77,21 @@ module GitHubChangelogGenerator
     end
 
     # Method filter issues, that belong only specified tag range
+    #
+    # @param [Array] issues issues to filter
+    # @param [Hash, Nil] newer_tag Tag to find PRs of. May be nil for unreleased section
+    # @return [Array] filtered issues
+    def filter_by_tag(issues, newer_tag = nil)
+      issues.select do |issue|
+        issue["first_occurring_tag"] == (newer_tag.nil? ? nil : newer_tag["name"])
+      end
+    end
+
+    # Method filter issues, that belong only specified tag range
     # @param [Array] issues issues to filter
     # @param [Symbol] hash_key key of date value default is :actual_date
-    # @param [String] older_tag all issues before this tag date will be excluded. May be nil, if it's first tag
-    # @param [String] newer_tag all issue after this tag will be excluded. May be nil for unreleased section
+    # @param [Hash, Nil] older_tag all issues before this tag date will be excluded. May be nil, if it's first tag
+    # @param [Hash, Nil] newer_tag all issue after this tag will be excluded. May be nil for unreleased section
     # @return [Array] filtered issues
     def delete_by_time(issues, hash_key = "actual_date", older_tag = nil, newer_tag = nil)
       # in case if not tags specified - return unchanged array
@@ -125,11 +136,11 @@ module GitHubChangelogGenerator
       tag_in_range_new
     end
 
-    def tag_newer_old_tag?(older_tag_time, t)
+    def tag_newer_old_tag?(older_tag_time, time)
       tag_in_range_old = if older_tag_time.nil?
                            true
                          else
-                           t > older_tag_time
+                           time > older_tag_time
                          end
       tag_in_range_old
     end

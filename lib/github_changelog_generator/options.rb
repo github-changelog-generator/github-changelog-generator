@@ -7,7 +7,7 @@ module GitHubChangelogGenerator
   # This class wraps Options, and knows a list of known options. Others options
   # will raise exceptions.
   class Options < SimpleDelegator
-    # Raised on intializing with unknown keys in the values hash,
+    # Raised on initializing with unknown keys in the values hash,
     # and when trying to store a value on an unknown key.
     UnsupportedOptionError = Class.new(ArgumentError)
 
@@ -19,18 +19,20 @@ module GitHubChangelogGenerator
       author
       base
       between_tags
+      breaking_labels
+      breaking_prefix
       bug_labels
       bug_prefix
       cache_file
       cache_log
       compare_link
+      configure_sections
       date_format
+      deprecated_labels
+      deprecated_prefix
       due_tag
       enhancement_labels
       enhancement_prefix
-      breaking_labels
-      breaking_prefix
-      configure_sections
       exclude_labels
       exclude_tags
       exclude_tags_regex
@@ -44,6 +46,7 @@ module GitHubChangelogGenerator
       include_labels
       issue_prefix
       issue_line_labels
+      issue_line_body
       issues
       max_issues
       merge_prefix
@@ -52,7 +55,11 @@ module GitHubChangelogGenerator
       pulls
       release_branch
       release_url
+      removed_labels
+      removed_prefix
       require
+      security_labels
+      security_prefix
       simple_list
       since_tag
       ssl_ca_file
