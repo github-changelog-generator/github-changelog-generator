@@ -56,6 +56,9 @@ module GitHubChangelogGenerator
         opts.on("-b", "--base [NAME]", "Optional base file to append generated changes to.") do |last|
           options[:base] = last
         end
+        opts.on("--summary-label [LABEL]", "Set up custom label for the release summary section. Default is \"\".") do |v|
+          options[:summary_prefix] = v
+        end
         opts.on("--breaking-label [LABEL]", "Set up custom label for the breaking changes section. Default is \"**Breaking changes:**\".") do |v|
           options[:breaking_prefix] = v
         end
@@ -250,6 +253,7 @@ module GitHubChangelogGenerator
         header: "# Changelog",
         merge_prefix: "**Merged pull requests:**",
         issue_prefix: "**Closed issues:**",
+        summary_prefix: "",
         breaking_prefix: "**Breaking changes:**",
         enhancement_prefix: "**Implemented enhancements:**",
         bug_prefix: "**Fixed bugs:**",
