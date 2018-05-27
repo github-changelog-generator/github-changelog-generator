@@ -236,7 +236,7 @@ module GitHubChangelogGenerator
         unreleased_label: "Unreleased",
         compare_link: true,
         exclude_labels: ["duplicate", "question", "invalid", "wontfix", "Duplicate", "Question", "Invalid", "Wontfix", "Meta: Exclude From Changelog"],
-        summary_labels: ["Release-summary", "release-summary", "Summary", "summary"],
+        summary_labels: ["Release summary", "release-summary", "Summary", "summary"],
         breaking_labels: ["backwards-incompatible", "Backwards incompatible", "breaking"],
         enhancement_labels: ["enhancement", "Enhancement", "Type: Enhancement"],
         bug_labels: ["bug", "Bug", "Type: Bug"],
