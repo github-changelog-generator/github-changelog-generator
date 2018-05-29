@@ -2,7 +2,7 @@
 
 require "tmpdir"
 require "retriable"
-require
+require "gitlab"
 module GitHubChangelogGenerator
   # A Fetcher responsible for all requests to GitHub and all basic manipulation with related data
   # (such as filtering, validating, e.t.c)
@@ -36,43 +36,20 @@ module GitHubChangelogGenerator
       @cache_log    = nil
       @commits      = []
       @compares     = {}
-      # prepare_cache
-      # configure_octokit_ssl
-      @client = Gitlab::Client.new(github_options)
+
+      Gitlab.sudo = nil
+      @client = Gitlab::Client.new(gitlab_options)
+      @project_id = @client.project_search(@project).first.id
     end
 
-    # def prepare_cache
-    #   return unless @http_cache
-    #   @cache_file = @options.fetch(:cache_file) { File.join(Dir.tmpdir, "github-changelog-http-cache") }
-    #   @cache_log  = @options.fetch(:cache_log) { File.join(Dir.tmpdir, "github-changelog-logger.log") }
-    #   init_cache
-    # end
-
-    def github_options
+    def gitlab_options
       result = {}
-      github_token = fetch_github_token
-      result[:access_token] = github_token if github_token
+      access_token = fetch_github_token
+      result[:private_token] = access_token if access_token
       endpoint = @options[:github_endpoint]
-      result[:api_endpoint] = endpoint if endpoint
+      result[:endpoint] = endpoint if endpoint
       result
     end
-
-    # def configure_octokit_ssl
-    #   ca_file = @options[:ssl_ca_file] || ENV["SSL_CA_FILE"] || File.expand_path("ssl_certs/cacert.pem", __dir__)
-    #   Octokit.connection_options = { ssl: { ca_file: ca_file } }
-    # end
-
-    # def init_cache
-    #   Octokit.middleware = Faraday::RackBuilder.new do |builder|
-    #     builder.use(Faraday::HttpCache, serializer: Marshal,
-    #                                     store: ActiveSupport::Cache::FileStore.new(@cache_file),
-    #                                     logger: Logger.new(@cache_log),
-    #                                     shared_cache: false)
-    #     builder.use Octokit::Response::RaiseError
-    #     builder.adapter Faraday.default_adapter
-    #     # builder.response :logger
-    #   end
-    # end
 
     DEFAULT_REQUEST_OPTIONS = { per_page: PER_PAGE_NUMBER }
 
@@ -82,39 +59,36 @@ module GitHubChangelogGenerator
     def get_all_tags
       print "Fetching tags...\r" if @options[:verbose]
 
-      check_github_response { github_fetch_tags }
+      check_response { fetch_tags }
     end
 
-    # # Returns the number of pages for a API call
-    # #
-    # # @return [Integer] number of pages for this API call in total
-    # def calculate_pages(client, method, request_options)
-    #   # Makes the first API call so that we can call last_response
-    #   check_github_response do
-    #     client.send(method, user_project, DEFAULT_REQUEST_OPTIONS.merge(request_options))
-    #   end
+    # Returns the number of pages for a API call
     #
-    #   last_response = client.last_response
-    #
-    #   if (last_pg = last_response.rels[:last])
-    #     querystring_as_hash(last_pg.href)["page"].to_i
-    #   else
-    #     1
-    #   end
-    # end
+    # @return [Integer] number of pages for this API call in total
+    def calculate_pages(client, method, request_options)
+      # Makes the first API call so that we can call last_response
+      check_response do
+        client.send(method, user_project, DEFAULT_REQUEST_OPTIONS.merge(request_options))
+      end
+
+      last_response = client.last_response
+
+      if (last_pg = last_response.rels[:last])
+        querystring_as_hash(last_pg.href)["page"].to_i
+      else
+        1
+      end
+    end
 
     # Fill input array with tags
     #
     # @return [Array <Hash>] array of tags in repo
-    def github_fetch_tags
+    def fetch_tags
       tags        = []
-      page_i      = 0
-      count_pages = calculate_pages(@client, "tags", {})
+      new_tags = @client.tags(@project_id, DEFAULT_REQUEST_OPTIONS)
 
-      iterate_pages(@client, "tags") do |new_tags|
-        page_i += PER_PAGE_NUMBER
-        print_in_same_line("Fetching tags... #{page_i}/#{count_pages * PER_PAGE_NUMBER}")
-        tags.concat(new_tags)
+      new_tags.auto_paginate do |new_tag|
+        tags.push(new_tag)
       end
       print_empty_line
 
@@ -252,7 +226,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     # @return [Hash] Github api response for comparison.
     def fetch_compare(older, newer)
       unless @compares["#{older}...#{newer}"]
-        compare_data = check_github_response { @client.compare(user_project, older, newer || "HEAD") }
+        compare_data = check_response { @client.compare(user_project, older, newer || "HEAD") }
         raise StandardError, "Sha #{older} and sha #{newer} are not related; please file a github-changelog-generator issues and describe how to replicate this issue." if compare_data["status"] == "diverged"
         @compares["#{older}...#{newer}"] = stringify_keys_deep(compare_data.to_hash)
       end
@@ -271,7 +245,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
         stringify_keys_deep(found.to_hash)
       else
         # cache miss; don't add to @commits because unsure of order.
-        check_github_response do
+        check_response do
           commit = @client.commit(user_project, commit_id)
           commit = stringify_keys_deep(commit.to_hash)
           commit
@@ -366,7 +340,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     def iterate_pages(client, method, *args)
       args << DEFAULT_REQUEST_OPTIONS.merge(extract_request_args(args))
 
-      check_github_response { client.send(method, user_project, *args) }
+      check_response { client.send(method, user_project, *args) }
       last_response = client.last_response.tap do |response|
         raise(MovedPermanentlyError, response.data[:url]) if response.status == 301
       end
@@ -374,7 +348,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       yield(last_response.data)
 
       until (next_one = last_response.rels[:next]).nil?
-        last_response = check_github_response { next_one.get }
+        last_response = check_response { next_one.get }
         yield(last_response.data)
       end
     end
@@ -392,7 +366,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     # This is wrapper with rescue block
     #
     # @return [Object] returns exactly the same, what you put in the block, but wrap it with begin-rescue block
-    def check_github_response
+    def check_response
       Retriable.retriable(retry_options) do
         yield
       end
