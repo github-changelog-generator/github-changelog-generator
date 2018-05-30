@@ -99,9 +99,8 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     # @return [Tuple] with (issues [Array <Hash>], pull-requests [Array <Hash>])
     def fetch_closed_issues_and_pr
       print "Fetching closed issues...\r" if @options[:verbose]
-      print_empty_line
-      issues = @client.issues(@project_id, DEFAULT_REQUEST_OPTIONS)
-      p issues.first
+      options = { state: "closed",  scope: :all}
+      issues = @client.issues(@project_id, DEFAULT_REQUEST_OPTIONS.merge(options))
 
       print_empty_line
       Helper.log.info "Received issues: #{issues.count}"
