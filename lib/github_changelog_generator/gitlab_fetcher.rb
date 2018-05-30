@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
-require 'date'
+require "date"
 require "tmpdir"
 require "retriable"
 require "gitlab"
-
 
 module GitHubChangelogGenerator
   # A Fetcher responsible for all requests to GitHub and all basic manipulation with related data
@@ -69,7 +68,7 @@ module GitHubChangelogGenerator
     #
     # @return [Array <Hash>] array of tags in repo
     def fetch_tags
-      tags        = []
+      tags = []
       new_tags = @client.tags(@project_id, DEFAULT_REQUEST_OPTIONS)
 
       new_tags.auto_paginate do |new_tag|
@@ -99,14 +98,14 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     # @return [Tuple] with (issues [Array <Hash>], pull-requests [Array <Hash>])
     def fetch_closed_issues_and_pr
       print "Fetching closed issues...\r" if @options[:verbose]
-      options = { state: "closed",  scope: :all}
+      options = { state: "closed", scope: :all }
       issues = @client.issues(@project_id, DEFAULT_REQUEST_OPTIONS.merge(options))
 
       print_empty_line
       Helper.log.info "Received issues: #{issues.count}"
 
       # separate arrays of issues and pull requests:
-      return issues.map { |issue| stringify_keys_deep(issue.to_hash) }, fetch_closed_pull_requests
+      [issues.map { |issue| stringify_keys_deep(issue.to_hash) }, fetch_closed_pull_requests]
     end
 
     # Fetch all pull requests. We need them to detect :merged_at parameter
@@ -114,13 +113,15 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     # @return [Array <Hash>] all pull requests
     def fetch_closed_pull_requests
       pull_requests = []
-      options = { state: "merged",  scope: :all}
+      options = { state: "merged", scope: :all }
 
       @client.merge_requests(@project_id, options).auto_paginate do |new_pr|
         new_pr = stringify_keys_deep(new_pr.to_hash)
         # align with Github naming
         new_pr["number"] = new_pr["iid"]
         new_pr["merged_at"] = new_pr["updated_at"]
+        new_pr["pull_request"] = true
+        new_pr["user"] = { login: new_pr["author"]["username"], html_url: new_pr["author"]["web_url"] }
         pull_requests.push(new_pr)
       end
 
@@ -205,7 +206,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
           commit["sha"] = commit["id"]
         end
         # TODO: do not know what the equivalent for gitlab is
-        if compare_data["compare_same_ref"] == true then
+        if compare_data["compare_same_ref"] == true
           raise StandardError, "Sha #{older} and sha #{newer} are not related; please file a github-changelog-generator issues and describe how to replicate this issue."
         end
         @compares["#{older}...#{newer}"] = stringify_keys_deep(compare_data.to_hash)
@@ -219,7 +220,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     # @return [Hash]
     def fetch_commit(commit_id)
       found = commits.find do |commit|
-        commit['sha'] == commit_id
+        commit["sha"] == commit_id
       end
       if found
         stringify_keys_deep(found.to_hash)
@@ -228,7 +229,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
         check_response do
           commit = @client.commit(@project_id, commit_id)
           commit = stringify_keys_deep(commit.to_hash)
-          commit['sha'] = commit['id']
+          commit["sha"] = commit["id"]
           commit
         end
       end
@@ -241,7 +242,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       if @commits.empty?
         @client.commits(@project_id).auto_paginate do |new_commit|
           new_commit = stringify_keys_deep(new_commit.to_hash)
-          new_commit['sha'] = new_commit['id']
+          new_commit["sha"] = new_commit["id"]
           @commits.push(new_commit)
         end
       end
@@ -310,7 +311,6 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
 
     # Exception raised to warn about moved repositories.
     MovedPermanentlyError = Class.new(RuntimeError)
-
 
     def extract_request_args(args)
       if args.size == 1 && args.first.is_a?(Hash)
