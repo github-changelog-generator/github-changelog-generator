@@ -154,7 +154,8 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     def fetch_events_async(issues)
       i       = 0
       threads = []
-      options = { target_type: "issue" }
+      options = { }
+      options[:target_type] = issues.first["merged_at"].nil? ? "issue" : "merge_request"
       issue_events = []
       @client.project_events(@project_id, options).auto_paginate do |event|
         event = stringify_keys_deep(event.to_hash)
@@ -176,7 +177,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
                 issue["events"].push(new_event)
               end
             end
-            print_in_same_line("Fetching events for issues and PR: #{i + 1}/#{issues.count}")
+            print_in_same_line("Fetching events for #{options[:target_type]}s: #{i + 1}/#{issues.count}")
             i += 1
           end
         end
@@ -202,6 +203,8 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
           threads << Thread.new do
             pr["comments"] = []
             @client.merge_request_notes(@project_id, pr["number"]) do |new_comment|
+              new_comment = stringify_keys_deep(new_comment.to_hash)
+              new_comment["body"] = new_comment["description"]
               pr["comments"].push(new_comment)
             end
             pr["comments"] = pr["comments"].map { |comment| stringify_keys_deep(comment.to_hash) }
