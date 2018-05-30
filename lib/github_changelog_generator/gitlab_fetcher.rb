@@ -138,6 +138,8 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
         new_pr["merged_at"] = new_pr["updated_at"]
         new_pr["pull_request"] = true
         new_pr["user"] = { login: new_pr["author"]["username"], html_url: new_pr["author"]["web_url"] }
+        # to make it work with older gitlab version or repos that lived across versions
+        new_pr["merge_commit_sha"] = new_pr["merge_commit_sha"].nil? ? new_pr["sha"]: new_pr["merge_commit_sha"]
         pull_requests.push(new_pr)
       end
 
