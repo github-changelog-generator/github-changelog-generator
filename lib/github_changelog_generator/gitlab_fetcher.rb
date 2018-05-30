@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "date"
 require "tmpdir"
 require "retriable"
 require "gitlab"
@@ -97,9 +96,16 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     #
     # @return [Tuple] with (issues [Array <Hash>], pull-requests [Array <Hash>])
     def fetch_closed_issues_and_pr
+      issues = []
       print "Fetching closed issues...\r" if @options[:verbose]
       options = { state: "closed", scope: :all }
-      issues = @client.issues(@project_id, DEFAULT_REQUEST_OPTIONS.merge(options))
+      @client.issues(@project_id, DEFAULT_REQUEST_OPTIONS.merge(options)).auto_paginate do |issue|
+        issue = stringify_keys_deep(issue.to_hash)
+        issue["body"] = issue["description"]
+        issue["html_url"] = issue["web_url"]
+        issue["number"] = issue["iid"]
+        issues.push(issue)
+      end
 
       print_empty_line
       Helper.log.info "Received issues: #{issues.count}"
@@ -119,6 +125,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
         new_pr = stringify_keys_deep(new_pr.to_hash)
         # align with Github naming
         new_pr["number"] = new_pr["iid"]
+        new_pr["html_url"] = new_pr["web_url"]
         new_pr["merged_at"] = new_pr["updated_at"]
         new_pr["pull_request"] = true
         new_pr["user"] = { login: new_pr["author"]["username"], html_url: new_pr["author"]["web_url"] }
@@ -138,15 +145,28 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     def fetch_events_async(issues)
       i       = 0
       threads = []
+      options = { target_type: "issue" }
+      issue_events = []
+      @client.project_events(@project_id, options).auto_paginate do |event|
+        event = stringify_keys_deep(event.to_hash)
+        # gitlab to github
+        event["event"] = event["action_name"]
+        issue_events.push(event)
+      end
+      # p issue_events
 
       issues.each_slice(MAX_THREAD_NUMBER) do |issues_slice|
         issues_slice.each do |issue|
           threads << Thread.new do
             issue["events"] = []
-            @client.project_events(@project_id).auto_paginate do |new_event|
-              issue["events"].push(new_event)
+            issue_events.each do |new_event|
+              if issue["id"] == new_event["target_id"]
+                if new_event["action_name"].eql? "closed"
+                  issue["closed_at"] = issue["closed_at"].nil? ? new_event["created_at"] : issue["closed_at"]
+                end
+                issue["events"].push(new_event)
+              end
             end
-            issue["events"] = issue["events"].map { |event| stringify_keys_deep(event.to_hash) }
             print_in_same_line("Fetching events for issues and PR: #{i + 1}/#{issues.count}")
             i += 1
           end
@@ -190,7 +210,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     #
     # @return [Time] time of specified tag
     def fetch_date_of_tag(tag)
-      DateTime.parse(tag["commit"]["committed_date"])
+      Time.parse(tag["commit"]["committed_date"])
     end
 
     # Fetch and cache comparison between two github refs
