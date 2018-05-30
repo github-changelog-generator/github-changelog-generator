@@ -40,7 +40,17 @@ module GitHubChangelogGenerator
 
       Gitlab.sudo = nil
       @client = Gitlab::Client.new(gitlab_options)
-      @project_id = @client.project_search(@project).first.id
+      @project_id = find_project_id
+    end
+
+    def find_project_id
+      project_id = nil
+      @client.project_search(@project).auto_paginate do |project|
+        if project.namespace.name.eql? @user
+          project_id = project.id
+        end
+      end
+      project_id
     end
 
     def gitlab_options
@@ -68,9 +78,8 @@ module GitHubChangelogGenerator
     # @return [Array <Hash>] array of tags in repo
     def fetch_tags
       tags = []
-      new_tags = @client.tags(@project_id, DEFAULT_REQUEST_OPTIONS)
 
-      new_tags.auto_paginate do |new_tag|
+       @client.tags(@project_id, DEFAULT_REQUEST_OPTIONS).auto_paginate do |new_tag|
         tags.push(new_tag)
       end
       print_empty_line
