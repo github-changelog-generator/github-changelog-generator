@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "github_changelog_generator/octo_fetcher"
+require "github_changelog_generator/gitlab_fetcher"
 require "github_changelog_generator/generator/generator_fetcher"
 require "github_changelog_generator/generator/generator_processor"
 require "github_changelog_generator/generator/generator_tags"
@@ -34,7 +35,7 @@ module GitHubChangelogGenerator
     def initialize(options = {})
       @options        = options
       @tag_times_hash = {}
-      @fetcher        = GitHubChangelogGenerator::OctoFetcher.new(options)
+      @fetcher        = options[:gitlab] ? GitHubChangelogGenerator::GitlabFetcher.new(options) : GitHubChangelogGenerator::OctoFetcher.new(options)
       @sections       = []
     end
 
