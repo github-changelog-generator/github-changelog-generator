@@ -41,6 +41,7 @@ module GitHubChangelogGenerator
       future_release
       github_endpoint
       github_site
+      gitlab
       header
       http_cache
       include_labels
