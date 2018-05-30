@@ -165,7 +165,7 @@ module GitHubChangelogGenerator
     # @param [Hash] issue
     def find_closed_date_by_commit(issue)
       unless issue["events"].nil?
-        # if it's PR -> then find "merged event", in case of usual issue -> fond closed date
+        # if it's PR -> then find "merged event", in case of usual issue -> find closed date
         compare_string = issue["merged_at"].nil? ? "closed" : "merged"
         # reverse! - to find latest closed event. (event goes in date order)
         issue["events"].reverse!.each do |event|
