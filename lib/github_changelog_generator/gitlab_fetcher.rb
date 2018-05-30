@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
+require 'date'
 require "tmpdir"
 require "retriable"
 require "gitlab"
+
+
 module GitHubChangelogGenerator
   # A Fetcher responsible for all requests to GitHub and all basic manipulation with related data
   # (such as filtering, validating, e.t.c)
@@ -20,8 +23,8 @@ module GitHubChangelogGenerator
     "This script can make only 50 requests to GitHub API per hour without token!"
 
     # @param options [Hash] Options passed in
-    # @option options [String] :user GitHub username
-    # @option options [String] :project GitHub project
+    # @option options [String] :user Gitlab username
+    # @option options [String] :project Gitlab project
     # @option options [String] :since Only issues updated at or after this time are returned. This is a timestamp in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ. eg. Time.parse("2016-01-01 10:00:00").iso8601
     # @option options [Boolean] :http_cache Use ActiveSupport::Cache::FileStore to cache http requests
     # @option options [Boolean] :cache_file If using http_cache, this is the cache file path
@@ -62,24 +65,6 @@ module GitHubChangelogGenerator
       check_response { fetch_tags }
     end
 
-    # Returns the number of pages for a API call
-    #
-    # @return [Integer] number of pages for this API call in total
-    def calculate_pages(client, method, request_options)
-      # Makes the first API call so that we can call last_response
-      check_response do
-        client.send(method, user_project, DEFAULT_REQUEST_OPTIONS.merge(request_options))
-      end
-
-      last_response = client.last_response
-
-      if (last_pg = last_response.rels[:last])
-        querystring_as_hash(last_pg.href)["page"].to_i
-      else
-        1
-      end
-    end
-
     # Fill input array with tags
     #
     # @return [Array <Hash>] array of tags in repo
@@ -104,7 +89,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
 
     def closed_pr_options
       @closed_pr_options ||= {
-        filter: "all", labels: nil, state: "closed"
+        filter: "all", labels: nil, state: "merged"
       }.tap { |options| options[:since] = @since if @since }
     end
 
@@ -114,22 +99,15 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     # @return [Tuple] with (issues [Array <Hash>], pull-requests [Array <Hash>])
     def fetch_closed_issues_and_pr
       print "Fetching closed issues...\r" if @options[:verbose]
-      issues = []
-      page_i      = 0
-      count_pages = calculate_pages(@client, "issues", closed_pr_options)
+      print_empty_line
+      issues = @client.issues(@project_id, DEFAULT_REQUEST_OPTIONS)
+      p issues.first
 
-      iterate_pages(@client, "issues", closed_pr_options) do |new_issues|
-        page_i += PER_PAGE_NUMBER
-        print_in_same_line("Fetching issues... #{page_i}/#{count_pages * PER_PAGE_NUMBER}")
-        issues.concat(new_issues)
-        break if @options[:max_issues] && issues.length >= @options[:max_issues]
-      end
       print_empty_line
       Helper.log.info "Received issues: #{issues.count}"
 
       # separate arrays of issues and pull requests:
-      issues.map { |issue| stringify_keys_deep(issue.to_hash) }
-            .partition { |issue_or_pr| issue_or_pr["pull_request"].nil? }
+      return issues.map { |issue| stringify_keys_deep(issue.to_hash) }, fetch_closed_pull_requests
     end
 
     # Fetch all pull requests. We need them to detect :merged_at parameter
@@ -137,17 +115,16 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     # @return [Array <Hash>] all pull requests
     def fetch_closed_pull_requests
       pull_requests = []
-      options = { state: "closed" }
+      options = { state: "merged",  scope: :all}
 
-      page_i      = 0
-      count_pages = calculate_pages(@client, "pull_requests", options)
-
-      iterate_pages(@client, "pull_requests", options) do |new_pr|
-        page_i += PER_PAGE_NUMBER
-        log_string = "Fetching merged dates... #{page_i}/#{count_pages * PER_PAGE_NUMBER}"
-        print_in_same_line(log_string)
-        pull_requests.concat(new_pr)
+      @client.merge_requests(@project_id, options).auto_paginate do |new_pr|
+        new_pr = stringify_keys_deep(new_pr.to_hash)
+        # align with Github naming
+        new_pr["number"] = new_pr["iid"]
+        new_pr["merged_at"] = new_pr["updated_at"]
+        pull_requests.push(new_pr)
       end
+
       print_empty_line
 
       Helper.log.info "Pull Request count: #{pull_requests.count}"
@@ -166,8 +143,8 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
         issues_slice.each do |issue|
           threads << Thread.new do
             issue["events"] = []
-            iterate_pages(@client, "issue_events", issue["number"]) do |new_event|
-              issue["events"].concat(new_event)
+            @client.project_events(@project_id).auto_paginate do |new_event|
+              issue["events"].push(new_event)
             end
             issue["events"] = issue["events"].map { |event| stringify_keys_deep(event.to_hash) }
             print_in_same_line("Fetching events for issues and PR: #{i + 1}/#{issues.count}")
@@ -195,8 +172,8 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
         prs_slice.each do |pr|
           threads << Thread.new do
             pr["comments"] = []
-            iterate_pages(@client, "issue_comments", pr["number"]) do |new_comment|
-              pr["comments"].concat(new_comment)
+            @client.merge_request_notes(@project_id, pr["number"]) do |new_comment|
+              pr["comments"].push(new_comment)
             end
             pr["comments"] = pr["comments"].map { |comment| stringify_keys_deep(comment.to_hash) }
           end
@@ -213,10 +190,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     #
     # @return [Time] time of specified tag
     def fetch_date_of_tag(tag)
-      commit_data = fetch_commit(tag["commit"]["sha"])
-      commit_data = stringify_keys_deep(commit_data.to_hash)
-
-      commit_data["commit"]["committer"]["date"]
+      DateTime.parse(tag["commit"]["committed_date"])
     end
 
     # Fetch and cache comparison between two github refs
@@ -226,8 +200,15 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     # @return [Hash] Github api response for comparison.
     def fetch_compare(older, newer)
       unless @compares["#{older}...#{newer}"]
-        compare_data = check_response { @client.compare(user_project, older, newer || "HEAD") }
-        raise StandardError, "Sha #{older} and sha #{newer} are not related; please file a github-changelog-generator issues and describe how to replicate this issue." if compare_data["status"] == "diverged"
+        compare_data = check_response { @client.compare(@project_id, older, newer || "HEAD") }
+        compare_data = stringify_keys_deep(compare_data.to_hash)
+        compare_data["commits"].each do |commit|
+          commit["sha"] = commit["id"]
+        end
+        # TODO: do not know what the equivalent for gitlab is
+        if compare_data["compare_same_ref"] == true then
+          raise StandardError, "Sha #{older} and sha #{newer} are not related; please file a github-changelog-generator issues and describe how to replicate this issue."
+        end
         @compares["#{older}...#{newer}"] = stringify_keys_deep(compare_data.to_hash)
       end
       @compares["#{older}...#{newer}"]
@@ -239,15 +220,16 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     # @return [Hash]
     def fetch_commit(commit_id)
       found = commits.find do |commit|
-        commit["sha"] == commit_id
+        commit['sha'] == commit_id
       end
       if found
         stringify_keys_deep(found.to_hash)
       else
         # cache miss; don't add to @commits because unsure of order.
         check_response do
-          commit = @client.commit(user_project, commit_id)
+          commit = @client.commit(@project_id, commit_id)
           commit = stringify_keys_deep(commit.to_hash)
+          commit['sha'] = commit['id']
           commit
         end
       end
@@ -258,8 +240,10 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     # @return [Array] Commits in a repo.
     def commits
       if @commits.empty?
-        iterate_pages(@client, "commits") do |new_commits|
-          @commits.concat(new_commits)
+        @client.commits(@project_id).auto_paginate do |new_commit|
+          new_commit = stringify_keys_deep(new_commit.to_hash)
+          new_commit['sha'] = new_commit['id']
+          @commits.push(new_commit)
         end
       end
       @commits
@@ -267,14 +251,14 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
 
     # Return the oldest commit in a repo
     #
-    # @return [Hash] Oldest commit in the github git history.
+    # @return [Hash] Oldest commit in the gitlab git history.
     def oldest_commit
       commits.last
     end
 
     # @return [String] Default branch of the repo
     def default_branch
-      @default_branch ||= @client.repository(user_project)[:default_branch]
+      @default_branch ||= @client.project(@project_id)[:default_branch]
     end
 
     # Fetch all SHAs occurring in or before a given tag and add them to
@@ -328,30 +312,6 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     # Exception raised to warn about moved repositories.
     MovedPermanentlyError = Class.new(RuntimeError)
 
-    # Iterates through all pages until there are no more :next pages to follow
-    # yields the result per page
-    #
-    # @param [Octokit::Client] client
-    # @param [String] method (eg. 'tags')
-    #
-    # @yield [Sawyer::Resource] An OctoKit-provided response (which can be empty)
-    #
-    # @return [void]
-    def iterate_pages(client, method, *args)
-      args << DEFAULT_REQUEST_OPTIONS.merge(extract_request_args(args))
-
-      check_response { client.send(method, user_project, *args) }
-      last_response = client.last_response.tap do |response|
-        raise(MovedPermanentlyError, response.data[:url]) if response.status == 301
-      end
-
-      yield(last_response.data)
-
-      until (next_one = last_response.rels[:next]).nil?
-        last_response = check_response { next_one.get }
-        yield(last_response.data)
-      end
-    end
 
     def extract_request_args(args)
       if args.size == 1 && args.first.is_a?(Hash)
