@@ -35,6 +35,7 @@ module GitHubChangelogGenerator
       @cache_log    = nil
       @commits      = []
       @compares     = {}
+      @token_idx    = 0
       prepare_cache
       configure_octokit_ssl
       @client = Octokit::Client.new(github_options)
@@ -432,6 +433,10 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
         Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG
         Helper.log.warn @client.rate_limit
       end
+      if @client.rate_limit.remaining == 0
+        Helper.log.warn("Exausted retries, attempting to make a new client")
+        @client = Octokit::Client.new(github_options)
+      end
     end
 
     def sys_abort(msg)
@@ -459,7 +464,11 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
 
       Helper.log.warn NO_TOKEN_PROVIDED unless env_var
 
-      env_var
+      i = @token_idx
+      Helper.log.info "Using token at index: #{i}"
+      @token_idx = i + 1
+
+      env_var.split(',')[i]
     end
 
     # @return [String] helper to return Github "user/project"
