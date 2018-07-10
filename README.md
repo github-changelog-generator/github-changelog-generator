@@ -1,5 +1,4 @@
 [![Gem Version](https://badge.fury.io/rb/github_changelog_generator.svg)](http://badge.fury.io/rb/github_changelog_generator)
-[![Dependency Status](https://gemnasium.com/skywinder/github-changelog-generator.svg)](https://gemnasium.com/skywinder/github-changelog-generator)
 [![Build Status](https://travis-ci.org/skywinder/github-changelog-generator.svg?branch=master)](https://travis-ci.org/skywinder/github-changelog-generator)
 [![Build status](https://ci.appveyor.com/api/projects/status/xdfnfmdjfo0upm7m?svg=true)](https://ci.appveyor.com/project/olleolleolle/github-changelog-generator)
 [![Inline docs](http://inch-ci.org/github/skywinder/github-changelog-generator.svg)](http://inch-ci.org/github/skywinder/github-changelog-generator)
