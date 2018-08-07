@@ -12,7 +12,8 @@ module GitHubChangelogGenerator
       end
 
       # Async fetching events:
-      @fetcher.fetch_events_async(@issues + @pull_requests)
+      @fetcher.fetch_events_async(@issues)
+      @fetcher.fetch_events_async(@pull_requests)
     end
 
     # Async fetching of all tags dates
