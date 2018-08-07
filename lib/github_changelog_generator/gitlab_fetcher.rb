@@ -157,6 +157,9 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       i       = 0
       threads = []
       options = { }
+      if issues.empty?
+        return
+      end
       options[:target_type] = issues.first["merged_at"].nil? ? "issue" : "merge_request"
       issue_events = []
       @client.project_events(@project_id, options).auto_paginate do |event|
