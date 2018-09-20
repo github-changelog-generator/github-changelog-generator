@@ -63,6 +63,8 @@ module GitHubChangelogGenerator
       simple_list
       since_tag
       ssl_ca_file
+      summary_labels
+      summary_prefix
       token
       unreleased
       unreleased_label
