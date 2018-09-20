@@ -105,12 +105,11 @@ module GitHubChangelogGenerator
     def print_options
       return unless self[:verbose]
       Helper.log.info "Using these options:"
-      # pp(censored_values)
-      # For ruby 2.5.0 or avobe
-      censored_values.each{|key, value|
-        print(":", key, "=>", value)
+      # For ruby 2.5.0+
+      censored_values.each do |key, value|
+        print(key.inspect, "=>", value.inspect)
         puts ""
-      }
+      end
       puts ""
     end
 
