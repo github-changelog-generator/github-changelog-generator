@@ -2,7 +2,6 @@
 # frozen_string_literal: true
 
 require "optparse"
-require "pp"
 require "github_changelog_generator/version"
 require "github_changelog_generator/helper"
 
