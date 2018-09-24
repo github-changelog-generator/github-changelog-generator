@@ -55,7 +55,7 @@ module GitHubChangelogGenerator
     end
 
     def issue_line_with_body(line, issue)
-      return issue["body"] if @body_only && issue["body"].present?
+      return issue["body"].gsub(/(\r\n|\r|\n)/, "\s\s\n") if @body_only && issue["body"].present?
       return line if !@options[:issue_line_body] || issue["body"].blank?
 
       # get issue body till first line break
