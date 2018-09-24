@@ -194,6 +194,32 @@ You can look for params names from the [parser source code (#setup_parser)](http
 - Customize lots more! Tweak the changelog to fit your preferences :tophat:
 (*See `github_changelog_generator --help`  for details)*
 
+### Using the summary section feature
+
+For each version, you can add a _release summary_ with text, images, gif animations,
+etc, and show new features and notes clearly to the user. This is done using GitHub metadata.
+
+**Example**: adding the release summary for v1.0.0:
+
+1. Create a new GitHub Issue
+2. In the Issue's _Description_ field, add your release summary content
+```
+![image](https://user-images.githubusercontent.com/12690315/45935880-006a8200-bfeb-11e8-958e-ff742ae66b96.png)
+
+Hello, World! :tada:
+```
+3. Set the Issue Label `release-summary` and add it to the GitHub Milestone `v1.0.0`
+4. Close the Issue and execute `github-changelog-generator`
+5. The result looks like this:
+> ## [v1.0.0](https://github.com/skywinder/github-changelog-generator/tree/1.0.0) (2014-11-07)
+> [Full Changelog](https://github.com/skywinder/github-changelog-generator/compare/0.1.0...1.0.0)
+>
+> ![image](https://user-images.githubusercontent.com/12690315/45935880-006a8200-bfeb-11e8-958e-ff742ae66b96.png)
+>
+> Hello, World! :tada:
+>
+> **Implemented enhancements:**
+> - Add some features
 
 ### Alternatives
 
