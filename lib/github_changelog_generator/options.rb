@@ -106,6 +106,7 @@ module GitHubChangelogGenerator
     # Pretty-prints a censored options hash, if :verbose.
     def print_options
       return unless self[:verbose]
+
       Helper.log.info "Using these options:"
       # For ruby 2.5.0+
       censored_values.each do |key, value|

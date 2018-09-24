@@ -498,7 +498,7 @@ describe GitHubChangelogGenerator::OctoFetcher do
                   "commit_url" =>
                     "https://api.github.com/repos/skywinder/changelog_test/commits/decfe840d1a1b86e0c28700de5362d3365a29555",
                   "created_at" => "2015-07-16T12:21:16Z" }
-        commit = fetcher.fetch_commit(event)
+        commit = fetcher.fetch_commit(event["commit_id"])
 
         expectations = [
           %w[sha decfe840d1a1b86e0c28700de5362d3365a29555],

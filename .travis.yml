@@ -13,7 +13,7 @@ matrix:
     - rvm: 2.2.9
       install: true # This skips 'bundle install'
       script: gem build github_changelog_generator && bundle install
-      gemfile: spec/install-gem-in-bundler.gemfile
+      gemfile: spec/install_gem_in_bundler.gemfile
       after_success: true # This skips 'codeclimate-test-reporter'
     - rvm: 2.3.6
     - rvm: 2.4.3
