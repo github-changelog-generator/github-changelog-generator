@@ -31,6 +31,7 @@ module GitHubChangelogGenerator
     # Sets options using configuration file content
     def parse!
       return unless @file
+
       @file.each_with_index { |line, i| parse_line!(line, i + 1) }
       @file.close
     end
@@ -46,6 +47,7 @@ module GitHubChangelogGenerator
 
     def parse_line!(line, line_number)
       return if non_configuration_line?(line)
+
       option_name, value = extract_pair(line)
       @options[option_key_for(option_name)] = convert_value(value, option_name)
     rescue StandardError

@@ -42,6 +42,7 @@ module GitHubChangelogGenerator
 
     def prepare_cache
       return unless @http_cache
+
       @cache_file = @options.fetch(:cache_file) { File.join(Dir.tmpdir, "github-changelog-http-cache") }
       @cache_log  = @options.fetch(:cache_log) { File.join(Dir.tmpdir, "github-changelog-logger.log") }
       init_cache
@@ -253,6 +254,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       unless @compares["#{older}...#{newer}"]
         compare_data = check_github_response { @client.compare(user_project, older, newer || "HEAD") }
         raise StandardError, "Sha #{older} and sha #{newer} are not related; please file a github-changelog-generator issues and describe how to replicate this issue." if compare_data["status"] == "diverged"
+
         @compares["#{older}...#{newer}"] = stringify_keys_deep(compare_data.to_hash)
       end
       @compares["#{older}...#{newer}"]

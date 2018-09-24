@@ -88,6 +88,7 @@ module GitHubChangelogGenerator
           # weird like that apparently. Check for a rebased comment before erroring.
           no_events_pr = associate_rebase_comment_prs(tags, [pr], total)
           raise StandardError, "No merge sha found for PR #{pr['number']} via the GitHub API" unless no_events_pr.empty?
+
           found = true
           i += 1
           print("Associating PRs with tags: #{i}/#{total}\r") if @options[:verbose]
