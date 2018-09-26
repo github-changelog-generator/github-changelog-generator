@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 module GitHubChangelogGenerator
   class Generator
     MAX_THREAD_NUMBER = 25
@@ -156,18 +155,22 @@ module GitHubChangelogGenerator
     end
 
     # Fill :actual_date parameter of specified issue by closed date of the commit, if it was closed by commit.
+    # Or by merged_at, if that info exists.
     # @param [Hash] issue
     def find_closed_date_by_commit(issue)
-      unless issue["events"].nil?
-        # if it's PR -> then find "merged event", in case of usual issue -> fond closed date
-        compare_string = issue["merged_at"].nil? ? "closed" : "merged"
-        # reverse! - to find latest closed event. (event goes in date order)
-        issue["events"].reverse!.each do |event|
-          if event["event"].eql? compare_string
-            set_date_from_event(event, issue)
-            break
+      # in case of usual issue with no merge, find closed date.
+      if issue["merged_at"].nil?
+        unless issue["events"].nil?
+          # reverse! - to find latest closed event. (event goes in date order)
+          issue["events"].reverse!.each do |event|
+            if event["event"].eql? compare_string
+              set_date_from_event(event, issue)
+              break
+            end
           end
         end
+      else # if it's a PR, then go based on the merge event itself.
+        issue["actual_date"] = issue["merged_at"]
       end
       # TODO: assert issues, that remain without 'actual_date' hash for some reason.
     end
