@@ -1,0 +1,35 @@
+# Ruby CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-ruby/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+       - image: circleci/ruby:2.4.1-node-browsers
+
+    steps:
+      - checkout
+
+      # download and cache dependencies
+      - restore_cache:
+          keys:
+          - dependencies-{{ checksum "Gemfile" }}-{{ checksum "github_changelog_generator.gemspec" }}
+          # fallback to using the latest cache if no exact match is found
+          - dependencies
+
+      - run:
+          name: Install dependencies
+          command: |
+            bundle install --jobs=4 --retry=3 --path vendor/bundle
+
+      - save_cache:
+          paths:
+            - ./vendor/bundle
+          key: dependencies-{{ checksum "Gemfile" }}-{{ checksum "github_changelog_generator.gemspec" }}
+
+      # run tests
+      - run:
+          name: Run tests
+          command: |
+            bundle exec rspec --color --require spec_helper spec --format progress
