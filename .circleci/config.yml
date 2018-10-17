@@ -1,0 +1,27 @@
+# Ruby CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-ruby/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+       - image: circleci/ruby:2.5.1-node-browsers
+
+    steps:
+      - checkout
+
+      - run:
+          name: Install dependencies
+          command: |
+            bundle install --jobs=4 --retry=3 --path vendor/bundle
+
+      - run:
+          name: Run Rubocop checks
+          command: |
+            bundle exec rubocop
+
+      - run:
+          name: Run tests
+          command: |
+            bundle exec rspec --color --require spec_helper spec --format progress
