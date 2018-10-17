@@ -11,22 +11,11 @@ jobs:
     steps:
       - checkout
 
-      # download and cache dependencies
-      - restore_cache:
-          keys:
-          - dependencies-{{ checksum "Gemfile" }}-{{ checksum "github_changelog_generator.gemspec" }}
-          # fallback to using the latest cache if no exact match is found
-          - dependencies
-
+      # install dependencies
       - run:
           name: Install dependencies
           command: |
             bundle install --jobs=4 --retry=3 --path vendor/bundle
-
-      - save_cache:
-          paths:
-            - ./vendor/bundle
-          key: dependencies-{{ checksum "Gemfile" }}-{{ checksum "github_changelog_generator.gemspec" }}
 
       # run tests
       - run:
