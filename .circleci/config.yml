@@ -2,26 +2,64 @@
 #
 # Check https://circleci.com/docs/2.0/language-ruby/ for more details
 #
-version: 2
+version: 2.0
+
+shared: &shared
+  steps:
+    - checkout
+
+    - run:
+        name: Install dependencies
+        command: |
+          bundle install --jobs=4 --retry=3 --path vendor/bundle
+
+    - run:
+        name: Run Rubocop checks
+        command: |
+          bundle exec rubocop
+
+    - run:
+        name: Run tests
+        command: |
+          bundle exec rspec --color --require spec_helper spec --format progress
+
 jobs:
-  build:
+  "ruby-2.2":
+    <<: *shared
     docker:
-       - image: circleci/ruby:2.5.1-node-browsers
+      - image: circleci/ruby:2.2.10-node-browsers
+  "ruby-2.3":
+    <<: *shared
+    docker:
+      - image: circleci/ruby:2.3.7-node-browsers
+  "ruby-2.4":
+    <<: *shared
+    docker:
+      - image: circleci/ruby:2.4.4-node-browsers
+  "ruby-2.5":
+    <<: *shared
+    docker:
+      - image: circleci/ruby:2.5.1-node-browsers
+  "jruby-9.1":
+    <<: *shared
+    docker:
+      - image: circleci/jruby:9.1-jdk
+        environment:
+          JRUBY_OPTS: "--debug"
+  "jruby-9.2":
+    <<: *shared
+    docker:
+      - image: circleci/jruby:9.2-jdk
+        environment:
+          JRUBY_OPTS: "--debug"
 
-    steps:
-      - checkout
-
-      - run:
-          name: Install dependencies
-          command: |
-            bundle install --jobs=4 --retry=3 --path vendor/bundle
-
-      - run:
-          name: Run Rubocop checks
-          command: |
-            bundle exec rubocop
-
-      - run:
-          name: Run tests
-          command: |
-            bundle exec rspec --color --require spec_helper spec --format progress
+workflows:
+  version: 2
+  build:
+    jobs:
+      - "ruby-2.2"
+      - "ruby-2.3"
+      - "ruby-2.4"
+      - "ruby-2.5"
+      - "jruby-9.1"
+      - "jruby-9.2"
