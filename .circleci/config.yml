@@ -11,19 +11,16 @@ jobs:
     steps:
       - checkout
 
-      # install dependencies
       - run:
           name: Install dependencies
           command: |
             bundle install --jobs=4 --retry=3 --path vendor/bundle
 
-      # run rubocop checks
       - run:
           name: Run Rubocop checks
           command: |
             bundle exec rubocop
 
-      # run tests
       - run:
           name: Run tests
           command: |
