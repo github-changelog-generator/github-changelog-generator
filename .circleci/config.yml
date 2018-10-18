@@ -24,10 +24,6 @@ shared: &shared
           bundle exec rspec --color --require spec_helper spec --format progress
 
 jobs:
-  "ruby-2.2":
-    <<: *shared
-    docker:
-      - image: circleci/ruby:2.2.10-node-browsers
   "ruby-2.3":
     <<: *shared
     docker:
@@ -57,7 +53,6 @@ workflows:
   version: 2
   build:
     jobs:
-      - "ruby-2.2"
       - "ruby-2.3"
       - "ruby-2.4"
       - "ruby-2.5"
