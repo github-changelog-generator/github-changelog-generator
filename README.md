@@ -39,13 +39,21 @@ release (or version) of the project."
 
 :arrow_right: *[http://keepachangelog.com](http://keepachangelog.com)*
 
+## dependencies
+
+You must install [Ruby](https://www.ruby-lang.org/en/documentation/installation/) before installing github_changelog_generator.
+
 ## Installation
 
-    $ [sudo] gem install github_changelog_generator
+$ gem install github_changelog_generator
+
+On Linux systems: $ [sudo] gem install github_changelog_generator
 
 See also Troubleshooting.
 
 ## Running with Docker
+
+Using [Docker](https://www.docker.com/products/docker-desktop) is an alternative to gem:
 
     $ docker run -it --rm -v "$(pwd)":/usr/local/src/your-app ferrarimarco/github-changelog-generator
 
