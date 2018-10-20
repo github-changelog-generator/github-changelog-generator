@@ -41,11 +41,23 @@ release (or version) of the project."
 
 ## Installation
 
-    $ [sudo] gem install github_changelog_generator
+GitHub Changelog Generator is a [Ruby](https://www.ruby-lang.org/)
+program, distributed as a RubyGem. The Ruby language homepage has an [Installation page](https://www.ruby-lang.org/en/documentation/installation/).
 
-See also Troubleshooting.
+Install the gem like:
+
+    $ gem install github_changelog_generator
+
+Depending on your system, you _may_ need to run the shell as an Administrator (Windows),
+or use `sudo gem install github_changelog_generator` (Linux).
 
 ## Running with Docker
+
+Using [Docker](https://www.docker.com/products/docker-desktop) is an alternative to installing Ruby and the gem.
+
+`ferrarimarco` has made a Docker image available that you can use.
+
+Example invocation:
 
     $ docker run -it --rm -v "$(pwd)":/usr/local/src/your-app ferrarimarco/github-changelog-generator
 
