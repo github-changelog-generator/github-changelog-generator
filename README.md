@@ -51,6 +51,8 @@ Install the gem like:
 Depending on your system, you need to run the shell as an Administrator (Windows),
 or use `sudo gem install github_changelog_generator` (Linux).
 
+In Windows, you must [update your path variables](https://github.com/github-changelog-generator/github-changelog-generator/blob/master/Troubleshooting.md) in order for github_changelog_generator to work.
+
 ## Running with Docker
 
 Using [Docker](https://www.docker.com/products/docker-desktop) is an alternative to installing Ruby and the gem.
