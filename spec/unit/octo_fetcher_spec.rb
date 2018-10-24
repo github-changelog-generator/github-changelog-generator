@@ -520,8 +520,13 @@ describe GitHubChangelogGenerator::OctoFetcher do
                "https://github.com/skywinder/changelog_test/commit/7ec095e5e3caceacedabf44d0b9b10da17c92e51" }]]
         ]
 
-        expectations.each do |property, val|
-          expect(commit[property]).to eq(val)
+        expectations.each do |property, value|
+          case value
+          when String, Array
+            expect(commit[property]).to eq(value)
+          when Hash
+            expect(commit[property]).to include(value)
+          end
         end
       end
     end
