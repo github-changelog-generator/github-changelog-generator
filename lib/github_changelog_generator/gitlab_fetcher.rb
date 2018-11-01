@@ -85,10 +85,10 @@ module GitLabChangelogGenerator
       print_empty_line
 
       if tags.count == 0
-        Helper.log.warn "Warning: Can't find any tags in repo. \
+        GitHubChangelogGenerator::Helper.log.warn "Warning: Can't find any tags in repo. \
 Make sure, that you push tags to remote repo via 'git push --tags'"
       else
-        Helper.log.info "Found #{tags.count} tags"
+        GitHubChangelogGenerator::Helper.log.info "Found #{tags.count} tags"
       end
       # tags are a Sawyer::Resource. Convert to hash
       tags.map { |resource| stringify_keys_deep(resource.to_hash) }
@@ -117,7 +117,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       end
 
       print_empty_line
-      Helper.log.info "Received issues: #{issues.count}"
+      GitHubChangelogGenerator::Helper.log.info "Received issues: #{issues.count}"
 
       # separate arrays of issues and pull requests:
       [issues.map { |issue| stringify_keys_deep(issue.to_hash) }, fetch_closed_pull_requests]
@@ -145,7 +145,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
 
       print_empty_line
 
-      Helper.log.info "Pull Request count: #{pull_requests.count}"
+      GitHubChangelogGenerator::Helper.log.info "Pull Request count: #{pull_requests.count}"
       pull_requests.map { |pull_request| stringify_keys_deep(pull_request.to_hash) }
     end
 
@@ -193,7 +193,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       # to clear line from prev print
       print_empty_line
 
-      Helper.log.info "Fetching events for issues and PR: #{i}"
+      GitHubChangelogGenerator::Helper.log.info "Fetching events for issues and PR: #{i}"
     end
 
     # Fetch comments for PRs and add them to "comments"
@@ -325,7 +325,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       # to clear line from prev print
       print_empty_line
 
-      Helper.log.info "Fetching SHAs for tags: #{i}"
+      GitHubChangelogGenerator::Helper.log.info "Fetching SHAs for tags: #{i}"
       nil
     end
 
@@ -376,7 +376,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
 
     # Presents the exception, and the aborts with the message.
     def fail_with_message(error, message)
-      Helper.log.error("#{error.class}: #{error.message}")
+      GitHubChangelogGenerator::Helper.log.error("#{error.class}: #{error.message}")
       sys_abort(message)
     end
 
@@ -398,10 +398,10 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
 
     def retry_callback
       proc do |exception, try, elapsed_time, next_interval|
-        Helper.log.warn("RETRY - #{exception.class}: '#{exception.message}'")
-        Helper.log.warn("#{try} tries in #{elapsed_time} seconds and #{next_interval} seconds until the next try")
-        Helper.log.warn RATE_LIMIT_EXCEEDED_MSG
-        Helper.log.warn @client.rate_limit
+        GitHubChangelogGenerator::Helper.log.warn("RETRY - #{exception.class}: '#{exception.message}'")
+        GitHubChangelogGenerator::Helper.log.warn("#{try} tries in #{elapsed_time} seconds and #{next_interval} seconds until the next try")
+        GitHubChangelogGenerator::Helper.log.warn RATE_LIMIT_EXCEEDED_MSG
+        GitHubChangelogGenerator::Helper.log.warn @client.rate_limit
       end
     end
 
@@ -428,7 +428,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     def fetch_auth_token
       env_var = @options[:token].presence || ENV["CHANGELOG_GITLAB_TOKEN"]
 
-      Helper.log.warn NO_TOKEN_PROVIDED unless env_var
+      GitHubChangelogGenerator::Helper.log.warn NO_TOKEN_PROVIDED unless env_var
 
       env_var
     end
