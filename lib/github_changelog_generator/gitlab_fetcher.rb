@@ -440,7 +440,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
 
     # Returns Hash of all querystring variables in given URI.
     #
-    # @param [String] uri eg. https://api.github.com/repositories/43914960/tags?page=37&foo=1
+    # @param [String] uri eg. https://gitlab.example.com/api/v4/projects/43914960/repository/tags?page=37&foo=1
     # @return [Hash] of all GET variables. eg. { 'page' => 37, 'foo' => 1 }
     def querystring_as_hash(uri)
       Hash[URI.decode_www_form(URI(uri).query || "")]
