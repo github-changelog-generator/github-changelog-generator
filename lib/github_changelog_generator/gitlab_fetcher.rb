@@ -5,7 +5,7 @@ require "retriable"
 require "gitlab"
 
 module GitLabChangelogGenerator
-  # A Fetcher responsible for all requests to GitHub and all basic manipulation with related data
+  # A Fetcher responsible for all requests to GitLab and all basic manipulation with related data
   # (such as filtering, validating, e.t.c)
   #
   # Example:
@@ -15,10 +15,10 @@ module GitLabChangelogGenerator
     MAX_THREAD_NUMBER = 25
     MAX_FORBIDDEN_RETRIES = 100
     CHANGELOG_AUTH_TOKEN = "CHANGELOG_AUTH_TOKEN"
-    RATE_LIMIT_EXCEEDED_MSG = "Warning: Can't finish operation: GitHub API rate limit exceeded, changelog may be " \
+    RATE_LIMIT_EXCEEDED_MSG = "Warning: Can't finish operation: GitLab API rate limit exceeded, changelog may be " \
     "missing some issues. You can limit the number of issues fetched using the `--max-issues NUM` argument."
     NO_TOKEN_PROVIDED = "Warning: No token provided (-t option) and variable $CHANGELOG_AUTH_TOKEN was not found. " \
-    "This script can make only 50 requests to GitHub API per hour without token!"
+    "This script can make only 50 requests to GitLab API per hour without token!"
 
     # @param options [Hash] Options passed in
     # @option options [String] :user Gitlab username
@@ -417,7 +417,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       print_in_same_line("                                                                       ")
     end
 
-    # Returns GitHub token. First try to use variable, provided by --token option,
+    # Returns AUTH token. First try to use variable, provided by --token option,
     # otherwise try to fetch it from CHANGELOG_AUTH_TOKEN env variable.
     #
     # @return [String]
