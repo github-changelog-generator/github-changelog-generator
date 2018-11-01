@@ -35,7 +35,7 @@ module GitHubChangelogGenerator
     def initialize(options = {})
       @options        = options
       @tag_times_hash = {}
-      @fetcher        = options[:gitlab] ? GitHubChangelogGenerator::GitlabFetcher.new(options) : GitHubChangelogGenerator::OctoFetcher.new(options)
+      @fetcher        = options[:gitlab] ? GitLabChangelogGenerator::GitlabFetcher.new(options) : GitHubChangelogGenerator::OctoFetcher.new(options)
       @sections       = []
     end
 

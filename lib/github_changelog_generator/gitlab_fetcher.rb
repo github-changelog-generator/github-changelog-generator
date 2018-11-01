@@ -4,18 +4,18 @@ require "tmpdir"
 require "retriable"
 require "gitlab"
 
-module GitHubChangelogGenerator
+module GitLabChangelogGenerator
   # A Fetcher responsible for all requests to GitHub and all basic manipulation with related data
   # (such as filtering, validating, e.t.c)
   #
   # Example:
-  # fetcher = GitHubChangelogGenerator::OctoFetcher.new(options)
+  # fetcher = GitLabChangelogGenerator::GitlabFetcher.new(options)
   class GitlabFetcher
     PER_PAGE_NUMBER   = 100
     MAX_THREAD_NUMBER = 25
     MAX_FORBIDDEN_RETRIES = 100
     CHANGELOG_GITHUB_TOKEN = "CHANGELOG_GITHUB_TOKEN"
-    GH_RATE_LIMIT_EXCEEDED_MSG = "Warning: Can't finish operation: GitHub API rate limit exceeded, changelog may be " \
+    RATE_LIMIT_EXCEEDED_MSG = "Warning: Can't finish operation: GitHub API rate limit exceeded, changelog may be " \
     "missing some issues. You can limit the number of issues fetched using the `--max-issues NUM` argument."
     NO_TOKEN_PROVIDED = "Warning: No token provided (-t option) and variable $CHANGELOG_GITHUB_TOKEN was not found. " \
     "This script can make only 50 requests to GitHub API per hour without token!"
@@ -55,7 +55,7 @@ module GitHubChangelogGenerator
 
     def gitlab_options
       result = {}
-      access_token = fetch_github_token
+      access_token = fetch_auth_token
       result[:private_token] = access_token if access_token
       endpoint = @options[:github_endpoint]
       result[:endpoint] = endpoint if endpoint
@@ -371,7 +371,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     rescue Gitlab::Error::Forbidden => e
       fail_with_message(e, "Exceeded retry limit")
     rescue Gitlab::Error::Unauthorized => e
-      fail_with_message(e, "Error: wrong GitHub token")
+      fail_with_message(e, "Error: wrong GitLab token")
     end
 
     # Presents the exception, and the aborts with the message.
@@ -400,7 +400,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       proc do |exception, try, elapsed_time, next_interval|
         Helper.log.warn("RETRY - #{exception.class}: '#{exception.message}'")
         Helper.log.warn("#{try} tries in #{elapsed_time} seconds and #{next_interval} seconds until the next try")
-        Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG
+        Helper.log.warn RATE_LIMIT_EXCEEDED_MSG
         Helper.log.warn @client.rate_limit
       end
     end
@@ -425,15 +425,15 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     # otherwise try to fetch it from CHANGELOG_GITHUB_TOKEN env variable.
     #
     # @return [String]
-    def fetch_github_token
-      env_var = @options[:token].presence || ENV["CHANGELOG_GITHUB_TOKEN"]
+    def fetch_auth_token
+      env_var = @options[:token].presence || ENV["CHANGELOG_GITLAB_TOKEN"]
 
       Helper.log.warn NO_TOKEN_PROVIDED unless env_var
 
       env_var
     end
 
-    # @return [String] helper to return Github "user/project"
+    # @return [String] "user/project" slug
     def user_project
       "#{@options[:user]}/#{@options[:project]}"
     end
