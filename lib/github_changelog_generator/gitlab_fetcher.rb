@@ -46,9 +46,7 @@ module GitLabChangelogGenerator
     def find_project_id
       project_id = nil
       @client.project_search(@project).auto_paginate do |project|
-        if project.namespace.name.eql? @user
-          project_id = project.id
-        end
+        project_id = project.id if project.namespace.name.eql? @user
       end
       project_id
     end
@@ -79,7 +77,7 @@ module GitLabChangelogGenerator
     def fetch_tags
       tags = []
 
-       @client.tags(@project_id, DEFAULT_REQUEST_OPTIONS).auto_paginate do |new_tag|
+      @client.tags(@project_id, DEFAULT_REQUEST_OPTIONS).auto_paginate do |new_tag|
         tags.push(new_tag)
       end
       print_empty_line
@@ -139,7 +137,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
         new_pr["pull_request"] = true
         new_pr["user"] = { login: new_pr["author"]["username"], html_url: new_pr["author"]["web_url"] }
         # to make it work with older gitlab version or repos that lived across versions
-        new_pr["merge_commit_sha"] = new_pr["merge_commit_sha"].nil? ? new_pr["sha"]: new_pr["merge_commit_sha"]
+        new_pr["merge_commit_sha"] = new_pr["merge_commit_sha"].nil? ? new_pr["sha"] : new_pr["merge_commit_sha"]
         pull_requests.push(new_pr)
       end
 
@@ -156,10 +154,8 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     def fetch_events_async(issues)
       i       = 0
       threads = []
-      options = { }
-      if issues.empty?
-        return
-      end
+      options = {}
+      return if issues.empty?
       options[:target_type] = issues.first["merged_at"].nil? ? "issue" : "merge_request"
       issue_events = []
       @client.project_events(@project_id, options).auto_paginate do |event|

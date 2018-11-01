@@ -77,12 +77,7 @@ module GitHubChangelogGenerator
         # https://developer.github.com/v3/pulls/#get-a-single-pull-request vs.
         # https://developer.github.com/v3/pulls/#list-pull-requests
         # gitlab API has this
-        merge_commit_sha = nil
-        if pr.has_key?("merge_commit_sha")
-          merge_commit_sha = pr["merge_commit_sha"]
-        elsif pr["events"] && (event = pr["events"].find { |e| e["event"] == "merged" })
-          merge_commit_sha = event["commit_id"]
-        end
+        merge_commit_sha = try_merge_commit_sha_from_gitlab(pr)
         if merge_commit_sha
           # Iterate tags.reverse (oldest to newest) to find first tag of each PR.
           if (oldest_tag = tags.reverse.find { |tag| tag["shas_in_tag"].include?(merge_commit_sha) })
@@ -102,6 +97,16 @@ module GitHubChangelogGenerator
         end
         found
       end
+    end
+
+    def try_merge_commit_sha_from_gitlab(merge_request)
+      merge_commit_sha = nil
+      if merge_request.key?("merge_commit_sha")
+        merge_commit_sha = merge_request["merge_commit_sha"]
+      elsif merge_request["events"] && (event = merge_request["events"].find { |e| e["event"] == "merged" })
+        merge_commit_sha = event["commit_id"]
+      end
+      merge_commit_sha
     end
 
     # Associate merged PRs by the HEAD of the release branch. If no
