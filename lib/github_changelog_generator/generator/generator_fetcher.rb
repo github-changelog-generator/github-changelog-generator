@@ -78,12 +78,12 @@ module GitHubChangelogGenerator
         # https://developer.github.com/v3/pulls/#list-pull-requests
         # gitlab API has this
         merge_commit_sha = nil
-        if pr.has_key?("merge_commit_sha") then
+        if pr.has_key?("merge_commit_sha")
           merge_commit_sha = pr["merge_commit_sha"]
         elsif pr["events"] && (event = pr["events"].find { |e| e["event"] == "merged" })
           merge_commit_sha = event["commit_id"]
         end
-        unless merge_commit_sha.nil?
+        if merge_commit_sha
           # Iterate tags.reverse (oldest to newest) to find first tag of each PR.
           if (oldest_tag = tags.reverse.find { |tag| tag["shas_in_tag"].include?(merge_commit_sha) })
             pr["first_occurring_tag"] = oldest_tag["name"]
