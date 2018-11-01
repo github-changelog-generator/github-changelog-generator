@@ -21,8 +21,8 @@ module GitLabChangelogGenerator
     "This script can make only 50 requests to GitLab API per hour without token!"
 
     # @param options [Hash] Options passed in
-    # @option options [String] :user Gitlab username
-    # @option options [String] :project Gitlab project
+    # @option options [String] :user GitLab username
+    # @option options [String] :project GitLab project
     # @option options [String] :since Only issues updated at or after this time are returned. This is a timestamp in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ. eg. Time.parse("2016-01-01 10:00:00").iso8601
     # @option options [Boolean] :http_cache Use ActiveSupport::Cache::FileStore to cache http requests
     # @option options [Boolean] :cache_file If using http_cache, this is the cache file path
@@ -78,17 +78,16 @@ module GitLabChangelogGenerator
       tags = []
 
       @client.tags(@project_id, DEFAULT_REQUEST_OPTIONS).auto_paginate do |new_tag|
-        tags.push(new_tag)
+        tags << new_tag
       end
       print_empty_line
 
-      if tags.count == 0
+      if tags.empty?
         GitHubChangelogGenerator::Helper.log.warn "Warning: Can't find any tags in repo. \
 Make sure, that you push tags to remote repo via 'git push --tags'"
       else
         GitHubChangelogGenerator::Helper.log.info "Found #{tags.count} tags"
       end
-      # tags are a Sawyer::Resource. Convert to hash
       tags.map { |resource| stringify_keys_deep(resource.to_hash) }
     end
 
@@ -98,8 +97,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       }.tap { |options| options[:since] = @since if @since }
     end
 
-    # This method fetch all closed issues and separate them to pull requests and pure issues
-    # (pull request is kind of issue in term of GitHub)
+    # This method fetch all closed issues pull requests (GitLab uses the term "merge requests")
     #
     # @return [Tuple] with (issues [Array <Hash>], pull-requests [Array <Hash>])
     def fetch_closed_issues_and_pr
@@ -138,7 +136,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
         new_pr["user"] = { login: new_pr["author"]["username"], html_url: new_pr["author"]["web_url"] }
         # to make it work with older gitlab version or repos that lived across versions
         new_pr["merge_commit_sha"] = new_pr["merge_commit_sha"].nil? ? new_pr["sha"] : new_pr["merge_commit_sha"]
-        pull_requests.push(new_pr)
+        pull_requests << new_pr
       end
 
       print_empty_line
@@ -156,15 +154,15 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       threads = []
       options = {}
       return if issues.empty?
+
       options[:target_type] = issues.first["merged_at"].nil? ? "issue" : "merge_request"
       issue_events = []
       @client.project_events(@project_id, options).auto_paginate do |event|
         event = stringify_keys_deep(event.to_hash)
         # gitlab to github
         event["event"] = event["action_name"]
-        issue_events.push(event)
+        issue_events << event
       end
-      # p issue_events
 
       issues.each_slice(MAX_THREAD_NUMBER) do |issues_slice|
         issues_slice.each do |issue|
@@ -175,7 +173,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
                 if new_event["action_name"].eql? "closed"
                   issue["closed_at"] = issue["closed_at"].nil? ? new_event["created_at"] : issue["closed_at"]
                 end
-                issue["events"].push(new_event)
+                issue["events"] << new_event
               end
             end
             print_in_same_line("Fetching events for #{options[:target_type]}s: #{i + 1}/#{issues.count}")
@@ -194,7 +192,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
 
     # Fetch comments for PRs and add them to "comments"
     #
-    # @param [Array] prs The array of PRs.
+    # @param prs [Array] PRs for which to fetch comments
     # @return [Void] No return; PRs are updated in-place.
     def fetch_comments_async(prs)
       threads = []
@@ -219,18 +217,18 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
 
     # Fetch tag time from repo
     #
-    # @param [Hash] tag GitHub data item about a Tag
+    # @param [Hash] tag GitLab data item about a Tag
     #
     # @return [Time] time of specified tag
     def fetch_date_of_tag(tag)
       Time.parse(tag["commit"]["committed_date"])
     end
 
-    # Fetch and cache comparison between two github refs
+    # Fetch and cache comparison between two GitLab refs
     #
     # @param [String] older The older sha/tag/branch.
     # @param [String] newer The newer sha/tag/branch.
-    # @return [Hash] Github api response for comparison.
+    # @return [Hash] GitLab api response for comparison.
     def fetch_compare(older, newer)
       unless @compares["#{older}...#{newer}"]
         compare_data = check_response { @client.compare(@project_id, older, newer || "HEAD") }
@@ -240,7 +238,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
         end
         # TODO: do not know what the equivalent for gitlab is
         if compare_data["compare_same_ref"] == true
-          raise StandardError, "Sha #{older} and sha #{newer} are not related; please file a github-changelog-generator issues and describe how to replicate this issue."
+          raise StandardError, "Sha #{older} and sha #{newer} are not related; please file a github-changelog-generator issue and describe how to replicate this issue."
         end
         @compares["#{older}...#{newer}"] = stringify_keys_deep(compare_data.to_hash)
       end
@@ -276,7 +274,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
         @client.commits(@project_id).auto_paginate do |new_commit|
           new_commit = stringify_keys_deep(new_commit.to_hash)
           new_commit["sha"] = new_commit["id"]
-          @commits.push(new_commit)
+          @commits << new_commit
         end
       end
       @commits
@@ -298,7 +296,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     # "shas_in_tag"
     #
     # @param [Array] tags The array of tags.
-    # @return [Nil] No return; tags are updated in-place.
+    # @return [void] No return; tags are updated in-place.
     def fetch_tag_shas_async(tags)
       i = 0
       threads = []
