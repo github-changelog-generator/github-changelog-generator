@@ -33,9 +33,9 @@ describe GitHubChangelogGenerator::Reader do
       # it { is_expected.to have_all_string_keys }
     end
     context "when given version, url and date" do
-      subject { @reader.parse_heading("## [1.3.10](https://github.com/skywinder/Github-Changelog-Generator/tree/1.3.10) (2015-03-18)") }
+      subject { @reader.parse_heading("## [1.3.10](https://github.com/github-changelog-generator/Github-Changelog-Generator/tree/1.3.10) (2015-03-18)") }
       it { is_expected.to include("version" => "1.3.10") }
-      it { is_expected.to include("url" => "https://github.com/skywinder/Github-Changelog-Generator/tree/1.3.10") }
+      it { is_expected.to include("url" => "https://github.com/github-changelog-generator/Github-Changelog-Generator/tree/1.3.10") }
       it { is_expected.to include("date" => "2015-03-18") }
     end
     context "when no url and date is provided" do
@@ -64,7 +64,7 @@ describe GitHubChangelogGenerator::Reader do
       it { is_expected.not_to be_empty }
       it { expect(subject.count).to eq(28) }
       it { expect(subject.first).to include("version" => "1.3.10") }
-      it { expect(subject.first).to include("url" => "https://github.com/skywinder/Github-Changelog-Generator/tree/1.3.10") }
+      it { expect(subject.first).to include("url" => "https://github.com/github-changelog-generator/Github-Changelog-Generator/tree/1.3.10") }
       it { expect(subject.first).to include("date" => "2015-03-18") }
       it { expect(subject.first).to include("content") }
       it "content should not be empty" do
