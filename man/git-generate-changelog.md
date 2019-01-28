@@ -259,8 +259,8 @@ Written by Petr Korolev sky4winder@gmail.com
 
 ## REPORTING BUGS
 
-&lt;<https://github.com/skywinder/github-changelog-generator/issues>&gt;
+&lt;<https://github.com/github-changelog-generator/github-changelog-generator/issues>&gt;
 
 ## SEE ALSO
 
-&lt;<https://github.com/skywinder/github-changelog-generator/>&gt;
+&lt;<https://github.com/github-changelog-generator/github-changelog-generator/>&gt;

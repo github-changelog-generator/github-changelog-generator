@@ -39,7 +39,7 @@ module GitHubChangelogGenerator
     # Parse issue and generate single line formatted issue line.
     #
     # Example output:
-    # - Add coveralls integration [\#223](https://github.com/skywinder/github-changelog-generator/pull/223) (@skywinder)
+    # - Add coveralls integration [\#223](https://github.com/github-changelog-generator/github-changelog-generator/pull/223) (@github-changelog-generator)
     #
     # @param [Hash] issue Fetched issue from GitHub
     # @return [String] Markdown-formatted single issue
