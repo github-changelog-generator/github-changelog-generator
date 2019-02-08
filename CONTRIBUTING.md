@@ -5,7 +5,7 @@ Bug reports and pull requests from users are what keep this project working.
 ## Basics
 
 1. Create an issue and describe your idea
-2. [Fork it](https://github.com/skywinder/github-changelog-generator/fork)
+2. [Fork it](https://github.com/github-changelog-generator/github-changelog-generator/fork)
 3. Create your feature branch (`git checkout -b my-new-feature`)
 4. Commit your changes (`git commit -am 'Add some feature'`)
 5. Publish the branch (`git push origin my-new-feature`)
@@ -14,7 +14,7 @@ Bug reports and pull requests from users are what keep this project working.
 ## Checking your work
 
 You can test your workflow with changelog generator with
-[the skywinder/changelog_test repo].
+[the github-changelog-generator/changelog_test repo].
 
 You can run the test suite.
 
@@ -22,7 +22,7 @@ You can run [RuboCop] to check code style.
 
 The default Rake task, runnable using `rake`, calls `rubocop`, then `spec`.
 
-[the skywinder/changelog_test repo]: https://github.com/skywinder/changelog_test/
+[the github-changelog-generator/changelog_test repo]: https://github.com/github-changelog-generator/changelog_test/
 [RuboCop]: http://rubocop.readthedocs.io/en/latest/
 
 ## Write documentation
@@ -53,8 +53,8 @@ The man page is for the `git generate-changelog` Git sub-command, which is a wra
 
 Use the [ronn] gem to generate `.1` and `.html` artifacts like this: `cd man; ronn git-generate-changelog.md`
 
-[wiki]: https://github.com/skywinder/github-changelog-generator/wiki
+[wiki]: https://github.com/github-changelog-generator/github-changelog-generator/wiki
 [YARD]: https://yardoc.org/
 [github-changelog-generator on Rubydoc.info]: http://www.rubydoc.info/gems/github_changelog_generator
 [ronn]: https://github.com/rtomayko/ronn
-[github-changelog-generator on Inch CI]: https://inch-ci.org/github/skywinder/github-changelog-generator
+[github-changelog-generator on Inch CI]: https://inch-ci.org/github/github-changelog-generator/github-changelog-generator

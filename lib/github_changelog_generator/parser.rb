@@ -2,7 +2,6 @@
 # frozen_string_literal: true
 
 require "optparse"
-require "pp"
 require "github_changelog_generator/version"
 require "github_changelog_generator/helper"
 
@@ -55,6 +54,9 @@ module GitHubChangelogGenerator
         end
         opts.on("-b", "--base [NAME]", "Optional base file to append generated changes to.") do |last|
           options[:base] = last
+        end
+        opts.on("--summary-label [LABEL]", "Set up custom label for the release summary section. Default is \"\".") do |v|
+          options[:summary_prefix] = v
         end
         opts.on("--breaking-label [LABEL]", "Set up custom label for the breaking changes section. Default is \"**Breaking changes:**\".") do |v|
           options[:breaking_prefix] = v
@@ -130,6 +132,9 @@ module GitHubChangelogGenerator
         end
         opts.on("--exclude-labels  x,y,z", Array, "Issues with the specified labels will be excluded from changelog. Default is 'duplicate,question,invalid,wontfix'.") do |list|
           options[:exclude_labels] = list
+        end
+        opts.on("--summary-labels x,y,z", Array, 'Issues with these labels will be added to a new section, called "Release Summary". The section display only body of issues. Default is \'release-summary,summary\'.') do |list|
+          options[:summary_labels] = list
         end
         opts.on("--breaking-labels x,y,z", Array, 'Issues with these labels will be added to a new section, called "Breaking changes". Default is \'backwards-incompatible,breaking\'.') do |list|
           options[:breaking_labels] = list
@@ -230,6 +235,7 @@ module GitHubChangelogGenerator
         unreleased_label: "Unreleased",
         compare_link: true,
         exclude_labels: ["duplicate", "question", "invalid", "wontfix", "Duplicate", "Question", "Invalid", "Wontfix", "Meta: Exclude From Changelog"],
+        summary_labels: ["Release summary", "release-summary", "Summary", "summary"],
         breaking_labels: ["backwards-incompatible", "Backwards incompatible", "breaking"],
         enhancement_labels: ["enhancement", "Enhancement", "Type: Enhancement"],
         bug_labels: ["bug", "Bug", "Type: Bug"],
@@ -246,6 +252,7 @@ module GitHubChangelogGenerator
         header: "# Changelog",
         merge_prefix: "**Merged pull requests:**",
         issue_prefix: "**Closed issues:**",
+        summary_prefix: "",
         breaking_prefix: "**Breaking changes:**",
         enhancement_prefix: "**Implemented enhancements:**",
         bug_prefix: "**Fixed bugs:**",

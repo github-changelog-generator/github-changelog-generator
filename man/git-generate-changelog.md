@@ -35,6 +35,10 @@ Automatically generate changelog from your tags, issues, labels and pull request
 
   Optional base file to append generated changes to.
 
+  --summary-label [LABEL]
+
+  Set up custom label for the release summary section. Default is "".
+
   --breaking-label [LABEL]
 
   Set up custom label for breaking changes section. Default is "**Breaking changes:**".
@@ -134,6 +138,10 @@ Automatically generate changelog from your tags, issues, labels and pull request
   --exclude-labels x,y,z
 
   Issues with the specified labels will be excluded from changelog. Default is 'duplicate,question,invalid,wontfix'.
+
+  --summary-labels x,y,z
+
+  Issues with these labels will be added to a new section, called "Release Summary". The section display only body of issues. Default is 'Release summary,release-summary,Summary,summary'.
 
   --breaking-labels x,y,z
 
@@ -251,8 +259,8 @@ Written by Petr Korolev sky4winder@gmail.com
 
 ## REPORTING BUGS
 
-&lt;<https://github.com/skywinder/github-changelog-generator/issues>&gt;
+&lt;<https://github.com/github-changelog-generator/github-changelog-generator/issues>&gt;
 
 ## SEE ALSO
 
-&lt;<https://github.com/skywinder/github-changelog-generator/>&gt;
+&lt;<https://github.com/github-changelog-generator/github-changelog-generator/>&gt;

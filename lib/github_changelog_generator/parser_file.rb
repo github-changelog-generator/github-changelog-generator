@@ -31,6 +31,7 @@ module GitHubChangelogGenerator
     # Sets options using configuration file content
     def parse!
       return unless @file
+
       @file.each_with_index { |line, i| parse_line!(line, i + 1) }
       @file.close
     end
@@ -46,6 +47,7 @@ module GitHubChangelogGenerator
 
     def parse_line!(line, line_number)
       return if non_configuration_line?(line)
+
       option_name, value = extract_pair(line)
       @options[option_key_for(option_name)] = convert_value(value, option_name)
     rescue StandardError
@@ -67,7 +69,7 @@ module GitHubChangelogGenerator
     end
 
     KNOWN_ARRAY_KEYS = %i[exclude_labels include_labels
-                          breaking_labels enhancement_labels bug_labels
+                          summary_labels breaking_labels enhancement_labels bug_labels
                           deprecated_labels removed_labels security_labels
                           issue_line_labels between_tags exclude_tags]
     KNOWN_INTEGER_KEYS = [:max_issues]
