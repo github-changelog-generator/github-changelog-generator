@@ -7,9 +7,7 @@ module GitHubChangelogGenerator
     # Fetch event for issues and pull requests
     # @return [Array] array of fetched issues
     def fetch_events_for_issues_and_pr
-      if options[:verbose]
-        print "Fetching events for issues and PR: 0/#{@issues.count + @pull_requests.count}\r"
-      end
+      print "Fetching events for issues and PR: 0/#{@issues.count + @pull_requests.count}\r" if options[:verbose]
 
       # Async fetching events:
       @fetcher.fetch_events_async(@issues + @pull_requests)
