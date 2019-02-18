@@ -47,9 +47,7 @@ module GitHubChangelogGenerator
       encapsulated_title = encapsulate_string issue["title"]
 
       title_with_number = "#{encapsulated_title} [\\##{issue['number']}](#{issue['html_url']})"
-      if @options[:issue_line_labels].present?
-        title_with_number = "#{title_with_number}#{line_labels_for(issue)}"
-      end
+      title_with_number = "#{title_with_number}#{line_labels_for(issue)}" if @options[:issue_line_labels].present?
       line = issue_line_with_user(title_with_number, issue)
       issue_line_with_body(line, issue)
     end

@@ -208,9 +208,7 @@ module GitHubChangelogGenerator
     end
 
     def warn_if_tag_not_found(all_tags, tag)
-      unless all_tags.map { |t| t["name"] }.include?(tag)
-        Helper.log.warn "Warning: can't find tag #{tag}, specified with --exclude-tags option."
-      end
+      Helper.log.warn("Warning: can't find tag #{tag}, specified with --exclude-tags option.") unless all_tags.map { |t| t["name"] }.include?(tag)
     end
   end
 end
