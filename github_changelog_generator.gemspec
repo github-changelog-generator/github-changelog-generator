@@ -7,7 +7,6 @@ require "github_changelog_generator/version"
 Gem::Specification.new do |spec|
   spec.name               = "github_changelog_generator"
   spec.version            = GitHubChangelogGenerator::VERSION
-  spec.default_executable = "github_changelog_generator"
 
   spec.required_ruby_version = ">= 2.2.2"
   spec.authors = ["Petr Korolev", "Olle Jonsson"]
