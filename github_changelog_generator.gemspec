@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.name               = "github_changelog_generator"
   spec.version            = GitHubChangelogGenerator::VERSION
 
-  spec.required_ruby_version = ">= 2.2.2"
+  spec.required_ruby_version = ">= 2.3.0"
   spec.authors = ["Petr Korolev", "Olle Jonsson"]
   spec.email = "sky4winder+github_changelog_generator@gmail.com"
 
