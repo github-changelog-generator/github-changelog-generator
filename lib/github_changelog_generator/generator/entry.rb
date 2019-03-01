@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "github_changelog_generator/generator/section"
 
 module GitHubChangelogGenerator

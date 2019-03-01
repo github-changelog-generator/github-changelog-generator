@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source "https://rubygems.org"
 
 gem "github_changelog_generator", path: Dir.glob("../pkg/github_changelog_generator-*.gem")[0]

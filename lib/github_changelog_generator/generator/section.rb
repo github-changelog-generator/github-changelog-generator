@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module GitHubChangelogGenerator
   # This class generates the content for a single section of a changelog entry.
   # It turns the tagged issues and PRs into a well-formatted list of changes to
