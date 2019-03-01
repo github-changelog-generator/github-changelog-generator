@@ -18,7 +18,6 @@
 # limitations under the License.
 #
 require "simplecov"
-require "coveralls"
 require "vcr"
 require "webmock/rspec"
 
@@ -26,10 +25,7 @@ require "webmock/rspec"
 module SpecHelper
 end
 
-SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
-                                                                 Coveralls::SimpleCov::Formatter,
-                                                                 SimpleCov::Formatter::HTMLFormatter
-                                                               ])
+SimpleCov.formatter = SimpleCov::Formatter::HTMLFormatter
 SimpleCov.start do
   add_filter "gemfiles/"
 end
