@@ -314,6 +314,12 @@ gem 'rack', '~> 1.6'
 This way, you can keep on using github_changelog_generator, even if you
 can't get the latest version of Ruby installed.
 
+- ***Windows: 1.14.x wants to create a file on an invalid path. Why?***
+
+Windows: [v1.14.0 introduced a bug where it attempts to create /tmp/github_changelog-logger.log... which isn't a valid path on Windows and thus fails](https://github.com/github-changelog-generator/github-changelog-generator/issues/458)
+
+Workaround: Create a `C:\tmp`.
+
 ## Contributing
 
 We have collected notes on how to contribute to this project in [CONTRIBUTING.md].
