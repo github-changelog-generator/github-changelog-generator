@@ -21,7 +21,7 @@ shared: &shared
 jobs:
   "rubocop":
     docker:
-      - image: circleci/ruby:2.6.1-node-browsers
+      - image: circleci/ruby:2.6-node-browsers
     steps:
       - checkout
       - run: bundle install --jobs=4 --retry=3 --path vendor/bundle
@@ -30,19 +30,19 @@ jobs:
   "ruby-23":
     <<: *shared
     docker:
-      - image: circleci/ruby:2.3.8-node-browsers
+      - image: circleci/ruby:2.3-node-browsers
   "ruby-24":
     <<: *shared
     docker:
-      - image: circleci/ruby:2.4.5-node-browsers
+      - image: circleci/ruby:2.4-node-browsers
   "ruby-25":
     <<: *shared
     docker:
-      - image: circleci/ruby:2.5.3-node-browsers
+      - image: circleci/ruby:2.5-node-browsers
   "ruby-26":
     <<: *shared
     docker:
-      - image: circleci/ruby:2.6.1-node-browsers
+      - image: circleci/ruby:2.6-node-browsers
   "jruby-91":
     <<: *shared
     docker:
