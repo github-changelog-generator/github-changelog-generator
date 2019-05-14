@@ -35,7 +35,7 @@ Because software tools are for _people_. "Changelogs make it easier for users an
 contributors to see precisely what notable changes have been made between each
 release (or version) of the project."
 
-:arrow_right: *[http://keepachangelog.com](http://keepachangelog.com)*
+:arrow_right: *[https://keepachangelog.com](https://keepachangelog.com)*
 
 ## Installation
 
