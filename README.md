@@ -5,23 +5,38 @@
 
 # github-changelog-generator ![GitHub Logo](../master/images/logo.jpg)
 
-#### Update: 
+#### Update:
 
 🖖 Keep it alive: We need more Collaborators to github-changelog-generator [#727](https://github.com/github-changelog-generator/github-changelog-generator/issues/727)
 
-==================
+---
 
-  - [Installation](#installation)
-  - [Output example](#output-example)
-  - [Usage](#usage)
-    - [Params](#params)
-    - [GitHub token](#github-token)
-  - [Features and advantages of this project](#features-and-advantages-of-this-project)
-    - [Alternatives](#alternatives)
-    - [Projects using this library](#projects-using-this-library)
-  - [Am I missing some essential feature?](#am-i-missing-some-essential-feature)
-  - [Contributing](#contributing)
-  - [License](#license)
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+  - [Changelog generation has never been so easy](#changelog-generation-has-never-been-so-easy)
+  - [*What’s the point of a changelog?*](#whats-the-point-of-a-changelog)
+  - [*Why should I care?*](#why-should-i-care)
+- [Installation](#installation)
+- [Running with Docker](#running-with-docker)
+- [Output example](#output-example)
+- [Usage](#usage)
+  - [Params](#params)
+  - [Params File](#params-file)
+  - [GitHub token](#github-token)
+- [Migrating from a manual changelog](#migrating-from-a-manual-changelog)
+  - [Rake task](#rake-task)
+- [Features and advantages of this project](#features-and-advantages-of-this-project)
+  - [Using the summary section feature](#using-the-summary-section-feature)
+  - [Alternatives](#alternatives)
+  - [Projects using this library](#projects-using-this-library)
+- [Am I missing some essential feature?](#am-i-missing-some-essential-feature)
+- [FAQ](#faq)
+- [Contributing](#contributing)
+- [License](#license)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 
 ### Changelog generation has never been so easy
