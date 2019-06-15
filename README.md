@@ -10,7 +10,10 @@
 🖖 Keep it alive: We need more Collaborators to github-changelog-generator [#727](https://github.com/github-changelog-generator/github-changelog-generator/issues/727)
 
 ---
-
+<!--
+To update TOC, please run:
+> doctoc ./README.md --github
+ -->
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
