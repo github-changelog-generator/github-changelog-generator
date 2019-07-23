@@ -37,7 +37,7 @@ A friendly `README.md` written for many audiences.
 
 The [wiki].
 
-###  API documentation 
+### API documentation
 
 API documentation is written as [YARD] docblocks in the Ruby code.
 
