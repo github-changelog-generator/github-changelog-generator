@@ -14,19 +14,16 @@ shared: &shared
           bundle install --jobs=4 --retry=3 --path vendor/bundle
 
     - run:
+        name: Run rubocop
+        command: |
+          bundle exec rubocop
+
+    - run:
         name: Run tests
         command: |
           bundle exec rspec --color --require spec_helper spec --format progress
 
 jobs:
-  "rubocop":
-    docker:
-      - image: circleci/ruby:2.6.1-node-browsers
-    steps:
-      - checkout
-      - run: bundle install --jobs=4 --retry=3 --path vendor/bundle
-      - run: bundle exec rubocop
-
   "ruby-23":
     <<: *shared
     docker:
@@ -60,22 +57,9 @@ workflows:
   version: 2
   build:
     jobs:
-      - rubocop
-      - "ruby-23":
-          requires:
-            - rubocop
-      - "ruby-24":
-          requires:
-            - rubocop
-      - "ruby-25":
-          requires:
-            - rubocop
-      - "ruby-26":
-          requires:
-            - rubocop
-      - "jruby-91":
-          requires:
-            - rubocop
-      - "jruby-92":
-          requires:
-            - rubocop
+      - "ruby-23"
+      - "ruby-24"
+      - "ruby-25"
+      - "ruby-26"
+      - "jruby-91"
+      - "jruby-92"
