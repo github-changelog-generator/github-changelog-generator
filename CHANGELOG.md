@@ -149,15 +149,16 @@
 - OctoFetcher: drop unused number\_of\_pages feature [\#568](https://github.com/github-changelog-generator/github-changelog-generator/pull/568) ([olleolleolle](https://github.com/olleolleolle))
 - Travis: Do not test on jruby-head [\#567](https://github.com/github-changelog-generator/github-changelog-generator/pull/567) ([olleolleolle](https://github.com/olleolleolle))
 - Drop unused Rake task [\#564](https://github.com/github-changelog-generator/github-changelog-generator/pull/564) ([olleolleolle](https://github.com/olleolleolle))
-- Update license date [\#553](https://github.com/github-changelog-generator/github-changelog-generator/pull/553) ([benhc123](https://github.com/benhc123))
+- Update license date [\#553](https://github.com/github-changelog-generator/github-changelog-generator/pull/553) ([blrhc](https://github.com/blrhc))
 
 ## [v1.15.0.pre.alpha](https://github.com/github-changelog-generator/github-changelog-generator/tree/v1.15.0.pre.alpha) (2017-10-01)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/v1.14.3...v1.15.0.pre.alpha)
 
 **Implemented enhancements:**
 
 - Add newline after version name and Full Changelog link [\#548](https://github.com/github-changelog-generator/github-changelog-generator/pull/548) ([ianroberts131](https://github.com/ianroberts131))
-- Update the token failure example to OctoKit 404 failure [\#525](https://github.com/github-changelog-generator/github-changelog-generator/pull/525) ([00xcoffee](https://github.com/00xcoffee))
+- Update the token failure example to OctoKit 404 failure [\#525](https://github.com/github-changelog-generator/github-changelog-generator/pull/525) ([0xalexdelgado](https://github.com/0xalexdelgado))
 - Rescue invalid commands and present the valid options list [\#498](https://github.com/github-changelog-generator/github-changelog-generator/pull/498) ([Lucashuang0802](https://github.com/Lucashuang0802))
 - bundled cacert.pem with --ssl-ca-file PATH option [\#480](https://github.com/github-changelog-generator/github-changelog-generator/pull/480) ([olleolleolle](https://github.com/olleolleolle))
 - Option parsing: Remove tag1, tag2 cruft [\#479](https://github.com/github-changelog-generator/github-changelog-generator/pull/479) ([olleolleolle](https://github.com/olleolleolle))
@@ -196,7 +197,7 @@
 - Update README.md [\#534](https://github.com/github-changelog-generator/github-changelog-generator/pull/534) ([Lucashuang0802](https://github.com/Lucashuang0802))
 - Delete circle.yml [\#532](https://github.com/github-changelog-generator/github-changelog-generator/pull/532) ([Lucashuang0802](https://github.com/Lucashuang0802))
 - Update README.md [\#531](https://github.com/github-changelog-generator/github-changelog-generator/pull/531) ([Lucashuang0802](https://github.com/Lucashuang0802))
-- Remove all old credit lines in the output then add a new one [\#526](https://github.com/github-changelog-generator/github-changelog-generator/pull/526) ([Enether](https://github.com/Enether))
+- Remove all old credit lines in the output then add a new one [\#526](https://github.com/github-changelog-generator/github-changelog-generator/pull/526) ([stanislavkozlovski](https://github.com/stanislavkozlovski))
 - Travis: jruby-9.1.10.0 [\#523](https://github.com/github-changelog-generator/github-changelog-generator/pull/523) ([olleolleolle](https://github.com/olleolleolle))
 - Travis CI: Drop 2.1 [\#517](https://github.com/github-changelog-generator/github-changelog-generator/pull/517) ([olleolleolle](https://github.com/olleolleolle))
 - Chore: Rubocop 0.49.0 [\#516](https://github.com/github-changelog-generator/github-changelog-generator/pull/516) ([olleolleolle](https://github.com/olleolleolle))
@@ -215,6 +216,7 @@
 - Gemspec: demand rainbow 2.2.1+ [\#466](https://github.com/github-changelog-generator/github-changelog-generator/pull/466) ([olleolleolle](https://github.com/olleolleolle))
 
 ## [v1.14.3](https://github.com/github-changelog-generator/github-changelog-generator/tree/v1.14.3) (2016-12-31)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/v1.14.2...v1.14.3)
 
 **Fixed bugs:**
@@ -236,6 +238,7 @@
 - Travis: Use ruby 2.3.3 and 2.2.6 [\#452](https://github.com/github-changelog-generator/github-changelog-generator/pull/452) ([olleolleolle](https://github.com/olleolleolle))
 
 ## [v1.14.2](https://github.com/github-changelog-generator/github-changelog-generator/tree/v1.14.2) (2016-11-12)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/v1.14.1...v1.14.2)
 
 **Implemented enhancements:**
@@ -247,6 +250,7 @@
 - Error: can't convert Sawyer::Resource to Array when iterating over a 301 Moved Permanently [\#448](https://github.com/github-changelog-generator/github-changelog-generator/issues/448)
 
 ## [v1.14.1](https://github.com/github-changelog-generator/github-changelog-generator/tree/v1.14.1) (2016-11-06)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/v1.14.0...v1.14.1)
 
 **Closed issues:**
@@ -258,6 +262,7 @@
 - Add multi\_json as a runtime dependency [\#445](https://github.com/github-changelog-generator/github-changelog-generator/pull/445) ([rnelson0](https://github.com/rnelson0))
 
 ## [v1.14.0](https://github.com/github-changelog-generator/github-changelog-generator/tree/v1.14.0) (2016-11-05)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/v1.13.2...v1.14.0)
 
 **Implemented enhancements:**
@@ -295,9 +300,11 @@
 - Travis: Add JRuby 9.1.5.0 to matrix [\#424](https://github.com/github-changelog-generator/github-changelog-generator/pull/424) ([olleolleolle](https://github.com/olleolleolle))
 
 ## [v1.13.2](https://github.com/github-changelog-generator/github-changelog-generator/tree/v1.13.2) (2016-09-29)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.13.2...v1.13.2)
 
 ## [1.13.2](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.13.2) (2016-09-29)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.13.1...1.13.2)
 
 **Implemented enhancements:**
@@ -323,6 +330,7 @@
 - Spec: avoid Ruby warning about already-defined constant [\#409](https://github.com/github-changelog-generator/github-changelog-generator/pull/409) ([olleolleolle](https://github.com/olleolleolle))
 
 ## [1.13.1](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.13.1) (2016-07-22)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.13.0...1.13.1)
 
 **Implemented enhancements:**
@@ -340,13 +348,14 @@
 
 **Merged pull requests:**
 
-- Ability to implicity set user and project from command line [\#401](https://github.com/github-changelog-generator/github-changelog-generator/pull/401) ([github-changelog-generator](https://github.com/github-changelog-generator))
+- Ability to implicity set user and project from command line [\#401](https://github.com/github-changelog-generator/github-changelog-generator/pull/401) ([skywinder](https://github.com/skywinder))
 - Show how to use it with Rakefile [\#399](https://github.com/github-changelog-generator/github-changelog-generator/pull/399) ([edusantana](https://github.com/edusantana))
 - Adds documentation on using a GHE endpoint [\#396](https://github.com/github-changelog-generator/github-changelog-generator/pull/396) ([cormacmccarthy](https://github.com/cormacmccarthy))
 - Rake task usage: Added a missing option exclude\_tags\_regex [\#393](https://github.com/github-changelog-generator/github-changelog-generator/pull/393) ([perlun](https://github.com/perlun))
 - Parser: YARD docstrings and a rename, and RegExp named capture groups [\#391](https://github.com/github-changelog-generator/github-changelog-generator/pull/391) ([olleolleolle](https://github.com/olleolleolle))
 
 ## [1.13.0](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.13.0) (2016-07-04)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.12.1...1.13.0)
 
 **Merged pull requests:**
@@ -354,11 +363,12 @@
 - Carry PR \#301: usernames\_as\_github\_logins [\#392](https://github.com/github-changelog-generator/github-changelog-generator/pull/392) ([olleolleolle](https://github.com/olleolleolle))
 
 ## [1.12.1](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.12.1) (2016-05-09)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.12.0...1.12.1)
 
 **Fixed bugs:**
 
-- github\_changelog\_generator/generator/generator\_tags.rb:61:in `detect\_since\_tag': undefined method `\[\]' for nil:NilClass \(NoMethodError\) [\#351](https://github.com/github-changelog-generator/github-changelog-generator/issues/351)
+- NoMethodError on nil in detect\_since\_tag in github\_changelog\_generator/generator/generator\_tags.rb:61 [\#351](https://github.com/github-changelog-generator/github-changelog-generator/issues/351)
 
 **Closed issues:**
 
@@ -367,11 +377,12 @@
 
 **Merged pull requests:**
 
-- Move dev gems to add\_development\_dependency [\#373](https://github.com/github-changelog-generator/github-changelog-generator/pull/373) ([github-changelog-generator](https://github.com/github-changelog-generator))
+- Move dev gems to add\_development\_dependency [\#373](https://github.com/github-changelog-generator/github-changelog-generator/pull/373) ([skywinder](https://github.com/skywinder))
 - Add MIT LICENSE file [\#370](https://github.com/github-changelog-generator/github-changelog-generator/pull/370) ([olleolleolle](https://github.com/olleolleolle))
 - Avoid nil bug in detect\_since\_tag [\#368](https://github.com/github-changelog-generator/github-changelog-generator/pull/368) ([olleolleolle](https://github.com/olleolleolle))
 
 ## [1.12.0](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.12.0) (2016-04-01)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.11.8...1.12.0)
 
 **Closed issues:**
@@ -384,6 +395,7 @@
 - Added tag exclusion with a filter \(string or regex\) [\#320](https://github.com/github-changelog-generator/github-changelog-generator/pull/320) ([soundstep](https://github.com/soundstep))
 
 ## [1.11.8](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.11.8) (2016-03-22)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.11.7...1.11.8)
 
 **Implemented enhancements:**
@@ -415,14 +427,16 @@
 - README: Document GitHub token URI scope [\#345](https://github.com/github-changelog-generator/github-changelog-generator/pull/345) ([olleolleolle](https://github.com/olleolleolle))
 
 ## [1.11.7](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.11.7) (2016-03-04)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.11.6...1.11.7)
 
 **Merged pull requests:**
 
-- Add Olle Jonsson as co-author [\#347](https://github.com/github-changelog-generator/github-changelog-generator/pull/347) ([github-changelog-generator](https://github.com/github-changelog-generator))
+- Add Olle Jonsson as co-author [\#347](https://github.com/github-changelog-generator/github-changelog-generator/pull/347) ([skywinder](https://github.com/skywinder))
 - Gemspec, default date [\#346](https://github.com/github-changelog-generator/github-changelog-generator/pull/346) ([olleolleolle](https://github.com/olleolleolle))
 
 ## [1.11.6](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.11.6) (2016-03-01)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.11.5...1.11.6)
 
 **Fixed bugs:**
@@ -438,6 +452,7 @@
 - Gemspec: Calculate date using Date stdlib [\#343](https://github.com/github-changelog-generator/github-changelog-generator/pull/343) ([olleolleolle](https://github.com/olleolleolle))
 
 ## [1.11.5](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.11.5) (2016-03-01)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.11.4...1.11.5)
 
 **Merged pull requests:**
@@ -446,6 +461,7 @@
 - Update Rakefile to avoid install-breaking bug [\#341](https://github.com/github-changelog-generator/github-changelog-generator/pull/341) ([olleolleolle](https://github.com/olleolleolle))
 
 ## [1.11.4](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.11.4) (2016-02-26)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.11.3...1.11.4)
 
 **Merged pull requests:**
@@ -453,6 +469,7 @@
 - Man page copying: only copy .1 [\#338](https://github.com/github-changelog-generator/github-changelog-generator/pull/338) ([olleolleolle](https://github.com/olleolleolle))
 
 ## [1.11.3](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.11.3) (2016-02-25)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.11.2...1.11.3)
 
 **Closed issues:**
@@ -460,6 +477,7 @@
 - Cannot install gem [\#335](https://github.com/github-changelog-generator/github-changelog-generator/issues/335)
 
 ## [1.11.2](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.11.2) (2016-02-25)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.11.1...1.11.2)
 
 **Fixed bugs:**
@@ -468,9 +486,10 @@
 
 **Merged pull requests:**
 
-- Fix installation by not running the specs - which have dependencies [\#337](https://github.com/github-changelog-generator/github-changelog-generator/pull/337) ([github-changelog-generator](https://github.com/github-changelog-generator))
+- Fix installation by not running the specs - which have dependencies [\#337](https://github.com/github-changelog-generator/github-changelog-generator/pull/337) ([skywinder](https://github.com/skywinder))
 
 ## [1.11.1](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.11.1) (2016-02-25)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.11.0...1.11.1)
 
 **Merged pull requests:**
@@ -480,12 +499,15 @@
 - \[Refactor\] Generator\#exclude\_issues\_by\_labels simpler, tested [\#332](https://github.com/github-changelog-generator/github-changelog-generator/pull/332) ([olleolleolle](https://github.com/olleolleolle))
 
 ## [1.11.0](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.11.0) (2016-02-24)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.10.5...1.11.0)
 
 ## [1.10.5](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.10.5) (2016-02-24)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.10.4...1.10.5)
 
 ## [1.10.4](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.10.4) (2016-02-24)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.10.3...1.10.4)
 
 **Fixed bugs:**
@@ -498,12 +520,15 @@
 - Fix crash installing on systems without overcommit [\#330](https://github.com/github-changelog-generator/github-changelog-generator/pull/330) ([jkeiser](https://github.com/jkeiser))
 
 ## [1.10.3](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.10.3) (2016-02-23)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.10.2...1.10.3)
 
 ## [1.10.2](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.10.2) (2016-02-23)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/v1.11.0...1.10.2)
 
 ## [v1.11.0](https://github.com/github-changelog-generator/github-changelog-generator/tree/v1.11.0) (2016-02-23)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.10.1...v1.11.0)
 
 **Implemented enhancements:**
@@ -521,6 +546,7 @@
 - Update README.md [\#324](https://github.com/github-changelog-generator/github-changelog-generator/pull/324) ([Zearin](https://github.com/Zearin))
 
 ## [1.10.1](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.10.1) (2016-01-06)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.10.0...1.10.1)
 
 **Fixed bugs:**
@@ -528,6 +554,7 @@
 - Parser: avoid Ruby exit, to make Rake tasks work [\#315](https://github.com/github-changelog-generator/github-changelog-generator/pull/315) ([olleolleolle](https://github.com/olleolleolle))
 
 ## [1.10.0](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.10.0) (2016-01-05)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.9.0...1.10.0)
 
 **Implemented enhancements:**
@@ -551,6 +578,7 @@
 - Add base option to RakeTask [\#287](https://github.com/github-changelog-generator/github-changelog-generator/pull/287) ([jkeiser](https://github.com/jkeiser))
 
 ## [1.9.0](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.9.0) (2015-09-17)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.8.5...1.9.0)
 
 **Implemented enhancements:**
@@ -559,28 +587,24 @@
 - Auto parse options from file .github\_changelog\_generator [\#278](https://github.com/github-changelog-generator/github-changelog-generator/pull/278) ([dlanileonardo](https://github.com/dlanileonardo))
 
 ## [1.8.5](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.8.5) (2015-09-15)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.8.4...1.8.5)
+
+**Fixed bugs:**
+
+- Sending OATH through -t fails [\#274](https://github.com/github-changelog-generator/github-changelog-generator/issues/274)
 
 **Merged pull requests:**
 
 - Rake task: Be able to set false value in config [\#279](https://github.com/github-changelog-generator/github-changelog-generator/pull/279) ([olleolleolle](https://github.com/olleolleolle))
 
 ## [1.8.4](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.8.4) (2015-09-01)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.8.3...1.8.4)
 
-**Fixed bugs:**
-
-- Sending OATH through -t fails [\#274](https://github.com/github-changelog-generator/github-changelog-generator/issues/274)
-
 ## [1.8.3](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.8.3) (2015-08-31)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.8.2...1.8.3)
-
-**Merged pull requests:**
-
-- Do not alter pull\_requests while iterating on it [\#271](https://github.com/github-changelog-generator/github-changelog-generator/pull/271) ([raphink](https://github.com/raphink))
-
-## [1.8.2](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.8.2) (2015-08-26)
-[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.8.1...1.8.2)
 
 **Closed issues:**
 
@@ -588,9 +612,18 @@
 
 **Merged pull requests:**
 
-- This PRi will fix \#274. [\#275](https://github.com/github-changelog-generator/github-changelog-generator/pull/275) ([github-changelog-generator](https://github.com/github-changelog-generator))
+- Do not alter pull\_requests while iterating on it [\#271](https://github.com/github-changelog-generator/github-changelog-generator/pull/271) ([raphink](https://github.com/raphink))
+
+## [1.8.2](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.8.2) (2015-08-26)
+
+[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.8.1...1.8.2)
+
+**Merged pull requests:**
+
+- This PRi will fix \#274. [\#275](https://github.com/github-changelog-generator/github-changelog-generator/pull/275) ([skywinder](https://github.com/skywinder))
 
 ## [1.8.1](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.8.1) (2015-08-25)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.8.0...1.8.1)
 
 **Implemented enhancements:**
@@ -599,53 +632,47 @@
 
 **Merged pull requests:**
 
-- Fix issue with missing events \(in case of events for issue \>30\) [\#268](https://github.com/github-changelog-generator/github-changelog-generator/pull/268) ([github-changelog-generator](https://github.com/github-changelog-generator))
+- Fix issue with missing events \(in case of events for issue \>30\) [\#268](https://github.com/github-changelog-generator/github-changelog-generator/pull/268) ([skywinder](https://github.com/skywinder))
 - Use since\_tag as default for older\_tag [\#267](https://github.com/github-changelog-generator/github-changelog-generator/pull/267) ([raphink](https://github.com/raphink))
 
 ## [1.8.0](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.8.0) (2015-08-24)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.7.0...1.8.0)
 
 **Implemented enhancements:**
 
-- Generate changelog since/due specific tag [\#254](https://github.com/github-changelog-generator/github-changelog-generator/issues/254)
+- Generate change log since/due specific tag [\#254](https://github.com/github-changelog-generator/github-changelog-generator/issues/254)
+- Custom header [\#251](https://github.com/github-changelog-generator/github-changelog-generator/issues/251)
+- Arbitrary templates [\#242](https://github.com/github-changelog-generator/github-changelog-generator/issues/242)
 - Add --base option [\#258](https://github.com/github-changelog-generator/github-changelog-generator/pull/258) ([raphink](https://github.com/raphink))
 
 **Merged pull requests:**
 
-- Add `--due-tag` option [\#265](https://github.com/github-changelog-generator/github-changelog-generator/pull/265) ([github-changelog-generator](https://github.com/github-changelog-generator))
+- Add `--due-tag` option [\#265](https://github.com/github-changelog-generator/github-changelog-generator/pull/265) ([skywinder](https://github.com/skywinder))
 - Add release\_url to rake task options [\#264](https://github.com/github-changelog-generator/github-changelog-generator/pull/264) ([raphink](https://github.com/raphink))
 - Add a rake task [\#260](https://github.com/github-changelog-generator/github-changelog-generator/pull/260) ([raphink](https://github.com/raphink))
 - Add release\_url option [\#259](https://github.com/github-changelog-generator/github-changelog-generator/pull/259) ([raphink](https://github.com/raphink))
 - Add --since-tag [\#257](https://github.com/github-changelog-generator/github-changelog-generator/pull/257) ([raphink](https://github.com/raphink))
 
 ## [1.7.0](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.7.0) (2015-07-16)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.6.2...1.7.0)
-
-**Implemented enhancements:**
-
-- Custom header [\#251](https://github.com/github-changelog-generator/github-changelog-generator/issues/251)
-- Arbitrary templates [\#242](https://github.com/github-changelog-generator/github-changelog-generator/issues/242)
-
-## [1.6.2](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.6.2) (2015-07-16)
-[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.6.1...1.6.2)
 
 **Fixed bugs:**
 
 - --unreleased-only broken [\#250](https://github.com/github-changelog-generator/github-changelog-generator/issues/250)
 
-## [1.6.1](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.6.1) (2015-06-12)
-[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.6.0...1.6.1)
+## [1.6.2](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.6.2) (2015-07-16)
+
+[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.6.1...1.6.2)
 
 **Implemented enhancements:**
 
 - Ability to specify custom section header [\#241](https://github.com/github-changelog-generator/github-changelog-generator/issues/241)
 
-**Fixed bugs:**
+## [1.6.1](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.6.1) (2015-06-12)
 
-- not encapsulated character `\<` [\#249](https://github.com/github-changelog-generator/github-changelog-generator/issues/249)
-
-## [1.6.0](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.6.0) (2015-06-11)
-[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.5.0...1.6.0)
+[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.6.0...1.6.1)
 
 **Implemented enhancements:**
 
@@ -654,48 +681,65 @@
 
 **Fixed bugs:**
 
+- not encapsulated character `\<` [\#249](https://github.com/github-changelog-generator/github-changelog-generator/issues/249)
 - --user and --project options are broken [\#246](https://github.com/github-changelog-generator/github-changelog-generator/issues/246)
-- Exclude and Include tags is broken [\#245](https://github.com/github-changelog-generator/github-changelog-generator/issues/245)
 
-## [1.5.0](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.5.0) (2015-05-26)
-[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.4.1...1.5.0)
+## [1.6.0](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.6.0) (2015-06-11)
+
+[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.5.0...1.6.0)
 
 **Implemented enhancements:**
 
 - Show `Unreleased` section even when there is no tags in repo. [\#228](https://github.com/github-changelog-generator/github-changelog-generator/issues/228)
 - Add option `--exclude-tags x,y,z` [\#214](https://github.com/github-changelog-generator/github-changelog-generator/issues/214)
-- Generate changelog between 2 specific tags [\#172](https://github.com/github-changelog-generator/github-changelog-generator/issues/172)
-- Yanked releases support [\#53](https://github.com/github-changelog-generator/github-changelog-generator/issues/53)
+- Generate change log between 2 specific tags [\#172](https://github.com/github-changelog-generator/github-changelog-generator/issues/172)
 
-**Merged pull requests:**
+**Fixed bugs:**
 
-- Big refactoring [\#243](https://github.com/github-changelog-generator/github-changelog-generator/pull/243) ([github-changelog-generator](https://github.com/github-changelog-generator))
+- Exclude and Include tags is broken [\#245](https://github.com/github-changelog-generator/github-changelog-generator/issues/245)
 
-## [1.4.1](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.4.1) (2015-05-19)
-[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.4.0...1.4.1)
+## [1.5.0](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.5.0) (2015-05-26)
+
+[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.4.1...1.5.0)
 
 **Implemented enhancements:**
 
-- Trees/Archives with missing changelog notes for the current tag. [\#230](https://github.com/github-changelog-generator/github-changelog-generator/issues/230)
+- Yanked releases support [\#53](https://github.com/github-changelog-generator/github-changelog-generator/issues/53)
 
 **Fixed bugs:**
 
 - github\_changelog\_generator.rb:220:in ``': No such file or directory - pwd \(Errno::ENOENT\) [\#237](https://github.com/github-changelog-generator/github-changelog-generator/issues/237)
-- Doesnot generator changelog [\#235](https://github.com/github-changelog-generator/github-changelog-generator/issues/235)
 - Exclude closed \(not merged\) PR's from changelog. [\#69](https://github.com/github-changelog-generator/github-changelog-generator/issues/69)
 
 **Merged pull requests:**
 
-- Wrap GitHub requests in function check\_github\_response [\#238](https://github.com/github-changelog-generator/github-changelog-generator/pull/238) ([github-changelog-generator](https://github.com/github-changelog-generator))
-- Add fetch token tests [\#236](https://github.com/github-changelog-generator/github-changelog-generator/pull/236) ([github-changelog-generator](https://github.com/github-changelog-generator))
+- Big refactoring [\#243](https://github.com/github-changelog-generator/github-changelog-generator/pull/243) ([skywinder](https://github.com/skywinder))
+- Wrap GitHub requests in function check\_github\_response [\#238](https://github.com/github-changelog-generator/github-changelog-generator/pull/238) ([skywinder](https://github.com/skywinder))
+
+## [1.4.1](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.4.1) (2015-05-19)
+
+[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.4.0...1.4.1)
+
+**Implemented enhancements:**
+
+- Trees/Archives with missing change log notes for the current tag. [\#230](https://github.com/github-changelog-generator/github-changelog-generator/issues/230)
+
+**Fixed bugs:**
+
+- Doesnot generator changelog [\#235](https://github.com/github-changelog-generator/github-changelog-generator/issues/235)
+
+**Merged pull requests:**
+
+- Add fetch token tests [\#236](https://github.com/github-changelog-generator/github-changelog-generator/pull/236) ([skywinder](https://github.com/skywinder))
 - Add future release option [\#231](https://github.com/github-changelog-generator/github-changelog-generator/pull/231) ([sildur](https://github.com/sildur))
 
 ## [1.4.0](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.4.0) (2015-05-07)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.3.11...1.4.0)
 
 **Implemented enhancements:**
 
-- Parsing of existing Changelog file [\#212](https://github.com/github-changelog-generator/github-changelog-generator/issues/212)
+- Parsing of existing Change Log file [\#212](https://github.com/github-changelog-generator/github-changelog-generator/issues/212)
 - Warn users about 0 tags in repo. [\#208](https://github.com/github-changelog-generator/github-changelog-generator/issues/208)
 - Cleanup [\#220](https://github.com/github-changelog-generator/github-changelog-generator/pull/220) ([tuexss](https://github.com/tuexss))
 
@@ -705,29 +749,28 @@
 
 **Merged pull requests:**
 
-- Implement fetcher class [\#227](https://github.com/github-changelog-generator/github-changelog-generator/pull/227) ([github-changelog-generator](https://github.com/github-changelog-generator))
-- Add coveralls integration [\#223](https://github.com/github-changelog-generator/github-changelog-generator/pull/223) ([github-changelog-generator](https://github.com/github-changelog-generator))
-- Rspec & rubocop integration [\#217](https://github.com/github-changelog-generator/github-changelog-generator/pull/217) ([github-changelog-generator](https://github.com/github-changelog-generator))
+- Implement fetcher class [\#227](https://github.com/github-changelog-generator/github-changelog-generator/pull/227) ([skywinder](https://github.com/skywinder))
+- Add coveralls integration [\#223](https://github.com/github-changelog-generator/github-changelog-generator/pull/223) ([skywinder](https://github.com/skywinder))
+- Rspec & rubocop integration [\#217](https://github.com/github-changelog-generator/github-changelog-generator/pull/217) ([skywinder](https://github.com/skywinder))
 - Implement Reader class to parse ChangeLog.md [\#216](https://github.com/github-changelog-generator/github-changelog-generator/pull/216) ([estahn](https://github.com/estahn))
 - Relatively require github\_changelog\_generator library [\#207](https://github.com/github-changelog-generator/github-changelog-generator/pull/207) ([sneal](https://github.com/sneal))
 - Add --max-issues argument to limit requests [\#76](https://github.com/github-changelog-generator/github-changelog-generator/pull/76) ([sneal](https://github.com/sneal))
 
 ## [1.3.11](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.3.11) (2015-03-21)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.3.10...1.3.11)
-
-**Merged pull requests:**
-
-- Add  fallback with warning message to prevent crash in case of exceed API Rate Limit \(temporary workaround for \#71\) [\#75](https://github.com/github-changelog-generator/github-changelog-generator/pull/75) ([github-changelog-generator](https://github.com/github-changelog-generator))
-
-## [1.3.10](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.3.10) (2015-03-18)
-[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.3.9...1.3.10)
 
 **Fixed bugs:**
 
-- Fix termination in case of empty unreleased section with `--unreleased-only` option. [\#70](https://github.com/github-changelog-generator/github-changelog-generator/pull/70) ([github-changelog-generator](https://github.com/github-changelog-generator))
+- Fix termination in case of empty unreleased section with `--unreleased-only` option. [\#70](https://github.com/github-changelog-generator/github-changelog-generator/pull/70) ([skywinder](https://github.com/skywinder))
 
-## [1.3.9](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.3.9) (2015-03-06)
-[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.3.8...1.3.9)
+**Merged pull requests:**
+
+- Add  fallback with warning message to prevent crash in case of exceed API Rate Limit \(temporary workaround for \#71\) [\#75](https://github.com/github-changelog-generator/github-changelog-generator/pull/75) ([skywinder](https://github.com/skywinder))
+
+## [1.3.10](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.3.10) (2015-03-18)
+
+[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.3.9...1.3.10)
 
 **Implemented enhancements:**
 
@@ -735,65 +778,73 @@
 
 **Fixed bugs:**
 
-- Resolved concurrency problem in case of issues \> 2048 [\#65](https://github.com/github-changelog-generator/github-changelog-generator/pull/65) ([github-changelog-generator](https://github.com/github-changelog-generator))
+- Resolved concurrency problem in case of issues \> 2048 [\#65](https://github.com/github-changelog-generator/github-changelog-generator/pull/65) ([skywinder](https://github.com/skywinder))
+
+## [1.3.9](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.3.9) (2015-03-06)
+
+[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.3.8...1.3.9)
 
 ## [1.3.8](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.3.8) (2015-03-05)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.3.6...1.3.8)
 
 ## [1.3.6](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.3.6) (2015-03-05)
-[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.3.5...1.3.6)
 
-## [1.3.5](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.3.5) (2015-03-04)
-[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.3.4...1.3.5)
+[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.3.5...1.3.6)
 
 **Fixed bugs:**
 
 - Pull Requests in Wrong Tag [\#60](https://github.com/github-changelog-generator/github-changelog-generator/issues/60)
 
-## [1.3.4](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.3.4) (2015-03-03)
-[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.3.3...1.3.4)
+## [1.3.5](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.3.5) (2015-03-04)
+
+[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.3.4...1.3.5)
 
 **Fixed bugs:**
 
 - --no-issues appears to break PRs [\#59](https://github.com/github-changelog-generator/github-changelog-generator/issues/59)
 
+## [1.3.4](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.3.4) (2015-03-03)
+
+[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.3.3...1.3.4)
+
 ## [1.3.3](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.3.3) (2015-03-03)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.3.2...1.3.3)
+
+**Fixed bugs:**
+
+- generation failed if github commit api return `404 Not Found` [\#57](https://github.com/github-changelog-generator/github-changelog-generator/issues/57)
 
 **Closed issues:**
 
 - Add \# character to encapsulate list. [\#58](https://github.com/github-changelog-generator/github-changelog-generator/issues/58)
 
 ## [1.3.2](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.3.2) (2015-03-03)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.3.1...1.3.2)
 
-**Fixed bugs:**
-
-- generation failed if github commit api return `404 Not Found` [\#57](https://github.com/github-changelog-generator/github-changelog-generator/issues/57)
-
 ## [1.3.1](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.3.1) (2015-02-27)
-[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.3.0...1.3.1)
 
-## [1.3.0](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.3.0) (2015-02-26)
-[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.2.8...1.3.0)
+[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.3.0...1.3.1)
 
 **Implemented enhancements:**
 
 - Do not show `Unreleased` section, when it's empty. [\#55](https://github.com/github-changelog-generator/github-changelog-generator/issues/55)
+- Separate by lists: Enhancements, Bugs, Pull requests. [\#31](https://github.com/github-changelog-generator/github-changelog-generator/issues/31)
+
+## [1.3.0](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.3.0) (2015-02-26)
+
+[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.2.8...1.3.0)
+
+**Implemented enhancements:**
+
 - Separate list exclude and include labels [\#52](https://github.com/github-changelog-generator/github-changelog-generator/issues/52)
 - Unreleased issues in separate section [\#47](https://github.com/github-changelog-generator/github-changelog-generator/issues/47)
-- Separate by lists: Enhancements, Bugs, Pull requests. [\#31](https://github.com/github-changelog-generator/github-changelog-generator/issues/31)
 
 **Fixed bugs:**
 
 - Pull request with invalid label \(\#26\) in changelog appeared. [\#44](https://github.com/github-changelog-generator/github-changelog-generator/issues/44)
-
-**Merged pull requests:**
-
-- Implement filtering of Pull Requests by milestones [\#50](https://github.com/github-changelog-generator/github-changelog-generator/pull/50) ([github-changelog-generator](https://github.com/github-changelog-generator))
-
-## [1.2.8](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.2.8) (2015-02-17)
-[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.2.7...1.2.8)
 
 **Closed issues:**
 
@@ -801,10 +852,19 @@
 
 **Merged pull requests:**
 
-- Feature/fix 37 [\#49](https://github.com/github-changelog-generator/github-changelog-generator/pull/49) ([github-changelog-generator](https://github.com/github-changelog-generator))
-- Prettify output [\#48](https://github.com/github-changelog-generator/github-changelog-generator/pull/48) ([github-changelog-generator](https://github.com/github-changelog-generator))
+- Implement filtering of Pull Requests by milestones [\#50](https://github.com/github-changelog-generator/github-changelog-generator/pull/50) ([skywinder](https://github.com/skywinder))
+
+## [1.2.8](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.2.8) (2015-02-17)
+
+[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.2.7...1.2.8)
+
+**Merged pull requests:**
+
+- Feature/fix 37 [\#49](https://github.com/github-changelog-generator/github-changelog-generator/pull/49) ([skywinder](https://github.com/skywinder))
+- Prettify output [\#48](https://github.com/github-changelog-generator/github-changelog-generator/pull/48) ([skywinder](https://github.com/skywinder))
 
 ## [1.2.7](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.2.7) (2015-01-26)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.2.6...1.2.7)
 
 **Implemented enhancements:**
@@ -812,6 +872,7 @@
 - Add compare link between older version and newer version [\#46](https://github.com/github-changelog-generator/github-changelog-generator/pull/46) ([sue445](https://github.com/sue445))
 
 ## [1.2.6](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.2.6) (2015-01-21)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.2.5...1.2.6)
 
 **Merged pull requests:**
@@ -819,6 +880,7 @@
 - fix link tag format [\#45](https://github.com/github-changelog-generator/github-changelog-generator/pull/45) ([sugamasao](https://github.com/sugamasao))
 
 ## [1.2.5](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.2.5) (2015-01-15)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.2.4...1.2.5)
 
 **Implemented enhancements:**
@@ -832,19 +894,28 @@
 - PrettyPrint class is included using lowercase 'pp' [\#43](https://github.com/github-changelog-generator/github-changelog-generator/pull/43) ([schwing](https://github.com/schwing))
 
 ## [1.2.4](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.2.4) (2014-12-16)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.2.3...1.2.4)
+
+**Implemented enhancements:**
+
+- Add ability to run with one parameter instead -u -p [\#38](https://github.com/github-changelog-generator/github-changelog-generator/issues/38)
 
 **Fixed bugs:**
 
 - Sometimes user is NULL during merges [\#41](https://github.com/github-changelog-generator/github-changelog-generator/issues/41)
 - Crash when try generate log for rails [\#35](https://github.com/github-changelog-generator/github-changelog-generator/issues/35)
 
+**Merged pull requests:**
+
+- Implement async fetching [\#39](https://github.com/github-changelog-generator/github-changelog-generator/pull/39) ([skywinder](https://github.com/skywinder))
+
 ## [1.2.3](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.2.3) (2014-12-16)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.2.2...1.2.3)
 
 **Implemented enhancements:**
 
-- Add ability to run with one parameter instead -u -p [\#38](https://github.com/github-changelog-generator/github-changelog-generator/issues/38)
 - Detailed output [\#33](https://github.com/github-changelog-generator/github-changelog-generator/issues/33)
 
 **Fixed bugs:**
@@ -853,10 +924,10 @@
 
 **Merged pull requests:**
 
-- Implement async fetching [\#39](https://github.com/github-changelog-generator/github-changelog-generator/pull/39) ([github-changelog-generator](https://github.com/github-changelog-generator))
-- Fix crash when user is NULL [\#40](https://github.com/github-changelog-generator/github-changelog-generator/pull/40) ([github-changelog-generator](https://github.com/github-changelog-generator))
+- Fix crash when user is NULL [\#40](https://github.com/github-changelog-generator/github-changelog-generator/pull/40) ([skywinder](https://github.com/skywinder))
 
 ## [1.2.2](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.2.2) (2014-12-10)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.2.1...1.2.2)
 
 **Fixed bugs:**
@@ -864,6 +935,7 @@
 - Encapsulate \[ \> \* \_ \ \] signs in issues names [\#34](https://github.com/github-changelog-generator/github-changelog-generator/issues/34)
 
 ## [1.2.1](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.2.1) (2014-11-22)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.2.0...1.2.1)
 
 **Fixed bugs:**
@@ -872,19 +944,21 @@
 
 **Merged pull requests:**
 
-- Issues for last tag not in list [\#29](https://github.com/github-changelog-generator/github-changelog-generator/pull/29) ([github-changelog-generator](https://github.com/github-changelog-generator))
-- Disable default --filter-pull-requests option. [\#28](https://github.com/github-changelog-generator/github-changelog-generator/pull/28) ([github-changelog-generator](https://github.com/github-changelog-generator))
+- Issues for last tag not in list [\#29](https://github.com/github-changelog-generator/github-changelog-generator/pull/29) ([skywinder](https://github.com/skywinder))
+- Disable default --filter-pull-requests option. [\#28](https://github.com/github-changelog-generator/github-changelog-generator/pull/28) ([skywinder](https://github.com/skywinder))
 
 ## [1.2.0](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.2.0) (2014-11-19)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.1.4...1.2.0)
 
 **Merged pull requests:**
 
-- Add filter for pull-requests labels. \(option --filter-pull-requests\) [\#27](https://github.com/github-changelog-generator/github-changelog-generator/pull/27) ([github-changelog-generator](https://github.com/github-changelog-generator))
-- Add ability to insert authors of pull-requests \(--\[no-\]author option\) [\#25](https://github.com/github-changelog-generator/github-changelog-generator/pull/25) ([github-changelog-generator](https://github.com/github-changelog-generator))
-- Don't receive issues in case of --no-isses flag specied [\#24](https://github.com/github-changelog-generator/github-changelog-generator/pull/24) ([github-changelog-generator](https://github.com/github-changelog-generator))
+- Add filter for pull-requests labels. \(option --filter-pull-requests\) [\#27](https://github.com/github-changelog-generator/github-changelog-generator/pull/27) ([skywinder](https://github.com/skywinder))
+- Add ability to insert authors of pull-requests \(--\[no-\]author option\) [\#25](https://github.com/github-changelog-generator/github-changelog-generator/pull/25) ([skywinder](https://github.com/skywinder))
+- Don't receive issues in case of --no-isses flag specied [\#24](https://github.com/github-changelog-generator/github-changelog-generator/pull/24) ([skywinder](https://github.com/skywinder))
 
 ## [1.1.4](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.1.4) (2014-11-18)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.1.2...1.1.4)
 
 **Implemented enhancements:**
@@ -893,26 +967,29 @@
 
 **Merged pull requests:**
 
-- Sort tags by date [\#23](https://github.com/github-changelog-generator/github-changelog-generator/pull/23) ([github-changelog-generator](https://github.com/github-changelog-generator))
+- Sort tags by date [\#23](https://github.com/github-changelog-generator/github-changelog-generator/pull/23) ([skywinder](https://github.com/skywinder))
 
 ## [1.1.2](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.1.2) (2014-11-12)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.1.1...1.1.2)
 
 **Merged pull requests:**
 
-- Fix bug with dot signs in project name [\#18](https://github.com/github-changelog-generator/github-changelog-generator/pull/18) ([github-changelog-generator](https://github.com/github-changelog-generator))
-- Fix bug with dot signs in user name [\#17](https://github.com/github-changelog-generator/github-changelog-generator/pull/17) ([github-changelog-generator](https://github.com/github-changelog-generator))
+- Fix bug with dot signs in project name [\#18](https://github.com/github-changelog-generator/github-changelog-generator/pull/18) ([skywinder](https://github.com/skywinder))
+- Fix bug with dot signs in user name [\#17](https://github.com/github-changelog-generator/github-changelog-generator/pull/17) ([skywinder](https://github.com/skywinder))
 
 ## [1.1.1](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.1.1) (2014-11-10)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.1.0...1.1.1)
 
 **Merged pull requests:**
 
-- Remove duplicates of issues and pull-requests with same number [\#15](https://github.com/github-changelog-generator/github-changelog-generator/pull/15) ([github-changelog-generator](https://github.com/github-changelog-generator))
-- Sort issues by tags [\#14](https://github.com/github-changelog-generator/github-changelog-generator/pull/14) ([github-changelog-generator](https://github.com/github-changelog-generator))
-- Add ability to add or exclude issues without any labels [\#13](https://github.com/github-changelog-generator/github-changelog-generator/pull/13) ([github-changelog-generator](https://github.com/github-changelog-generator))
+- Remove duplicates of issues and pull-requests with same number [\#15](https://github.com/github-changelog-generator/github-changelog-generator/pull/15) ([skywinder](https://github.com/skywinder))
+- Sort issues by tags [\#14](https://github.com/github-changelog-generator/github-changelog-generator/pull/14) ([skywinder](https://github.com/skywinder))
+- Add ability to add or exclude issues without any labels [\#13](https://github.com/github-changelog-generator/github-changelog-generator/pull/13) ([skywinder](https://github.com/skywinder))
 
 ## [1.1.0](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.1.0) (2014-11-10)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.0.1...1.1.0)
 
 **Implemented enhancements:**
@@ -925,16 +1002,21 @@
 - Markdown formating in the last line wrong [\#9](https://github.com/github-changelog-generator/github-changelog-generator/issues/9)
 
 ## [1.0.1](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.0.1) (2014-11-10)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.0.0...1.0.1)
 
+**Implemented enhancements:**
+
+- Implement support of different tags. [\#8](https://github.com/github-changelog-generator/github-changelog-generator/pull/8) ([skywinder](https://github.com/skywinder))
+
 ## [1.0.0](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.0.0) (2014-11-07)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/0.1.0...1.0.0)
 
 **Implemented enhancements:**
 
 - Add support for fixed issues and implemented enchanments. [\#6](https://github.com/github-changelog-generator/github-changelog-generator/issues/6)
 - Implement option to specify output filename [\#4](https://github.com/github-changelog-generator/github-changelog-generator/issues/4)
-- Implement support of different tags. [\#8](https://github.com/github-changelog-generator/github-changelog-generator/pull/8) ([github-changelog-generator](https://github.com/github-changelog-generator))
 
 **Fixed bugs:**
 
@@ -942,21 +1024,26 @@
 
 **Merged pull requests:**
 
-- Add support for issues in CHANGELOG [\#7](https://github.com/github-changelog-generator/github-changelog-generator/pull/7) ([github-changelog-generator](https://github.com/github-changelog-generator))
+- Add support for issues in CHANGELOG [\#7](https://github.com/github-changelog-generator/github-changelog-generator/pull/7) ([skywinder](https://github.com/skywinder))
+- Fix parsing date of pull request [\#3](https://github.com/github-changelog-generator/github-changelog-generator/pull/3) ([skywinder](https://github.com/skywinder))
 
 ## [0.1.0](https://github.com/github-changelog-generator/github-changelog-generator/tree/0.1.0) (2014-11-07)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/0.0.2...0.1.0)
 
 **Merged pull requests:**
 
-- Fix parsing date of pull request [\#3](https://github.com/github-changelog-generator/github-changelog-generator/pull/3) ([github-changelog-generator](https://github.com/github-changelog-generator))
-- Add changelog generation for last tag [\#2](https://github.com/github-changelog-generator/github-changelog-generator/pull/2) ([github-changelog-generator](https://github.com/github-changelog-generator))
-- Add option \(-o --output\) to specify name of the output file. [\#1](https://github.com/github-changelog-generator/github-changelog-generator/pull/1) ([github-changelog-generator](https://github.com/github-changelog-generator))
+- Add changelog generation for last tag [\#2](https://github.com/github-changelog-generator/github-changelog-generator/pull/2) ([skywinder](https://github.com/skywinder))
+- Add option \(-o --output\) to specify name of the output file. [\#1](https://github.com/github-changelog-generator/github-changelog-generator/pull/1) ([skywinder](https://github.com/skywinder))
 
 ## [0.0.2](https://github.com/github-changelog-generator/github-changelog-generator/tree/0.0.2) (2014-11-06)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/0.0.1...0.0.2)
 
 ## [0.0.1](https://github.com/github-changelog-generator/github-changelog-generator/tree/0.0.1) (2014-11-06)
 
+[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/2a5b354410a422e2046f8d95b019df5985b003e4...0.0.1)
 
-\* *This Changelog was automatically generated by [github_changelog_generator](https://github.com/github-changelog-generator/Github-Changelog-Generator)*
+
+
+\* *This Change Log was automatically generated by [github_changelog_generator](https://github.com/skywinder/Github-Changelog-Generator)*
