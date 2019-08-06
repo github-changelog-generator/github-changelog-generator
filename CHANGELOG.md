@@ -1,7 +1,110 @@
-# Changelog
+# Change Log
 
-## [v1.15.0-rc](https://github.com/github-changelog-generator/github-changelog-generator/tree/v1.15.0-rc) (2017-10-29)
-[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/v1.15.0.pre.beta...v1.15.0-rc)
+## [1.15.0](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.15.0) (2019-08-06)
+
+[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/v1.15.0.pre.rc...1.15.0)
+
+**Implemented enhancements:**
+
+- CircleCI: Add a build matrix [\#685](https://github.com/github-changelog-generator/github-changelog-generator/issues/685)
+- A way to add release summaries [\#582](https://github.com/github-changelog-generator/github-changelog-generator/issues/582)
+- Build matrix for different ruby & jruby versions [\#686](https://github.com/github-changelog-generator/github-changelog-generator/pull/686) ([szemek](https://github.com/szemek))
+- CircleCI 2.0 configuration [\#684](https://github.com/github-changelog-generator/github-changelog-generator/pull/684) ([szemek](https://github.com/szemek))
+- 588 : Added new line after credits [\#627](https://github.com/github-changelog-generator/github-changelog-generator/pull/627) ([qwerty2323](https://github.com/qwerty2323))
+- Support printing changelog to stdout [\#624](https://github.com/github-changelog-generator/github-changelog-generator/pull/624) ([sue445](https://github.com/sue445))
+- Fix unlabeled, mixed labels, and unmapped labels handling [\#618](https://github.com/github-changelog-generator/github-changelog-generator/pull/618) ([hunner](https://github.com/hunner))
+- Implemented a Dockerfile [\#592](https://github.com/github-changelog-generator/github-changelog-generator/pull/592) ([ferrarimarco](https://github.com/ferrarimarco))
+- Make 'change log' a single word [\#579](https://github.com/github-changelog-generator/github-changelog-generator/pull/579) ([mesaugat](https://github.com/mesaugat))
+
+**Fixed bugs:**
+
+- Add a new line after the credits [\#588](https://github.com/github-changelog-generator/github-changelog-generator/issues/588)
+- can't create Thread: Not enough space \(ThreadError\) [\#402](https://github.com/github-changelog-generator/github-changelog-generator/issues/402)
+- Fix warnings in ruby 2.6 [\#701](https://github.com/github-changelog-generator/github-changelog-generator/pull/701) ([mhenrixon](https://github.com/mhenrixon))
+- Remove threading and use caching [\#653](https://github.com/github-changelog-generator/github-changelog-generator/pull/653) ([hunner](https://github.com/hunner))
+- Use git history to find PRs in a tag instead of time [\#619](https://github.com/github-changelog-generator/github-changelog-generator/pull/619) ([hunner](https://github.com/hunner))
+
+**Closed issues:**
+
+- Could we publish the latest version to gem? [\#722](https://github.com/github-changelog-generator/github-changelog-generator/issues/722)
+- docker container waits for a long time, then crashes [\#717](https://github.com/github-changelog-generator/github-changelog-generator/issues/717)
+- N/A [\#713](https://github.com/github-changelog-generator/github-changelog-generator/issues/713)
+- Example Rakefile [\#712](https://github.com/github-changelog-generator/github-changelog-generator/issues/712)
+- Cannot generate the changelog for a repo moved from BitBucket to GitHub [\#699](https://github.com/github-changelog-generator/github-changelog-generator/issues/699)
+- End support of Ruby 2.2 [\#687](https://github.com/github-changelog-generator/github-changelog-generator/issues/687)
+- \[ci\] Configure a CircleCI 2.0 configuration [\#681](https://github.com/github-changelog-generator/github-changelog-generator/issues/681)
+- \[DOC\] Explain new Labels and Summary Section support in README [\#678](https://github.com/github-changelog-generator/github-changelog-generator/issues/678)
+- Encore! [\#669](https://github.com/github-changelog-generator/github-changelog-generator/issues/669)
+- Hang on pretty print of options in 1.15.0-rc [\#668](https://github.com/github-changelog-generator/github-changelog-generator/issues/668)
+- Latest docker image hanging [\#663](https://github.com/github-changelog-generator/github-changelog-generator/issues/663)
+- More instructions on how to use it with docker [\#652](https://github.com/github-changelog-generator/github-changelog-generator/issues/652)
+- process stucks/hangs and the memory usage increases up to 4.6Gib [\#651](https://github.com/github-changelog-generator/github-changelog-generator/issues/651)
+- couldn't generate changelog for organization repos [\#647](https://github.com/github-changelog-generator/github-changelog-generator/issues/647)
+- Closed issues reported under the wrong milestone [\#638](https://github.com/github-changelog-generator/github-changelog-generator/issues/638)
+- Updating to v1.15.0-rc requires --user and --project [\#633](https://github.com/github-changelog-generator/github-changelog-generator/issues/633)
+- Can we exclude closed Requests [\#632](https://github.com/github-changelog-generator/github-changelog-generator/issues/632)
+- Version in master branch hangs on MacOS [\#629](https://github.com/github-changelog-generator/github-changelog-generator/issues/629)
+- Some PRs logged for the wrong releases [\#617](https://github.com/github-changelog-generator/github-changelog-generator/issues/617)
+- since\_tag with unreleased tag unexpected behavior [\#604](https://github.com/github-changelog-generator/github-changelog-generator/issues/604)
+- Generator doesn't work when I run the command presented in the docs [\#599](https://github.com/github-changelog-generator/github-changelog-generator/issues/599)
+- Move repo to organisation [\#595](https://github.com/github-changelog-generator/github-changelog-generator/issues/595)
+- Docker image does not exist on docker hub [\#593](https://github.com/github-changelog-generator/github-changelog-generator/issues/593)
+- Dockerfile and Docker automated builds [\#591](https://github.com/github-changelog-generator/github-changelog-generator/issues/591)
+- bug: Output on aborting when unknown user and project only prints out banner, not why it aborted [\#577](https://github.com/github-changelog-generator/github-changelog-generator/issues/577)
+- Issues with 2 labels appear twice in the changelog [\#388](https://github.com/github-changelog-generator/github-changelog-generator/issues/388)
+
+**Merged pull requests:**
+
+- HTTP to HTTPS link [\#723](https://github.com/github-changelog-generator/github-changelog-generator/pull/723) ([blrhc](https://github.com/blrhc))
+- Fix broken output example link in README [\#721](https://github.com/github-changelog-generator/github-changelog-generator/pull/721) ([djpowers](https://github.com/djpowers))
+- Use MRI 2.6.2 in development [\#711](https://github.com/github-changelog-generator/github-changelog-generator/pull/711) ([olleolleolle](https://github.com/olleolleolle))
+- Drop coveralls gem and configuration [\#710](https://github.com/github-changelog-generator/github-changelog-generator/pull/710) ([olleolleolle](https://github.com/olleolleolle))
+- End support for Ruby 2.2 [\#709](https://github.com/github-changelog-generator/github-changelog-generator/pull/709) ([olleolleolle](https://github.com/olleolleolle))
+- Drop AppVeyor builds [\#708](https://github.com/github-changelog-generator/github-changelog-generator/pull/708) ([olleolleolle](https://github.com/olleolleolle))
+- Ruby version file: use 2.6.1 [\#707](https://github.com/github-changelog-generator/github-changelog-generator/pull/707) ([olleolleolle](https://github.com/olleolleolle))
+- Use a complete shebang line in git subcommand [\#706](https://github.com/github-changelog-generator/github-changelog-generator/pull/706) ([olleolleolle](https://github.com/olleolleolle))
+- CI: Make RuboCop a required, initial Workflow Job [\#705](https://github.com/github-changelog-generator/github-changelog-generator/pull/705) ([olleolleolle](https://github.com/olleolleolle))
+- CI: Remove unused TravisCI configuration file [\#704](https://github.com/github-changelog-generator/github-changelog-generator/pull/704) ([olleolleolle](https://github.com/olleolleolle))
+- Rubocop maintenance for 0.64.0 [\#703](https://github.com/github-changelog-generator/github-changelog-generator/pull/703) ([olleolleolle](https://github.com/olleolleolle))
+- Gemspec: drop old setting default\_executable [\#702](https://github.com/github-changelog-generator/github-changelog-generator/pull/702) ([olleolleolle](https://github.com/olleolleolle))
+- Fix tests [\#700](https://github.com/github-changelog-generator/github-changelog-generator/pull/700) ([unicolet](https://github.com/unicolet))
+- Replace all skywinder occurrences to github-changelog-generator [\#698](https://github.com/github-changelog-generator/github-changelog-generator/pull/698) ([bodazhao](https://github.com/bodazhao))
+- Update license date [\#696](https://github.com/github-changelog-generator/github-changelog-generator/pull/696) ([blrhc](https://github.com/blrhc))
+- README: Install wording, notes on Docker [\#689](https://github.com/github-changelog-generator/github-changelog-generator/pull/689) ([aredshaw](https://github.com/aredshaw))
+- Linting updates, spec fixes [\#680](https://github.com/github-changelog-generator/github-changelog-generator/pull/680) ([mob-sakai](https://github.com/mob-sakai))
+- README: Include Example of Release Summary [\#679](https://github.com/github-changelog-generator/github-changelog-generator/pull/679) ([olleolleolle](https://github.com/olleolleolle))
+- Remove redundant dependency [\#677](https://github.com/github-changelog-generator/github-changelog-generator/pull/677) ([mob-sakai](https://github.com/mob-sakai))
+- fix \#668; Hang on pretty print of options in 1.15.0-rc [\#676](https://github.com/github-changelog-generator/github-changelog-generator/pull/676) ([mob-sakai](https://github.com/mob-sakai))
+- Update `credit\_line` [\#666](https://github.com/github-changelog-generator/github-changelog-generator/pull/666) ([sugyan](https://github.com/sugyan))
+- Update octo\_fetcher.rb [\#661](https://github.com/github-changelog-generator/github-changelog-generator/pull/661) ([Skeyelab](https://github.com/Skeyelab))
+- Add release summary section [\#654](https://github.com/github-changelog-generator/github-changelog-generator/pull/654) ([mob-sakai](https://github.com/mob-sakai))
+- Add 'Backwards incompatible' as a default breaking label [\#650](https://github.com/github-changelog-generator/github-changelog-generator/pull/650) ([ekohl](https://github.com/ekohl))
+- Update the README to reflect the required Rake-task options [\#648](https://github.com/github-changelog-generator/github-changelog-generator/pull/648) ([chocolateboy](https://github.com/chocolateboy))
+- Travis: use jruby-9.1.17.0 [\#646](https://github.com/github-changelog-generator/github-changelog-generator/pull/646) ([olleolleolle](https://github.com/olleolleolle))
+- Sort issues by detected actual\_date instead of closed\_at [\#640](https://github.com/github-changelog-generator/github-changelog-generator/pull/640) ([hunner](https://github.com/hunner))
+- update parser.rb and git-generate-changelog.md, run ronn [\#637](https://github.com/github-changelog-generator/github-changelog-generator/pull/637) ([jennyknuth](https://github.com/jennyknuth))
+- Issue \#558 Keepachangelog labels [\#636](https://github.com/github-changelog-generator/github-changelog-generator/pull/636) ([jennyknuth](https://github.com/jennyknuth))
+- \[CI\] Test against Ruby 2.5 [\#635](https://github.com/github-changelog-generator/github-changelog-generator/pull/635) ([nicolasleger](https://github.com/nicolasleger))
+- Remove docker bits [\#634](https://github.com/github-changelog-generator/github-changelog-generator/pull/634) ([ferrarimarco](https://github.com/ferrarimarco))
+- Linty McLintface [\#628](https://github.com/github-changelog-generator/github-changelog-generator/pull/628) ([hunner](https://github.com/hunner))
+- \(maint\) Make yard warn on incorrect yard docs [\#623](https://github.com/github-changelog-generator/github-changelog-generator/pull/623) ([hunner](https://github.com/hunner))
+- Regenerate man, html docs [\#622](https://github.com/github-changelog-generator/github-changelog-generator/pull/622) ([olleolleolle](https://github.com/olleolleolle))
+- Raise error instead of unhelpful behavior for --since-tag or --due-tag [\#621](https://github.com/github-changelog-generator/github-changelog-generator/pull/621) ([hunner](https://github.com/hunner))
+- Optionally Print Issue and Pull Requests Body [\#616](https://github.com/github-changelog-generator/github-changelog-generator/pull/616) ([ArtieReus](https://github.com/ArtieReus))
+- Linting: formatting code to suit RuboCop [\#611](https://github.com/github-changelog-generator/github-changelog-generator/pull/611) ([olleolleolle](https://github.com/olleolleolle))
+- Update license date [\#610](https://github.com/github-changelog-generator/github-changelog-generator/pull/610) ([blrhc](https://github.com/blrhc))
+- Update git-generate-changelog.md [\#607](https://github.com/github-changelog-generator/github-changelog-generator/pull/607) ([blrhc](https://github.com/blrhc))
+- Capitalization and full stops [\#605](https://github.com/github-changelog-generator/github-changelog-generator/pull/605) ([blrhc](https://github.com/blrhc))
+- RuboCop 0.52.0 linting [\#603](https://github.com/github-changelog-generator/github-changelog-generator/pull/603) ([olleolleolle](https://github.com/olleolleolle))
+- Add $ or \# to indicate whether a command needs to be run as root or n… [\#602](https://github.com/github-changelog-generator/github-changelog-generator/pull/602) ([mueller-ma](https://github.com/mueller-ma))
+- Error message correction [\#601](https://github.com/github-changelog-generator/github-changelog-generator/pull/601) ([blrhc](https://github.com/blrhc))
+- Minor change [\#597](https://github.com/github-changelog-generator/github-changelog-generator/pull/597) ([blrhc](https://github.com/blrhc))
+- minor cosmetic change [\#596](https://github.com/github-changelog-generator/github-changelog-generator/pull/596) ([blrhc](https://github.com/blrhc))
+- Add option --configure-sections, --add-sections, --include-merged [\#587](https://github.com/github-changelog-generator/github-changelog-generator/pull/587) ([eputnam](https://github.com/eputnam))
+
+## [v1.15.0.pre.rc](https://github.com/github-changelog-generator/github-changelog-generator/tree/v1.15.0.pre.rc) (2017-10-29)
+
+[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/v1.15.0.pre.beta...v1.15.0.pre.rc)
 
 **Implemented enhancements:**
 
@@ -19,6 +122,7 @@
 - \[docs\] Contributing file [\#575](https://github.com/github-changelog-generator/github-changelog-generator/pull/575) ([olleolleolle](https://github.com/olleolleolle))
 
 ## [v1.15.0.pre.beta](https://github.com/github-changelog-generator/github-changelog-generator/tree/v1.15.0.pre.beta) (2017-10-13)
+
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/v1.15.0.pre.alpha...v1.15.0.pre.beta)
 
 **Implemented enhancements:**
