@@ -141,7 +141,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     def fetch_closed_issues_and_pr
       print "Fetching closed issues...\r" if @options[:verbose]
       issues = []
-      page_i      = 0
+      page_i = 0
       count_pages = calculate_pages(@client, "issues", closed_pr_options)
 
       iterate_pages(@client, "issues", closed_pr_options) do |new_issues|
