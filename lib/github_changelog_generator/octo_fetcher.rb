@@ -474,6 +474,9 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       fail_with_message(e, "Exceeded retry limit")
     rescue Octokit::Unauthorized => e
       fail_with_message(e, "Error: wrong GitHub token")
+    rescue StandardError => e
+      Helper.log.error("#{e.class}: #{e.message}")
+      nil
     end
 
     # Presents the exception, and the aborts with the message.

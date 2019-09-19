@@ -73,7 +73,7 @@ module GitHubChangelogGenerator
         # https://developer.github.com/v3/pulls/#list-pull-requests
         if pr["events"] && (event = pr["events"].find { |e| e["event"] == "merged" })
           # Iterate tags.reverse (oldest to newest) to find first tag of each PR.
-          if (oldest_tag = tags.reverse.find { |tag| tag["shas_in_tag"].include?(event["commit_id"]) })
+          if (oldest_tag = tags.reverse.find { |tag| tag["shas_in_tag"].include?(event["commit_id"]) unless tag["shas_in_tag"].nil? })
             pr["first_occurring_tag"] = oldest_tag["name"]
             found = true
             i += 1

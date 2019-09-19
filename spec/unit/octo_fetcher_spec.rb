@@ -587,4 +587,19 @@ describe GitHubChangelogGenerator::OctoFetcher do
       end
     end
   end
+
+  describe "#fetch_compare" do
+    context "with nil compare_data" do
+      it "not raises error" do
+        allow(fetcher).to receive(:check_github_response)
+        expect { fetcher.fetch_compare("a", "b") }.not_to raise_error
+      end
+    end
+    context "with diverged compare_data" do
+      it "raises error" do
+        allow(fetcher).to receive(:check_github_response).and_return("status" => "diverged")
+        expect { fetcher.fetch_compare("a", "b") }.to raise_error(StandardError, /are not related/)
+      end
+    end
+  end
 end
