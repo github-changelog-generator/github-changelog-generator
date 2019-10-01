@@ -8,9 +8,10 @@ module GitHubChangelogGenerator
     def exclude_issues_by_labels(issues)
       return issues if !options[:exclude_labels] || options[:exclude_labels].empty?
 
+      exclude_labels = options[:exclude_labels].map(&:downcase)
       issues.reject do |issue|
-        labels = issue["labels"].map { |l| l["name"] }
-        (labels & options[:exclude_labels]).any?
+        issue_labels = issue["labels"].map { |label| label["name"].downcase }
+        (issue_labels & exclude_labels).any?
       end
     end
 
