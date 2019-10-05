@@ -1,6 +1,6 @@
 # Change Log
 
-## [1.15.0](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.15.0) (2019-08-06)
+## [1.15.0](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.15.0) (2019-10-05)
 
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/v1.15.0.pre.rc...1.15.0)
 
@@ -8,6 +8,7 @@
 
 - CircleCI: Add a build matrix [\#685](https://github.com/github-changelog-generator/github-changelog-generator/issues/685)
 - A way to add release summaries [\#582](https://github.com/github-changelog-generator/github-changelog-generator/issues/582)
+- CI: Use the shorter image names for less maint [\#716](https://github.com/github-changelog-generator/github-changelog-generator/pull/716) ([olleolleolle](https://github.com/olleolleolle))
 - Build matrix for different ruby & jruby versions [\#686](https://github.com/github-changelog-generator/github-changelog-generator/pull/686) ([szemek](https://github.com/szemek))
 - CircleCI 2.0 configuration [\#684](https://github.com/github-changelog-generator/github-changelog-generator/pull/684) ([szemek](https://github.com/szemek))
 - 588 : Added new line after credits [\#627](https://github.com/github-changelog-generator/github-changelog-generator/pull/627) ([qwerty2323](https://github.com/qwerty2323))
@@ -26,6 +27,7 @@
 
 **Closed issues:**
 
+- Gitea integration  [\#735](https://github.com/github-changelog-generator/github-changelog-generator/issues/735)
 - Could we publish the latest version to gem? [\#722](https://github.com/github-changelog-generator/github-changelog-generator/issues/722)
 - docker container waits for a long time, then crashes [\#717](https://github.com/github-changelog-generator/github-changelog-generator/issues/717)
 - N/A [\#713](https://github.com/github-changelog-generator/github-changelog-generator/issues/713)
@@ -45,6 +47,7 @@
 - Can we exclude closed Requests [\#632](https://github.com/github-changelog-generator/github-changelog-generator/issues/632)
 - Version in master branch hangs on MacOS [\#629](https://github.com/github-changelog-generator/github-changelog-generator/issues/629)
 - Some PRs logged for the wrong releases [\#617](https://github.com/github-changelog-generator/github-changelog-generator/issues/617)
+- Is there way to list referenced but not closed issues? [\#609](https://github.com/github-changelog-generator/github-changelog-generator/issues/609)
 - since\_tag with unreleased tag unexpected behavior [\#604](https://github.com/github-changelog-generator/github-changelog-generator/issues/604)
 - Generator doesn't work when I run the command presented in the docs [\#599](https://github.com/github-changelog-generator/github-changelog-generator/issues/599)
 - Move repo to organisation [\#595](https://github.com/github-changelog-generator/github-changelog-generator/issues/595)
