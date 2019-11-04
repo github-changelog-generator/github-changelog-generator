@@ -95,7 +95,10 @@ module GitHubChangelogGenerator
       string = string.gsub('\\', '\\\\')
 
       ENCAPSULATED_CHARACTERS.each do |char|
-        string = string.gsub(char, "\\#{char}")
+        # Only replace char with escaped version if it isn't inside backticks (markdown inline code).
+        # This relies on each opening '`' being closed (ie an even number in total).
+        # A char is *outside* backticks if there is an even number of backticks following it.
+        string = string.gsub(%r{#{Regexp.escape(char)}(?=([^`]*`[^`]*`)*[^`]*$)}, "\\#{char}")
       end
 
       string
