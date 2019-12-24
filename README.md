@@ -72,15 +72,33 @@ Install the gem like:
 Depending on your system, you _may_ need to run the shell as an Administrator (Windows),
 or use `sudo gem install github_changelog_generator` (Linux).
 
-## Running with Docker
+
+## Usage
+
+
+### Running with CLI:
+
+	   github_changelog_generator -u github_username -p github_project
+
+
+### Running with Docker
 
 Using [Docker](https://www.docker.com/products/docker-desktop) is an alternative to installing Ruby and the gem.
-
-`ferrarimarco` has made a Docker image available that you can use.
 
 Example invocation:
 
     $ docker run -it --rm -v "$(pwd)":/usr/local/src/your-app ferrarimarco/github-changelog-generator
+
+
+
+- For Github Enterprise repos, specify *both* `--github-site` and `--github-api` options:
+
+       $ github_changelog_generator --github-site="https://github.yoursite.com" \
+                                  --github-api="https://github.yoursite.com/api/v3/"
+
+
+This generates a `CHANGELOG.md`, with pretty Markdown formatting.
+
 
 ## Output example
 
@@ -109,25 +127,6 @@ Example invocation:
 >
 > - support enterprise github via command line options [\#42](https://github.com/github-changelog-generator/Github-Changelog-Generator/pull/42) ([glenlovett](https://github.com/glenlovett))
 
-
-## Usage
-
--  Run this:
-
-	   $ github_changelog_generator -u github_username -p github_project
-
-	or, on the 1.14.x (current stable release)
-
-	   $ github_changelog_generator github_username/github_project
-
-
-- For Github Enterprise repos, specify *both* `--github-site` and `--github-api` options:
-
-       $ github_changelog_generator --github-site="https://github.yoursite.com" \
-                                  --github-api="https://github.yoursite.com/api/v3/"
-
-This generates a `CHANGELOG.md`, with pretty Markdown formatting.
-
 ### Params
 
 Print help for all command-line options to learn more details:
@@ -150,7 +149,7 @@ since-tag=1.0.0
 
 ### GitHub token
 
-GitHub only allows 50 unauthenticated requests per hour.
+GitHub only allows **50 unauthenticated requests per hour**.
 
 Therefore, it's recommended to run this script with authentication by using a **token**.
 
@@ -161,7 +160,7 @@ Here's how:
     - Run the script with `--token <your-40-digit-token>`; **OR**
     - Set the `CHANGELOG_GITHUB_TOKEN` environment variable to your 40 digit token
 
-You can set an environment variable by running the following command at the prompt, or by adding it to your shell profile (e.g., `~/.bash_profile` or `~/.zshrc`):
+You can set an environment variable by running the following command at the prompt, or by adding it to your shell profile (e.g., `.env`, `~/.bash_profile`, `~/.zshrc`, etc):
 
     export CHANGELOG_GITHUB_TOKEN="«your-40-digit-github-token»"
 
