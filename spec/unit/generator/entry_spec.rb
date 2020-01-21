@@ -426,6 +426,18 @@ module GitHubChangelogGenerator
             sections_json.shift
           end
         end
+        context "parse also body_only" do
+          let(:sections_string) { "{ \"foo\": { \"prefix\": \"foofix\", \"labels\": [\"test1\", \"test2\"]}, \"bar\": { \"prefix\": \"barfix\", \"labels\": [\"test3\", \"test4\"], \"body_only\": true}}" }
+
+          it "returns correctly constructed sections" do
+            require "json"
+
+            parsed_sections = subject.send(:parse_sections, sections_string)
+
+            expect(parsed_sections[0].body_only).to eq false
+            expect(parsed_sections[1].body_only).to eq true
+          end
+        end
       end
       context "hash" do
         let(:sections_hash) do
