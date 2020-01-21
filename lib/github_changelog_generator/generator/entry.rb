@@ -72,7 +72,7 @@ module GitHubChangelogGenerator
       end
 
       sections_json.collect do |name, v|
-        Section.new(name: name.to_s, prefix: v["prefix"], labels: v["labels"], options: @options)
+        Section.new(name: name.to_s, prefix: v["prefix"], labels: v["labels"], body_only: v["body_only"], options: @options)
       end
     end
 
