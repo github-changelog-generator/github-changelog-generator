@@ -40,6 +40,15 @@ module GitHubChangelogGenerator
       @content
     end
 
+    def line_labels_for(issue)
+      labels = if @options[:issue_line_labels] == ["ALL"]
+                 issue["labels"]
+               else
+                 issue["labels"].select { |label| @options[:issue_line_labels].include?(label["name"]) }
+               end
+      labels.map { |label| " \[[#{label['name']}](#{label['url'].sub('api.github.com/repos', 'github.com')})\]" }.join("")
+    end
+
     private
 
     # Creates section objects for this entry.
@@ -204,15 +213,6 @@ module GitHubChangelogGenerator
         @sections << merged
       end
       nil
-    end
-
-    def line_labels_for(issue)
-      labels = if @options[:issue_line_labels] == ["ALL"]
-                 issue["labels"]
-               else
-                 issue["labels"].select { |label| @options[:issue_line_labels].include?(label["name"]) }
-               end
-      labels.map { |label| " \[[#{label['name']}](#{label['url'].sub('api.github.com/repos', 'github.com')})\]" }.join("")
     end
   end
 end
