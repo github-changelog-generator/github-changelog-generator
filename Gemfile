@@ -11,6 +11,7 @@ group :development, :test do
   gem "overcommit", ">= 0.31"
   gem "rake"
   gem "rubocop", ">= 0.50"
+  gem "rubocop-performance"
   gem "yard-junk"
 end
 
@@ -20,7 +21,6 @@ end
 
 group :test do
   gem "codeclimate-test-reporter", "~> 1.0"
-  gem "coveralls", "~>0.8", require: false
   gem "json"
   gem "multi_json"
   gem "rspec", "< 4"

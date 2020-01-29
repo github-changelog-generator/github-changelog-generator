@@ -538,12 +538,13 @@ module GitHubChangelogGenerator
 
         subject { described_class.new(options) }
 
-        it "returns 8 sections" do
-          expect(entry_sections.size).to eq 8
+        it "returns 9 sections" do
+          entry_sections.each { |sec| pp(sec.name) }
+          expect(entry_sections.size).to eq 9
         end
 
         it "returns default sections" do
-          default_sections.each { |default_section| expect(entry_sections.select { |section| section.name == default_section }.size).to eq 1 }
+          default_sections.each { |default_section| expect(entry_sections.count { |section| section.name == default_section }).to eq 1 }
         end
 
         it "assigns issues to the correct sections" do
@@ -606,8 +607,8 @@ module GitHubChangelogGenerator
         end
 
         it "returns only configured sections" do
-          expect(entry_sections.select { |section| section.name == "foo" }.size).to eq 1
-          expect(entry_sections.select { |section| section.name == "bar" }.size).to eq 1
+          expect(entry_sections.count { |section| section.name == "foo" }).to eq 1
+          expect(entry_sections.count { |section| section.name == "bar" }).to eq 1
         end
 
         it "assigns issues to the correct sections" do
@@ -664,8 +665,8 @@ module GitHubChangelogGenerator
         end
 
         it "returns only configured sections" do
-          expect(entry_sections.select { |section| section.name == "foo" }.size).to eq 1
-          expect(entry_sections.select { |section| section.name == "bar" }.size).to eq 1
+          expect(entry_sections.count { |section| section.name == "foo" }).to eq 1
+          expect(entry_sections.count { |section| section.name == "bar" }).to eq 1
         end
 
         it "assigns issues to the correct sections" do
@@ -722,16 +723,17 @@ module GitHubChangelogGenerator
 
         subject { described_class.new(options) }
 
-        it "returns 9 sections" do
-          expect(entry_sections.size).to eq 9
+        it "returns 10 sections" do
+          entry_sections.each { |sec| pp(sec.name) }
+          expect(entry_sections.size).to eq 10
         end
 
         it "returns default sections" do
-          default_sections.each { |default_section| expect(entry_sections.select { |section| section.name == default_section }.size).to eq 1 }
+          default_sections.each { |default_section| expect(entry_sections.count { |section| section.name == default_section }).to eq 1 }
         end
 
         it "returns added section" do
-          expect(entry_sections.select { |section| section.name == "foo" }.size).to eq 1
+          expect(entry_sections.count { |section| section.name == "foo" }).to eq 1
         end
 
         it "assigns issues to the correct sections" do

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "github_changelog_generator/generator/section"
 
 module GitHubChangelogGenerator
@@ -123,6 +125,7 @@ module GitHubChangelogGenerator
     # @return [Array] Section objects.
     def default_sections
       [
+        Section.new(name: "summary", prefix: @options[:summary_prefix], labels: @options[:summary_labels], options: @options, body_only: true),
         Section.new(name: "breaking", prefix: @options[:breaking_prefix], labels: @options[:breaking_labels], options: @options),
         Section.new(name: "enhancements", prefix: @options[:enhancement_prefix], labels: @options[:enhancement_labels], options: @options),
         Section.new(name: "bugs", prefix: @options[:bug_prefix], labels: @options[:bug_labels], options: @options),

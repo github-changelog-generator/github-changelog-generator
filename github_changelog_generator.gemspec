@@ -7,15 +7,14 @@ require "github_changelog_generator/version"
 Gem::Specification.new do |spec|
   spec.name               = "github_changelog_generator"
   spec.version            = GitHubChangelogGenerator::VERSION
-  spec.default_executable = "github_changelog_generator"
 
-  spec.required_ruby_version = ">= 2.2.2"
+  spec.required_ruby_version = ">= 2.3.0"
   spec.authors = ["Petr Korolev", "Olle Jonsson"]
   spec.email = "sky4winder+github_changelog_generator@gmail.com"
 
   spec.summary = "Script, that automatically generate changelog from your tags, issues, labels and pull requests."
   spec.description = "Changelog generation has never been so easy. Fully automate changelog generation - this gem generate changelog file based on tags, issues and merged pull requests from Github issue tracker."
-  spec.homepage = "https://github.com/skywinder/Github-Changelog-Generator"
+  spec.homepage = "https://github.com/github-changelog-generator/Github-Changelog-Generator"
   spec.license = "MIT"
 
   spec.files = Dir["{bin,lib,man,spec}/**/*"] + %w[LICENSE Rakefile README.md]

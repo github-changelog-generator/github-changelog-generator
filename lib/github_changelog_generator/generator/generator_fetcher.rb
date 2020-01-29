@@ -7,9 +7,7 @@ module GitHubChangelogGenerator
     # Fetch event for issues and pull requests
     # @return [Array] array of fetched issues
     def fetch_events_for_issues_and_pr
-      if options[:verbose]
-        print "Fetching events for issues and PR: 0/#{@issues.count + @pull_requests.count}\r"
-      end
+      print "Fetching events for issues and PR: 0/#{@issues.count + @pull_requests.count}\r" if options[:verbose]
 
       # Async fetching events:
       @fetcher.fetch_events_async(@issues)
@@ -91,6 +89,7 @@ module GitHubChangelogGenerator
           # weird like that apparently. Check for a rebased comment before erroring.
           no_events_pr = associate_rebase_comment_prs(tags, [pr], total)
           raise StandardError, "No merge sha found for PR #{pr['number']} via the GitHub API" unless no_events_pr.empty?
+
           found = true
           i += 1
           print("Associating PRs with tags: #{i}/#{total}\r") if @options[:verbose]
