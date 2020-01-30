@@ -10,7 +10,7 @@ module GitHubChangelogGenerator
   # fetcher = GitHubChangelogGenerator::OctoFetcher.new(options)
   class OctoFetcher
     PER_PAGE_NUMBER   = 100
-    MAX_THREAD_NUMBER = 25
+    MAX_THREAD_NUMBER = 10
     MAX_FORBIDDEN_RETRIES = 100
     CHANGELOG_GITHUB_TOKEN = "CHANGELOG_GITHUB_TOKEN"
     GH_RATE_LIMIT_EXCEEDED_MSG = "Warning: Can't finish operation: GitHub API rate limit exceeded, changelog may be " \
@@ -42,6 +42,7 @@ module GitHubChangelogGenerator
 
     def prepare_cache
       return unless @http_cache
+
       @cache_file = @options.fetch(:cache_file) { File.join(Dir.tmpdir, "github-changelog-http-cache") }
       @cache_log  = @options.fetch(:cache_log) { File.join(Dir.tmpdir, "github-changelog-logger.log") }
       init_cache
@@ -140,7 +141,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     def fetch_closed_issues_and_pr
       print "Fetching closed issues...\r" if @options[:verbose]
       issues = []
-      page_i      = 0
+      page_i = 0
       count_pages = calculate_pages(@client, "issues", closed_pr_options)
 
       iterate_pages(@client, "issues", closed_pr_options) do |new_issues|
@@ -253,6 +254,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       unless @compares["#{older}...#{newer}"]
         compare_data = check_github_response { @client.compare(user_project, older, newer || "HEAD") }
         raise StandardError, "Sha #{older} and sha #{newer} are not related; please file a github-changelog-generator issues and describe how to replicate this issue." if compare_data["status"] == "diverged"
+
         @compares["#{older}...#{newer}"] = stringify_keys_deep(compare_data.to_hash)
       end
       @compares["#{older}...#{newer}"]

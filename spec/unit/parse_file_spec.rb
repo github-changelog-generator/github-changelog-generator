@@ -60,7 +60,7 @@ describe GitHubChangelogGenerator::ParserFile do
         it "reads exclude_labels into an Array" do
           expect { parser.parse! }.to change { options[:exclude_labels] }
             .from(default_options[:exclude_labels])
-            .to(["73a91042-da6f-11e5-9335-1040f38d7f90", "7adf83b4-da6f-11e5-ae18-1040f38d7f90"])
+            .to(%w[73a91042-da6f-11e5-9335-1040f38d7f90 7adf83b4-da6f-11e5-ae18-1040f38d7f90])
         end
 
         it "translates given header_label into the :header option" do

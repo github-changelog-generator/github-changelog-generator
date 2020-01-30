@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module GitHubChangelogGenerator
   # This class generates the content for a single section of a changelog entry.
   # It turns the tagged issues and PRs into a well-formatted list of changes to
@@ -5,7 +7,7 @@ module GitHubChangelogGenerator
   #
   # @see GitHubChangelogGenerator::Entry
   class Section
-    attr_accessor :name, :prefix, :issues, :labels
+    attr_accessor :name, :prefix, :issues, :labels, :body_only
 
     def initialize(opts = {})
       @name = opts[:name]
@@ -13,6 +15,7 @@ module GitHubChangelogGenerator
       @labels = opts[:labels] || []
       @issues = opts[:issues] || []
       @options = opts[:options] || Options.new({})
+      @body_only = opts[:body_only] || false
     end
 
     # Returns the content of a section.
@@ -22,10 +25,11 @@ module GitHubChangelogGenerator
       content = ""
 
       if @issues.any?
-        content += "#{@prefix}\n\n" unless @options[:simple_list]
+        content += "#{@prefix}\n\n" unless @options[:simple_list] || @prefix.blank?
         @issues.each do |issue|
           merge_string = get_string_for_issue(issue)
-          content += "- #{merge_string}\n"
+          content += "- " unless @body_only
+          content += "#{merge_string}\n"
         end
         content += "\n"
       end
@@ -37,7 +41,7 @@ module GitHubChangelogGenerator
     # Parse issue and generate single line formatted issue line.
     #
     # Example output:
-    # - Add coveralls integration [\#223](https://github.com/skywinder/github-changelog-generator/pull/223) (@skywinder)
+    # - Add coveralls integration [\#223](https://github.com/github-changelog-generator/github-changelog-generator/pull/223) (@github-changelog-generator)
     #
     # @param [Hash] issue Fetched issue from GitHub
     # @return [String] Markdown-formatted single issue
@@ -45,15 +49,15 @@ module GitHubChangelogGenerator
       encapsulated_title = encapsulate_string issue["title"]
 
       title_with_number = "#{encapsulated_title} [\\##{issue['number']}](#{issue['html_url']})"
-      if @options[:issue_line_labels].present?
-        title_with_number = "#{title_with_number}#{line_labels_for(issue)}"
-      end
+      title_with_number = "#{title_with_number}#{line_labels_for(issue)}" if @options[:issue_line_labels].present?
       line = issue_line_with_user(title_with_number, issue)
       issue_line_with_body(line, issue)
     end
 
     def issue_line_with_body(line, issue)
+      return issue["body"] if @body_only && issue["body"].present?
       return line if !@options[:issue_line_body] || issue["body"].blank?
+
       # get issue body till first line break
       body_paragraph = body_till_first_break(issue["body"])
       # remove spaces from begining and end of the string
