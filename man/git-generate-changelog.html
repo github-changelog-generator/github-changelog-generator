@@ -80,7 +80,7 @@
 
 <h2 id="DESCRIPTION">DESCRIPTION</h2>
 
-<p>Automatically generate change log from your tags, issues, labels and pull requests on GitHub.</p>
+<p>Automatically generate changelog from your tags, issues, labels and pull requests on GitHub.</p>
 
 <h2 id="OPTIONS">OPTIONS</h2>
 
@@ -122,7 +122,7 @@
 
 <p>   --header-label [LABEL]</p>
 
-<p>   Setup custom header label. Default is "# Change Log"</p>
+<p>   Setup custom header label. Default is "# Changelog"</p>
 
 <p>   --pr-label [LABEL]</p>
 
@@ -184,21 +184,17 @@
 
 <p>   Issues with the specified labels will be always added to "Implemented enhancements" section. Default is 'enhancement,Enhancement'</p>
 
-<p>   --between-tags x,y,z</p>
-
-<p>   Change log will be filled only between specified tags</p>
-
 <p>   --exclude-tags x,y,z</p>
 
-<p>   Change log will exclude specified tags</p>
+<p>   Changelog will exclude specified tags</p>
 
 <p>   --since-tag x</p>
 
-<p>   Change log will start after specified tag</p>
+<p>   Changelog will start after specified tag</p>
 
 <p>   --due-tag x</p>
 
-<p>   Change log will end before specified tag</p>
+<p>   Changelog will end before specified tag</p>
 
 <p>   --max-issues [NUMBER]</p>
 
@@ -224,6 +220,18 @@
 
 <p>   Put the unreleased changes in the specified release number.</p>
 
+<p>   --configure-sections [HASH, STRING]</p>
+
+<p>   Define your own set of sections which overrides all default sections") do |v|</p>
+
+<p>   --add-sections [HASH, STRING]</p>
+
+<p>   Add new sections but keep the default sections"</p>
+
+<p>   --include-merged</p>
+
+<p>   If configure_sections is set, use this to restore the merged pull requests sections</p>
+
 <p>   --[no-]verbose</p>
 
 <p>   Run verbosely. Default is true</p>
@@ -244,11 +252,11 @@
 
 <h2 id="REPORTING-BUGS">REPORTING BUGS</h2>
 
-<p>&lt;<a href="https://github.com/skywinder/github-changelog-generator/issues" data-bare-link="true">https://github.com/skywinder/github-changelog-generator/issues</a>&gt;</p>
+<p>&lt;<a href="https://github.com/github-changelog-generator/github-changelog-generator/issues" data-bare-link="true">https://github.com/github-changelog-generator/github-changelog-generator/issues</a>&gt;</p>
 
 <h2 id="SEE-ALSO">SEE ALSO</h2>
 
-<p>&lt;<a href="https://github.com/skywinder/github-changelog-generator/" data-bare-link="true">https://github.com/skywinder/github-changelog-generator/</a>&gt;</p>
+<p>&lt;<a href="https://github.com/github-changelog-generator/github-changelog-generator/" data-bare-link="true">https://github.com/github-changelog-generator/github-changelog-generator/</a>&gt;</p>
 
 
   <ol class='man-decor man-foot man foot'>

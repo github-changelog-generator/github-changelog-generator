@@ -1,6 +1,18 @@
 inherit_from: .rubocop_todo.yml
+require: rubocop-performance
+
+AllCops:
+  TargetRubyVersion: 2.3
+  DisplayCopNames: true
+  DisplayStyleGuide: true
+  Exclude:
+    - 'vendor/**/*'
+    - 'gemfiles/**/*'
 
 Metrics/LineLength:
+  Enabled: false
+
+Performance/RegexpMatch:
   Enabled: false
 
 #http://viget.com/extend/just-use-double-quoted-ruby-strings
@@ -15,7 +27,7 @@ Metrics/ClassLength:
 Metrics/MethodLength:
     Enabled: false
 
-Style/FileName:
+Naming/FileName:
     Exclude:
       - 'bin/git-generate-changelog'
 
@@ -25,7 +37,7 @@ Metrics/AbcSize:
   Enabled: false
 
 # Offense count: 1
-Style/AccessorMethodName:
+Naming/AccessorMethodName:
   Enabled: false
 
 # Offense count: 10
@@ -53,4 +65,26 @@ Style/RegexpLiteral:
 
 Style/MutableConstant:
     Enabled: false
-    
+
+# "Use idx.positive? instead of idx > 0."
+Style/NumericPredicate:
+  Enabled: false
+
+Style/SafeNavigation:
+  Enabled: false
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+
+# Re-enable when merged; https://github.com/bbatsov/rubocop/pull/4756
+Lint/InterpolationCheck:
+  Enabled: false
+
+Style/FormatStringToken:
+  Exclude:
+    - lib/github_changelog_generator/parser.rb
+
+Style/MixinUsage:
+  Exclude:
+    - lib/github_changelog_generator/task.rb

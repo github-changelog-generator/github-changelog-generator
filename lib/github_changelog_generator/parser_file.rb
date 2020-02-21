@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "pathname"
 
 module GitHubChangelogGenerator
@@ -29,6 +31,7 @@ module GitHubChangelogGenerator
     # Sets options using configuration file content
     def parse!
       return unless @file
+
       @file.each_with_index { |line, i| parse_line!(line, i + 1) }
       @file.close
     end
@@ -44,9 +47,10 @@ module GitHubChangelogGenerator
 
     def parse_line!(line, line_number)
       return if non_configuration_line?(line)
+
       option_name, value = extract_pair(line)
       @options[option_key_for(option_name)] = convert_value(value, option_name)
-    rescue
+    rescue StandardError
       raise ParserError, "Failed on line ##{line_number}: \"#{line.gsub(/[\n\r]+/, '')}\""
     end
 
@@ -61,11 +65,13 @@ module GitHubChangelogGenerator
     # @return [Array<Symbol, String>]
     def extract_pair(line)
       key, value = line.split("=", 2)
-      [key.sub("-", "_").to_sym, value.gsub(/[\n\r]+/, "")]
+      [key.tr("-", "_").to_sym, value.gsub(/[\n\r]+/, "")]
     end
 
-    KNOWN_ARRAY_KEYS = [:exclude_labels, :include_labels, :bug_labels,
-                        :enhancement_labels, :between_tags, :exclude_tags]
+    KNOWN_ARRAY_KEYS = %i[exclude_labels include_labels
+                          summary_labels breaking_labels enhancement_labels bug_labels
+                          deprecated_labels removed_labels security_labels
+                          issue_line_labels between_tags exclude_tags]
     KNOWN_INTEGER_KEYS = [:max_issues]
 
     def convert_value(value, option_name)
@@ -89,6 +95,7 @@ module GitHubChangelogGenerator
       header_label: :header,
       front_matter: :frontmatter,
       pr_label: :merge_prefix,
+      breaking_label: :breaking_prefix,
       issues_wo_labels: :add_issues_wo_labels,
       pr_wo_labels: :add_pr_wo_labels,
       pull_requests: :pulls,

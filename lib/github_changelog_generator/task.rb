@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rake"
 require "rake/tasklib"
 require "github_changelog_generator"
@@ -6,7 +8,7 @@ module GitHubChangelogGenerator
   class RakeTask < ::Rake::TaskLib
     include ::Rake::DSL if defined?(::Rake::DSL)
 
-    OPTIONS = %w( user project token date_format output
+    OPTIONS = %w[ user project token date_format output
                   bug_prefix enhancement_prefix issue_prefix
                   header merge_prefix issues
                   add_issues_wo_labels add_pr_wo_labels
@@ -17,7 +19,7 @@ module GitHubChangelogGenerator
                   between_tags exclude_tags exclude_tags_regex since_tag max_issues
                   github_site github_endpoint simple_list
                   future_release release_branch verbose release_url
-                  base )
+                  base configure_sections add_sections]
 
     OPTIONS.each do |o|
       attr_accessor o.to_sym
@@ -35,7 +37,7 @@ module GitHubChangelogGenerator
     end
 
     def define(args, &task_block)
-      desc "Generate a Change log from GitHub"
+      desc "Generate a Changelog from GitHub"
 
       yield(*[self, args].slice(0, task_block.arity)) if task_block
 
@@ -46,13 +48,11 @@ module GitHubChangelogGenerator
         # mimick parse_options
         options = Parser.default_options
 
-        Parser.fetch_user_and_project(options)
-
         OPTIONS.each do |o|
           v = instance_variable_get("@#{o}")
           options[o.to_sym] = v unless v.nil?
         end
-
+        abort "user and project are required." unless options[:user] && options[:project]
         generator = Generator.new options
 
         log = generator.compound_changelog

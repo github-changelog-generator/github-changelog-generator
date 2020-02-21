@@ -1,15 +1,30 @@
+# frozen_string_literal: true
+
 source "https://rubygems.org"
+
+ruby RUBY_VERSION
 
 gemspec
 
-group :test do
-  gem "rake"
+group :development, :test do
   gem "bundler"
-  gem "rubocop"
-  gem "overcommit"
-  gem "coveralls", "~>0.8", require: false
+  gem "overcommit", ">= 0.31"
+  gem "rake"
+  gem "rubocop", ">= 0.50"
+  gem "rubocop-performance"
+  gem "yard-junk"
+end
+
+group :development do
+  gem "bump"
+end
+
+group :test do
+  gem "codeclimate-test-reporter", "~> 1.0"
+  gem "json"
+  gem "multi_json"
+  gem "rspec", "< 4"
   gem "simplecov", "~>0.10", require: false
-  gem "codeclimate-test-reporter", "~>0.4"
-  # JSON 2.0.1 is ruby 2.0+
-  gem "json", "< 2.0"
+  gem "vcr"
+  gem "webmock"
 end

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv='content-type' value='text/html;charset=utf8'>
+  <meta name='generator' value='Ronn/v0.7.3 (http://github.com/rtomayko/ronn/tree/0.7.3)'>
+  <title>git-generate-changelog(1) - Generate changelog from GitHub</title>
+  <style type='text/css' media='all'>
+  /* style: man */
+  body#manpage {margin:0}
+  .mp {max-width:100ex;padding:0 9ex 1ex 4ex}
+  .mp p,.mp pre,.mp ul,.mp ol,.mp dl {margin:0 0 20px 0}
+  .mp h2 {margin:10px 0 0 0}
+  .mp > p,.mp > pre,.mp > ul,.mp > ol,.mp > dl {margin-left:8ex}
+  .mp h3 {margin:0 0 0 4ex}
+  .mp dt {margin:0;clear:left}
+  .mp dt.flush {float:left;width:8ex}
+  .mp dd {margin:0 0 0 9ex}
+  .mp h1,.mp h2,.mp h3,.mp h4 {clear:left}
+  .mp pre {margin-bottom:20px}
+  .mp pre+h2,.mp pre+h3 {margin-top:22px}
+  .mp h2+pre,.mp h3+pre {margin-top:5px}
+  .mp img {display:block;margin:auto}
+  .mp h1.man-title {display:none}
+  .mp,.mp code,.mp pre,.mp tt,.mp kbd,.mp samp,.mp h3,.mp h4 {font-family:monospace;font-size:14px;line-height:1.42857142857143}
+  .mp h2 {font-size:16px;line-height:1.25}
+  .mp h1 {font-size:20px;line-height:2}
+  .mp {text-align:justify;background:#fff}
+  .mp,.mp code,.mp pre,.mp pre code,.mp tt,.mp kbd,.mp samp {color:#131211}
+  .mp h1,.mp h2,.mp h3,.mp h4 {color:#030201}
+  .mp u {text-decoration:underline}
+  .mp code,.mp strong,.mp b {font-weight:bold;color:#131211}
+  .mp em,.mp var {font-style:italic;color:#232221;text-decoration:none}
+  .mp a,.mp a:link,.mp a:hover,.mp a code,.mp a pre,.mp a tt,.mp a kbd,.mp a samp {color:#0000ff}
+  .mp b.man-ref {font-weight:normal;color:#434241}
+  .mp pre {padding:0 4ex}
+  .mp pre code {font-weight:normal;color:#434241}
+  .mp h2+pre,h3+pre {padding-left:0}
+  ol.man-decor,ol.man-decor li {margin:3px 0 10px 0;padding:0;float:left;width:33%;list-style-type:none;text-transform:uppercase;color:#999;letter-spacing:1px}
+  ol.man-decor {width:100%}
+  ol.man-decor li.tl {text-align:left}
+  ol.man-decor li.tc {text-align:center;letter-spacing:4px}
+  ol.man-decor li.tr {text-align:right;float:right}
+  </style>
+</head>
+<!--
+  The following styles are deprecated and will be removed at some point:
+  div#man, div#man ol.man, div#man ol.head, div#man ol.man.
+
+  The .man-page, .man-decor, .man-head, .man-foot, .man-title, and
+  .man-navigation should be used instead.
+-->
+<body id='manpage'>
+  <div class='mp' id='man'>
+
+  <div class='man-navigation' style='display:none'>
+    <a href="#NAME">NAME</a>
+    <a href="#SYNOPSIS">SYNOPSIS</a>
+    <a href="#DESCRIPTION">DESCRIPTION</a>
+    <a href="#OPTIONS">OPTIONS</a>
+    <a href="#REBASED-COMMITS">REBASED COMMITS</a>
+    <a href="#EXAMPLES">EXAMPLES</a>
+    <a href="#AUTHOR">AUTHOR</a>
+    <a href="#REPORTING-BUGS">REPORTING BUGS</a>
+    <a href="#SEE-ALSO">SEE ALSO</a>
+  </div>
+
+  <ol class='man-decor man-head man head'>
+    <li class='tl'>git-generate-changelog(1)</li>
+    <li class='tc'></li>
+    <li class='tr'>git-generate-changelog(1)</li>
+  </ol>
+
+  <h2 id="NAME">NAME</h2>
+<p class="man-name">
+  <code>git-generate-changelog</code> - <span class="man-whatis">Generate changelog from GitHub</span>
+</p>
+
+<h2 id="SYNOPSIS">SYNOPSIS</h2>
+
+<p><code>git generate-changelog</code> [-h|--help] [-u|--user] [-p|--project]</p>
+
+<h2 id="DESCRIPTION">DESCRIPTION</h2>
+
+<p>Automatically generate changelog from your tags, issues, labels and pull requests on GitHub.</p>
+
+<h2 id="OPTIONS">OPTIONS</h2>
+
+<p>  -u, --user [USER]</p>
+
+<p>  Username of the owner of target GitHub repo.</p>
+
+<p>  -p, --project [PROJECT]</p>
+
+<p>  Name of project on GitHub.</p>
+
+<p>  -t, --token [TOKEN]</p>
+
+<p>  To make more than 50 requests per hour your GitHub token is required. You can generate it at: https://github.com/settings/tokens/new</p>
+
+<p>  -f, --date-format [FORMAT]</p>
+
+<p>  Date format. Default is %Y-%m-%d.</p>
+
+<p>  -o, --output [NAME]</p>
+
+<p>  Output file. To print to STDOUT instead, use blank as path. Default is CHANGELOG.md.</p>
+
+<p>  -b, --base [NAME]</p>
+
+<p>  Optional base file to append generated changes to.</p>
+
+<p>  --summary-label [LABEL]</p>
+
+<p>  Set up custom label for the release summary section. Default is "".</p>
+
+<p>  --breaking-label [LABEL]</p>
+
+<p>  Set up custom label for breaking changes section. Default is "<strong>Breaking changes:</strong>".</p>
+
+<p>  --enhancement-label [LABEL]</p>
+
+<p>  Set up custom label for enhancements section. Default is "<strong>Implemented enhancements:</strong>".</p>
+
+<p>  --bugs-label [LABEL]</p>
+
+<p>  Set up custom label for bug-fixes section. Default is "<strong>Fixed bugs:</strong>".</p>
+
+<p>  --deprecated-label [LABEL]</p>
+
+<p>  Set up custom label for deprecated section. Default is "<strong>Deprecated:</strong>".</p>
+
+<p>  --removed-label [LABEL]</p>
+
+<p>  Set up custom label for removed section. Default is "<strong>Removed:</strong>".</p>
+
+<p>  --security-label [LABEL]</p>
+
+<p>  Set up custom label for security section. Default is "<strong>Security:</strong>".</p>
+
+<p>  --issues-label [LABEL]</p>
+
+<p>  Set up custom label for closed-issues section. Default is "<strong>Closed issues:</strong>".</p>
+
+<p>  --header-label [LABEL]</p>
+
+<p>  Set up custom header label. Default is "# Changelog".</p>
+
+<p>  --configure-sections [HASH, STRING]</p>
+
+<p>  Define your own set of sections which overrides all default sections.</p>
+
+<p>  --add-sections [HASH, STRING]</p>
+
+<p>  Add new sections but keep the default sections.</p>
+
+<p>  --front-matter [JSON]</p>
+
+<p>  Add YAML front matter. Formatted as JSON because it's easier to add on the command line.</p>
+
+<p>  --pr-label [LABEL]</p>
+
+<p>  Set up custom label for pull requests section. Default is "<strong>Merged pull requests:</strong>".</p>
+
+<p>  --[no-]issues</p>
+
+<p>  Include closed issues in changelog. Default is true.</p>
+
+<p>  --[no-]issues-wo-labels</p>
+
+<p>  Include closed issues without labels in changelog. Default is true.</p>
+
+<p>  --[no-]pr-wo-labels</p>
+
+<p>  Include pull requests without labels in changelog. Default is true.</p>
+
+<p>  --[no-]pull-requests</p>
+
+<p>  Include pull-requests in changelog. Default is true.</p>
+
+<p>  --[no-]filter-by-milestone</p>
+
+<p>  Use milestone to detect when issue was resolved. Default is true.</p>
+
+<p>  --[no-]author</p>
+
+<p>  Add author of pull request at the end. Default is true.</p>
+
+<p>  --usernames-as-github-logins</p>
+
+<p>  Use GitHub tags instead of Markdown links for the author of an issue or pull-request.</p>
+
+<p>  --unreleased-only</p>
+
+<p>  Generate log from unreleased closed issues only.</p>
+
+<p>  --[no-]unreleased</p>
+
+<p>  Add to log unreleased closed issues. Default is true.</p>
+
+<p>  --unreleased-label [label]</p>
+
+<p>  Set up custom label for unreleased closed issues section. Default is "<strong>Unreleased:</strong>".</p>
+
+<p>  --[no-]compare-link</p>
+
+<p>  Include compare link (Full Changelog) between older version and newer version. Default is true.</p>
+
+<p>  --include-labels x,y,z</p>
+
+<p>  Of the labeled issues, only include the ones with the specified labels.</p>
+
+<p>  --exclude-labels x,y,z</p>
+
+<p>  Issues with the specified labels will be excluded from changelog. Default is 'duplicate,question,invalid,wontfix'.</p>
+
+<p>  --summary-labels x,y,z</p>
+
+<p>  Issues with these labels will be added to a new section, called "Release Summary". The section display only body of issues. Default is 'Release summary,release-summary,Summary,summary'.</p>
+
+<p>  --breaking-labels x,y,z</p>
+
+<p>  Issues with these labels will be added to a new section, called "Breaking changes". Default is 'backwards-incompatible,breaking'.</p>
+
+<p>  --enhancement-labels x,y,z</p>
+
+<p>  Issues with the specified labels will be added to "Implemented enhancements" section. Default is 'enhancement,Enhancement'.</p>
+
+<p>  --bug-labels x,y,z</p>
+
+<p>  Issues with the specified labels will be added to "Fixed bugs" section. Default is 'bug,Bug'.</p>
+
+<p>  --deprecated-labels x,y,z</p>
+
+<p>  Issues with the specified labels will be added to a section called "Deprecated". Default is 'deprecated,Deprecated'.</p>
+
+<p>  --removed-labels x,y,z</p>
+
+<p>  Issues with the specified labels will be added to a section called "Removed". Default is 'removed,Removed'.</p>
+
+<p>  --security-labels x,y,z</p>
+
+<p>  Issues with the specified labels will be added to a section called "Security fixes". Default is 'security,Security'.</p>
+
+<p>  --issue-line-labels x,y,z</p>
+
+<p>  The specified labels will be shown in brackets next to each matching issue. Use "ALL" to show all labels. Default is [].</p>
+
+<p>  --exclude-tags x,y,z</p>
+
+<p>  Changelog will exclude specified tags.</p>
+
+<p>  --exclude-tags-regex [REGEX]</p>
+
+<p>  Apply a regular expression on tag names so that they can be excluded, for example: --exclude-tags-regex ".*+\d{1,}".</p>
+
+<p>  --since-tag x</p>
+
+<p>  Changelog will start after specified tag.</p>
+
+<p>  --due-tag x</p>
+
+<p>  Changelog will end before specified tag.</p>
+
+<p>  --max-issues [NUMBER]</p>
+
+<p>  Maximum number of issues to fetch from GitHub. Default is unlimited.</p>
+
+<p>  --release-url [URL]</p>
+
+<p>  The URL to point to for release links, in printf format (with the tag as variable).</p>
+
+<p>  --github-site [URL]</p>
+
+<p>  The Enterprise GitHub site where your project is hosted.</p>
+
+<p>  --github-api [URL]</p>
+
+<p>  The enterprise endpoint to use for your GitHub API.</p>
+
+<p>  --simple-list</p>
+
+<p>  Create a simple list from issues and pull requests. Default is false.</p>
+
+<p>  --future-release [RELEASE-VERSION]</p>
+
+<p>  Put the unreleased changes in the specified release number.</p>
+
+<p>  --release-branch [RELEASE-BRANCH]</p>
+
+<p>  Limit pull requests to the release branch, such as master or release.</p>
+
+<p>  --http-cache</p>
+
+<p>  Use HTTP Cache to cache GitHub API requests (useful for large repos). Default is true.</p>
+
+<p>  --[no-]cache-file [CACHE-FILE]</p>
+
+<p>  Filename to use for cache. Default is github-changelog-http-cache in a temporary directory.</p>
+
+<p>  --cache-log [CACHE-LOG]</p>
+
+<p>  Filename to use for cache log. Default is github-changelog-logger.log in a temporary directory.</p>
+
+<p>  --ssl-ca-file [PATH]</p>
+
+<p>  Path to cacert.pem file. Default is a bundled lib/github_changelog_generator/ssl_certs/cacert.pem. Respects SSL_CA_PATH.</p>
+
+<p>  --require file1.rb,file2.rb</p>
+
+<p>  Paths to Ruby file(s) to require before generating changelog.</p>
+
+<p>  --[no-]verbose</p>
+
+<p>  Run verbosely. Default is true.</p>
+
+<p>  -v, --version</p>
+
+<p>  Print version number.</p>
+
+<p>  -h, --help</p>
+
+<p>  Displays Help.</p>
+
+<h2 id="REBASED-COMMITS">REBASED COMMITS</h2>
+
+<p>GitHub pull requests that have been merged whose merge commit SHA has been modified through rebasing, cherry picking, or some other method may be tracked via a special comment on GitHub. Git commit SHAs found in comments on pull requests matching the regular expression <code>/rebased commit: ([0-9a-f]{40})/i</code> will be used in place of the original merge SHA when being added to the changelog.</p>
+
+<h2 id="EXAMPLES">EXAMPLES</h2>
+
+<h2 id="AUTHOR">AUTHOR</h2>
+
+<p>Written by Petr Korolev sky4winder@gmail.com</p>
+
+<h2 id="REPORTING-BUGS">REPORTING BUGS</h2>
+
+<p>&lt;<a href="https://github.com/github-changelog-generator/github-changelog-generator/issues" data-bare-link="true">https://github.com/github-changelog-generator/github-changelog-generator/issues</a>&gt;</p>
+
+<h2 id="SEE-ALSO">SEE ALSO</h2>
+
+<p>&lt;<a href="https://github.com/github-changelog-generator/github-changelog-generator/" data-bare-link="true">https://github.com/github-changelog-generator/github-changelog-generator/</a>&gt;</p>
+
+
+  <ol class='man-decor man-foot man foot'>
+    <li class='tl'></li>
+    <li class='tc'>May 2018</li>
+    <li class='tr'>git-generate-changelog(1)</li>
+  </ol>
+
+  </div>
+</body>
+</html>
