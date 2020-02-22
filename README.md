@@ -348,6 +348,9 @@ We have collected notes on how to contribute to this project in [CONTRIBUTING.md
 
 [CONTRIBUTING.md]: CONTRIBUTING.md
 
+## Contact us
+Feel free to ask your questions [gitter.im chat])https://gitter.im/github-changelog-generator)
+
 ## License
 
 Github Changelog Generator is released under the [MIT License](http://www.opensource.org/licenses/MIT).
