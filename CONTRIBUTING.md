@@ -37,6 +37,7 @@ TBD
 
 ```
 bundle exec rake
+gem build github_changelog_generator
 ```
 
 ## Checking your work
