@@ -11,6 +11,34 @@ Bug reports and pull requests from users are what keep this project working.
 5. Publish the branch (`git push origin my-new-feature`)
 6. Create a new Pull Request
 
+## Running for development
+
+Make sure you have `ruby`, `gem` and `bundle` installed locally.
+
+If you don't: `gem install bundler`
+
+#### Step 1: Install requirements
+
+```
+bundle install
+```
+
+#### Step 2: Install linters: overcommit, rubocop
+
+```
+overcommit --install
+```
+
+#### Step 3: Run & debug
+
+TBD 
+
+#### Step 4: Test it
+
+```
+bundle exec rake
+```
+
 ## Checking your work
 
 You can test your workflow with changelog generator with
