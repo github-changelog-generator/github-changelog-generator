@@ -76,6 +76,7 @@ module GitHubChangelogGenerator
       user
       usernames_as_github_logins
       verbose
+      continue_with_errors
     ]
 
     # @param values [Hash]

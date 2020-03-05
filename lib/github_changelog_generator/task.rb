@@ -20,6 +20,7 @@ module GitHubChangelogGenerator
                   github_site github_endpoint simple_list
                   future_release release_branch verbose release_url
                   base configure_sections add_sections http_cache]
+                  base configure_sections add_sections continue_with_errors]
 
     OPTIONS.each do |o|
       attr_accessor o.to_sym
