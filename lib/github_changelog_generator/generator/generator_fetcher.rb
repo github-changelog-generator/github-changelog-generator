@@ -55,6 +55,19 @@ module GitHubChangelogGenerator
       Helper.log.info "Associating PRs with tags: #{total}/#{total}"
     end
 
+    # Used in associate_tagged_prs to attach the oldest tag to the pr
+    # @param [Array] tags The tags sorted by time, newest to olderst.
+    # @param [Hash] pull_request The pull request that receives the associated tag.
+    # @param [Hash] event The last merged event information from the pull_request.
+    # @return [Boolean] Returns true if tag is associated, false otherwise.
+    def add_tag_to_pr(tags, pull_request, event)
+      if (oldest_tag = tags.reverse.find { |tag| tag["shas_in_tag"].include?(event["commit_id"]) unless tag["shas_in_tag"].nil? })
+        pull_request["first_occurring_tag"] = oldest_tag["name"]
+        return true
+      end
+      false
+    end
+
     # Associate merged PRs by the merge SHA contained in each tag. If the
     # merge_commit_sha is not found in any tag's history, skip association.
     #
@@ -73,12 +86,7 @@ module GitHubChangelogGenerator
         # https://developer.github.com/v3/pulls/#list-pull-requests
         if pr["events"] && (event = pr["events"].find { |e| e["event"] == "merged" })
           # Iterate tags.reverse (oldest to newest) to find first tag of each PR.
-          if (oldest_tag = tags.reverse.find { |tag| tag["shas_in_tag"].include?(event["commit_id"]) unless tag["shas_in_tag"].nil? })
-            pr["first_occurring_tag"] = oldest_tag["name"]
-            found = true
-            i += 1
-            print("Associating PRs with tags: #{i}/#{total}\r") if @options[:verbose]
-          end
+          found = add_tag_to_pr(tags, pr, event)
         else
           # Either there were no events or no merged event. Github's api can be
           # weird like that apparently. Check for a rebased comment before erroring.
@@ -86,9 +94,9 @@ module GitHubChangelogGenerator
           raise StandardError, "No merge sha found for PR #{pr['number']} via the GitHub API" unless no_events_pr.empty?
 
           found = true
-          i += 1
-          print("Associating PRs with tags: #{i}/#{total}\r") if @options[:verbose]
         end
+        i += 1
+        print("Associating PRs with tags: #{i}/#{total}\r") if @options[:verbose]
         found
       end
     end

@@ -19,7 +19,7 @@ module GitHubChangelogGenerator
                   between_tags exclude_tags exclude_tags_regex since_tag max_issues
                   github_site github_endpoint simple_list
                   future_release release_branch verbose release_url
-                  base configure_sections add_sections http_cache]
+                  base configure_sections add_sections http_cache
                   base configure_sections add_sections continue_with_errors]
 
     OPTIONS.each do |o|
