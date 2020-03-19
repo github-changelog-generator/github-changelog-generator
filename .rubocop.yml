@@ -27,6 +27,10 @@ Metrics/ClassLength:
 Metrics/MethodLength:
     Enabled: false
 
+Metrics/ModuleLength:
+    Exclude:
+      - 'spec/**/*'
+
 Naming/FileName:
     Exclude:
       - 'bin/git-generate-changelog'
