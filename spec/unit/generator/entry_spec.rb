@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Metrics/ModuleLength
 module GitHubChangelogGenerator
   RSpec.describe Entry do
     def label(name)
@@ -765,4 +764,3 @@ module GitHubChangelogGenerator
     end
   end
 end
-# rubocop:enable Metrics/ModuleLength
