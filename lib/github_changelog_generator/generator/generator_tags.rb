@@ -35,7 +35,12 @@ module GitHubChangelogGenerator
         tag = section_tags[i]
 
         # Don't create section header for the "since" tag
-        next if since_tag && tag["name"] == since_tag
+        if since_tag
+            if since_tag.match('TAG~(\d+)')
+              next if i == $1.to_i - 1
+            end
+            next if tag["name"] == since_tag
+        end
 
         # Don't create a section header for the first tag in between_tags
         next if options[:between_tags] && tag == section_tags.last
@@ -127,6 +132,10 @@ module GitHubChangelogGenerator
       filtered_tags = all_tags
       tag = since_tag
       if tag
+        if tag.match('TAG~([1-9]+)')
+          return all_tags[0, $1.to_i]
+        end
+
         if all_tags.map { |t| t["name"] }.include? tag
           idx = all_tags.index { |t| t["name"] == tag }
           filtered_tags = if idx

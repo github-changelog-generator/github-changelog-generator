@@ -187,6 +187,14 @@ describe GitHubChangelogGenerator::Generator do
           let(:generator) { GitHubChangelogGenerator::Generator.new(since_tag: "1") }
           it { is_expected.to match_array(tags_from_strings(%w[1])) }
         end
+        context "with since tag set to be the last tag" do
+          let(:generator) { GitHubChangelogGenerator::Generator.new(since_tag: "TAG~1") }
+          it { is_expected.to match_array(tags_from_strings(%w[1])) }
+        end
+        context "with since tag set to be the last two tags" do
+          let(:generator) { GitHubChangelogGenerator::Generator.new(since_tag: "TAG~2") }
+          it { is_expected.to match_array(tags_from_strings(%w[1 2])) }
+        end
       end
 
       context "with invalid since tag" do
