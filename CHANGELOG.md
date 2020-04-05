@@ -1,6 +1,6 @@
 # Changelog
 
-## [v1.15.1](https://github.com/github-changelog-generator/github-changelog-generator/tree/v1.15.1) (2020-04-06)
+## [v1.15.1](https://github.com/github-changelog-generator/github-changelog-generator/tree/v1.15.1) (2020-04-05)
 
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/v1.15.0...v1.15.1)
 
@@ -12,10 +12,15 @@
 
 **Closed issues:**
 
+- Warning about Project\_card\_events API [\#773](https://github.com/github-changelog-generator/github-changelog-generator/issues/773)
 - To improve build\_url method in Locust HttpSession [\#744](https://github.com/github-changelog-generator/github-changelog-generator/issues/744)
 - uninitialized constant Faraday::Error::ClientError \(NameError\) [\#741](https://github.com/github-changelog-generator/github-changelog-generator/issues/741)
 - TypeError: no implicit conversion of nil into Array [\#738](https://github.com/github-changelog-generator/github-changelog-generator/issues/738)
 - bundler 1.14.3 issue with  uninitalized constant [\#474](https://github.com/github-changelog-generator/github-changelog-generator/issues/474)
+
+**Merged pull requests:**
+
+- fix: disable preview api warning from octokit.rb [\#777](https://github.com/github-changelog-generator/github-changelog-generator/pull/777) ([digglife](https://github.com/digglife))
 
 ## [v1.15.0](https://github.com/github-changelog-generator/github-changelog-generator/tree/v1.15.0) (2019-10-05)
 
@@ -136,6 +141,7 @@
 **Merged pull requests:**
 
 - Add Rake options reported missing [\#584](https://github.com/github-changelog-generator/github-changelog-generator/pull/584) ([olleolleolle](https://github.com/olleolleolle))
+- Aborting on missing --user and --project prints all of usage [\#578](https://github.com/github-changelog-generator/github-changelog-generator/pull/578) ([olleolleolle](https://github.com/olleolleolle))
 - Options\#print\_options + API docs for Options, Parser [\#576](https://github.com/github-changelog-generator/github-changelog-generator/pull/576) ([olleolleolle](https://github.com/olleolleolle))
 - \[docs\] Contributing file [\#575](https://github.com/github-changelog-generator/github-changelog-generator/pull/575) ([olleolleolle](https://github.com/olleolleolle))
 
@@ -160,7 +166,6 @@
 
 **Merged pull requests:**
 
-- Aborting on missing --user and --project prints all of usage [\#578](https://github.com/github-changelog-generator/github-changelog-generator/pull/578) ([olleolleolle](https://github.com/olleolleolle))
 - Fix regression w/ enhancements in issues\_to\_log [\#573](https://github.com/github-changelog-generator/github-changelog-generator/pull/573) ([ekohl](https://github.com/ekohl))
 - OctoFetcher: Use defaults for request\_options [\#571](https://github.com/github-changelog-generator/github-changelog-generator/pull/571) ([olleolleolle](https://github.com/olleolleolle))
 - OctoFetcher: extract methods [\#570](https://github.com/github-changelog-generator/github-changelog-generator/pull/570) ([olleolleolle](https://github.com/olleolleolle))
@@ -511,10 +516,6 @@
 
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.11.0...1.11.1)
 
-**Fixed bugs:**
-
-- Rake and Bundler as runtime deps [\#333](https://github.com/github-changelog-generator/github-changelog-generator/pull/333) ([olleolleolle](https://github.com/olleolleolle))
-
 **Merged pull requests:**
 
 - Add rubocop and rspec as runtime dependencies [\#336](https://github.com/github-changelog-generator/github-changelog-generator/pull/336) ([jkeiser](https://github.com/jkeiser))
@@ -532,6 +533,10 @@
 ## [1.10.4](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.10.4) (2016-02-24)
 
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.10.3...1.10.4)
+
+**Fixed bugs:**
+
+- Rake and Bundler as runtime deps [\#333](https://github.com/github-changelog-generator/github-changelog-generator/pull/333) ([olleolleolle](https://github.com/olleolleolle))
 
 **Merged pull requests:**
 
@@ -625,10 +630,6 @@
 
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.8.2...1.8.3)
 
-**Merged pull requests:**
-
-- Do not alter pull\_requests while iterating on it [\#271](https://github.com/github-changelog-generator/github-changelog-generator/pull/271) ([raphink](https://github.com/raphink))
-
 ## [1.8.2](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.8.2) (2015-08-26)
 
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.8.1...1.8.2)
@@ -651,6 +652,7 @@
 
 **Merged pull requests:**
 
+- Do not alter pull\_requests while iterating on it [\#271](https://github.com/github-changelog-generator/github-changelog-generator/pull/271) ([raphink](https://github.com/raphink))
 - Fix issue with missing events \(in case of events for issue \>30\) [\#268](https://github.com/github-changelog-generator/github-changelog-generator/pull/268) ([skywinder](https://github.com/skywinder))
 - Use since\_tag as default for older\_tag [\#267](https://github.com/github-changelog-generator/github-changelog-generator/pull/267) ([raphink](https://github.com/raphink))
 
@@ -862,11 +864,14 @@
 **Merged pull requests:**
 
 - Implement filtering of Pull Requests by milestones [\#50](https://github.com/github-changelog-generator/github-changelog-generator/pull/50) ([skywinder](https://github.com/skywinder))
-- Issues for last tag not in list [\#29](https://github.com/github-changelog-generator/github-changelog-generator/pull/29) ([skywinder](https://github.com/skywinder))
 
 ## [1.2.8](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.2.8) (2015-02-17)
 
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.2.7...1.2.8)
+
+**Implemented enhancements:**
+
+- Add compare link between older version and newer version [\#46](https://github.com/github-changelog-generator/github-changelog-generator/pull/46) ([sue445](https://github.com/sue445))
 
 **Closed issues:**
 
@@ -880,10 +885,6 @@
 ## [1.2.7](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.2.7) (2015-01-26)
 
 [Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.2.6...1.2.7)
-
-**Implemented enhancements:**
-
-- Add compare link between older version and newer version [\#46](https://github.com/github-changelog-generator/github-changelog-generator/pull/46) ([sue445](https://github.com/sue445))
 
 ## [1.2.6](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.2.6) (2015-01-21)
 
@@ -905,6 +906,7 @@
 **Fixed bugs:**
 
 - Error when trying to generate log for repo without tags [\#32](https://github.com/github-changelog-generator/github-changelog-generator/issues/32)
+- PrettyPrint class is included using lowercase 'pp' [\#43](https://github.com/github-changelog-generator/github-changelog-generator/pull/43) ([schwing](https://github.com/schwing))
 
 ## [1.2.4](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.2.4) (2014-12-16)
 
@@ -948,10 +950,10 @@
 **Fixed bugs:**
 
 - Script fills changelog only for first 30 tags. [\#20](https://github.com/github-changelog-generator/github-changelog-generator/issues/20)
-- PrettyPrint class is included using lowercase 'pp' [\#43](https://github.com/github-changelog-generator/github-changelog-generator/pull/43) ([schwing](https://github.com/schwing))
 
 **Merged pull requests:**
 
+- Issues for last tag not in list [\#29](https://github.com/github-changelog-generator/github-changelog-generator/pull/29) ([skywinder](https://github.com/skywinder))
 - Disable default --filter-pull-requests option. [\#28](https://github.com/github-changelog-generator/github-changelog-generator/pull/28) ([skywinder](https://github.com/skywinder))
 
 ## [1.2.0](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.2.0) (2014-11-19)
