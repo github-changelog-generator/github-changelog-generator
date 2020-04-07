@@ -46,6 +46,7 @@ jobs:
       - image: circleci/jruby:9.1-jdk
         environment:
           JRUBY_OPTS: "--debug"
+          BUNDLE_GEMFILE: "gemfiles/Gemfile_jruby_91"
   "jruby-92":
     <<: *shared
     docker:
