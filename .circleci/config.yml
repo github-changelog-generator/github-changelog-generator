@@ -30,12 +30,14 @@ jobs:
     docker:
       - image: circleci/ruby:2.3-node-browsers
         environment:
+          BUNDLE_GEMFILE: "gemfiles/Gemfile_ruby_23"
           BUNDLE_PATH: vendor/bundle
   "ruby-24":
     <<: *shared
     docker:
       - image: circleci/ruby:2.4-node-browsers
         environment:
+          BUNDLE_GEMFILE: "gemfiles/Gemfile_ruby_24"
           BUNDLE_PATH: vendor/bundle
   "ruby-25":
     <<: *shared
