@@ -1,0 +1,3 @@
+eval_gemfile "../Gemfile"
+
+gem "activesupport", "< 6"
