@@ -25,20 +25,6 @@ shared: &shared
           bundle exec rspec --color --require spec_helper spec --format progress
 
 jobs:
-  "ruby-23":
-    <<: *shared
-    docker:
-      - image: circleci/ruby:2.3-node-browsers
-        environment:
-          BUNDLE_GEMFILE: "gemfiles/Gemfile_ruby_23"
-          BUNDLE_PATH: vendor/bundle
-  "ruby-24":
-    <<: *shared
-    docker:
-      - image: circleci/ruby:2.4-node-browsers
-        environment:
-          BUNDLE_GEMFILE: "gemfiles/Gemfile_ruby_24"
-          BUNDLE_PATH: vendor/bundle
   "ruby-25":
     <<: *shared
     docker:
@@ -51,14 +37,6 @@ jobs:
       - image: circleci/ruby:2.6-node-browsers
         environment:
           BUNDLE_PATH: vendor/bundle
-  "jruby-91":
-    <<: *shared
-    docker:
-      - image: circleci/jruby:9.1-jdk
-        environment:
-          BUNDLE_PATH: vendor/bundle
-          JRUBY_OPTS: "--debug"
-          BUNDLE_GEMFILE: "gemfiles/Gemfile_jruby_91"
   "jruby-92":
     <<: *shared
     docker:
@@ -71,9 +49,6 @@ workflows:
   version: 2
   build:
     jobs:
-      - "ruby-23"
-      - "ruby-24"
       - "ruby-25"
       - "ruby-26"
-      - "jruby-91"
       - "jruby-92"
