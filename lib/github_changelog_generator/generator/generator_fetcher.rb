@@ -2,8 +2,6 @@
 
 module GitHubChangelogGenerator
   class Generator
-    MAX_THREAD_NUMBER = 25
-
     # Fetch event for issues and pull requests
     # @return [Array] array of fetched issues
     def fetch_events_for_issues_and_pr
@@ -64,7 +62,7 @@ module GitHubChangelogGenerator
     # @param [Array] prs The PRs to associate.
     # @return [Array] PRs without their merge_commit_sha in a tag.
     def associate_tagged_prs(tags, prs, total)
-      @fetcher.fetch_tag_shas_async(tags)
+      @fetcher.fetch_tag_shas(tags)
 
       i = 0
       prs.reject do |pr|
@@ -199,8 +197,7 @@ module GitHubChangelogGenerator
     # @return [Boolean] True if SHA is in the branch git history.
     def sha_in_release_branch(sha)
       branch = @options[:release_branch] || @fetcher.default_branch
-      commits_in_branch = @fetcher.fetch_compare(@fetcher.oldest_commit["sha"], branch)
-      shas_in_branch = commits_in_branch["commits"].collect { |commit| commit["sha"] }
+      shas_in_branch = @fetcher.commits_in_branch(branch)
       shas_in_branch.include?(sha)
     end
   end
