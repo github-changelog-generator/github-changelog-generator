@@ -22,7 +22,7 @@ GEM
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
     ast (2.4.0)
-    backports (3.17.0)
+    backports (3.17.1)
     bump (0.9.0)
     childprocess (3.0.0)
     codeclimate-test-reporter (1.0.7)
