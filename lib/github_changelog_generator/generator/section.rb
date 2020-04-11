@@ -32,6 +32,7 @@ module GitHubChangelogGenerator
       @issues = opts[:issues] || []
       @options = opts[:options] || Options.new({})
       @body_only = opts[:body_only] || false
+      @entry = Entry.new(options)
     end
 
     # Returns the content of a section.
@@ -65,7 +66,7 @@ module GitHubChangelogGenerator
       encapsulated_title = encapsulate_string issue["title"]
 
       title_with_number = "#{encapsulated_title} [\\##{issue['number']}](#{issue['html_url']})"
-      title_with_number = "#{title_with_number}#{Entry.new(options).line_labels_for(issue)}" if @options[:issue_line_labels].present?
+      title_with_number = "#{title_with_number}#{@entry.line_labels_for(issue)}" if @options[:issue_line_labels].present?
       line = issue_line_with_user(title_with_number, issue)
       issue_line_with_body(line, issue)
     end
