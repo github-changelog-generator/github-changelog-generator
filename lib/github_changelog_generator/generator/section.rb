@@ -7,7 +7,23 @@ module GitHubChangelogGenerator
   #
   # @see GitHubChangelogGenerator::Entry
   class Section
-    attr_accessor :name, :options, :prefix, :issues, :labels, :body_only
+    # @return [String]
+    attr_accessor :name
+
+    # @return [String] a merge prefix, or an issue prefix
+    attr_reader :prefix
+
+    # @return [Array<Hash>]
+    attr_reader :issues
+
+    # @return [Array<String>]
+    attr_reader :labels
+
+    # @return [Boolean]
+    attr_reader :body_only
+
+    # @return [Options]
+    attr_reader :options
 
     def initialize(opts = {})
       @name = opts[:name]
