@@ -69,7 +69,7 @@ module GitHubChangelogGenerator
     end
 
     def body_till_first_break(body)
-      body.split(/\n/).first
+      body.split(/\n/, 2).first
     end
 
     def issue_line_with_user(line, issue)
