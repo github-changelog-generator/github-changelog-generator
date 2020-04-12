@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Metrics/ModuleLength
 module GitHubChangelogGenerator
   RSpec.describe Entry do
     def label(name)
@@ -58,9 +57,6 @@ module GitHubChangelogGenerator
     let(:issues) { [] }
     let(:pull_requests) { [] }
     let(:tags) { [] }
-    let(:compare_shas) do
-      { "aaaaa1...master" => ["aaaaa1"] }
-    end
 
     # Default to standard options minus verbose to avoid output during testing.
     let(:options) do
@@ -76,15 +72,14 @@ module GitHubChangelogGenerator
         fetch_closed_issues_and_pr: [issues, pull_requests],
         fetch_closed_pull_requests: [],
         fetch_events_async: issues + pull_requests,
-        fetch_tag_shas_async: nil,
+        fetch_tag_shas: nil,
         fetch_comments_async: nil,
         default_branch: "master",
         oldest_commit: { "sha" => "aaaaa1" },
         fetch_commit: { "commit" => { "author" => { "date" => Time.now.utc } } }
       )
-      allow(fake_fetcher).to receive(:fetch_compare) do |old, new|
-        # Comparisons has a "commits" key of an array of commit hashes each with a "sha" key.
-        { "commits" => compare_shas["#{old}...#{new}"].collect { |sha| { "sha" => sha } } }
+      allow(fake_fetcher).to receive(:commits_in_branch) do
+        ["aaaaa1"]
       end
       allow(GitHubChangelogGenerator::OctoFetcher).to receive(:new).and_return(fake_fetcher)
       generator = GitHubChangelogGenerator::Generator.new(options)
@@ -426,6 +421,18 @@ module GitHubChangelogGenerator
             sections_json.shift
           end
         end
+        context "parse also body_only" do
+          let(:sections_string) { "{ \"foo\": { \"prefix\": \"foofix\", \"labels\": [\"test1\", \"test2\"]}, \"bar\": { \"prefix\": \"barfix\", \"labels\": [\"test3\", \"test4\"], \"body_only\": true}}" }
+
+          it "returns correctly constructed sections" do
+            require "json"
+
+            parsed_sections = subject.send(:parse_sections, sections_string)
+
+            expect(parsed_sections[0].body_only).to eq false
+            expect(parsed_sections[1].body_only).to eq true
+          end
+        end
       end
       context "hash" do
         let(:sections_hash) do
@@ -757,4 +764,3 @@ module GitHubChangelogGenerator
     end
   end
 end
-# rubocop:enable Metrics/ModuleLength

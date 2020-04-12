@@ -7,7 +7,7 @@ module GitHubChangelogGenerator
   #
   # @see GitHubChangelogGenerator::Entry
   class Section
-    attr_accessor :name, :prefix, :issues, :labels, :body_only
+    attr_accessor :name, :options, :prefix, :issues, :labels, :body_only
 
     def initialize(opts = {})
       @name = opts[:name]
@@ -20,7 +20,7 @@ module GitHubChangelogGenerator
 
     # Returns the content of a section.
     #
-    # @return [String] Generate section content
+    # @return [String] Generated section content
     def generate_content
       content = ""
 
@@ -49,7 +49,7 @@ module GitHubChangelogGenerator
       encapsulated_title = encapsulate_string issue["title"]
 
       title_with_number = "#{encapsulated_title} [\\##{issue['number']}](#{issue['html_url']})"
-      title_with_number = "#{title_with_number}#{line_labels_for(issue)}" if @options[:issue_line_labels].present?
+      title_with_number = "#{title_with_number}#{Entry.new(options).line_labels_for(issue)}" if @options[:issue_line_labels].present?
       line = issue_line_with_user(title_with_number, issue)
       issue_line_with_body(line, issue)
     end
@@ -60,7 +60,7 @@ module GitHubChangelogGenerator
 
       # get issue body till first line break
       body_paragraph = body_till_first_break(issue["body"])
-      # remove spaces from begining and end of the string
+      # remove spaces from beginning of the string
       body_paragraph.rstrip!
       # encapsulate to md
       encapsulated_body = "\s\s\n" + encapsulate_string(body_paragraph)
