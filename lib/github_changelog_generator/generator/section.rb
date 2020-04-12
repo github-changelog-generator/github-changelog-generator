@@ -20,7 +20,7 @@ module GitHubChangelogGenerator
 
     # Returns the content of a section.
     #
-    # @return [String] Generate section content
+    # @return [String] Generated section content
     def generate_content
       content = ""
 
@@ -60,7 +60,7 @@ module GitHubChangelogGenerator
 
       # get issue body till first line break
       body_paragraph = body_till_first_break(issue["body"])
-      # remove spaces from begining and end of the string
+      # remove spaces from beginning of the string
       body_paragraph.rstrip!
       # encapsulate to md
       encapsulated_body = "\s\s\n" + encapsulate_string(body_paragraph)
