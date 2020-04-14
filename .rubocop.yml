@@ -9,7 +9,7 @@ AllCops:
     - 'vendor/**/*'
     - 'gemfiles/**/*'
 
-Metrics/LineLength:
+Layout/LineLength:
   Enabled: false
 
 Performance/RegexpMatch:
