@@ -2,6 +2,12 @@
 
 require "tmpdir"
 require "retriable"
+require "set"
+require "async"
+require "async/barrier"
+require "async/semaphore"
+require "async/http/faraday"
+
 module GitHubChangelogGenerator
   # A Fetcher responsible for all requests to GitHub and all basic manipulation with related data
   # (such as filtering, validating, e.t.c)
@@ -9,14 +15,14 @@ module GitHubChangelogGenerator
   # Example:
   # fetcher = GitHubChangelogGenerator::OctoFetcher.new(options)
   class OctoFetcher
-    PER_PAGE_NUMBER   = 100
-    MAX_THREAD_NUMBER = 10
+    PER_PAGE_NUMBER = 100
+    MAXIMUM_CONNECTIONS = 50
     MAX_FORBIDDEN_RETRIES = 100
     CHANGELOG_GITHUB_TOKEN = "CHANGELOG_GITHUB_TOKEN"
     GH_RATE_LIMIT_EXCEEDED_MSG = "Warning: Can't finish operation: GitHub API rate limit exceeded, changelog may be " \
     "missing some issues. You can limit the number of issues fetched using the `--max-issues NUM` argument."
     NO_TOKEN_PROVIDED = "Warning: No token provided (-t option) and variable $CHANGELOG_GITHUB_TOKEN was not found. " \
-    "This script can make only 50 requests to GitHub API per hour without token!"
+    "This script can make only 50 requests to GitHub API per hour without a token!"
 
     # @param options [Hash] Options passed in
     # @option options [String] :user GitHub username
@@ -31,47 +37,57 @@ module GitHubChangelogGenerator
       @project      = @options[:project]
       @since        = @options[:since]
       @http_cache   = @options[:http_cache]
-      @cache_file   = nil
-      @cache_log    = nil
       @commits      = []
-      @compares     = {}
-      prepare_cache
-      configure_octokit_ssl
-      @client = Octokit::Client.new(github_options)
+      @branches     = nil
+      @graph        = nil
+      @client = nil
     end
 
-    def prepare_cache
-      return unless @http_cache
+    def middleware
+      Faraday::RackBuilder.new do |builder|
+        if @http_cache
+          cache_file = @options.fetch(:cache_file) { File.join(Dir.tmpdir, "github-changelog-http-cache") }
+          cache_log  = @options.fetch(:cache_log) { File.join(Dir.tmpdir, "github-changelog-logger.log") }
 
-      @cache_file = @options.fetch(:cache_file) { File.join(Dir.tmpdir, "github-changelog-http-cache") }
-      @cache_log  = @options.fetch(:cache_log) { File.join(Dir.tmpdir, "github-changelog-logger.log") }
-      init_cache
-    end
+          builder.use(
+            Faraday::HttpCache,
+            serializer: Marshal,
+            store: ActiveSupport::Cache::FileStore.new(cache_file),
+            logger: Logger.new(cache_log),
+            shared_cache: false
+          )
+        end
 
-    def github_options
-      result = {}
-      github_token = fetch_github_token
-      result[:access_token] = github_token if github_token
-      endpoint = @options[:github_endpoint]
-      result[:api_endpoint] = endpoint if endpoint
-      result
-    end
-
-    def configure_octokit_ssl
-      ca_file = @options[:ssl_ca_file] || ENV["SSL_CA_FILE"] || File.expand_path("ssl_certs/cacert.pem", __dir__)
-      Octokit.connection_options = { ssl: { ca_file: ca_file } }
-    end
-
-    def init_cache
-      Octokit.middleware = Faraday::RackBuilder.new do |builder|
-        builder.use(Faraday::HttpCache, serializer: Marshal,
-                                        store: ActiveSupport::Cache::FileStore.new(@cache_file),
-                                        logger: Logger.new(@cache_log),
-                                        shared_cache: false)
         builder.use Octokit::Response::RaiseError
-        builder.adapter Faraday.default_adapter
-        # builder.response :logger
+        builder.adapter :async_http
       end
+    end
+
+    def connection_options
+      ca_file = @options[:ssl_ca_file] || ENV["SSL_CA_FILE"] || File.expand_path("ssl_certs/cacert.pem", __dir__)
+
+      Octokit.connection_options.merge({ ssl: { ca_file: ca_file } })
+    end
+
+    def client_options
+      options = {
+        middleware: middleware,
+        connection_options: connection_options
+      }
+
+      if (github_token = fetch_github_token)
+        options[:access_token] = github_token
+      end
+
+      if (endpoint = @options[:github_endpoint])
+        options[:api_endpoint] = endpoint
+      end
+
+      options
+    end
+
+    def client
+      @client ||= Octokit::Client.new(client_options)
     end
 
     DEFAULT_REQUEST_OPTIONS = { per_page: PER_PAGE_NUMBER }
@@ -107,11 +123,11 @@ module GitHubChangelogGenerator
     #
     # @return [Array <Hash>] array of tags in repo
     def github_fetch_tags
-      tags        = []
-      page_i      = 0
-      count_pages = calculate_pages(@client, "tags", {})
+      tags = []
+      page_i = 0
+      count_pages = calculate_pages(client, "tags", {})
 
-      iterate_pages(@client, "tags") do |new_tags|
+      iterate_pages(client, "tags") do |new_tags|
         page_i += PER_PAGE_NUMBER
         print_in_same_line("Fetching tags... #{page_i}/#{count_pages * PER_PAGE_NUMBER}")
         tags.concat(new_tags)
@@ -142,9 +158,9 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       print "Fetching closed issues...\r" if @options[:verbose]
       issues = []
       page_i = 0
-      count_pages = calculate_pages(@client, "issues", closed_pr_options)
+      count_pages = calculate_pages(client, "issues", closed_pr_options)
 
-      iterate_pages(@client, "issues", closed_pr_options) do |new_issues|
+      iterate_pages(client, "issues", closed_pr_options) do |new_issues|
         page_i += PER_PAGE_NUMBER
         print_in_same_line("Fetching issues... #{page_i}/#{count_pages * PER_PAGE_NUMBER}")
         issues.concat(new_issues)
@@ -165,10 +181,10 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       pull_requests = []
       options = { state: "closed" }
 
-      page_i      = 0
-      count_pages = calculate_pages(@client, "pull_requests", options)
+      page_i = 0
+      count_pages = calculate_pages(client, "pull_requests", options)
 
-      iterate_pages(@client, "pull_requests", options) do |new_pr|
+      iterate_pages(client, "pull_requests", options) do |new_pr|
         page_i += PER_PAGE_NUMBER
         log_string = "Fetching merged dates... #{page_i}/#{count_pages * PER_PAGE_NUMBER}"
         print_in_same_line(log_string)
@@ -185,14 +201,20 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     # @param [Array] issues
     # @return [Void]
     def fetch_events_async(issues)
-      i       = 0
-      threads = []
+      i = 0
+      # Add accept option explicitly for disabling the warning of preview API.
+      preview = { accept: Octokit::Preview::PREVIEW_TYPES[:project_card_events] }
 
-      issues.each_slice(MAX_THREAD_NUMBER) do |issues_slice|
-        issues_slice.each do |issue|
-          threads << Thread.new do
+      barrier = Async::Barrier.new
+      semaphore = Async::Semaphore.new(MAXIMUM_CONNECTIONS, parent: barrier)
+
+      Sync do
+        client = self.client
+
+        issues.each do |issue|
+          semaphore.async do
             issue["events"] = []
-            iterate_pages(@client, "issue_events", issue["number"]) do |new_event|
+            iterate_pages(client, "issue_events", issue["number"], preview) do |new_event|
               issue["events"].concat(new_event)
             end
             issue["events"] = issue["events"].map { |event| stringify_keys_deep(event.to_hash) }
@@ -200,12 +222,14 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
             i += 1
           end
         end
-        threads.each(&:join)
-        threads = []
-      end
 
-      # to clear line from prev print
-      print_empty_line
+        barrier.wait
+
+        # to clear line from prev print
+        print_empty_line
+
+        client.agent.close
+      end
 
       Helper.log.info "Fetching events for issues and PR: #{i}"
     end
@@ -215,21 +239,27 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     # @param [Array] prs The array of PRs.
     # @return [Void] No return; PRs are updated in-place.
     def fetch_comments_async(prs)
-      threads = []
+      barrier = Async::Barrier.new
+      semaphore = Async::Semaphore.new(MAXIMUM_CONNECTIONS, parent: barrier)
 
-      prs.each_slice(MAX_THREAD_NUMBER) do |prs_slice|
-        prs_slice.each do |pr|
-          threads << Thread.new do
+      Sync do
+        client = self.client
+
+        prs.each do |pr|
+          semaphore.async do
             pr["comments"] = []
-            iterate_pages(@client, "issue_comments", pr["number"]) do |new_comment|
+            iterate_pages(client, "issue_comments", pr["number"]) do |new_comment|
               pr["comments"].concat(new_comment)
             end
             pr["comments"] = pr["comments"].map { |comment| stringify_keys_deep(comment.to_hash) }
           end
         end
-        threads.each(&:join)
-        threads = []
+
+        barrier.wait
+
+        client.agent.close
       end
+
       nil
     end
 
@@ -245,21 +275,6 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       commit_data["commit"]["committer"]["date"]
     end
 
-    # Fetch and cache comparison between two github refs
-    #
-    # @param [String] older The older sha/tag/branch.
-    # @param [String] newer The newer sha/tag/branch.
-    # @return [Hash] Github api response for comparison.
-    def fetch_compare(older, newer)
-      unless @compares["#{older}...#{newer}"]
-        compare_data = check_github_response { @client.compare(user_project, older, newer || "HEAD") }
-        raise StandardError, "Sha #{older} and sha #{newer} are not related; please file a github-changelog-generator issues and describe how to replicate this issue." if compare_data["status"] == "diverged"
-
-        @compares["#{older}...#{newer}"] = stringify_keys_deep(compare_data.to_hash)
-      end
-      @compares["#{older}...#{newer}"]
-    end
-
     # Fetch commit for specified event
     #
     # @param [String] commit_id the SHA of a commit to fetch
@@ -271,9 +286,11 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       if found
         stringify_keys_deep(found.to_hash)
       else
+        client = self.client
+
         # cache miss; don't add to @commits because unsure of order.
         check_github_response do
-          commit = @client.commit(user_project, commit_id)
+          commit = client.commit(user_project, commit_id)
           commit = stringify_keys_deep(commit.to_hash)
           commit
         end
@@ -285,8 +302,20 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     # @return [Array] Commits in a repo.
     def commits
       if @commits.empty?
-        iterate_pages(@client, "commits") do |new_commits|
-          @commits.concat(new_commits)
+        Sync do
+          barrier = Async::Barrier.new
+          semaphore = Async::Semaphore.new(MAXIMUM_CONNECTIONS, parent: barrier)
+
+          iterate_pages(client, "commits", parent: semaphore) do |new_commits|
+            @commits.concat(new_commits)
+          end
+
+          barrier.wait
+          client.agent.close
+
+          @commits.sort! do |b, a|
+            a[:commit][:author][:date] <=> b[:commit][:author][:date]
+          end
         end
       end
       @commits
@@ -301,7 +330,31 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
 
     # @return [String] Default branch of the repo
     def default_branch
-      @default_branch ||= @client.repository(user_project)[:default_branch]
+      @default_branch ||= client.repository(user_project)[:default_branch]
+    end
+
+    def commits_in_branch(name)
+      @branches ||= client.branches(user_project).map { |branch| [branch[:name], branch] }.to_h
+
+      if (branch = @branches[name])
+        commits_in_tag(branch[:commit][:sha])
+      end
+    end
+
+    def commits_in_tag(sha, shas = Set.new)
+      @graph ||= commits.map { |commit| [commit["sha"], commit] }.to_h
+
+      return if shas.include?(sha)
+
+      shas << sha
+
+      if (top = @graph[sha])
+        top[:parents].each do |parent|
+          commits_in_tag(parent[:sha], shas)
+        end
+      end
+
+      shas
     end
 
     # Fetch all SHAs occurring in or before a given tag and add them to
@@ -309,30 +362,10 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     #
     # @param [Array] tags The array of tags.
     # @return [Nil] No return; tags are updated in-place.
-    def fetch_tag_shas_async(tags)
-      i = 0
-      threads = []
-      print_in_same_line("Fetching SHAs for tags: #{i}/#{tags.count}\r") if @options[:verbose]
-
-      tags.each_slice(MAX_THREAD_NUMBER) do |tags_slice|
-        tags_slice.each do |tag|
-          threads << Thread.new do
-            # Use oldest commit because comparing two arbitrary tags may be diverged
-            commits_in_tag = fetch_compare(oldest_commit["sha"], tag["name"])
-            tag["shas_in_tag"] = commits_in_tag["commits"].collect { |commit| commit["sha"] }
-            print_in_same_line("Fetching SHAs for tags: #{i + 1}/#{tags.count}") if @options[:verbose]
-            i += 1
-          end
-        end
-        threads.each(&:join)
-        threads = []
+    def fetch_tag_shas(tags)
+      tags.each do |tag|
+        tag["shas_in_tag"] = commits_in_tag(tag["commit"]["sha"])
       end
-
-      # to clear line from prev print
-      print_empty_line
-
-      Helper.log.info "Fetching SHAs for tags: #{i}"
-      nil
     end
 
     private
@@ -364,29 +397,33 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     # @yield [Sawyer::Resource] An OctoKit-provided response (which can be empty)
     #
     # @return [void]
-    def iterate_pages(client, method, *args)
-      args << DEFAULT_REQUEST_OPTIONS.merge(extract_request_args(args))
+    def iterate_pages(client, method, *arguments, parent: nil, **options)
+      options = DEFAULT_REQUEST_OPTIONS.merge(options)
 
-      check_github_response { client.send(method, user_project, *args) }
+      check_github_response { client.send(method, user_project, *arguments, **options) }
       last_response = client.last_response.tap do |response|
         raise(MovedPermanentlyError, response.data[:url]) if response.status == 301
       end
 
       yield(last_response.data)
 
-      until (next_one = last_response.rels[:next]).nil?
-        last_response = check_github_response { next_one.get }
-        yield(last_response.data)
-      end
-    end
+      if parent.nil?
+        # The snail visits one leaf at a time:
+        until (next_one = last_response.rels[:next]).nil?
+          last_response = check_github_response { next_one.get }
+          yield(last_response.data)
+        end
+      elsif (last = last_response.rels[:last])
+        # OR we bring out the gatling gun:
+        parameters = querystring_as_hash(last.href)
+        last_page = Integer(parameters["page"])
 
-    def extract_request_args(args)
-      if args.size == 1 && args.first.is_a?(Hash)
-        args.delete_at(0)
-      elsif args.size > 1 && args.last.is_a?(Hash)
-        args.delete_at(args.length - 1)
-      else
-        {}
+        (2..last_page).each do |page|
+          parent.async do
+            data = check_github_response { client.send(method, user_project, *arguments, page: page, **options) }
+            yield data
+          end
+        end
       end
     end
 
@@ -432,7 +469,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
         Helper.log.warn("RETRY - #{exception.class}: '#{exception.message}'")
         Helper.log.warn("#{try} tries in #{elapsed_time} seconds and #{next_interval} seconds until the next try")
         Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG
-        Helper.log.warn @client.rate_limit
+        Helper.log.warn(client.rate_limit)
       end
     end
 

@@ -5,11 +5,6 @@
 
 # github-changelog-generator ![GitHub Logo](../master/images/logo.jpg)
 
-#### Update:
-
-🖖 Keep it alive: We need more Collaborators to github-changelog-generator [#727](https://github.com/github-changelog-generator/github-changelog-generator/issues/727)
-
----
 <!--
 To update TOC, please run:
 > doctoc ./README.md --github
@@ -72,15 +67,33 @@ Install the gem like:
 Depending on your system, you _may_ need to run the shell as an Administrator (Windows),
 or use `sudo gem install github_changelog_generator` (Linux).
 
-## Running with Docker
+
+## Usage
+
+
+### Running with CLI:
+
+	   github_changelog_generator -u github_username -p github_project
+
+
+### Running with Docker
 
 Using [Docker](https://www.docker.com/products/docker-desktop) is an alternative to installing Ruby and the gem.
-
-`ferrarimarco` has made a Docker image available that you can use.
 
 Example invocation:
 
     $ docker run -it --rm -v "$(pwd)":/usr/local/src/your-app ferrarimarco/github-changelog-generator
+
+
+
+- For Github Enterprise repos, specify *both* `--github-site` and `--github-api` options:
+
+       $ github_changelog_generator --github-site="https://github.yoursite.com" \
+                                  --github-api="https://github.yoursite.com/api/v3/"
+
+
+This generates a `CHANGELOG.md`, with pretty Markdown formatting.
+
 
 ## Output example
 
@@ -109,25 +122,6 @@ Example invocation:
 >
 > - support enterprise github via command line options [\#42](https://github.com/github-changelog-generator/Github-Changelog-Generator/pull/42) ([glenlovett](https://github.com/glenlovett))
 
-
-## Usage
-
--  Run this:
-
-	   $ github_changelog_generator -u github_username -p github_project
-
-	or, on the 1.14.x (current stable release)
-
-	   $ github_changelog_generator github_username/github_project
-
-
-- For Github Enterprise repos, specify *both* `--github-site` and `--github-api` options:
-
-       $ github_changelog_generator --github-site="https://github.yoursite.com" \
-                                  --github-api="https://github.yoursite.com/api/v3/"
-
-This generates a `CHANGELOG.md`, with pretty Markdown formatting.
-
 ### Params
 
 Print help for all command-line options to learn more details:
@@ -150,7 +144,7 @@ since-tag=1.0.0
 
 ### GitHub token
 
-GitHub only allows 50 unauthenticated requests per hour.
+GitHub only allows **50 unauthenticated requests per hour**.
 
 Therefore, it's recommended to run this script with authentication by using a **token**.
 
@@ -161,7 +155,7 @@ Here's how:
     - Run the script with `--token <your-40-digit-token>`; **OR**
     - Set the `CHANGELOG_GITHUB_TOKEN` environment variable to your 40 digit token
 
-You can set an environment variable by running the following command at the prompt, or by adding it to your shell profile (e.g., `~/.bash_profile` or `~/.zshrc`):
+You can set an environment variable by running the following command at the prompt, or by adding it to your shell profile (e.g., `.env`, `~/.bash_profile`, `~/.zshrc`, etc):
 
     export CHANGELOG_GITHUB_TOKEN="«your-40-digit-github-token»"
 
@@ -290,27 +284,6 @@ I'm not trying to compare the quality of handwritten and auto-generated logs. Th
 
 An auto-generated changelog really helps, even if you manually fill in the release notes!
 
-For example:
-
-When you find a closed bug, it is very useful to know which release fixed it.
-So that you can easily find the issue by \# in `CHANGELOG.md`.
-
-- It's not quite as easy to find this in handwritten releases notes.
-- A generated file saves you the trouble of remembering everything;
-  sometimes people forget to add things to a handwritten file.
-
-Ultimately, I think GitHub Releases are ideal for end-users.
-Meanwhile, `CHANGELOG.md` lives right in the repository, with its detailed list of changes, which is handy for developers.
-Finally, there's nothing wrong with using GitHub Releases alongside `CHANGELOG.md` in this combination.
-
-- ***I got an "API rate limit exceeded" error message. What does this mean?***
-
-GitHub [limits the number of API requests](https://developer.github.com/v3/#rate-limiting) you can make in an hour. You can make up to 5,000 requests per hour. For unauthenticated requests, the rate limit is only up to 60 requests per hour. Unauthenticated requests are associated with your IP address (not the user making requests).
-
-If you're seeing this warning, please do the following:
-
-1. Make sure you're providing an OAuth token, so you're not making requests anonymously. Using an OAuth token increases your hourly request maximum from 60 to 5000.
-2. If you have a large repo with lots of issues/PRs, you can use `--max-issues NUM` to limit the number of issues that are pulled back. For example: `--max-issues 1000`
 
 - ***My Ruby version is very old, can I use this?***
 
@@ -348,6 +321,9 @@ Workaround: Create a `C:\tmp`.
 We have collected notes on how to contribute to this project in [CONTRIBUTING.md].
 
 [CONTRIBUTING.md]: CONTRIBUTING.md
+
+## Contact us
+[Join the chat at gitter : github-changelog-generator](https://gitter.im/github-changelog-generator/chat?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## License
 

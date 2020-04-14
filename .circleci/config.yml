@@ -11,7 +11,8 @@ shared: &shared
     - run:
         name: Install dependencies
         command: |
-          bundle install --jobs=4 --retry=3 --path vendor/bundle
+          gem i bundler -v'> 2'
+          bundle install --jobs=4 --retry=3
 
     - run:
         name: Run rubocop
@@ -24,42 +25,30 @@ shared: &shared
           bundle exec rspec --color --require spec_helper spec --format progress
 
 jobs:
-  "ruby-23":
-    <<: *shared
-    docker:
-      - image: circleci/ruby:2.3-node-browsers
-  "ruby-24":
-    <<: *shared
-    docker:
-      - image: circleci/ruby:2.4-node-browsers
   "ruby-25":
     <<: *shared
     docker:
       - image: circleci/ruby:2.5-node-browsers
+        environment:
+          BUNDLE_PATH: vendor/bundle
   "ruby-26":
     <<: *shared
     docker:
       - image: circleci/ruby:2.6-node-browsers
-  "jruby-91":
-    <<: *shared
-    docker:
-      - image: circleci/jruby:9.1-jdk
         environment:
-          JRUBY_OPTS: "--debug"
+          BUNDLE_PATH: vendor/bundle
   "jruby-92":
     <<: *shared
     docker:
       - image: circleci/jruby:9.2-jdk
         environment:
+          BUNDLE_PATH: vendor/bundle
           JRUBY_OPTS: "--debug"
 
 workflows:
   version: 2
   build:
     jobs:
-      - "ruby-23"
-      - "ruby-24"
       - "ruby-25"
       - "ruby-26"
-      - "jruby-91"
       - "jruby-92"
