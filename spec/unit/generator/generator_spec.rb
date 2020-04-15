@@ -28,6 +28,7 @@ RSpec.describe GitHubChangelogGenerator::Generator do
     describe "#remove_old_fixed_string" do
       it "removes old template headers and footers" do
         log = +"#{header}\n\n#{header}\n#{header}#{content}\n\n#{footer}\n#{footer}#{footer}"
+
         expect(generator.send(:remove_old_fixed_string, log)).to eq content
       end
     end
