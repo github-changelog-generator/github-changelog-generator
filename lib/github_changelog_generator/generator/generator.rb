@@ -158,8 +158,9 @@ module GitHubChangelogGenerator
       log
     end
 
-    # Add template messages
-    # @param [String] log Old lines are removed.
+    # Add template messages to given string. Previously added
+    # messages of the same wording are removed.
+    # @param log [String]
     def insert_fixed_string(log)
       ins = ""
       ins += @options[:frontmatter] if @options[:frontmatter]
