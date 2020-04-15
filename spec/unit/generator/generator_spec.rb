@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-require "spec_helper"
-require "./lib/github_changelog_generator/generator/generator"
+require "github_changelog_generator/generator/generator"
 
 RSpec.describe GitHubChangelogGenerator::Generator do
   let(:header) { "# Changelog" }
