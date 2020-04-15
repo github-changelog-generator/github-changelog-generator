@@ -150,7 +150,7 @@ module GitHubChangelogGenerator
     end
 
     # Remove the previously assigned fixed message.
-    # @param [String] log Old lines are mixed
+    # @param log [String] Old lines are fixed
     def remove_old_fixed_string(log)
       log.gsub!(/#{Regexp.escape(@options[:frontmatter])}/, "") if @options[:frontmatter]
       log.gsub!(/#{Regexp.escape(@options[:header])}\n{,2}/, "")
