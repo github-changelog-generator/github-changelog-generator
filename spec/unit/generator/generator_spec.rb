@@ -38,6 +38,7 @@ RSpec.describe GitHubChangelogGenerator::Generator do
       it "append template messages at header and footer" do
         log = String.new(content)
         ans = "#{header}\n\n#{content}\n\n#{footer}"
+
         expect(generator.send(:insert_fixed_string, log)).to eq ans
       end
     end
