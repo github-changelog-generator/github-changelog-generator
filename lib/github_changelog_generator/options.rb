@@ -37,6 +37,7 @@ module GitHubChangelogGenerator
       exclude_tags
       exclude_tags_regex
       filter_issues_by_milestone
+      issues_of_open_milestones
       frontmatter
       future_release
       github_endpoint

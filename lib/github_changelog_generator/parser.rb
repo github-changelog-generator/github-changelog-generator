@@ -109,6 +109,9 @@ module GitHubChangelogGenerator
         opts.on("--[no-]filter-by-milestone", "Use milestone to detect when issue was resolved. Default is true.") do |last|
           options[:filter_issues_by_milestone] = last
         end
+        opts.on("--[no-]issues-of-open-milestones", "Include issues of open milestones. Default is true.") do |v|
+          options[:issues_of_open_milestones] = v
+        end
         opts.on("--[no-]author", "Add author of pull request at the end. Default is true.") do |author|
           options[:author] = author
         end
@@ -230,6 +233,7 @@ module GitHubChangelogGenerator
         add_pr_wo_labels: true,
         pulls: true,
         filter_issues_by_milestone: true,
+        issues_of_open_milestones: true,
         author: true,
         unreleased: true,
         unreleased_label: "Unreleased",

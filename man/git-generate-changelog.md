@@ -107,6 +107,10 @@ Automatically generate changelog from your tags, issues, labels and pull request
 
   Use milestone to detect when issue was resolved. Default is true.
 
+  --[no-]issues-of-open-milestones
+
+  Include issues of open milestones. Default is true.
+
   --[no-]author
 
   Add author of pull request at the end. Default is true.
