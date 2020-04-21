@@ -30,5 +30,14 @@ module GitHubChangelogGenerator
         end
       end
     end
+
+    describe "#normalize_body" do
+      context "it should remove CR" do
+        let(:body) { "Some content from GitHub\r\n\r\nUser is describing something" }
+        it "returns a cleaned body" do
+          expect(section.send(:normalize_body, body)).to eq "Some content from GitHub\n\nUser is describing something"
+        end
+      end
+    end
   end
 end
