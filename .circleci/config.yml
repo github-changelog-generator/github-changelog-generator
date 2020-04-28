@@ -26,7 +26,7 @@ jobs:
       BUNDLE_PATH: vendor/bundle
       JRUBY_OPTS: "--debug"
     docker:
-      - image: circleci/ruby:<< parameters.tag >>
+      - image: circleci/<< parameters.tag >>
     parallelism: 1
     steps:
       - run: ruby -v
@@ -44,4 +44,4 @@ workflows:
       - test:
           matrix:
             parameters:
-              tag: ["2.5-node-browsers", "2.6-node-browsers", "2.7-node-browsers", "jruby-9.2-jdk"]
+              tag: ["ruby:2.5-node-browsers", "ruby:2.6-node-browsers", "ruby:2.7-node-browsers", "jruby:9.2-jdk"]
