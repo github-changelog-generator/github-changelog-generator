@@ -26,6 +26,7 @@ jobs:
       BUNDLE_PATH: vendor/bundle
       JRUBY_OPTS: "--debug"
     executor: ruby/default
+    parallelism: 4
     steps:
       - run: ruby -v
       - checkout
