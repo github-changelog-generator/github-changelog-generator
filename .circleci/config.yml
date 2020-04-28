@@ -25,8 +25,10 @@ jobs:
     environment:
       BUNDLE_PATH: vendor/bundle
       JRUBY_OPTS: "--debug"
-    executor: ruby/default
-    parallelism: 4
+    executor:
+      ruby/default:
+        tag: << parameters.tag >>
+    parallelism: 1
     steps:
       - run: ruby -v
       - checkout
