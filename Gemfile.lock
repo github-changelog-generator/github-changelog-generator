@@ -60,6 +60,7 @@ GEM
     i18n (1.8.2)
       concurrent-ruby (~> 1.0)
     iniparse (1.5.0)
+    jaro_winkler (1.5.4)
     json (2.3.0)
     minitest (5.14.0)
     multi_json (1.14.1)
@@ -99,7 +100,10 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.9.0)
     rspec-support (3.9.3)
+    rspec_junit_formatter (0.4.1)
+      rspec-core (>= 2, < 4, != 2.12.0)
     rubocop (0.83.0)
+      jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
       parser (>= 2.7.0.1)
       rainbow (>= 2.2.2, < 4.0)
@@ -149,6 +153,7 @@ DEPENDENCIES
   overcommit (>= 0.31)
   rake
   rspec (< 4)
+  rspec_junit_formatter
   rubocop (>= 0.50)
   rubocop-performance
   simplecov (~> 0.10)
