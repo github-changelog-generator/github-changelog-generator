@@ -3,16 +3,16 @@
 # Check https://circleci.com/docs/2.0/language-ruby/ for more details
 #
 version: 2.1
+orbs:
+  ruby: circleci/ruby@0.2.2
 
 shared: &shared
+  environment:
+    BUNDLE_PATH: vendor/bundle
   steps:
     - checkout
 
-    - run:
-        name: Install dependencies
-        command: |
-          gem i bundler -v'> 2'
-          bundle install --jobs=4 --retry=3
+    - ruby/install-deps
 
     - run:
         name: Run rubocop
@@ -29,20 +29,15 @@ jobs:
     <<: *shared
     docker:
       - image: circleci/ruby:2.5-node-browsers
-        environment:
-          BUNDLE_PATH: vendor/bundle
   "ruby-26":
     <<: *shared
     docker:
       - image: circleci/ruby:2.6-node-browsers
-        environment:
-          BUNDLE_PATH: vendor/bundle
   "jruby-92":
     <<: *shared
     docker:
       - image: circleci/jruby:9.2-jdk
         environment:
-          BUNDLE_PATH: vendor/bundle
           JRUBY_OPTS: "--debug"
 
 workflows:
