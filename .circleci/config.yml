@@ -7,6 +7,15 @@ orbs:
   ruby: circleci/ruby@0.2.2
 
 jobs:
+  lint:
+    environment:
+      BUNDLE_PATH: vendor/bundle
+    executor: ruby/default
+    steps:
+      - checkout
+      - ruby/install-deps
+      - run: bundle exec rubocop
+
   test:
     parameters:
       tag:
@@ -18,17 +27,13 @@ jobs:
     steps:
       - checkout
       - ruby/install-deps
-
-      - run:
-          name: Run rubocop
-          command: |
-            bundle exec rubocop
       - ruby/run-tests
 
 workflows:
   version: 2
   build:
     jobs:
+      - lint
       - test:
           matrix:
             parameters:
