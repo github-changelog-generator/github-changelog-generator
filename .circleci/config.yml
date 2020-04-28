@@ -6,6 +6,16 @@ version: 2.1
 orbs:
   ruby: circleci/ruby@0.2.2
 
+shared_steps: &shared_steps
+  steps:
+    - run: ruby -v
+    - checkout
+    - ruby/load-cache
+    - run: gem install bundler:2.1.4
+    - ruby/install-deps
+    - ruby/save-cache
+    - ruby/run-tests
+
 jobs:
   lint:
     environment:
@@ -24,25 +34,31 @@ jobs:
         type: string
     environment:
       BUNDLE_PATH: vendor/bundle
+    executor:
+      name: ruby/default
+      tag: << parameters.tag >>
+    parallelism: 1
+    <<: *shared_steps
+
+  test_jruby:
+    environment:
+      BUNDLE_PATH: vendor/bundle
       JRUBY_OPTS: "--debug"
     docker:
-      - image: circleci/<< parameters.tag >>
-    parallelism: 1
-    steps:
-      - run: ruby -v
-      - checkout
-      - ruby/load-cache
-      - run: gem install bundler:2.1.4
-      - ruby/install-deps
-      - ruby/save-cache
-      - ruby/run-tests
+      - image: circleci/jruby:9.2-jdk
+    <<: *shared_steps
 
 workflows:
   version: 2
   build:
     jobs:
       - lint
+      - test_jruby:
+          requires:
+            - lint
       - test:
           matrix:
             parameters:
-              tag: ["ruby:2.5-node-browsers", "ruby:2.6-node-browsers", "ruby:2.7-node-browsers", "jruby:9.2-jdk"]
+              tag: ["ruby:2.5-node-browsers", "ruby:2.6-node-browsers", "ruby:2.7-node-browsers"]
+          requires:
+            - lint
