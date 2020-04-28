@@ -12,7 +12,9 @@ jobs:
       BUNDLE_PATH: vendor/bundle
     executor: ruby/default
     steps:
+      - run: ruby -v
       - checkout
+      - ruby/load-cache
       - ruby/install-deps
       - run: bundle exec rubocop
 
@@ -25,8 +27,11 @@ jobs:
       JRUBY_OPTS: "--debug"
     executor: ruby/default
     steps:
+      - run: ruby -v
       - checkout
+      - ruby/load-cache
       - ruby/install-deps
+      - ruby/save-cache
       - ruby/run-tests
 
 workflows:
