@@ -6,44 +6,30 @@ version: 2.1
 orbs:
   ruby: circleci/ruby@0.2.2
 
-shared: &shared
-  environment:
-    BUNDLE_PATH: vendor/bundle
-  steps:
-    - checkout
-
-    - ruby/install-deps
-
-    - run:
-        name: Run rubocop
-        command: |
-          bundle exec rubocop
-
-    - run:
-        name: Run tests
-        command: |
-          bundle exec rspec --color --require spec_helper spec --format progress
-
 jobs:
-  "ruby-25":
-    <<: *shared
-    docker:
-      - image: circleci/ruby:2.5-node-browsers
-  "ruby-26":
-    <<: *shared
-    docker:
-      - image: circleci/ruby:2.6-node-browsers
-  "jruby-92":
-    <<: *shared
-    docker:
-      - image: circleci/jruby:9.2-jdk
-        environment:
-          JRUBY_OPTS: "--debug"
+  test:
+    parameters:
+      tag:
+        type: string
+    environment:
+      BUNDLE_PATH: vendor/bundle
+      JRUBY_OPTS: "--debug"
+    executor: ruby/default
+    steps:
+      - checkout
+      - ruby/install-deps
+
+      - run:
+          name: Run rubocop
+          command: |
+            bundle exec rubocop
+      - ruby/run-tests
 
 workflows:
   version: 2
   build:
     jobs:
-      - "ruby-25"
-      - "ruby-26"
-      - "jruby-92"
+      - test:
+          matrix:
+            parameters:
+              tag: ["2.5-node-browsers", "2.6-node-browsers", "2.7-node-browsers"]
