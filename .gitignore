@@ -4,12 +4,8 @@ bin/
 pkg/
 coverage/
 .bundle
-spec/*.lock
 doc
 .yardoc
-gemfiles/Gemfile.2_4_0.lock
-gemfiles/Gemfile.jruby-9.1.5.0.lock
-.idea/
 github-changelog-generator.iml
 github_changelog_generator-*.gem
 vendor/
