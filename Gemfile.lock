@@ -82,7 +82,7 @@ GEM
     protocol-http2 (0.14.0)
       protocol-hpack (~> 1.4)
       protocol-http (~> 0.18)
-    public_suffix (4.0.4)
+    public_suffix (4.0.5)
     rainbow (3.0.0)
     rake (13.0.1)
     retriable (3.1.2)
