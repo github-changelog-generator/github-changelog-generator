@@ -23,7 +23,7 @@ GEM
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
     ast (2.4.0)
-    async (1.26.0)
+    async (1.26.1)
       console (~> 1.0)
       nio4r (~> 2.3)
       timers (~> 4.1)
