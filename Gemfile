@@ -24,6 +24,7 @@ group :test do
   gem "json"
   gem "multi_json"
   gem "rspec", "< 4"
+  gem "rspec_junit_formatter"
   gem "simplecov", "~>0.10", require: false
   gem "vcr"
   gem "webmock"
