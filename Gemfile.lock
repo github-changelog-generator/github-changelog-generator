@@ -62,7 +62,7 @@ GEM
     iniparse (1.5.0)
     jaro_winkler (1.5.4)
     json (2.3.0)
-    minitest (5.14.0)
+    minitest (5.14.1)
     multi_json (1.14.1)
     multipart-post (2.1.1)
     nio4r (2.5.2)
