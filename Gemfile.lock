@@ -41,7 +41,7 @@ GEM
       async (~> 1.14)
     async-pool (0.3.2)
       async (~> 1.25)
-    backports (3.17.1)
+    backports (3.17.2)
     bump (0.9.0)
     childprocess (3.0.0)
     codeclimate-test-reporter (1.0.7)
