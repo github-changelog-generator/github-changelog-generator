@@ -207,7 +207,7 @@ describe GitHubChangelogGenerator::OctoFetcher do
 
         # Convert times to Time
         expected_issue.each_pair do |k, v|
-          expected_issue[k] = Time.parse(v) if v.to_s =~ /^2015-/
+          expected_issue[k] = Time.parse(v) if v.to_s.start_with?("2015-")
         end
 
         expect(issues.first).to eq(expected_issue)
@@ -269,7 +269,7 @@ describe GitHubChangelogGenerator::OctoFetcher do
 
         # Convert times to Time
         expected_pr.each_pair do |k, v|
-          expected_pr[k] = Time.parse(v) if v.to_s =~ /^2016-01/
+          expected_pr[k] = Time.parse(v) if v.to_s.start_with?("2016-01")
         end
 
         expect(pull_requests.first).to eq(expected_pr)
