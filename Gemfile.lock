@@ -37,7 +37,7 @@ GEM
     async-http-faraday (0.9.0)
       async-http (~> 0.42)
       faraday
-    async-io (1.29.0)
+    async-io (1.30.0)
       async (~> 1.14)
     async-pool (0.3.2)
       async (~> 1.25)
