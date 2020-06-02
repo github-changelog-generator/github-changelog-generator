@@ -72,7 +72,7 @@ GEM
       childprocess (>= 0.6.3, < 4)
       iniparse (~> 1.4)
     parallel (1.19.1)
-    parser (2.7.1.2)
+    parser (2.7.1.3)
       ast (~> 2.4.0)
     protocol-hpack (1.4.2)
     protocol-http (0.20.0)
