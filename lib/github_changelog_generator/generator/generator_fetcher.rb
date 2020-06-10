@@ -61,7 +61,12 @@ module GitHubChangelogGenerator
     # @param [Hash] event The last merged event information from the pull_request.
     # @return [Boolean] Returns true if tag is associated, false otherwise.
     def add_tag_to_pr(tags, pull_request, event)
-      if (oldest_tag = tags.reverse.find { |tag| tag["shas_in_tag"].include?(event["commit_id"]) unless tag["shas_in_tag"].nil? })
+      if @options[:continue_with_errors]
+        if (oldest_tag = tags.reverse.find { |tag| tag["shas_in_tag"].include?(event["commit_id"]) unless tag["shas_in_tag"].nil? })
+          pull_request["first_occurring_tag"] = oldest_tag["name"]
+          return true
+        end
+      elsif (oldest_tag = tags.reverse.find { |tag| tag["shas_in_tag"].include?(event["commit_id"]) })
         pull_request["first_occurring_tag"] = oldest_tag["name"]
         return true
       end
