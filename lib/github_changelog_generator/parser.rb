@@ -163,6 +163,9 @@ module GitHubChangelogGenerator
         opts.on("--exclude-tags-regex [REGEX]", "Apply a regular expression on tag names so that they can be excluded, for example: --exclude-tags-regex \".*\+\d{1,}\".") do |last|
           options[:exclude_tags_regex] = last
         end
+        opts.on("--[no-]append-excluded", "Append ommited issues from excluded-tags in a next release.") do |v|
+          options[:exclude_tags_regex] = v
+        end
         opts.on("--since-tag  x", "Changelog will start after specified tag.") do |v|
           options[:since_tag] = v
         end
@@ -234,6 +237,7 @@ module GitHubChangelogGenerator
         unreleased: true,
         unreleased_label: "Unreleased",
         compare_link: true,
+        append_excluded: false,
         exclude_labels: ["duplicate", "question", "invalid", "wontfix", "Duplicate", "Question", "Invalid", "Wontfix", "Meta: Exclude From Changelog"],
         summary_labels: ["Release summary", "release-summary", "Summary", "summary"],
         breaking_labels: ["backwards-incompatible", "Backwards incompatible", "breaking"],

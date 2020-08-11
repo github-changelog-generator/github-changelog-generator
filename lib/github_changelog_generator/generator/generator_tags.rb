@@ -17,7 +17,7 @@ module GitHubChangelogGenerator
       # Because we need to properly create compare links, we need a sorted list
       # of all filtered tags (including the excluded ones). We'll exclude those
       # tags from section headers inside the mapping function.
-      section_tags = get_filtered_tags(all_sorted_tags)
+      section_tags = options[:append_excluded] ? @filtered_tags : get_filtered_tags(all_sorted_tags)
 
       @tag_section_mapping = build_tag_section_mapping(section_tags, @filtered_tags)
 
