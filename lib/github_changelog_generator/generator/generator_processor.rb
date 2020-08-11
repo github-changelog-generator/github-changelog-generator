@@ -159,12 +159,14 @@ module GitHubChangelogGenerator
     # @param [Array] issues Issues & PRs to filter when without labels
     # @return [Array] Issues & PRs without labels or empty array if
     #                 add_issues_wo_labels or add_pr_wo_labels are false
-    def filter_wo_labels(issues)
-      if (!issues.empty? && issues.first.key?("pull_requests") && options[:add_pr_wo_labels]) || options[:add_issues_wo_labels]
-        issues
-      else
-        issues.select { |issue| issue["labels"].map { |l| l["name"] }.any? }
+    def filter_wo_labels(items)
+      if items.any? && items.first.key?("pull_request")
+        return items if options[:add_pr_wo_labels]
+      elsif options[:add_issues_wo_labels]
+        return items
       end
+      # The default is to filter items without labels
+      items.select { |item| item["labels"].map { |l| l["name"] }.any? }
     end
 
     # @todo Document this

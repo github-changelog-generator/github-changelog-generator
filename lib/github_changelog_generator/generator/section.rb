@@ -7,7 +7,23 @@ module GitHubChangelogGenerator
   #
   # @see GitHubChangelogGenerator::Entry
   class Section
-    attr_accessor :name, :prefix, :issues, :labels, :body_only
+    # @return [String]
+    attr_accessor :name
+
+    # @return [String] a merge prefix, or an issue prefix
+    attr_reader :prefix
+
+    # @return [Array<Hash>]
+    attr_reader :issues
+
+    # @return [Array<String>]
+    attr_reader :labels
+
+    # @return [Boolean]
+    attr_reader :body_only
+
+    # @return [Options]
+    attr_reader :options
 
     def initialize(opts = {})
       @name = opts[:name]
@@ -16,11 +32,12 @@ module GitHubChangelogGenerator
       @issues = opts[:issues] || []
       @options = opts[:options] || Options.new({})
       @body_only = opts[:body_only] || false
+      @entry = Entry.new(options)
     end
 
     # Returns the content of a section.
     #
-    # @return [String] Generate section content
+    # @return [String] Generated section content
     def generate_content
       content = ""
 
@@ -49,7 +66,7 @@ module GitHubChangelogGenerator
       encapsulated_title = encapsulate_string issue["title"]
 
       title_with_number = "#{encapsulated_title} [\\##{issue['number']}](#{issue['html_url']})"
-      title_with_number = "#{title_with_number}#{line_labels_for(issue)}" if @options[:issue_line_labels].present?
+      title_with_number = "#{title_with_number}#{@entry.line_labels_for(issue)}" if @options[:issue_line_labels].present?
       line = issue_line_with_user(title_with_number, issue)
       issue_line_with_body(line, issue)
     end
@@ -60,7 +77,7 @@ module GitHubChangelogGenerator
 
       # get issue body till first line break
       body_paragraph = body_till_first_break(issue["body"])
-      # remove spaces from begining and end of the string
+      # remove spaces from beginning of the string
       body_paragraph.rstrip!
       # encapsulate to md
       encapsulated_body = "\s\s\n" + encapsulate_string(body_paragraph)
@@ -69,7 +86,7 @@ module GitHubChangelogGenerator
     end
 
     def body_till_first_break(body)
-      body.split(/\n/).first
+      body.split(/\n/, 2).first
     end
 
     def issue_line_with_user(line, issue)
@@ -95,7 +112,10 @@ module GitHubChangelogGenerator
       string = string.gsub('\\', '\\\\')
 
       ENCAPSULATED_CHARACTERS.each do |char|
-        string = string.gsub(char, "\\#{char}")
+        # Only replace char with escaped version if it isn't inside backticks (markdown inline code).
+        # This relies on each opening '`' being closed (ie an even number in total).
+        # A char is *outside* backticks if there is an even number of backticks following it.
+        string = string.gsub(%r{#{Regexp.escape(char)}(?=([^`]*`[^`]*`)*[^`]*$)}, "\\#{char}")
       end
 
       string

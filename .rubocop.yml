@@ -2,36 +2,52 @@ inherit_from: .rubocop_todo.yml
 require: rubocop-performance
 
 AllCops:
-  TargetRubyVersion: 2.3
+  TargetRubyVersion: 2.5
   DisplayCopNames: true
   DisplayStyleGuide: true
   Exclude:
     - 'vendor/**/*'
     - 'gemfiles/**/*'
 
-Metrics/LineLength:
+Layout/LineLength:
   Enabled: false
+
+Layout/SpaceAroundMethodCallOperator:
+  Enabled: true
+
+Layout/EmptyLinesAroundAttributeAccessor:
+  Enabled: true
+
+Style/SlicingWithRange:
+  Enabled: true
 
 Performance/RegexpMatch:
   Enabled: false
 
-#http://viget.com/extend/just-use-double-quoted-ruby-strings
+Style/ExponentialNotation:
+  Enabled: true
+
+# http://viget.com/extend/just-use-double-quoted-ruby-strings
 Style/StringLiterals:
   EnforcedStyle: double_quotes
 
 # Configuration parameters: CountComments.
 Metrics/ClassLength:
-    Enabled: false
+  Enabled: false
 
 # Configuration parameters: CountComments.
 Metrics/MethodLength:
-    Enabled: false
+  Enabled: false
+
+Metrics/ModuleLength:
+    Exclude:
+      - 'spec/**/*'
 
 Naming/FileName:
-    Exclude:
-      - 'bin/git-generate-changelog'
+  Exclude:
+    - 'bin/git-generate-changelog'
 
-#TODOS
+# TODOS
 # Offense count: 14
 Metrics/AbcSize:
   Enabled: false
@@ -64,7 +80,7 @@ Style/RegexpLiteral:
   Enabled: false
 
 Style/MutableConstant:
-    Enabled: false
+  Enabled: false
 
 # "Use idx.positive? instead of idx > 0."
 Style/NumericPredicate:
@@ -88,3 +104,19 @@ Style/FormatStringToken:
 Style/MixinUsage:
   Exclude:
     - lib/github_changelog_generator/task.rb
+
+Lint/RaiseException:
+  Enabled: true
+
+Lint/StructNewOverride:
+  Enabled: true
+
+Style/HashEachMethods:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: true
+
+Style/HashTransformValues:
+  Enabled: true
+
