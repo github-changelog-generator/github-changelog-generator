@@ -191,6 +191,10 @@ Automatically generate changelog from your tags, issues, labels and pull request
 
   Changelog will end before specified tag.
 
+  --since-commit x
+  
+  Fetch only commits after this time. eg. "2017-01-01 10:00:00"
+
   --max-issues [NUMBER]
 
   Maximum number of issues to fetch from GitHub. Default is unlimited.

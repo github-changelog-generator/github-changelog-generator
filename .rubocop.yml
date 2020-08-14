@@ -12,8 +12,20 @@ AllCops:
 Layout/LineLength:
   Enabled: false
 
+Layout/SpaceAroundMethodCallOperator:
+  Enabled: true
+
+Layout/EmptyLinesAroundAttributeAccessor:
+  Enabled: true
+
+Style/SlicingWithRange:
+  Enabled: true
+
 Performance/RegexpMatch:
   Enabled: false
+
+Style/ExponentialNotation:
+  Enabled: true
 
 # http://viget.com/extend/just-use-double-quoted-ruby-strings
 Style/StringLiterals:
@@ -107,3 +119,4 @@ Style/HashTransformKeys:
 
 Style/HashTransformValues:
   Enabled: true
+

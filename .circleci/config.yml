@@ -3,52 +3,62 @@
 # Check https://circleci.com/docs/2.0/language-ruby/ for more details
 #
 version: 2.1
+orbs:
+  ruby: circleci/ruby@0.2.2
 
-shared: &shared
+shared_steps: &shared_steps
   steps:
+    - run: ruby -v
     - checkout
-
-    - run:
-        name: Install dependencies
-        command: |
-          gem i bundler -v'> 2'
-          bundle install --jobs=4 --retry=3
-
-    - run:
-        name: Run rubocop
-        command: |
-          bundle exec rubocop
-
-    - run:
-        name: Run tests
-        command: |
-          bundle exec rspec --color --require spec_helper spec --format progress
+    - ruby/load-cache
+    - run: gem install bundler:2.1.4
+    - ruby/install-deps
+    - ruby/save-cache
+    - ruby/run-tests
 
 jobs:
-  "ruby-25":
-    <<: *shared
+  lint:
+    environment:
+      BUNDLE_PATH: vendor/bundle
+    executor: ruby/default
+    steps:
+      - run: ruby -v
+      - checkout
+      - ruby/load-cache
+      - ruby/install-deps
+      - run: bundle exec rubocop
+
+  test:
+    parameters:
+      tag:
+        type: string
+    environment:
+      BUNDLE_PATH: vendor/bundle
+    executor:
+      name: ruby/default
+      tag: << parameters.tag >>
+    parallelism: 1
+    <<: *shared_steps
+
+  test_jruby:
+    environment:
+      BUNDLE_PATH: vendor/bundle
+      JRUBY_OPTS: "--debug"
     docker:
-      - image: circleci/ruby:2.5-node-browsers
-        environment:
-          BUNDLE_PATH: vendor/bundle
-  "ruby-26":
-    <<: *shared
-    docker:
-      - image: circleci/ruby:2.6-node-browsers
-        environment:
-          BUNDLE_PATH: vendor/bundle
-  "jruby-92":
-    <<: *shared
-    docker:
-      - image: circleci/jruby:9.2-jdk
-        environment:
-          BUNDLE_PATH: vendor/bundle
-          JRUBY_OPTS: "--debug"
+      - image: circleci/jruby:9.2
+    <<: *shared_steps
 
 workflows:
   version: 2
   build:
     jobs:
-      - "ruby-25"
-      - "ruby-26"
-      - "jruby-92"
+      - lint
+      - test_jruby:
+          requires:
+            - lint
+      - test:
+          matrix:
+            parameters:
+              tag: ["2.5", "2.6", "2.7"]
+          requires:
+            - lint
