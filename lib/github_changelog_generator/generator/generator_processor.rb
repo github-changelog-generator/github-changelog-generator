@@ -69,6 +69,9 @@ module GitHubChangelogGenerator
         # leave issues without milestones
         if issue["milestone"].nil?
           true
+        # remove issues of open milestones if option is set
+        elsif issue["milestone"]["state"] == "open"
+          @options[:issues_of_open_milestones]
         else
           # check, that this milestone in tag list:
           @filtered_tags.find { |tag| tag["name"] == issue["milestone"]["title"] }.nil?
