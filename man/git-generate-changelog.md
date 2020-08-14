@@ -175,6 +175,10 @@ Automatically generate changelog from your tags, issues, labels and pull request
 
   Changelog will exclude specified tags.
 
+  --append-excluded
+
+  Append issues ommited in excluded-tags
+
   --exclude-tags-regex [REGEX]
 
   Apply a regular expression on tag names so that they can be excluded, for example: --exclude-tags-regex ".*\+\d{1,}".
