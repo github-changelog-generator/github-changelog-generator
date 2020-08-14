@@ -169,6 +169,9 @@ module GitHubChangelogGenerator
         opts.on("--due-tag  x", "Changelog will end before specified tag.") do |v|
           options[:due_tag] = v
         end
+        opts.on("--since-commit  x", "Fetch only commits after this time. eg. \"2017-01-01 10:00:00\"") do |v|
+          options[:since_commit] = v
+        end
         opts.on("--max-issues [NUMBER]", Integer, "Maximum number of issues to fetch from GitHub. Default is unlimited.") do |max|
           options[:max_issues] = max
         end

@@ -62,6 +62,7 @@ module GitHubChangelogGenerator
       security_prefix
       simple_list
       since_tag
+      since_commit
       ssl_ca_file
       summary_labels
       summary_prefix
