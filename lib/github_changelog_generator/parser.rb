@@ -109,6 +109,9 @@ module GitHubChangelogGenerator
         opts.on("--[no-]filter-by-milestone", "Use milestone to detect when issue was resolved. Default is true.") do |last|
           options[:filter_issues_by_milestone] = last
         end
+        opts.on("--[no-]issues-of-open-milestones", "Include issues of open milestones. Default is true.") do |v|
+          options[:issues_of_open_milestones] = v
+        end
         opts.on("--[no-]author", "Add author of pull request at the end. Default is true.") do |author|
           options[:author] = author
         end
@@ -168,6 +171,9 @@ module GitHubChangelogGenerator
         end
         opts.on("--due-tag  x", "Changelog will end before specified tag.") do |v|
           options[:due_tag] = v
+        end
+        opts.on("--since-commit  x", "Fetch only commits after this time. eg. \"2017-01-01 10:00:00\"") do |v|
+          options[:since_commit] = v
         end
         opts.on("--max-issues [NUMBER]", Integer, "Maximum number of issues to fetch from GitHub. Default is unlimited.") do |max|
           options[:max_issues] = max
@@ -230,6 +236,7 @@ module GitHubChangelogGenerator
         add_pr_wo_labels: true,
         pulls: true,
         filter_issues_by_milestone: true,
+        issues_of_open_milestones: true,
         author: true,
         unreleased: true,
         unreleased_label: "Unreleased",
