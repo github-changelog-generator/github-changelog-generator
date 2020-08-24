@@ -37,6 +37,7 @@ module GitHubChangelogGenerator
       exclude_tags
       exclude_tags_regex
       filter_issues_by_milestone
+      issues_of_open_milestones
       frontmatter
       future_release
       github_endpoint
@@ -62,6 +63,7 @@ module GitHubChangelogGenerator
       security_prefix
       simple_list
       since_tag
+      since_commit
       ssl_ca_file
       summary_labels
       summary_prefix

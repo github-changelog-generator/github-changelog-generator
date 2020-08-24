@@ -107,6 +107,10 @@ Automatically generate changelog from your tags, issues, labels and pull request
 
   Use milestone to detect when issue was resolved. Default is true.
 
+  --[no-]issues-of-open-milestones
+
+  Include issues of open milestones. Default is true.
+
   --[no-]author
 
   Add author of pull request at the end. Default is true.
@@ -190,6 +194,10 @@ Automatically generate changelog from your tags, issues, labels and pull request
   --due-tag x
 
   Changelog will end before specified tag.
+
+  --since-commit x
+  
+  Fetch only commits after this time. eg. "2017-01-01 10:00:00"
 
   --max-issues [NUMBER]
 

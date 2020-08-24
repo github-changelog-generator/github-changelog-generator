@@ -306,8 +306,14 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
           barrier = Async::Barrier.new
           semaphore = Async::Semaphore.new(MAXIMUM_CONNECTIONS, parent: barrier)
 
-          iterate_pages(client, "commits", parent: semaphore) do |new_commits|
-            @commits.concat(new_commits)
+          if (since_commit = @options[:since_commit])
+            iterate_pages(client, "commits_since", since_commit, parent: semaphore) do |new_commits|
+              @commits.concat(new_commits)
+            end
+          else
+            iterate_pages(client, "commits", parent: semaphore) do |new_commits|
+              @commits.concat(new_commits)
+            end
           end
 
           barrier.wait

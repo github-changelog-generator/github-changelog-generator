@@ -73,7 +73,9 @@ or use `sudo gem install github_changelog_generator` (Linux).
 
 ### Running with CLI:
 
-	   github_changelog_generator -u github_username -p github_project
+	   github_changelog_generator -u github_project_namespace -p github_project
+
+(where the project namespace is _likely_ your username if it's a project you own, but it could also be the namespace of the project)
 
 
 ### Running with Docker
