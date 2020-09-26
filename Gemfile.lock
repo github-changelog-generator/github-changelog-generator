@@ -14,7 +14,7 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (6.0.3.1)
+    activesupport (6.0.3.3)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
@@ -46,7 +46,7 @@ GEM
     childprocess (3.0.0)
     codeclimate-test-reporter (1.0.7)
       simplecov
-    concurrent-ruby (1.1.6)
+    concurrent-ruby (1.1.7)
     console (1.8.2)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
@@ -57,11 +57,11 @@ GEM
     faraday-http-cache (2.2.0)
       faraday (>= 0.8)
     hashdiff (1.0.1)
-    i18n (1.8.3)
+    i18n (1.8.5)
       concurrent-ruby (~> 1.0)
     iniparse (1.5.0)
     json (2.3.0)
-    minitest (5.14.1)
+    minitest (5.14.2)
     multi_json (1.14.1)
     multipart-post (2.1.1)
     nio4r (2.5.2)
@@ -139,7 +139,7 @@ GEM
       rainbow
       tty-color
       yard
-    zeitwerk (2.3.0)
+    zeitwerk (2.4.0)
 
 PLATFORMS
   ruby
