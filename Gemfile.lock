@@ -71,7 +71,7 @@ GEM
     overcommit (0.53.0)
       childprocess (>= 0.6.3, < 4)
       iniparse (~> 1.4)
-    parallel (1.19.1)
+    parallel (1.19.2)
     parser (2.7.1.5)
       ast (~> 2.4.1)
     protocol-hpack (1.4.2)
