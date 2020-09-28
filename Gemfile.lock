@@ -47,7 +47,7 @@ GEM
     codeclimate-test-reporter (1.0.7)
       simplecov
     concurrent-ruby (1.1.6)
-    console (1.8.2)
+    console (1.9.0)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
     diff-lcs (1.3)
