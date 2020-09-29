@@ -555,14 +555,14 @@ module GitHubChangelogGenerator
         end
 
         it "assigns issues to the correct sections" do
-          breaking_section = entry_sections.select { |section| section.name == "breaking" }[0]
-          enhancement_section = entry_sections.select { |section| section.name == "enhancements" }[0]
-          bug_section = entry_sections.select { |section| section.name == "bugs" }[0]
-          deprecated_section = entry_sections.select { |section| section.name == "deprecated" }[0]
-          removed_section = entry_sections.select { |section| section.name == "removed" }[0]
-          security_section = entry_sections.select { |section| section.name == "security" }[0]
-          issue_section = entry_sections.select { |section| section.name == "issues" }[0]
-          merged_section = entry_sections.select { |section| section.name == "merged" }[0]
+          breaking_section = entry_sections.find { |section| section.name == "breaking" }
+          enhancement_section = entry_sections.find { |section| section.name == "enhancements" }
+          bug_section = entry_sections.find { |section| section.name == "bugs" }
+          deprecated_section = entry_sections.find { |section| section.name == "deprecated" }
+          removed_section = entry_sections.find { |section| section.name == "removed" }
+          security_section = entry_sections.find { |section| section.name == "security" }
+          issue_section = entry_sections.find { |section| section.name == "issues" }
+          merged_section = entry_sections.find { |section| section.name == "merged" }
 
           expect(titles_for(breaking_section.issues)).to eq(["issue breaking", "issue all the labels", "pr breaking", "pr all the labels"])
           expect(titles_for(enhancement_section.issues)).to eq(["issue enhancement", "pr enhancement"])
@@ -619,10 +619,10 @@ module GitHubChangelogGenerator
         end
 
         it "assigns issues to the correct sections" do
-          foo_section = entry_sections.select { |section| section.name == "foo" }[0]
-          bar_section = entry_sections.select { |section| section.name == "bar" }[0]
-          issue_section = entry_sections.select { |section| section.name == "issues" }[0]
-          merged_section = entry_sections.select { |section| section.name == "merged" }[0]
+          foo_section = entry_sections.find { |section| section.name == "foo" }
+          bar_section = entry_sections.find { |section| section.name == "bar" }
+          issue_section = entry_sections.find { |section| section.name == "issues" }
+          merged_section = entry_sections.find { |section| section.name == "merged" }
 
           aggregate_failures "checks all sections" do
             expect(titles_for(foo_section.issues)).to eq(["issue test1", "issue all the labels", "issue some included labels", "pr test1", "pr all the labels", "pr some included labels"])
@@ -677,10 +677,10 @@ module GitHubChangelogGenerator
         end
 
         it "assigns issues to the correct sections" do
-          foo_section = entry_sections.select { |section| section.name == "foo" }[0]
-          bar_section = entry_sections.select { |section| section.name == "bar" }[0]
-          issue_section = entry_sections.select { |section| section.name == "issues" }[0]
-          merged_section = entry_sections.select { |section| section.name == "merged" }[0]
+          foo_section = entry_sections.find { |section| section.name == "foo" }
+          bar_section = entry_sections.find { |section| section.name == "bar" }
+          issue_section = entry_sections.find { |section| section.name == "issues" }
+          merged_section = entry_sections.find { |section| section.name == "merged" }
 
           aggregate_failures "checks all sections" do
             expect(titles_for(foo_section.issues)).to eq(["issue test1", "issue all the labels", "pr test1", "pr all the labels"])
@@ -744,12 +744,12 @@ module GitHubChangelogGenerator
         end
 
         it "assigns issues to the correct sections" do
-          foo_section = entry_sections.select { |section| section.name == "foo" }[0]
-          breaking_section = entry_sections.select { |section| section.name == "breaking" }[0]
-          enhancement_section = entry_sections.select { |section| section.name == "enhancements" }[0]
-          bug_section = entry_sections.select { |section| section.name == "bugs" }[0]
-          issue_section = entry_sections.select { |section| section.name == "issues" }[0]
-          merged_section = entry_sections.select { |section| section.name == "merged" }[0]
+          foo_section = entry_sections.find { |section| section.name == "foo" }
+          breaking_section = entry_sections.find { |section| section.name == "breaking" }
+          enhancement_section = entry_sections.find { |section| section.name == "enhancements" }
+          bug_section = entry_sections.find { |section| section.name == "bugs" }
+          issue_section = entry_sections.find { |section| section.name == "issues" }
+          merged_section = entry_sections.find { |section| section.name == "merged" }
 
           aggregate_failures "checks all sections" do
             expect(titles_for(breaking_section.issues)).to eq(["issue all the labels", "pr all the labels"])
