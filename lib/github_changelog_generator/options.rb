@@ -25,6 +25,7 @@ module GitHubChangelogGenerator
       bug_prefix
       cache_file
       cache_log
+      config_file
       compare_link
       configure_sections
       date_format
