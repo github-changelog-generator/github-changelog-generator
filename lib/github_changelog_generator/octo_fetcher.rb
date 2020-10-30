@@ -487,7 +487,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     #
     # @param [String] log_string
     def print_in_same_line(log_string)
-      print log_string + "\r"
+      print "#{log_string}\r"
     end
 
     # Print long line with spaces on same line to clear prev message
