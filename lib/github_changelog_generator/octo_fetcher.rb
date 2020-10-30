@@ -436,10 +436,8 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     # This is wrapper with rescue block
     #
     # @return [Object] returns exactly the same, what you put in the block, but wrap it with begin-rescue block
-    def check_github_response
-      Retriable.retriable(retry_options) do
-        yield
-      end
+    def check_github_response(&block)
+      Retriable.retriable(retry_options, &block)
     rescue MovedPermanentlyError => e
       fail_with_message(e, "The repository has moved, update your configuration")
     rescue Octokit::Forbidden => e
