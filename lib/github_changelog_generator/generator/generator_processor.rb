@@ -133,21 +133,19 @@ module GitHubChangelogGenerator
     end
 
     def tag_older_new_tag?(newer_tag_time, time)
-      tag_in_range_new = if newer_tag_time.nil?
-                           true
-                         else
-                           time <= newer_tag_time
-                         end
-      tag_in_range_new
+      if newer_tag_time.nil?
+        true
+      else
+        time <= newer_tag_time
+      end
     end
 
     def tag_newer_old_tag?(older_tag_time, time)
-      tag_in_range_old = if older_tag_time.nil?
-                           true
-                         else
-                           time > older_tag_time
-                         end
-      tag_in_range_old
+      if older_tag_time.nil?
+        true
+      else
+        time > older_tag_time
+      end
     end
 
     # Include issues with labels, specified in :include_labels
@@ -155,8 +153,7 @@ module GitHubChangelogGenerator
     # @return [Array] filtered array of issues
     def include_issues_by_labels(issues)
       filtered_issues = filter_by_include_labels(issues)
-      filtered_issues = filter_wo_labels(filtered_issues)
-      filtered_issues
+      filter_wo_labels(filtered_issues)
     end
 
     # @param [Array] issues Issues & PRs to filter when without labels
