@@ -29,8 +29,8 @@ module GitHubChangelogGenerator
       defaults = {
         heading_level: "##",
         heading_structures: [
-          /^## \[(?<version>.+?)\]\((?<url>.+?)\)( \((?<date>.+?)\))?$/,
-          /^## (?<version>.+?)( \((?<date>.+?)\))?$/
+          /^## \[(?<version>.+?)\]\((?<url>.+?)\)( \((?<date>.+?)\))?$/, # rubocop:disable Lint/MixedRegexpCaptureTypes
+          /^## (?<version>.+?)( \((?<date>.+?)\))?$/ # rubocop:disable Lint/MixedRegexpCaptureTypes
         ]
       }
 

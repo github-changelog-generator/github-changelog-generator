@@ -80,7 +80,7 @@ module GitHubChangelogGenerator
       # remove spaces from beginning of the string
       body_paragraph.rstrip!
       # encapsulate to md
-      encapsulated_body = "\s\s\n" + encapsulate_string(body_paragraph)
+      encapsulated_body = "  \n#{encapsulate_string(body_paragraph)}"
 
       "**#{line}** #{encapsulated_body}"
     end

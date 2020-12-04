@@ -89,7 +89,7 @@ module GitHubChangelogGenerator
           options[:add_sections] = v
         end
         opts.on("--front-matter [JSON]", "Add YAML front matter. Formatted as JSON because it's easier to add on the command line.") do |v|
-          options[:frontmatter] = JSON.parse(v).to_yaml + "---\n"
+          options[:frontmatter] = "#{JSON.parse(v).to_yaml}---\n"
         end
         opts.on("--pr-label [LABEL]", "Set up custom label for pull requests section. Default is \"**Merged pull requests:**\".") do |v|
           options[:merge_prefix] = v

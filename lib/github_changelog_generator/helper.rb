@@ -14,7 +14,7 @@ module GitHubChangelogGenerator
     @log ||= if test?
                Logger.new(nil) # don't show any logs when running tests
              else
-               Logger.new(STDOUT)
+               Logger.new($stdout)
              end
     @log.formatter = proc do |severity, _datetime, _progname, msg|
       string = "#{msg}\n"

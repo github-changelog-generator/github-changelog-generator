@@ -31,6 +31,7 @@ module GitHubChangelogGenerator
     #
     #   GitHubChangelogGenerator::RakeTask.new
     def initialize(*args, &task_block)
+      super
       @name = args.shift || :changelog
 
       define(args, &task_block)
