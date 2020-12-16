@@ -98,7 +98,8 @@ module GitHubChangelogGenerator
     def get_all_tags
       print "Fetching tags...\r" if @options[:verbose]
 
-      check_github_response { github_fetch_tags }
+      all_tags = check_github_response { github_fetch_tags }
+      all_tags.select { |tag| commits.any? { |commit| commit[:sha] == tag["commit"]["sha"] } }
     end
 
     # Returns the number of pages for a API call

@@ -76,11 +76,17 @@ describe GitHubChangelogGenerator::OctoFetcher do
   end
 
   describe "#get_all_tags" do
+    let(:in_branch_tags) { [{ "commit" => { "sha" => "in-branch" } }] }
+    let(:mock_tags) do
+      in_branch_tags + [{ "commit" => { "sha" => "off-branch" } }]
+    end
+    let(:mock_commits) { [{ sha: "in-branch" }] }
+
     context "when github_fetch_tags returns tags" do
-      it "returns tags" do
-        mock_tags = ["tag"]
+      it "returns tags that are on the current branch" do
         allow(fetcher).to receive(:github_fetch_tags).and_return(mock_tags)
-        expect(fetcher.get_all_tags).to eq(mock_tags)
+        allow(fetcher).to receive(:commits).and_return(mock_commits)
+        expect(fetcher.get_all_tags).to eq(in_branch_tags)
       end
     end
   end
