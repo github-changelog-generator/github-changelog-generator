@@ -3,6 +3,7 @@ PATH
   specs:
     github_changelog_generator (1.15.2)
       activesupport
+      async (>= 1.25.0)
       async-http-faraday
       faraday-http-cache
       multi_json
