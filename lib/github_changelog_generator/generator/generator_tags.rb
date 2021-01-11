@@ -83,7 +83,7 @@ module GitHubChangelogGenerator
     # @return [Array] link, name and time of the tag
     def detect_link_tag_time(newer_tag)
       # if tag is nil - set current time
-      newer_tag_time = newer_tag.nil? ? Time.new : get_time_of_tag(newer_tag)
+      newer_tag_time = newer_tag.nil? ? Time.new.getutc : get_time_of_tag(newer_tag)
 
       # if it's future release tag - set this value
       if newer_tag.nil? && options[:future_release]

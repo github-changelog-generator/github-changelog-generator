@@ -13,6 +13,33 @@ describe GitHubChangelogGenerator::Generator do
     end
   end
 
+  describe "#detect_link_tag_time" do
+    let(:newer_tag) { nil }
+
+    let(:default_options) { GitHubChangelogGenerator::Parser.default_options.merge(verbose: false) }
+    let(:options) do
+      {
+        future_release: "2.0.0"
+      }
+    end
+    let(:generator) { described_class.new(default_options.merge(options)) }
+
+    subject do
+      generator.detect_link_tag_time(newer_tag)
+    end
+
+    context "When the local date is not the same as the UTC date" do
+      before do
+        # 2020-12-27T17:00:00-10:00 is 2020-12-28T03:00:00Z.
+        # GitHub API date & time use UTC, so this instant when converted as a
+        # date should be 2020-12-28.
+        expect(Time).to receive(:new).and_return(Time.new(2020, 12, 27, 17, 0, 0, "-10:00"))
+      end
+
+      it { is_expected.to eq(["2.0.0", "2.0.0", Time.gm(2020, 12, 28, 3)]) }
+    end
+  end
+
   describe "#tag_section_mapping" do
     let(:all_tags) { tags_from_strings(%w[8 7 6 5 4 3 2 1]) }
     let(:sorted_tags) { all_tags }
