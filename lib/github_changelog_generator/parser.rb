@@ -160,6 +160,9 @@ module GitHubChangelogGenerator
         opts.on("--issue-line-labels x,y,z", Array, 'The specified labels will be shown in brackets next to each matching issue. Use "ALL" to show all labels. Default is [].') do |list|
           options[:issue_line_labels] = list
         end
+        opts.on("--include-tags-regex [REGEX]", "Apply a regular expression on tag names so that they can be included, for example: --include-tags-regex \".*\+\d{1,}\".") do |last|
+          options[:include_tags_regex] = last
+        end
         opts.on("--exclude-tags  x,y,z", Array, "Changelog will exclude specified tags") do |list|
           options[:exclude_tags] = list
         end
