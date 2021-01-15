@@ -84,10 +84,10 @@ describe GitHubChangelogGenerator::Generator do
     shared_examples_for "a changelog with some exclusions" do
       let(:expected_mapping) do
         {
-          tag_with_name("8") => [tag_with_name("7"), tag_with_name("8")],
-          tag_with_name("6") => [tag_with_name("5"), tag_with_name("6")],
+          tag_with_name("8") => [tag_with_name("6"), tag_with_name("8")],
+          tag_with_name("6") => [tag_with_name("4"), tag_with_name("6")],
           tag_with_name("4") => [tag_with_name("3"), tag_with_name("4")],
-          tag_with_name("3") => [tag_with_name("2"), tag_with_name("3")],
+          tag_with_name("3") => [tag_with_name("1"), tag_with_name("3")],
           tag_with_name("1") => [nil, tag_with_name("1")]
         }
       end
