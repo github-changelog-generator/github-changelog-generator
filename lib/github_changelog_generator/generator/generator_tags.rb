@@ -11,7 +11,8 @@ module GitHubChangelogGenerator
       fetch_tags_dates(all_tags) # Creates a Hash @tag_times_hash
       all_sorted_tags = sort_tags_by_date(all_tags)
 
-      @sorted_tags   = filter_excluded_tags(all_sorted_tags)
+      @sorted_tags   = filter_included_tags(all_sorted_tags)
+      @sorted_tags   = filter_excluded_tags(@sorted_tags)
       @filtered_tags = get_filtered_tags(@sorted_tags)
 
       # Because we need to properly create compare links, we need a sorted list
@@ -159,6 +160,17 @@ module GitHubChangelogGenerator
         end
       end
       filtered_tags
+    end
+
+    # @param [Array] all_tags all tags
+    # @return [Array] filtered tags according to :include_tags_regex option
+    def filter_included_tags(all_tags)
+      if options[:include_tags_regex]
+        regex = Regexp.new(options[:include_tags_regex])
+        all_tags.select { |tag| regex =~ tag["name"] }
+      else
+        all_tags
+      end
     end
 
     # @param [Array] all_tags all tags

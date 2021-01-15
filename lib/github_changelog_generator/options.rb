@@ -45,6 +45,7 @@ module GitHubChangelogGenerator
       header
       http_cache
       include_labels
+      include_tags_regex
       issue_prefix
       issue_line_labels
       issue_line_body
