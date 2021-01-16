@@ -15,7 +15,7 @@ module GitHubChangelogGenerator
                   pulls filter_issues_by_milestone author
                   unreleased_only unreleased unreleased_label
                   compare_link include_labels exclude_labels
-                  bug_labels enhancement_labels
+                  bug_labels enhancement_labels include_tags_regex
                   between_tags exclude_tags exclude_tags_regex since_tag max_issues
                   github_site github_endpoint simple_list
                   future_release release_branch verbose release_url
