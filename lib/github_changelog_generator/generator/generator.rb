@@ -49,21 +49,18 @@ module GitHubChangelogGenerator
     # @return [String] Generated changelog file
     def compound_changelog
       @options.load_custom_ruby_files
+      fetch_and_filter_tags
+      fetch_issues_and_pr
 
-      Sync do
-        fetch_and_filter_tags
-        fetch_issues_and_pr
-
-        log = if @options[:unreleased_only]
-                generate_entry_between_tags(@filtered_tags[0], nil)
-              else
-                generate_entries_for_all_tags
-              end
-        log += File.read(@options[:base]) if File.file?(@options[:base])
-        log = remove_old_fixed_string(log)
-        log = insert_fixed_string(log)
-        @log = log
-      end
+      log = if @options[:unreleased_only]
+              generate_entry_between_tags(@filtered_tags[0], nil)
+            else
+              generate_entries_for_all_tags
+            end
+      log += File.read(@options[:base]) if File.file?(@options[:base])
+      log = remove_old_fixed_string(log)
+      log = insert_fixed_string(log)
+      @log = log
     end
 
     private
