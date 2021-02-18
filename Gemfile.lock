@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    github_changelog_generator (1.15.2)
+    github_changelog_generator (1.16.0)
       activesupport
       async (>= 1.25.0)
       async-http-faraday
@@ -15,57 +15,63 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (6.0.3.4)
+    activesupport (6.1.3)
       concurrent-ruby (~> 1.0, >= 1.0.2)
-      i18n (>= 0.7, < 2)
-      minitest (~> 5.1)
-      tzinfo (~> 1.1)
-      zeitwerk (~> 2.2, >= 2.2.2)
+      i18n (>= 1.6, < 2)
+      minitest (>= 5.1)
+      tzinfo (~> 2.0)
+      zeitwerk (~> 2.3)
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
     ast (2.4.1)
-    async (1.26.2)
-      console (~> 1.0)
+    async (1.28.9)
+      console (~> 1.10)
       nio4r (~> 2.3)
       timers (~> 4.1)
-    async-http (0.52.5)
+    async-http (0.54.1)
       async (~> 1.25)
       async-io (~> 1.28)
       async-pool (~> 0.2)
-      protocol-http (~> 0.20.0)
+      protocol-http (~> 0.21.0)
       protocol-http1 (~> 0.13.0)
       protocol-http2 (~> 0.14.0)
     async-http-faraday (0.9.0)
       async-http (~> 0.42)
       faraday
-    async-io (1.30.1)
+    async-io (1.30.2)
       async (~> 1.14)
-    async-pool (0.3.2)
+    async-pool (0.3.5)
       async (~> 1.25)
     backports (3.18.2)
     bump (0.9.0)
     childprocess (4.0.0)
     codeclimate-test-reporter (1.0.7)
       simplecov
-    concurrent-ruby (1.1.7)
-    console (1.9.0)
-    crack (0.4.4)
+    concurrent-ruby (1.1.8)
+    console (1.10.1)
+      fiber-local
+    crack (0.4.5)
+      rexml
     diff-lcs (1.4.4)
     docile (1.3.2)
-    faraday (1.0.1)
+    faraday (1.3.0)
+      faraday-net_http (~> 1.0)
       multipart-post (>= 1.2, < 3)
+      ruby2_keywords
     faraday-http-cache (2.2.0)
       faraday (>= 0.8)
+    faraday-net_http (1.0.1)
+    fiber-local (1.0.0)
     hashdiff (1.0.1)
-    i18n (1.8.5)
+    i18n (1.8.9)
       concurrent-ruby (~> 1.0)
     iniparse (1.5.0)
     json (2.3.1)
-    minitest (5.14.2)
+    minitest (5.14.3)
     multi_json (1.15.0)
     multipart-post (2.1.1)
-    nio4r (2.5.4)
-    octokit (4.18.0)
+    nio4r (2.5.5)
+    octokit (4.20.0)
       faraday (>= 0.9)
       sawyer (~> 0.8.0, >= 0.5.3)
     overcommit (0.57.0)
@@ -75,10 +81,10 @@ GEM
     parser (2.7.2.0)
       ast (~> 2.4.1)
     protocol-hpack (1.4.2)
-    protocol-http (0.20.1)
-    protocol-http1 (0.13.1)
+    protocol-http (0.21.0)
+    protocol-http1 (0.13.2)
       protocol-http (~> 0.19)
-    protocol-http2 (0.14.1)
+    protocol-http2 (0.14.2)
       protocol-hpack (~> 1.4)
       protocol-http (~> 0.18)
     public_suffix (4.0.6)
@@ -117,6 +123,7 @@ GEM
       rubocop (>= 0.87.0)
       rubocop-ast (>= 0.4.0)
     ruby-progressbar (1.10.1)
+    ruby2_keywords (0.0.4)
     sawyer (0.8.2)
       addressable (>= 2.3.5)
       faraday (> 0.8, < 2.0)
@@ -124,14 +131,13 @@ GEM
       docile (~> 1.1)
       simplecov-html (~> 0.11)
     simplecov-html (0.12.3)
-    thread_safe (0.3.6)
-    timers (4.3.2)
+    timers (4.3.3)
     tty-color (0.5.2)
-    tzinfo (1.2.7)
-      thread_safe (~> 0.1)
+    tzinfo (2.0.4)
+      concurrent-ruby (~> 1.0)
     unicode-display_width (1.7.0)
     vcr (6.0.0)
-    webmock (3.9.1)
+    webmock (3.11.2)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
@@ -141,7 +147,7 @@ GEM
       rainbow
       tty-color
       yard
-    zeitwerk (2.4.0)
+    zeitwerk (2.4.2)
 
 PLATFORMS
   ruby
@@ -168,4 +174,4 @@ RUBY VERSION
    ruby 2.7.1p83
 
 BUNDLED WITH
-   2.1.4
+   2.2.7
