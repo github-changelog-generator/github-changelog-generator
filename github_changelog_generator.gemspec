@@ -24,7 +24,6 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_runtime_dependency("activesupport")
-  spec.add_runtime_dependency("async", ">= 1.25.0")
   spec.add_runtime_dependency("async-http-faraday")
   spec.add_runtime_dependency("faraday-http-cache")
   spec.add_runtime_dependency("multi_json")

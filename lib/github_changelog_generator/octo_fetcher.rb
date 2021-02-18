@@ -227,6 +227,8 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
 
         # to clear line from prev print
         print_empty_line
+
+        client.agent.close
       end
 
       Helper.log.info "Fetching events for issues and PR: #{i}"
@@ -254,6 +256,8 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
         end
 
         barrier.wait
+
+        client.agent.close
       end
 
       nil
@@ -313,6 +317,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
           end
 
           barrier.wait
+          client.agent.close
 
           @commits.sort! do |b, a|
             a[:commit][:author][:date] <=> b[:commit][:author][:date]
