@@ -1,30 +1,56 @@
 # Changelog
 
-## [Unreleased](https://github.com/github-changelog-generator/github-changelog-generator/tree/HEAD)
+## [1.16.0](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.16.0) (2021-02-19)
 
-[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/v1.15.2...HEAD)
+[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/v1.15.2...1.16.0)
 
 **Implemented enhancements:**
 
+- Enabling branch protection for the master branch [\#793](https://github.com/github-changelog-generator/github-changelog-generator/issues/793)
 - Add no-http-cache option to rake task [\#739](https://github.com/github-changelog-generator/github-changelog-generator/pull/739) ([mcelicalderon](https://github.com/mcelicalderon))
 
 **Fixed bugs:**
 
+- Footer message that keeps replicating [\#787](https://github.com/github-changelog-generator/github-changelog-generator/issues/787)
+- `Octokit::NotFound' error happens since 372875f7  [\#695](https://github.com/github-changelog-generator/github-changelog-generator/issues/695)
 - Fix not parsing body\_only param for sections [\#755](https://github.com/github-changelog-generator/github-changelog-generator/pull/755) ([dusan-dragon](https://github.com/dusan-dragon))
 - Bugfix: undefined method line\_labels\_for [\#753](https://github.com/github-changelog-generator/github-changelog-generator/pull/753) ([dusan-dragon](https://github.com/dusan-dragon))
 
 **Closed issues:**
 
+- Can't install it. [\#933](https://github.com/github-changelog-generator/github-changelog-generator/issues/933)
+- pip install docker [\#924](https://github.com/github-changelog-generator/github-changelog-generator/issues/924)
+- configure\_sections needs better examples [\#923](https://github.com/github-changelog-generator/github-changelog-generator/issues/923)
+- Add PR that are not linked to an issue [\#890](https://github.com/github-changelog-generator/github-changelog-generator/issues/890)
+- the `-u` parameter in the readme is a bit misleading [\#877](https://github.com/github-changelog-generator/github-changelog-generator/issues/877)
+- presets/node.js [\#867](https://github.com/github-changelog-generator/github-changelog-generator/issues/867)
+- "Full Changelog" uses tags that are excluded [\#842](https://github.com/github-changelog-generator/github-changelog-generator/issues/842)
+- Failure with `stack level too deep` [\#829](https://github.com/github-changelog-generator/github-changelog-generator/issues/829)
+- Get rid of multi\_json [\#789](https://github.com/github-changelog-generator/github-changelog-generator/issues/789)
 - Nondeterministic moving/deleting of PRs in CHANGELOG.md [\#774](https://github.com/github-changelog-generator/github-changelog-generator/issues/774)
+- Special characters inside `inline_code` incorrectly escaped [\#742](https://github.com/github-changelog-generator/github-changelog-generator/issues/742)
+- Milestones on PRs not taken into account [\#457](https://github.com/github-changelog-generator/github-changelog-generator/issues/457)
 
 **Merged pull requests:**
 
+- Restoring tag hash references to string keys [\#937](https://github.com/github-changelog-generator/github-changelog-generator/pull/937) ([douglasmiller](https://github.com/douglasmiller))
+- Fixing 'stack level too deep error' in commits\_in\_tag [\#936](https://github.com/github-changelog-generator/github-changelog-generator/pull/936) ([douglasmiller](https://github.com/douglasmiller))
+- When tags are excluded, do not include those tags in diff links. [\#930](https://github.com/github-changelog-generator/github-changelog-generator/pull/930) ([ameir](https://github.com/ameir))
+- Add --include-tags-regex option. [\#929](https://github.com/github-changelog-generator/github-changelog-generator/pull/929) ([ameir](https://github.com/ameir))
+- Use UTC for future release date [\#926](https://github.com/github-changelog-generator/github-changelog-generator/pull/926) ([smortex](https://github.com/smortex))
+- Update issue templates [\#922](https://github.com/github-changelog-generator/github-changelog-generator/pull/922) ([skywinder](https://github.com/skywinder))
+- More concurrency [\#921](https://github.com/github-changelog-generator/github-changelog-generator/pull/921) ([ioquatix](https://github.com/ioquatix))
+- updated the readme and the parser help message [\#878](https://github.com/github-changelog-generator/github-changelog-generator/pull/878) ([dmarticus](https://github.com/dmarticus))
+- \(chore\) Fix Performance/StartWith [\#851](https://github.com/github-changelog-generator/github-changelog-generator/pull/851) ([olleolleolle](https://github.com/olleolleolle))
+- add since-commit option [\#830](https://github.com/github-changelog-generator/github-changelog-generator/pull/830) ([takke](https://github.com/takke))
+- add option --\[no-\]issues-of-open-milestones [\#801](https://github.com/github-changelog-generator/github-changelog-generator/pull/801) ([Mairu](https://github.com/Mairu))
+- Don't escape special chars when they are in `inline_code` \(carried from \#743\) [\#797](https://github.com/github-changelog-generator/github-changelog-generator/pull/797) ([olleolleolle](https://github.com/olleolleolle))
+- Fix replicating template messages [\#794](https://github.com/github-changelog-generator/github-changelog-generator/pull/794) ([shinyaohtani](https://github.com/shinyaohtani))
 - Tell the truth in this comment [\#792](https://github.com/github-changelog-generator/github-changelog-generator/pull/792) ([olleolleolle](https://github.com/olleolleolle))
-- Bump backports from 3.17.0 to 3.17.1 [\#788](https://github.com/github-changelog-generator/github-changelog-generator/pull/788) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- Section: Split quicker on newline [\#791](https://github.com/github-changelog-generator/github-changelog-generator/pull/791) ([olleolleolle](https://github.com/olleolleolle))
+- \(refactor\) Reuse an Entry instance in Section; change accessors to readers [\#790](https://github.com/github-changelog-generator/github-changelog-generator/pull/790) ([olleolleolle](https://github.com/olleolleolle))
 - Drop support for EOL Ruby versions [\#786](https://github.com/github-changelog-generator/github-changelog-generator/pull/786) ([olleolleolle](https://github.com/olleolleolle))
-- chore: RuboCop: Add more Cop names as enabled [\#785](https://github.com/github-changelog-generator/github-changelog-generator/pull/785) ([olleolleolle](https://github.com/olleolleolle))
 - Use `async-http-faraday`. [\#784](https://github.com/github-changelog-generator/github-changelog-generator/pull/784) ([ioquatix](https://github.com/ioquatix))
-- chore: Use MRI 2.7.1 in development [\#783](https://github.com/github-changelog-generator/github-changelog-generator/pull/783) ([olleolleolle](https://github.com/olleolleolle))
 - CI: Ruby 2.3, Ruby 2.4 hold at ActiveSupport \< 6 [\#782](https://github.com/github-changelog-generator/github-changelog-generator/pull/782) ([olleolleolle](https://github.com/olleolleolle))
 - CI: JRuby 9.1 support: hold ActiveSupport at 5.x, introduce gemfiles/ directory [\#780](https://github.com/github-changelog-generator/github-changelog-generator/pull/780) ([olleolleolle](https://github.com/olleolleolle))
 - Fixing bug when filtering pull requests without labels [\#771](https://github.com/github-changelog-generator/github-changelog-generator/pull/771) ([douglasmiller](https://github.com/douglasmiller))
@@ -73,6 +99,7 @@
 - 588 : Added new line after credits [\#627](https://github.com/github-changelog-generator/github-changelog-generator/pull/627) ([qwerty2323](https://github.com/qwerty2323))
 - Support printing changelog to stdout [\#624](https://github.com/github-changelog-generator/github-changelog-generator/pull/624) ([sue445](https://github.com/sue445))
 - Fix unlabeled, mixed labels, and unmapped labels handling [\#618](https://github.com/github-changelog-generator/github-changelog-generator/pull/618) ([hunner](https://github.com/hunner))
+- Implemented a Dockerfile [\#592](https://github.com/github-changelog-generator/github-changelog-generator/pull/592) ([ferrarimarco](https://github.com/ferrarimarco))
 - Make 'change log' a single word [\#579](https://github.com/github-changelog-generator/github-changelog-generator/pull/579) ([mesaugat](https://github.com/mesaugat))
 
 **Fixed bugs:**
@@ -135,7 +162,7 @@
 - README: Include Example of Release Summary [\#679](https://github.com/github-changelog-generator/github-changelog-generator/pull/679) ([olleolleolle](https://github.com/olleolleolle))
 - Remove redundant dependency [\#677](https://github.com/github-changelog-generator/github-changelog-generator/pull/677) ([mob-sakai](https://github.com/mob-sakai))
 - fix \#668; Hang on pretty print of options in 1.15.0-rc [\#676](https://github.com/github-changelog-generator/github-changelog-generator/pull/676) ([mob-sakai](https://github.com/mob-sakai))
-- Update `credit\_line` [\#666](https://github.com/github-changelog-generator/github-changelog-generator/pull/666) ([sugyan](https://github.com/sugyan))
+- Update `credit_line` [\#666](https://github.com/github-changelog-generator/github-changelog-generator/pull/666) ([sugyan](https://github.com/sugyan))
 - Update octo\_fetcher.rb [\#661](https://github.com/github-changelog-generator/github-changelog-generator/pull/661) ([Skeyelab](https://github.com/Skeyelab))
 - Add release summary section [\#654](https://github.com/github-changelog-generator/github-changelog-generator/pull/654) ([mob-sakai](https://github.com/mob-sakai))
 - Add 'Backwards incompatible' as a default breaking label [\#650](https://github.com/github-changelog-generator/github-changelog-generator/pull/650) ([ekohl](https://github.com/ekohl))
@@ -168,7 +195,6 @@
 
 **Implemented enhancements:**
 
-- Implemented a Dockerfile [\#592](https://github.com/github-changelog-generator/github-changelog-generator/pull/592) ([ferrarimarco](https://github.com/ferrarimarco))
 - Add option --require to load custom Ruby code before starting [\#574](https://github.com/github-changelog-generator/github-changelog-generator/pull/574) ([olleolleolle](https://github.com/olleolleolle))
 
 **Fixed bugs:**
@@ -181,7 +207,6 @@
 - Aborting on missing --user and --project prints all of usage [\#578](https://github.com/github-changelog-generator/github-changelog-generator/pull/578) ([olleolleolle](https://github.com/olleolleolle))
 - Options\#print\_options + API docs for Options, Parser [\#576](https://github.com/github-changelog-generator/github-changelog-generator/pull/576) ([olleolleolle](https://github.com/olleolleolle))
 - \[docs\] Contributing file [\#575](https://github.com/github-changelog-generator/github-changelog-generator/pull/575) ([olleolleolle](https://github.com/olleolleolle))
-- OctoFetcher: Use defaults for request\_options [\#571](https://github.com/github-changelog-generator/github-changelog-generator/pull/571) ([olleolleolle](https://github.com/olleolleolle))
 
 ## [v1.15.0.pre.beta](https://github.com/github-changelog-generator/github-changelog-generator/tree/v1.15.0.pre.beta) (2017-10-13)
 
@@ -189,13 +214,14 @@
 
 **Implemented enhancements:**
 
+- add breaking-changes section to changelog [\#530](https://github.com/github-changelog-generator/github-changelog-generator/pull/530) ([bastelfreak](https://github.com/bastelfreak))
 - Drop Project-and-Username-finding code [\#451](https://github.com/github-changelog-generator/github-changelog-generator/pull/451) ([olleolleolle](https://github.com/olleolleolle))
 
 **Fixed bugs:**
 
 - since\_tag doesn't work when tag specified is the latest tag [\#555](https://github.com/github-changelog-generator/github-changelog-generator/issues/555)
 - since\_tag seems to not be working [\#304](https://github.com/github-changelog-generator/github-changelog-generator/issues/304)
-- filter tags correctly when `since\_tag` is set to most recent tag [\#566](https://github.com/github-changelog-generator/github-changelog-generator/pull/566) ([Crunch09](https://github.com/Crunch09))
+- filter tags correctly when `since_tag` is set to most recent tag [\#566](https://github.com/github-changelog-generator/github-changelog-generator/pull/566) ([Crunch09](https://github.com/Crunch09))
 
 **Closed issues:**
 
@@ -204,6 +230,7 @@
 **Merged pull requests:**
 
 - Fix regression w/ enhancements in issues\_to\_log [\#573](https://github.com/github-changelog-generator/github-changelog-generator/pull/573) ([ekohl](https://github.com/ekohl))
+- OctoFetcher: Use defaults for request\_options [\#571](https://github.com/github-changelog-generator/github-changelog-generator/pull/571) ([olleolleolle](https://github.com/olleolleolle))
 - OctoFetcher: extract methods [\#570](https://github.com/github-changelog-generator/github-changelog-generator/pull/570) ([olleolleolle](https://github.com/olleolleolle))
 - OctoFetcher: extract method fail\_with\_message [\#569](https://github.com/github-changelog-generator/github-changelog-generator/pull/569) ([olleolleolle](https://github.com/olleolleolle))
 - OctoFetcher: drop unused number\_of\_pages feature [\#568](https://github.com/github-changelog-generator/github-changelog-generator/pull/568) ([olleolleolle](https://github.com/olleolleolle))
@@ -218,8 +245,7 @@
 **Implemented enhancements:**
 
 - Add newline after version name and Full Changelog link [\#548](https://github.com/github-changelog-generator/github-changelog-generator/pull/548) ([ianroberts131](https://github.com/ianroberts131))
-- add breaking-changes section to changelog [\#530](https://github.com/github-changelog-generator/github-changelog-generator/pull/530) ([bastelfreak](https://github.com/bastelfreak))
-- Update the token failure example to OctoKit 404 failure [\#525](https://github.com/github-changelog-generator/github-changelog-generator/pull/525) ([0xalexdelgado](https://github.com/0xalexdelgado))
+- Update the token failure example to OctoKit 404 failure [\#525](https://github.com/github-changelog-generator/github-changelog-generator/pull/525) ([securitylater](https://github.com/securitylater))
 - Rescue invalid commands and present the valid options list [\#498](https://github.com/github-changelog-generator/github-changelog-generator/pull/498) ([Lucashuang0802](https://github.com/Lucashuang0802))
 - bundled cacert.pem with --ssl-ca-file PATH option [\#480](https://github.com/github-changelog-generator/github-changelog-generator/pull/480) ([olleolleolle](https://github.com/olleolleolle))
 - Option parsing: Remove tag1, tag2 cruft [\#479](https://github.com/github-changelog-generator/github-changelog-generator/pull/479) ([olleolleolle](https://github.com/olleolleolle))
@@ -411,6 +437,7 @@
 
 - Ability to implicity set user and project from command line [\#401](https://github.com/github-changelog-generator/github-changelog-generator/pull/401) ([skywinder](https://github.com/skywinder))
 - Show how to use it with Rakefile [\#399](https://github.com/github-changelog-generator/github-changelog-generator/pull/399) ([edusantana](https://github.com/edusantana))
+- Adds documentation on using a GHE endpoint [\#396](https://github.com/github-changelog-generator/github-changelog-generator/pull/396) ([cormacmccarthy](https://github.com/cormacmccarthy))
 - Rake task usage: Added a missing option exclude\_tags\_regex [\#393](https://github.com/github-changelog-generator/github-changelog-generator/pull/393) ([perlun](https://github.com/perlun))
 - Parser: YARD docstrings and a rename, and RegExp named capture groups [\#391](https://github.com/github-changelog-generator/github-changelog-generator/pull/391) ([olleolleolle](https://github.com/olleolleolle))
 
@@ -420,7 +447,6 @@
 
 **Merged pull requests:**
 
-- Adds documentation on using a GHE endpoint [\#396](https://github.com/github-changelog-generator/github-changelog-generator/pull/396) ([cormacmccarthy](https://github.com/cormacmccarthy))
 - Carry PR \#301: usernames\_as\_github\_logins [\#392](https://github.com/github-changelog-generator/github-changelog-generator/pull/392) ([olleolleolle](https://github.com/olleolleolle))
 
 ## [1.12.1](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.12.1) (2016-05-09)
@@ -594,6 +620,7 @@
 
 **Implemented enhancements:**
 
+- Cache API responses [\#361](https://github.com/github-changelog-generator/github-changelog-generator/issues/361)
 - We should add a git-generate-changelog command. [\#255](https://github.com/github-changelog-generator/github-changelog-generator/issues/255)
 - YAML front matter [\#322](https://github.com/github-changelog-generator/github-changelog-generator/pull/322) ([retorquere](https://github.com/retorquere))
 - Git Subcommand [\#288](https://github.com/github-changelog-generator/github-changelog-generator/pull/288) ([dlanileonardo](https://github.com/dlanileonardo))
@@ -740,7 +767,7 @@
 
 **Fixed bugs:**
 
-- not encapsulated character `\<` [\#249](https://github.com/github-changelog-generator/github-changelog-generator/issues/249)
+- not encapsulated character `<` [\#249](https://github.com/github-changelog-generator/github-changelog-generator/issues/249)
 
 ## [1.6.0](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.6.0) (2015-06-11)
 
