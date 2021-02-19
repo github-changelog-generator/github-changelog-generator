@@ -1,3 +1,3 @@
 project=github-changelog-generator
 user=github-changelog-generator
-exclude-labels=duplicate,question,invalid,wontfix,weekly-digest
+exclude-labels=duplicate,question,invalid,wontfix,weekly-digest,dependencies
