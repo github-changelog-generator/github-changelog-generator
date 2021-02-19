@@ -85,6 +85,49 @@ describe GitHubChangelogGenerator::OctoFetcher do
     end
   end
 
+  describe "#fetch_tag_shas" do
+    let(:commits) do
+      [
+        { sha: "0", parents: [{ sha: "1" }, { sha: "6" }] },
+        { sha: "1", parents: [{ sha: "2" }] },
+        { sha: "2", parents: [{ sha: "3" }] },
+        { sha: "3", parents: [{ sha: "4" }] },
+        { sha: "4", parents: [{ sha: "5" }] },
+        { sha: "5", parents: [] },
+        { sha: "6", parents: [{ sha: "7" }, { sha: "8" }] },
+        { sha: "7", parents: [{ sha: "9" }, { sha: "10" }] },
+        { sha: "8", parents: [{ sha: "11" }, { sha: "12" }] },
+        { sha: "9", parents: [] },
+        { sha: "10", parents: [] },
+        { sha: "11", parents: [] },
+        { sha: "12", parents: [] }
+      ]
+    end
+
+    let(:tag0) { { name: "tag-0", commit: { sha: "0" } } }
+    let(:tag1) { { name: "tag-1", commit: { sha: "1" } } }
+    let(:tag6) { { name: "tag-6", commit: { sha: "6" } } }
+
+    before do
+      allow(fetcher).to receive(:commits).and_return(commits)
+    end
+
+    it "should find all shas with single parents" do
+      fetcher.fetch_tag_shas([tag1])
+      expect(tag1["shas_in_tag"]).to eq(Set.new(%w[1 2 3 4 5]))
+    end
+
+    it "should find all shas with multiple parents" do
+      fetcher.fetch_tag_shas([tag6])
+      expect(tag6["shas_in_tag"]).to eq(Set.new(%w[6 7 8 9 10 11 12]))
+    end
+
+    it "should find all shas with mixed parents" do
+      fetcher.fetch_tag_shas([tag0])
+      expect(tag0["shas_in_tag"]).to eq(Set.new(%w[0 1 2 3 4 5 6 7 8 9 10 11 12]))
+    end
+  end
+
   describe "#github_fetch_tags" do
     context "when wrong token provided", :vcr do
       let(:options) do

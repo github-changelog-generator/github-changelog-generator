@@ -41,6 +41,7 @@ module GitHubChangelogGenerator
       @branches     = nil
       @graph        = nil
       @client = nil
+      @commits_in_tag_cache = {}
     end
 
     def middleware
@@ -342,34 +343,44 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       end
     end
 
-    def commits_in_tag(sha, shas = Set.new)
-      @graph ||= commits.map { |commit| [commit["sha"], commit] }.to_h
-
-      return if shas.include?(sha)
-
-      shas << sha
-
-      if (top = @graph[sha])
-        top[:parents].each do |parent|
-          commits_in_tag(parent[:sha], shas)
-        end
-      end
-
-      shas
-    end
-
     # Fetch all SHAs occurring in or before a given tag and add them to
     # "shas_in_tag"
     #
     # @param [Array] tags The array of tags.
     # @return [Nil] No return; tags are updated in-place.
     def fetch_tag_shas(tags)
-      tags.each do |tag|
-        tag["shas_in_tag"] = commits_in_tag(tag["commit"]["sha"])
+      # Reverse the tags array to gain max benefit from the @commits_in_tag_cache
+      tags.reverse_each do |tag|
+        tag["shas_in_tag"] = commits_in_tag(tag[:commit][:sha])
       end
     end
 
     private
+
+    def commits_in_tag(sha, shas = Set.new)
+      # Reduce multiple runs for the same tag
+      return @commits_in_tag_cache[sha] if @commits_in_tag_cache.key?(sha)
+
+      @graph ||= commits.map { |commit| [commit[:sha], commit] }.to_h
+      return shas unless (current = @graph[sha])
+
+      queue = [current]
+      while queue.any?
+        commit = queue.shift
+        # If we've already processed this sha, just grab it's parents from the cache
+        if @commits_in_tag_cache.key?(commit[:sha])
+          shas.merge(@commits_in_tag_cache[commit[:sha]])
+        else
+          shas.add(commit[:sha])
+          commit[:parents].each do |p|
+            queue.push(@graph[p[:sha]]) unless shas.include?(p[:sha])
+          end
+        end
+      end
+
+      @commits_in_tag_cache[sha] = shas
+      shas
+    end
 
     def stringify_keys_deep(indata)
       case indata
