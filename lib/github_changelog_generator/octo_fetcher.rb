@@ -351,7 +351,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     def fetch_tag_shas(tags)
       # Reverse the tags array to gain max benefit from the @commits_in_tag_cache
       tags.reverse_each do |tag|
-        tag["shas_in_tag"] = commits_in_tag(tag[:commit][:sha])
+        tag["shas_in_tag"] = commits_in_tag(tag["commit"]["sha"])
       end
     end
 

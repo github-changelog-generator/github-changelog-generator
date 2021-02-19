@@ -104,9 +104,9 @@ describe GitHubChangelogGenerator::OctoFetcher do
       ]
     end
 
-    let(:tag0) { { name: "tag-0", commit: { sha: "0" } } }
-    let(:tag1) { { name: "tag-1", commit: { sha: "1" } } }
-    let(:tag6) { { name: "tag-6", commit: { sha: "6" } } }
+    let(:tag0) { { "name" => "tag-0", "commit" => { "sha" => "0" } } }
+    let(:tag1) { { "name" => "tag-1", "commit" => { "sha" => "1" } } }
+    let(:tag6) { { "name" => "tag-6", "commit" => { "sha" => "6" } } }
 
     before do
       allow(fetcher).to receive(:commits).and_return(commits)
