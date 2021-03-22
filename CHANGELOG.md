@@ -1,8 +1,20 @@
 # Changelog
 
-## [1.16.0](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.16.0) (2021-02-19)
+## [1.16.1](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.16.1) (2021-03-22)
 
-[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/v1.15.2...1.16.0)
+[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/v1.16.0...1.16.1)
+
+**Fixed bugs:**
+
+- Release 1.16: If you give a specifc name to the GitHubChangelogGenerator::RakeTask, it breaks. [\#942](https://github.com/github-changelog-generator/github-changelog-generator/issues/942)
+
+**Merged pull requests:**
+
+- Rake Task: avoid calling super with arguments to avoid an ArgumentError [\#943](https://github.com/github-changelog-generator/github-changelog-generator/pull/943) ([olleolleolle](https://github.com/olleolleolle))
+
+## [v1.16.0](https://github.com/github-changelog-generator/github-changelog-generator/tree/v1.16.0) (2021-03-21)
+
+[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/v1.15.2...v1.16.0)
 
 **Implemented enhancements:**
 
@@ -350,7 +362,7 @@
 
 ## [v1.14.0](https://github.com/github-changelog-generator/github-changelog-generator/tree/v1.14.0) (2016-11-05)
 
-[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/v1.13.2...v1.14.0)
+[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.13.2...v1.14.0)
 
 **Implemented enhancements:**
 
@@ -386,13 +398,13 @@
 - Drop a stray Markdown file [\#426](https://github.com/github-changelog-generator/github-changelog-generator/pull/426) ([olleolleolle](https://github.com/olleolleolle))
 - Travis: Add JRuby 9.1.5.0 to matrix [\#424](https://github.com/github-changelog-generator/github-changelog-generator/pull/424) ([olleolleolle](https://github.com/olleolleolle))
 
-## [v1.13.2](https://github.com/github-changelog-generator/github-changelog-generator/tree/v1.13.2) (2016-09-29)
-
-[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.13.2...v1.13.2)
-
 ## [1.13.2](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.13.2) (2016-09-29)
 
-[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.13.1...1.13.2)
+[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/v1.13.2...1.13.2)
+
+## [v1.13.2](https://github.com/github-changelog-generator/github-changelog-generator/tree/v1.13.2) (2016-09-29)
+
+[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.13.1...v1.13.2)
 
 **Implemented enhancements:**
 
