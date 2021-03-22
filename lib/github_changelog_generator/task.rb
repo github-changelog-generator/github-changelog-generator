@@ -30,7 +30,7 @@ module GitHubChangelogGenerator
     # Example
     #
     #   GitHubChangelogGenerator::RakeTask.new
-    def initialize(*args, &task_block)
+    def initialize(*args, &task_block) # rubocop:disable Lint/MissingSuper
       @name = args.shift || :changelog
 
       define(args, &task_block)
