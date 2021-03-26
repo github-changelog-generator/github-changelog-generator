@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "github_changelog_generator/generator/section"
+require_relative "section"
 
 module GitHubChangelogGenerator
   # This class generates the content for a single changelog entry. An entry is
