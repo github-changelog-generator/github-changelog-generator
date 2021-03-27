@@ -156,7 +156,7 @@ module GitHubChangelogGenerator
       filter_wo_labels(filtered_issues)
     end
 
-    # @param [Array] issues Issues & PRs to filter when without labels
+    # @param [Array] items Issues & PRs to filter when without labels
     # @return [Array] Issues & PRs without labels or empty array if
     #                 add_issues_wo_labels or add_pr_wo_labels are false
     def filter_wo_labels(items)
@@ -170,6 +170,7 @@ module GitHubChangelogGenerator
     end
 
     # @todo Document this
+    # @param [Object] issues
     def filter_by_include_labels(issues)
       if options[:include_labels].nil?
         issues
