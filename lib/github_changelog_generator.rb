@@ -10,13 +10,13 @@ require "json"
 require "multi_json"
 require "benchmark"
 
-require "github_changelog_generator/helper"
-require "github_changelog_generator/options"
-require "github_changelog_generator/parser"
-require "github_changelog_generator/parser_file"
-require "github_changelog_generator/generator/generator"
-require "github_changelog_generator/version"
-require "github_changelog_generator/reader"
+require_relative "github_changelog_generator/helper"
+require_relative "github_changelog_generator/options"
+require_relative "github_changelog_generator/parser"
+require_relative "github_changelog_generator/parser_file"
+require_relative "github_changelog_generator/generator/generator"
+require_relative "github_changelog_generator/version"
+require_relative "github_changelog_generator/reader"
 
 # The main module, where placed all classes (now, at least)
 module GitHubChangelogGenerator

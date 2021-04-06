@@ -2,8 +2,8 @@
 # frozen_string_literal: true
 
 require "optparse"
-require "github_changelog_generator/version"
-require "github_changelog_generator/helper"
+require_relative "version"
+require_relative "helper"
 
 module GitHubChangelogGenerator
   class Parser
