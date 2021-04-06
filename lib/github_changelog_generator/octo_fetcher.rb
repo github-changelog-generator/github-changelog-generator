@@ -159,9 +159,9 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       print "Fetching closed issues...\r" if @options[:verbose]
       issues = []
       page_i = 0
-      count_pages = calculate_pages(client, "issues", closed_pr_options)
+      count_pages = calculate_pages(client, "issues", **closed_pr_options)
 
-      iterate_pages(client, "issues", closed_pr_options) do |new_issues|
+      iterate_pages(client, "issues", **closed_pr_options) do |new_issues|
         page_i += PER_PAGE_NUMBER
         print_in_same_line("Fetching issues... #{page_i}/#{count_pages * PER_PAGE_NUMBER}")
         issues.concat(new_issues)
@@ -185,7 +185,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       page_i = 0
       count_pages = calculate_pages(client, "pull_requests", options)
 
-      iterate_pages(client, "pull_requests", options) do |new_pr|
+      iterate_pages(client, "pull_requests", **options) do |new_pr|
         page_i += PER_PAGE_NUMBER
         log_string = "Fetching merged dates... #{page_i}/#{count_pages * PER_PAGE_NUMBER}"
         print_in_same_line(log_string)
@@ -215,7 +215,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
         issues.each do |issue|
           semaphore.async do
             issue["events"] = []
-            iterate_pages(client, "issue_events", issue["number"], preview) do |new_event|
+            iterate_pages(client, "issue_events", issue["number"], **preview) do |new_event|
               issue["events"].concat(new_event)
             end
             issue["events"] = issue["events"].map { |event| stringify_keys_deep(event.to_hash) }
