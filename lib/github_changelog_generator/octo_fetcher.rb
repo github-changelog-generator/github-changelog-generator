@@ -105,6 +105,9 @@ module GitHubChangelogGenerator
     # Returns the number of pages for a API call
     #
     # @return [Integer] number of pages for this API call in total
+    # @param [Object] request_options
+    # @param [Object] method
+    # @param [Object] client
     def calculate_pages(client, method, request_options)
       # Makes the first API call so that we can call last_response
       check_github_response do
@@ -161,7 +164,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       page_i = 0
       count_pages = calculate_pages(client, "issues", closed_pr_options)
 
-      iterate_pages(client, "issues", closed_pr_options) do |new_issues|
+      iterate_pages(client, "issues", **closed_pr_options) do |new_issues|
         page_i += PER_PAGE_NUMBER
         print_in_same_line("Fetching issues... #{page_i}/#{count_pages * PER_PAGE_NUMBER}")
         issues.concat(new_issues)
@@ -185,7 +188,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       page_i = 0
       count_pages = calculate_pages(client, "pull_requests", options)
 
-      iterate_pages(client, "pull_requests", options) do |new_pr|
+      iterate_pages(client, "pull_requests", **options) do |new_pr|
         page_i += PER_PAGE_NUMBER
         log_string = "Fetching merged dates... #{page_i}/#{count_pages * PER_PAGE_NUMBER}"
         print_in_same_line(log_string)
@@ -215,7 +218,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
         issues.each do |issue|
           semaphore.async do
             issue["events"] = []
-            iterate_pages(client, "issue_events", issue["number"], preview) do |new_event|
+            iterate_pages(client, "issue_events", issue["number"], **preview) do |new_event|
               issue["events"].concat(new_event)
             end
             issue["events"] = issue["events"].map { |event| stringify_keys_deep(event.to_hash) }
@@ -335,6 +338,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       @default_branch ||= client.repository(user_project)[:default_branch]
     end
 
+    # @param [Object] name
     def commits_in_branch(name)
       @branches ||= client.branches(user_project).map { |branch| [branch[:name], branch] }.to_h
 
@@ -357,6 +361,8 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
 
     private
 
+    # @param [Set] shas
+    # @param [Object] sha
     def commits_in_tag(sha, shas = Set.new)
       # Reduce multiple runs for the same tag
       return @commits_in_tag_cache[sha] if @commits_in_tag_cache.key?(sha)
@@ -382,6 +388,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       shas
     end
 
+    # @param [Object] indata
     def stringify_keys_deep(indata)
       case indata
       when Array
@@ -405,10 +412,13 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     #
     # @param [Octokit::Client] client
     # @param [String] method (eg. 'tags')
+    # @param [Array] arguments
+    # @param [Async::Semaphore] parent
     #
     # @yield [Sawyer::Resource] An OctoKit-provided response (which can be empty)
     #
     # @return [void]
+    # @param [Hash] options
     def iterate_pages(client, method, *arguments, parent: nil, **options)
       options = DEFAULT_REQUEST_OPTIONS.merge(options)
 
@@ -442,6 +452,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     # This is wrapper with rescue block
     #
     # @return [Object] returns exactly the same, what you put in the block, but wrap it with begin-rescue block
+    # @param [Proc] block
     def check_github_response(&block)
       Retriable.retriable(retry_options, &block)
     rescue MovedPermanentlyError => e
@@ -453,6 +464,8 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     end
 
     # Presents the exception, and the aborts with the message.
+    # @param [Object] message
+    # @param [Object] error
     def fail_with_message(error, message)
       Helper.log.error("#{error.class}: #{error.message}")
       sys_abort(message)
@@ -483,6 +496,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       end
     end
 
+    # @param [Object] msg
     def sys_abort(msg)
       abort(msg)
     end

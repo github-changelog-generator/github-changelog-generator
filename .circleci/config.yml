@@ -4,61 +4,40 @@
 #
 version: 2.1
 orbs:
-  ruby: circleci/ruby@0.2.2
-
-shared_steps: &shared_steps
-  steps:
-    - run: ruby -v
-    - checkout
-    - ruby/load-cache
-    - run: gem install bundler:2.1.4
-    - ruby/install-deps
-    - ruby/save-cache
-    - ruby/run-tests
+  ruby: circleci/ruby@1.1.2
 
 jobs:
-  lint:
-    environment:
-      BUNDLE_PATH: vendor/bundle
-    executor: ruby/default
-    steps:
-      - run: ruby -v
-      - checkout
-      - ruby/load-cache
-      - ruby/install-deps
-      - run: bundle exec rubocop
-
-  test:
+  rspec:
     parameters:
-      tag:
+      image:
+        description: "Name of the Docker image."
         type: string
-    environment:
-      BUNDLE_PATH: vendor/bundle
-    executor:
-      name: ruby/default
-      tag: << parameters.tag >>
-    parallelism: 1
-    <<: *shared_steps
-
-  test_jruby:
-    environment:
-      BUNDLE_PATH: vendor/bundle
-      JRUBY_OPTS: "--debug"
+        default: "cimg/ruby"
     docker:
-      - image: circleci/jruby:9.2
-    <<: *shared_steps
+      - image: << parameters.image >>
+    environment:
+      JRUBY_OPTS: "--debug"
+    steps:
+      - checkout
+      - run: bundle install
+      - run: bundle exec rubocop
+      - run: bundle exec rspec
 
 workflows:
-  version: 2
   build:
     jobs:
-      - lint
-      - test_jruby:
-          requires:
-            - lint
-      - test:
-          matrix:
-            parameters:
-              tag: ["2.5", "2.6", "2.7"]
-          requires:
-            - lint
+      - rspec:
+          name: Ruby 2.5
+          image: cimg/ruby:2.5
+      - rspec:
+          name: Ruby 2.6
+          image: cimg/ruby:2.6
+      - rspec:
+          name: Ruby 2.7
+          image: cimg/ruby:2.7
+      - rspec:
+          name: Ruby 3.0
+          image: cimg/ruby:3.0
+      - rspec:
+          name: JRuby 9.2
+          image: circleci/jruby:9.2
