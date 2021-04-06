@@ -85,79 +85,79 @@
 
 <h2 id="OPTIONS">OPTIONS</h2>
 
-<p>  -u, --user [USER]</p>
+<p>  -u, --user USER</p>
 
 <p>  Username of the owner of target GitHub repo.</p>
 
-<p>  -p, --project [PROJECT]</p>
+<p>  -p, --project PROJECT</p>
 
 <p>  Name of project on GitHub.</p>
 
-<p>  -t, --token [TOKEN]</p>
+<p>  -t, --token TOKEN</p>
 
 <p>  To make more than 50 requests per hour your GitHub token is required. You can generate it at: https://github.com/settings/tokens/new</p>
 
-<p>  -f, --date-format [FORMAT]</p>
+<p>  -f, --date-format FORMAT</p>
 
 <p>  Date format. Default is %Y-%m-%d.</p>
 
-<p>  -o, --output [NAME]</p>
+<p>  -o, --output NAME</p>
 
 <p>  Output file. To print to STDOUT instead, use blank as path. Default is CHANGELOG.md.</p>
 
-<p>  -b, --base [NAME]</p>
+<p>  -b, --base NAME</p>
 
 <p>  Optional base file to append generated changes to.</p>
 
-<p>  --summary-label [LABEL]</p>
+<p>  --summary-label LABEL</p>
 
 <p>  Set up custom label for the release summary section. Default is "".</p>
 
-<p>  --breaking-label [LABEL]</p>
+<p>  --breaking-label LABEL</p>
 
 <p>  Set up custom label for breaking changes section. Default is "<strong>Breaking changes:</strong>".</p>
 
-<p>  --enhancement-label [LABEL]</p>
+<p>  --enhancement-label LABEL</p>
 
 <p>  Set up custom label for enhancements section. Default is "<strong>Implemented enhancements:</strong>".</p>
 
-<p>  --bugs-label [LABEL]</p>
+<p>  --bugs-label LABEL</p>
 
 <p>  Set up custom label for bug-fixes section. Default is "<strong>Fixed bugs:</strong>".</p>
 
-<p>  --deprecated-label [LABEL]</p>
+<p>  --deprecated-label LABEL</p>
 
 <p>  Set up custom label for deprecated section. Default is "<strong>Deprecated:</strong>".</p>
 
-<p>  --removed-label [LABEL]</p>
+<p>  --removed-label LABEL</p>
 
 <p>  Set up custom label for removed section. Default is "<strong>Removed:</strong>".</p>
 
-<p>  --security-label [LABEL]</p>
+<p>  --security-label LABEL</p>
 
 <p>  Set up custom label for security section. Default is "<strong>Security:</strong>".</p>
 
-<p>  --issues-label [LABEL]</p>
+<p>  --issues-label LABEL</p>
 
 <p>  Set up custom label for closed-issues section. Default is "<strong>Closed issues:</strong>".</p>
 
-<p>  --header-label [LABEL]</p>
+<p>  --header-label LABEL</p>
 
 <p>  Set up custom header label. Default is "# Changelog".</p>
 
-<p>  --configure-sections [HASH, STRING]</p>
+<p>  --configure-sections HASH, STRING</p>
 
 <p>  Define your own set of sections which overrides all default sections.</p>
 
-<p>  --add-sections [HASH, STRING]</p>
+<p>  --add-sections HASH, STRING</p>
 
 <p>  Add new sections but keep the default sections.</p>
 
-<p>  --front-matter [JSON]</p>
+<p>  --front-matter JSON</p>
 
 <p>  Add YAML front matter. Formatted as JSON because it's easier to add on the command line.</p>
 
-<p>  --pr-label [LABEL]</p>
+<p>  --pr-label LABEL</p>
 
 <p>  Set up custom label for pull requests section. Default is "<strong>Merged pull requests:</strong>".</p>
 
@@ -201,7 +201,7 @@
 
 <p>  Add to log unreleased closed issues. Default is true.</p>
 
-<p>  --unreleased-label [label]</p>
+<p>  --unreleased-label LABEL</p>
 
 <p>  Set up custom label for unreleased closed issues section. Default is "<strong>Unreleased:</strong>".</p>
 
@@ -253,7 +253,7 @@
 
 <p>  Changelog will exclude specified tags.</p>
 
-<p>  --exclude-tags-regex [REGEX]</p>
+<p>  --exclude-tags-regex REGEX</p>
 
 <p>  Apply a regular expression on tag names so that they can be excluded, for example: --exclude-tags-regex ".*+\d{1,}".</p>
 
@@ -269,19 +269,19 @@
 
 <p>  Fetch only commits after this time. eg. "2017-01-01 10:00:00"</p>
 
-<p>  --max-issues [NUMBER]</p>
+<p>  --max-issues NUMBER</p>
 
 <p>  Maximum number of issues to fetch from GitHub. Default is unlimited.</p>
 
-<p>  --release-url [URL]</p>
+<p>  --release-url URL</p>
 
 <p>  The URL to point to for release links, in printf format (with the tag as variable).</p>
 
-<p>  --github-site [URL]</p>
+<p>  --github-site URL</p>
 
 <p>  The Enterprise GitHub site where your project is hosted.</p>
 
-<p>  --github-api [URL]</p>
+<p>  --github-api URL</p>
 
 <p>  The enterprise endpoint to use for your GitHub API.</p>
 
@@ -289,11 +289,11 @@
 
 <p>  Create a simple list from issues and pull requests. Default is false.</p>
 
-<p>  --future-release [RELEASE-VERSION]</p>
+<p>  --future-release RELEASE-VERSION</p>
 
 <p>  Put the unreleased changes in the specified release number.</p>
 
-<p>  --release-branch [RELEASE-BRANCH]</p>
+<p>  --release-branch RELEASE-BRANCH</p>
 
 <p>  Limit pull requests to the release branch, such as master or release.</p>
 
@@ -301,15 +301,15 @@
 
 <p>  Use HTTP Cache to cache GitHub API requests (useful for large repos). Default is true.</p>
 
-<p>  --[no-]cache-file [CACHE-FILE]</p>
+<p>  --[no-]cache-file CACHE-FILE</p>
 
 <p>  Filename to use for cache. Default is github-changelog-http-cache in a temporary directory.</p>
 
-<p>  --cache-log [CACHE-LOG]</p>
+<p>  --cache-log CACHE-LOG</p>
 
 <p>  Filename to use for cache log. Default is github-changelog-logger.log in a temporary directory.</p>
 
-<p>  --ssl-ca-file [PATH]</p>
+<p>  --ssl-ca-file PATH</p>
 
 <p>  Path to cacert.pem file. Default is a bundled lib/github_changelog_generator/ssl_certs/cacert.pem. Respects SSL_CA_PATH.</p>
 

@@ -11,79 +11,79 @@ Automatically generate changelog from your tags, issues, labels and pull request
 
 ## OPTIONS
 
-  -u, --user [USER]
+  -u, --user USER
 
   Username of the owner of target GitHub repo.
 
-  -p, --project [PROJECT]
+  -p, --project PROJECT
 
   Name of project on GitHub.
 
-  -t, --token [TOKEN]
+  -t, --token TOKEN
 
   To make more than 50 requests per hour your GitHub token is required. You can generate it at: https://github.com/settings/tokens/new
 
-  -f, --date-format [FORMAT]
+  -f, --date-format FORMAT
 
   Date format. Default is %Y-%m-%d.
 
-  -o, --output [NAME]
+  -o, --output NAME
 
   Output file. To print to STDOUT instead, use blank as path. Default is CHANGELOG.md.
 
-  -b, --base [NAME]
+  -b, --base NAME
 
-  Optional base file to append generated changes to.
+  Optional base file to append generated changes to. Default is HISTORY.md.
 
-  --summary-label [LABEL]
+  --summary-label LABEL
 
   Set up custom label for the release summary section. Default is "".
 
-  --breaking-label [LABEL]
+  --breaking-label LABEL
 
   Set up custom label for breaking changes section. Default is "**Breaking changes:**".
 
-  --enhancement-label [LABEL]
+  --enhancement-label LABEL
 
   Set up custom label for enhancements section. Default is "**Implemented enhancements:**".
 
-  --bugs-label [LABEL]
+  --bugs-label LABEL
 
   Set up custom label for bug-fixes section. Default is "**Fixed bugs:**".
 
-  --deprecated-label [LABEL]
+  --deprecated-label LABEL
 
   Set up custom label for deprecated section. Default is "**Deprecated:**".
 
-  --removed-label [LABEL]
+  --removed-label LABEL
 
   Set up custom label for removed section. Default is "**Removed:**".
 
-  --security-label [LABEL]
+  --security-label LABEL
 
   Set up custom label for security section. Default is "**Security:**".
 
-  --issues-label [LABEL]
+  --issues-label LABEL
 
   Set up custom label for closed-issues section. Default is "**Closed issues:**".
 
-  --header-label [LABEL]
+  --header-label LABEL
 
   Set up custom header label. Default is "# Changelog".
 
-  --configure-sections [HASH, STRING]
+  --configure-sections HASH, STRING
 
   Define your own set of sections which overrides all default sections.
 
-  --add-sections [HASH, STRING]
+  --add-sections HASH, STRING
 
   Add new sections but keep the default sections.
 
-  --front-matter [JSON]
+  --front-matter JSON
 
   Add YAML front matter. Formatted as JSON because it's easier to add on the command line.
 
-  --pr-label [LABEL]
+  --pr-label LABEL
 
   Set up custom label for pull requests section. Default is "**Merged pull requests:**".
 
@@ -127,7 +127,7 @@ Automatically generate changelog from your tags, issues, labels and pull request
 
   Add to log unreleased closed issues. Default is true.
 
-  --unreleased-label [label]
+  --unreleased-label LABEL
 
   Set up custom label for unreleased closed issues section. Default is "**Unreleased:**".
 
@@ -179,7 +179,7 @@ Automatically generate changelog from your tags, issues, labels and pull request
 
   Changelog will exclude specified tags.
 
-  --exclude-tags-regex [REGEX]
+  --exclude-tags-regex REGEX
 
   Apply a regular expression on tag names so that they can be excluded, for example: --exclude-tags-regex ".*\+\d{1,}".
 
@@ -195,19 +195,19 @@ Automatically generate changelog from your tags, issues, labels and pull request
   
   Fetch only commits after this time. eg. "2017-01-01 10:00:00"
 
-  --max-issues [NUMBER]
+  --max-issues NUMBER
 
   Maximum number of issues to fetch from GitHub. Default is unlimited.
 
-  --release-url [URL]
+  --release-url URL
 
   The URL to point to for release links, in printf format (with the tag as variable).
 
-  --github-site [URL]
+  --github-site URL
 
   The Enterprise GitHub site where your project is hosted.
 
-  --github-api [URL]
+  --github-api URL
 
   The enterprise endpoint to use for your GitHub API.
 
@@ -215,11 +215,11 @@ Automatically generate changelog from your tags, issues, labels and pull request
 
   Create a simple list from issues and pull requests. Default is false.
 
-  --future-release [RELEASE-VERSION]
+  --future-release RELEASE-VERSION
 
   Put the unreleased changes in the specified release number.
 
-  --release-branch [RELEASE-BRANCH]
+  --release-branch RELEASE-BRANCH
 
   Limit pull requests to the release branch, such as master or release.
 
@@ -227,15 +227,15 @@ Automatically generate changelog from your tags, issues, labels and pull request
 
   Use HTTP Cache to cache GitHub API requests (useful for large repos). Default is true.
 
-  --[no-]cache-file [CACHE-FILE]
+  --[no-]cache-file CACHE-FILE
 
   Filename to use for cache. Default is github-changelog-http-cache in a temporary directory.
 
-  --cache-log [CACHE-LOG]
+  --cache-log CACHE-LOG
 
   Filename to use for cache log. Default is github-changelog-logger.log in a temporary directory.
 
-  --ssl-ca-file [PATH]
+  --ssl-ca-file PATH
 
   Path to cacert.pem file. Default is a bundled lib/github_changelog_generator/ssl_certs/cacert.pem. Respects SSL_CA_PATH.
 

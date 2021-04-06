@@ -43,55 +43,55 @@ module GitHubChangelogGenerator
         opts.on("-p", "--project PROJECT", "Name of project on GitHub.") do |last|
           options[:project] = last
         end
-        opts.on("-t", "--token [TOKEN]", "To make more than 50 requests per hour your GitHub token is required. You can generate it at: https://github.com/settings/tokens/new") do |last|
+        opts.on("-t", "--token TOKEN", "To make more than 50 requests per hour your GitHub token is required. You can generate it at: https://github.com/settings/tokens/new") do |last|
           options[:token] = last
         end
         opts.on("-f", "--date-format FORMAT", "Date format. Default is %Y-%m-%d.") do |last|
           options[:date_format] = last
         end
-        opts.on("-o", "--output [NAME]", "Output file. To print to STDOUT instead, use blank as path. Default is CHANGELOG.md") do |last|
+        opts.on("-o", "--output NAME", "Output file. To print to STDOUT instead, use blank as path. Default is CHANGELOG.md") do |last|
           options[:output] = last
         end
-        opts.on("-b", "--base [NAME]", "Optional base file to append generated changes to.") do |last|
+        opts.on("-b", "--base NAME", "Optional base file to append generated changes to. Default is HISTORY.md") do |last|
           options[:base] = last
         end
-        opts.on("--summary-label [LABEL]", "Set up custom label for the release summary section. Default is \"\".") do |v|
+        opts.on("--summary-label LABEL", "Set up custom label for the release summary section. Default is \"\".") do |v|
           options[:summary_prefix] = v
         end
-        opts.on("--breaking-label [LABEL]", "Set up custom label for the breaking changes section. Default is \"**Breaking changes:**\".") do |v|
+        opts.on("--breaking-label LABEL", "Set up custom label for the breaking changes section. Default is \"**Breaking changes:**\".") do |v|
           options[:breaking_prefix] = v
         end
-        opts.on("--enhancement-label [LABEL]", "Set up custom label for enhancements section. Default is \"**Implemented enhancements:**\".") do |v|
+        opts.on("--enhancement-label LABEL", "Set up custom label for enhancements section. Default is \"**Implemented enhancements:**\".") do |v|
           options[:enhancement_prefix] = v
         end
-        opts.on("--bugs-label [LABEL]", "Set up custom label for bug-fixes section. Default is \"**Fixed bugs:**\".") do |v|
+        opts.on("--bugs-label LABEL", "Set up custom label for bug-fixes section. Default is \"**Fixed bugs:**\".") do |v|
           options[:bug_prefix] = v
         end
-        opts.on("--deprecated-label [LABEL]", "Set up custom label for the deprecated changes section. Default is \"**Deprecated:**\".") do |v|
+        opts.on("--deprecated-label LABEL", "Set up custom label for the deprecated changes section. Default is \"**Deprecated:**\".") do |v|
           options[:deprecated_prefix] = v
         end
-        opts.on("--removed-label [LABEL]", "Set up custom label for the removed changes section. Default is \"**Removed:**\".") do |v|
+        opts.on("--removed-label LABEL", "Set up custom label for the removed changes section. Default is \"**Removed:**\".") do |v|
           options[:removed_prefix] = v
         end
-        opts.on("--security-label [LABEL]", "Set up custom label for the security changes section. Default is \"**Security fixes:**\".") do |v|
+        opts.on("--security-label LABEL", "Set up custom label for the security changes section. Default is \"**Security fixes:**\".") do |v|
           options[:security_prefix] = v
         end
-        opts.on("--issues-label [LABEL]", "Set up custom label for closed-issues section. Default is \"**Closed issues:**\".") do |v|
+        opts.on("--issues-label LABEL", "Set up custom label for closed-issues section. Default is \"**Closed issues:**\".") do |v|
           options[:issue_prefix] = v
         end
-        opts.on("--header-label [LABEL]", "Set up custom header label. Default is \"# Changelog\".") do |v|
+        opts.on("--header-label LABEL", "Set up custom header label. Default is \"# Changelog\".") do |v|
           options[:header] = v
         end
-        opts.on("--configure-sections [Hash, String]", "Define your own set of sections which overrides all default sections.") do |v|
+        opts.on("--configure-sections HASH, STRING", "Define your own set of sections which overrides all default sections.") do |v|
           options[:configure_sections] = v
         end
-        opts.on("--add-sections [Hash, String]", "Add new sections but keep the default sections.") do |v|
+        opts.on("--add-sections HASH, STRING", "Add new sections but keep the default sections.") do |v|
           options[:add_sections] = v
         end
-        opts.on("--front-matter [JSON]", "Add YAML front matter. Formatted as JSON because it's easier to add on the command line.") do |v|
+        opts.on("--front-matter JSON", "Add YAML front matter. Formatted as JSON because it's easier to add on the command line.") do |v|
           options[:frontmatter] = "#{JSON.parse(v).to_yaml}---\n"
         end
-        opts.on("--pr-label [LABEL]", "Set up custom label for pull requests section. Default is \"**Merged pull requests:**\".") do |v|
+        opts.on("--pr-label LABEL", "Set up custom label for pull requests section. Default is \"**Merged pull requests:**\".") do |v|
           options[:merge_prefix] = v
         end
         opts.on("--[no-]issues", "Include closed issues in changelog. Default is true.") do |v|
@@ -124,7 +124,7 @@ module GitHubChangelogGenerator
         opts.on("--[no-]unreleased", "Add to log unreleased closed issues. Default is true.") do |v|
           options[:unreleased] = v
         end
-        opts.on("--unreleased-label [label]", "Set up custom label for unreleased closed issues section. Default is \"**Unreleased:**\".") do |v|
+        opts.on("--unreleased-label LABEL", "Set up custom label for unreleased closed issues section. Default is \"**Unreleased:**\".") do |v|
           options[:unreleased_label] = v
         end
         opts.on("--[no-]compare-link", "Include compare link (Full Changelog) between older version and newer version. Default is true.") do |v|
@@ -160,13 +160,13 @@ module GitHubChangelogGenerator
         opts.on("--issue-line-labels x,y,z", Array, 'The specified labels will be shown in brackets next to each matching issue. Use "ALL" to show all labels. Default is [].') do |list|
           options[:issue_line_labels] = list
         end
-        opts.on("--include-tags-regex [REGEX]", "Apply a regular expression on tag names so that they can be included, for example: --include-tags-regex \".*\+\d{1,}\".") do |last|
+        opts.on("--include-tags-regex REGEX", "Apply a regular expression on tag names so that they can be included, for example: --include-tags-regex \".*\+\d{1,}\".") do |last|
           options[:include_tags_regex] = last
         end
         opts.on("--exclude-tags  x,y,z", Array, "Changelog will exclude specified tags") do |list|
           options[:exclude_tags] = list
         end
-        opts.on("--exclude-tags-regex [REGEX]", "Apply a regular expression on tag names so that they can be excluded, for example: --exclude-tags-regex \".*\+\d{1,}\".") do |last|
+        opts.on("--exclude-tags-regex REGEX", "Apply a regular expression on tag names so that they can be excluded, for example: --exclude-tags-regex \".*\+\d{1,}\".") do |last|
           options[:exclude_tags_regex] = last
         end
         opts.on("--since-tag  x", "Changelog will start after specified tag.") do |v|
@@ -178,37 +178,37 @@ module GitHubChangelogGenerator
         opts.on("--since-commit  x", "Fetch only commits after this time. eg. \"2017-01-01 10:00:00\"") do |v|
           options[:since_commit] = v
         end
-        opts.on("--max-issues [NUMBER]", Integer, "Maximum number of issues to fetch from GitHub. Default is unlimited.") do |max|
+        opts.on("--max-issues NUMBER", Integer, "Maximum number of issues to fetch from GitHub. Default is unlimited.") do |max|
           options[:max_issues] = max
         end
-        opts.on("--release-url [URL]", "The URL to point to for release links, in printf format (with the tag as variable).") do |url|
+        opts.on("--release-url URL", "The URL to point to for release links, in printf format (with the tag as variable).") do |url|
           options[:release_url] = url
         end
-        opts.on("--github-site [URL]", "The Enterprise GitHub site where your project is hosted.") do |last|
+        opts.on("--github-site URL", "The Enterprise GitHub site where your project is hosted.") do |last|
           options[:github_site] = last
         end
-        opts.on("--github-api [URL]", "The enterprise endpoint to use for your GitHub API.") do |last|
+        opts.on("--github-api URL", "The enterprise endpoint to use for your GitHub API.") do |last|
           options[:github_endpoint] = last
         end
         opts.on("--simple-list", "Create a simple list from issues and pull requests. Default is false.") do |v|
           options[:simple_list] = v
         end
-        opts.on("--future-release [RELEASE-VERSION]", "Put the unreleased changes in the specified release number.") do |future_release|
+        opts.on("--future-release RELEASE-VERSION", "Put the unreleased changes in the specified release number.") do |future_release|
           options[:future_release] = future_release
         end
-        opts.on("--release-branch [RELEASE-BRANCH]", "Limit pull requests to the release branch, such as master or release.") do |release_branch|
+        opts.on("--release-branch RELEASE-BRANCH", "Limit pull requests to the release branch, such as master or release.") do |release_branch|
           options[:release_branch] = release_branch
         end
         opts.on("--[no-]http-cache", "Use HTTP Cache to cache GitHub API requests (useful for large repos). Default is true.") do |http_cache|
           options[:http_cache] = http_cache
         end
-        opts.on("--cache-file [CACHE-FILE]", "Filename to use for cache. Default is github-changelog-http-cache in a temporary directory.") do |cache_file|
+        opts.on("--cache-file CACHE-FILE", "Filename to use for cache. Default is github-changelog-http-cache in a temporary directory.") do |cache_file|
           options[:cache_file] = cache_file
         end
-        opts.on("--cache-log [CACHE-LOG]", "Filename to use for cache log. Default is github-changelog-logger.log in a temporary directory.") do |cache_log|
+        opts.on("--cache-log CACHE-LOG", "Filename to use for cache log. Default is github-changelog-logger.log in a temporary directory.") do |cache_log|
           options[:cache_log] = cache_log
         end
-        opts.on("--ssl-ca-file [PATH]", "Path to cacert.pem file. Default is a bundled lib/github_changelog_generator/ssl_certs/cacert.pem. Respects SSL_CA_PATH.") do |ssl_ca_file|
+        opts.on("--ssl-ca-file PATH", "Path to cacert.pem file. Default is a bundled lib/github_changelog_generator/ssl_certs/cacert.pem. Respects SSL_CA_PATH.") do |ssl_ca_file|
           options[:ssl_ca_file] = ssl_ca_file
         end
         opts.on("--require x,y,z", Array, "Path to Ruby file(s) to require before generating changelog.") do |paths|
