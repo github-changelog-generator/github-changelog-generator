@@ -4,14 +4,14 @@
 #
 version: 2.1
 orbs:
-  ruby: circleci/ruby@0.2.2
+  ruby: circleci/ruby@1.0
 
 shared_steps: &shared_steps
   steps:
     - run: ruby -v
     - checkout
     - ruby/load-cache
-    - run: gem install bundler:2.1.4
+    - run: gem install bundler:2.2.15
     - ruby/install-deps
     - ruby/save-cache
     - ruby/run-tests
@@ -59,6 +59,6 @@ workflows:
       - test:
           matrix:
             parameters:
-              tag: ["2.5", "2.6", "2.7"]
+              tag: ["2.5", "2.6", "2.7", "3.0"]
           requires:
             - lint
