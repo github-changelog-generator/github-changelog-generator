@@ -8,7 +8,8 @@ module GitHubChangelogGenerator
       print "Fetching events for issues and PR: 0/#{@issues.count + @pull_requests.count}\r" if options[:verbose]
 
       # Async fetching events:
-      @fetcher.fetch_events_async(@issues + @pull_requests)
+      @fetcher.fetch_events_async(@issues)
+      @fetcher.fetch_events_async(@pull_requests)
     end
 
     # Async fetching of all tags dates
@@ -71,9 +72,11 @@ module GitHubChangelogGenerator
         # fetch that. See
         # https://developer.github.com/v3/pulls/#get-a-single-pull-request vs.
         # https://developer.github.com/v3/pulls/#list-pull-requests
-        if pr["events"] && (event = pr["events"].find { |e| e["event"] == "merged" })
+        # gitlab API has this
+        merge_commit_sha = try_merge_commit_sha_from_gitlab(pr)
+        if merge_commit_sha
           # Iterate tags.reverse (oldest to newest) to find first tag of each PR.
-          if (oldest_tag = tags.reverse.find { |tag| tag["shas_in_tag"].include?(event["commit_id"]) })
+          if (oldest_tag = tags.reverse.find { |tag| tag["shas_in_tag"].include?(merge_commit_sha) })
             pr["first_occurring_tag"] = oldest_tag["name"]
             found = true
             i += 1
@@ -91,6 +94,16 @@ module GitHubChangelogGenerator
         end
         found
       end
+    end
+
+    def try_merge_commit_sha_from_gitlab(merge_request)
+      merge_commit_sha = nil
+      if merge_request.key?("merge_commit_sha")
+        merge_commit_sha = merge_request["merge_commit_sha"]
+      elsif merge_request["events"] && (event = merge_request["events"].find { |e| e["event"] == "merged" })
+        merge_commit_sha = event["commit_id"]
+      end
+      merge_commit_sha
     end
 
     # Associate merged PRs by the HEAD of the release branch. If no
@@ -155,7 +168,7 @@ module GitHubChangelogGenerator
     # @param [Hash] issue
     def find_closed_date_by_commit(issue)
       unless issue["events"].nil?
-        # if it's PR -> then find "merged event", in case of usual issue -> fond closed date
+        # if it's PR -> then find "merged event", in case of usual issue -> find closed date
         compare_string = issue["merged_at"].nil? ? "closed" : "merged"
         # reverse! - to find latest closed event. (event goes in date order)
         issue["events"].reverse!.each do |event|

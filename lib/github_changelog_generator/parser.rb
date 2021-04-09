@@ -190,6 +190,9 @@ module GitHubChangelogGenerator
         opts.on("--github-api URL", "The enterprise endpoint to use for your GitHub API.") do |last|
           options[:github_endpoint] = last
         end
+        opts.on("--[no-]gitlab", "Use Gitlab API instead of Github. Default is false.") do |last|
+          options[:gitlab] = last
+        end
         opts.on("--simple-list", "Create a simple list from issues and pull requests. Default is false.") do |v|
           options[:simple_list] = v
         end
@@ -270,7 +273,8 @@ module GitHubChangelogGenerator
         removed_prefix: "**Removed:**",
         security_prefix: "**Security fixes:**",
         http_cache: true,
-        require: []
+        require: [],
+        gitlab: false
       )
     end
   end
