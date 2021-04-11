@@ -5,6 +5,28 @@ require "pathname"
 module GitHubChangelogGenerator
   ParserError = Class.new(StandardError)
 
+  class FileParserChooser
+    def initialize(options)
+      @options     = options
+      @config_file = Pathname.new(options[:config_file])
+    end
+
+    def parse!(_argv)
+      return nil unless (path = resolve_path)
+
+      ParserFile.new(@options, File.open(path)).parse!
+    end
+
+    def resolve_path
+      return @config_file if @config_file.exist?
+
+      path = @config_file.expand_path
+      return path if File.exist?(path)
+
+      nil
+    end
+  end
+
   # ParserFile is a configuration file reader which sets options in the
   # given Hash.
   #
@@ -22,28 +44,21 @@ module GitHubChangelogGenerator
   #
   class ParserFile
     # @param options [Hash] options to be configured from file contents
-    # @param file [nil,IO] configuration file handle, defaults to opening `.github_changelog_generator`
-    def initialize(options, file = open_settings_file)
+    # @param io [nil, IO] configuration file handle
+    def initialize(options, io = nil)
       @options = options
-      @file = file
+      @io = io
     end
 
     # Sets options using configuration file content
     def parse!
-      return unless @file
+      return unless @io
 
-      @file.each_with_index { |line, i| parse_line!(line, i + 1) }
-      @file.close
+      @io.each_with_index { |line, i| parse_line!(line, i + 1) }
+      @io.close
     end
 
     private
-
-    FILENAME = ".github_changelog_generator"
-
-    def open_settings_file
-      path = Pathname(File.expand_path(FILENAME))
-      File.open(path) if path.exist?
-    end
 
     def parse_line!(line, line_number)
       return if non_configuration_line?(line)

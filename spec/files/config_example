@@ -1,0 +1,5 @@
+user=spec_user
+project=spec_project
+unreleased=false
+future-release=5.0.0
+since-tag=1.0.0
