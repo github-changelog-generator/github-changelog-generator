@@ -84,7 +84,7 @@ Using [Docker](https://www.docker.com/products/docker-desktop) is an alternative
 
 Example invocation:
 
-    $ docker run -it --rm -v "$(pwd)":/usr/local/src/your-app ferrarimarco/github-changelog-generator
+    $ docker run -it --rm -v "$(pwd)":/usr/local/src/your-app githubchangeloggenerator/github-changelog-generator
 
 
 
