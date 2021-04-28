@@ -104,7 +104,7 @@ module GitHubChangelogGenerator
         i = total - prs_left.count
         prs_left.reject do |pr|
           found = false
-          if pr["events"] && (event = pr["events"].find { |e| e["event"] == "merged" }) && sha_in_release_branch(event["commit_id"])
+          if pr["events"] && (event = pr["events"].find { |e| e["event"] == "merged" }) && sha_in_release_branch?(event["commit_id"])
             found = true
             i += 1
             print("Associating PRs with tags: #{i}/#{total}\r") if @options[:verbose]
@@ -137,7 +137,7 @@ module GitHubChangelogGenerator
             pr["first_occurring_tag"] = oldest_tag["name"]
             found = true
             i += 1
-          elsif sha_in_release_branch(rebased_sha)
+          elsif sha_in_release_branch?(rebased_sha)
             found = true
             i += 1
           else
@@ -195,10 +195,9 @@ module GitHubChangelogGenerator
     #
     # @param [String] sha SHA to check.
     # @return [Boolean] True if SHA is in the branch git history.
-    def sha_in_release_branch(sha)
+    def sha_in_release_branch?(sha)
       branch = @options[:release_branch] || @fetcher.default_branch
-      shas_in_branch = @fetcher.commits_in_branch(branch)
-      shas_in_branch.include?(sha)
+      @fetcher.commits_in_branch(branch).include?(sha)
     end
   end
 end
