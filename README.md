@@ -39,7 +39,7 @@ To update TOC, please run:
 
 ### Changelog generation has never been so easy
 
-**Fully automated changelog generation** - This gem generates a changelog file based on **tags**, **issues** and merged **pull requests** (and splits them into separate lists according to labels) from :octocat: GitHub Issue Tracker.
+**Fully automated changelog generation** - This gem generates a changelog file based on **tags**, **issues** and merged **pull requests** (and splits them into separate lists according to labels) from :octocat: GitHub.
 
 Since you don't have to fill your `CHANGELOG.md` manually now: just run the script, relax and take a cup of :coffee: before your next release! :tada:
 
@@ -88,7 +88,7 @@ Example invocation:
 
 
 
-- For Github Enterprise repos, specify *both* `--github-site` and `--github-api` options:
+- For GitHub Enterprise repos, specify *both* `--github-site` and `--github-api` options:
 
        $ github_changelog_generator --github-site="https://github.yoursite.com" \
                                   --github-api="https://github.yoursite.com/api/v3/"
@@ -320,7 +320,7 @@ Workaround: Create a `C:\tmp`.
 
 ## Contributing
 
-We have collected notes on how to contribute to this project in [CONTRIBUTING.md].
+Would you like to contribute to this project? [CONTRIBUTING.md] has all the details on how to do that.
 
 [CONTRIBUTING.md]: CONTRIBUTING.md
 
@@ -329,4 +329,4 @@ We have collected notes on how to contribute to this project in [CONTRIBUTING.md
 
 ## License
 
-Github Changelog Generator is released under the [MIT License](http://www.opensource.org/licenses/MIT).
+GitHub Changelog Generator is released under the [MIT License](http://www.opensource.org/licenses/MIT).
