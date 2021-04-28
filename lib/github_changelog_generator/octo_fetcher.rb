@@ -338,12 +338,15 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       @default_branch ||= client.repository(user_project)[:default_branch]
     end
 
-    # @param [Object] name
+    # @param [String] name
+    # @return [Array<String>]
     def commits_in_branch(name)
       @branches ||= client.branches(user_project).map { |branch| [branch[:name], branch] }.to_h
 
       if (branch = @branches[name])
         commits_in_tag(branch[:commit][:sha])
+      else
+        []
       end
     end
 
@@ -351,7 +354,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     # "shas_in_tag"
     #
     # @param [Array] tags The array of tags.
-    # @return [Nil] No return; tags are updated in-place.
+    # @return void
     def fetch_tag_shas(tags)
       # Reverse the tags array to gain max benefit from the @commits_in_tag_cache
       tags.reverse_each do |tag|
