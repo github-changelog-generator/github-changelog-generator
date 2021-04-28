@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    github_changelog_generator (1.16.1)
+    github_changelog_generator (1.16.2)
       activesupport
       async (>= 1.25.0)
       async-http-faraday
@@ -15,7 +15,7 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (6.1.3)
+    activesupport (6.1.3.1)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
@@ -24,16 +24,16 @@ GEM
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
     ast (2.4.1)
-    async (1.28.9)
+    async (1.29.0)
       console (~> 1.10)
       nio4r (~> 2.3)
       timers (~> 4.1)
-    async-http (0.54.1)
+    async-http (0.56.1)
       async (~> 1.25)
       async-io (~> 1.28)
       async-pool (~> 0.2)
-      protocol-http (~> 0.21.0)
-      protocol-http1 (~> 0.13.0)
+      protocol-http (~> 0.22.0)
+      protocol-http1 (~> 0.14.0)
       protocol-http2 (~> 0.14.0)
     async-http-faraday (0.9.0)
       async-http (~> 0.42)
@@ -48,22 +48,26 @@ GEM
     codeclimate-test-reporter (1.0.7)
       simplecov
     concurrent-ruby (1.1.8)
-    console (1.10.1)
+    console (1.12.0)
       fiber-local
     crack (0.4.5)
       rexml
     diff-lcs (1.4.4)
     docile (1.3.2)
-    faraday (1.3.0)
+    faraday (1.4.1)
+      faraday-excon (~> 1.1)
       faraday-net_http (~> 1.0)
+      faraday-net_http_persistent (~> 1.1)
       multipart-post (>= 1.2, < 3)
-      ruby2_keywords
+      ruby2_keywords (>= 0.0.4)
+    faraday-excon (1.1.0)
     faraday-http-cache (2.2.0)
       faraday (>= 0.8)
     faraday-net_http (1.0.1)
+    faraday-net_http_persistent (1.1.0)
     fiber-local (1.0.0)
     hashdiff (1.0.1)
-    i18n (1.8.9)
+    i18n (1.8.10)
       concurrent-ruby (~> 1.0)
     iniparse (1.5.0)
     json (2.3.1)
@@ -71,7 +75,7 @@ GEM
     multi_json (1.15.0)
     multipart-post (2.1.1)
     nio4r (2.5.7)
-    octokit (4.20.0)
+    octokit (4.21.0)
       faraday (>= 0.9)
       sawyer (~> 0.8.0, >= 0.5.3)
     overcommit (0.57.0)
@@ -81,9 +85,9 @@ GEM
     parser (2.7.2.0)
       ast (~> 2.4.1)
     protocol-hpack (1.4.2)
-    protocol-http (0.21.0)
-    protocol-http1 (0.13.2)
-      protocol-http (~> 0.19)
+    protocol-http (0.22.0)
+    protocol-http1 (0.14.0)
+      protocol-http (~> 0.22)
     protocol-http2 (0.14.2)
       protocol-hpack (~> 1.4)
       protocol-http (~> 0.18)
