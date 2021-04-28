@@ -1,8 +1,37 @@
 # Changelog
 
-## [1.16.1](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.16.1) (2021-03-22)
+## [1.16.2](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.16.2) (2021-04-28)
 
-[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/v1.16.0...1.16.1)
+[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/v1.16.1...1.16.2)
+
+**Implemented enhancements:**
+
+- Configure a Docker Automated build [\#644](https://github.com/github-changelog-generator/github-changelog-generator/issues/644)
+
+**Fixed bugs:**
+
+- Getting an error: ` 'list_issues': wrong number of arguments (given 3, expected 0..2) (ArgumentError)` [\#952](https://github.com/github-changelog-generator/github-changelog-generator/issues/952)
+
+**Closed issues:**
+
+- Error generating change log using \>=1.16.0 [\#956](https://github.com/github-changelog-generator/github-changelog-generator/issues/956)
+- Unable to run, undefined method `include?' for nil:NilClass \(NoMethodError\) [\#954](https://github.com/github-changelog-generator/github-changelog-generator/issues/954)
+- Docker images are not published for new releases [\#951](https://github.com/github-changelog-generator/github-changelog-generator/issues/951)
+- Not all options listed in OptionParser have optional arguments [\#945](https://github.com/github-changelog-generator/github-changelog-generator/issues/945)
+- Add Ruby 3 to CI, make it pass [\#928](https://github.com/github-changelog-generator/github-changelog-generator/issues/928)
+- SSL error on Windows with docker [\#894](https://github.com/github-changelog-generator/github-changelog-generator/issues/894)
+
+**Merged pull requests:**
+
+- Fix: always return an Array from \#commits\_in\_branch [\#957](https://github.com/github-changelog-generator/github-changelog-generator/pull/957) ([olleolleolle](https://github.com/olleolleolle))
+- Use the githubchangeloggenerator Docker Hub org [\#955](https://github.com/github-changelog-generator/github-changelog-generator/pull/955) ([ferrarimarco](https://github.com/ferrarimarco))
+- Support Ruby 3 [\#949](https://github.com/github-changelog-generator/github-changelog-generator/pull/949) ([magneland](https://github.com/magneland))
+- Update help output to reflect required args. [\#946](https://github.com/github-changelog-generator/github-changelog-generator/pull/946) ([spark-c](https://github.com/spark-c))
+- Add --config-file command line parameter [\#917](https://github.com/github-changelog-generator/github-changelog-generator/pull/917) ([anakinj](https://github.com/anakinj))
+
+## [v1.16.1](https://github.com/github-changelog-generator/github-changelog-generator/tree/v1.16.1) (2021-03-22)
+
+[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/v1.16.0...v1.16.1)
 
 **Fixed bugs:**
 
@@ -10,6 +39,7 @@
 
 **Merged pull requests:**
 
+- Release 1.16.1 [\#944](https://github.com/github-changelog-generator/github-changelog-generator/pull/944) ([olleolleolle](https://github.com/olleolleolle))
 - Rake Task: avoid calling super with arguments to avoid an ArgumentError [\#943](https://github.com/github-changelog-generator/github-changelog-generator/pull/943) ([olleolleolle](https://github.com/olleolleolle))
 
 ## [v1.16.0](https://github.com/github-changelog-generator/github-changelog-generator/tree/v1.16.0) (2021-03-21)
@@ -257,7 +287,7 @@
 **Implemented enhancements:**
 
 - Add newline after version name and Full Changelog link [\#548](https://github.com/github-changelog-generator/github-changelog-generator/pull/548) ([ianroberts131](https://github.com/ianroberts131))
-- Update the token failure example to OctoKit 404 failure [\#525](https://github.com/github-changelog-generator/github-changelog-generator/pull/525) ([securitylater](https://github.com/securitylater))
+- Update the token failure example to OctoKit 404 failure [\#525](https://github.com/github-changelog-generator/github-changelog-generator/pull/525) ([wompq](https://github.com/wompq))
 - Rescue invalid commands and present the valid options list [\#498](https://github.com/github-changelog-generator/github-changelog-generator/pull/498) ([Lucashuang0802](https://github.com/Lucashuang0802))
 - bundled cacert.pem with --ssl-ca-file PATH option [\#480](https://github.com/github-changelog-generator/github-changelog-generator/pull/480) ([olleolleolle](https://github.com/olleolleolle))
 - Option parsing: Remove tag1, tag2 cruft [\#479](https://github.com/github-changelog-generator/github-changelog-generator/pull/479) ([olleolleolle](https://github.com/olleolleolle))
