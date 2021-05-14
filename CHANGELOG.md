@@ -1,21 +1,35 @@
 # Changelog
 
-## [1.16.2](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.16.2) (2021-04-28)
+## [1.16.3](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.16.3) (2021-05-14)
 
-[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/v1.16.1...1.16.2)
+[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/v1.16.2...1.16.3)
+
+**Fixed bugs:**
+
+- --front-matter raises a NoMethodError for \#to\_yaml [\#962](https://github.com/github-changelog-generator/github-changelog-generator/issues/962)
+
+**Merged pull requests:**
+
+- argv\_parser: Ensure that YAML is loaded before use [\#963](https://github.com/github-changelog-generator/github-changelog-generator/pull/963) ([olleolleolle](https://github.com/olleolleolle))
+- README, gemspec: Clarify wording, fix typo [\#958](https://github.com/github-changelog-generator/github-changelog-generator/pull/958) ([olleolleolle](https://github.com/olleolleolle))
+
+## [v1.16.2](https://github.com/github-changelog-generator/github-changelog-generator/tree/v1.16.2) (2021-04-28)
+
+[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/v1.16.1...v1.16.2)
 
 **Implemented enhancements:**
 
 - Configure a Docker Automated build [\#644](https://github.com/github-changelog-generator/github-changelog-generator/issues/644)
+- Support Ruby 3 [\#949](https://github.com/github-changelog-generator/github-changelog-generator/pull/949) ([magneland](https://github.com/magneland))
 
 **Fixed bugs:**
 
+- Unable to run, undefined method `include?' for nil:NilClass \(NoMethodError\) [\#954](https://github.com/github-changelog-generator/github-changelog-generator/issues/954)
 - Getting an error: ` 'list_issues': wrong number of arguments (given 3, expected 0..2) (ArgumentError)` [\#952](https://github.com/github-changelog-generator/github-changelog-generator/issues/952)
 
 **Closed issues:**
 
 - Error generating change log using \>=1.16.0 [\#956](https://github.com/github-changelog-generator/github-changelog-generator/issues/956)
-- Unable to run, undefined method `include?' for nil:NilClass \(NoMethodError\) [\#954](https://github.com/github-changelog-generator/github-changelog-generator/issues/954)
 - Docker images are not published for new releases [\#951](https://github.com/github-changelog-generator/github-changelog-generator/issues/951)
 - Not all options listed in OptionParser have optional arguments [\#945](https://github.com/github-changelog-generator/github-changelog-generator/issues/945)
 - Add Ruby 3 to CI, make it pass [\#928](https://github.com/github-changelog-generator/github-changelog-generator/issues/928)
@@ -25,7 +39,6 @@
 
 - Fix: always return an Array from \#commits\_in\_branch [\#957](https://github.com/github-changelog-generator/github-changelog-generator/pull/957) ([olleolleolle](https://github.com/olleolleolle))
 - Use the githubchangeloggenerator Docker Hub org [\#955](https://github.com/github-changelog-generator/github-changelog-generator/pull/955) ([ferrarimarco](https://github.com/ferrarimarco))
-- Support Ruby 3 [\#949](https://github.com/github-changelog-generator/github-changelog-generator/pull/949) ([magneland](https://github.com/magneland))
 - Update help output to reflect required args. [\#946](https://github.com/github-changelog-generator/github-changelog-generator/pull/946) ([spark-c](https://github.com/spark-c))
 - Add --config-file command line parameter [\#917](https://github.com/github-changelog-generator/github-changelog-generator/pull/917) ([anakinj](https://github.com/anakinj))
 
