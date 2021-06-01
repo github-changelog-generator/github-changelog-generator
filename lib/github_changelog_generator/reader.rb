@@ -29,7 +29,7 @@ module GitHubChangelogGenerator
       defaults = {
         heading_level: "##",
         heading_structures: [
-          /^## \[(?<version>.+?)\]\((?<url>.+?)\)( \((?<date>.+?)\))?$/, # rubocop:disable Lint/MixedRegexpCaptureTypes
+          /^## \[(?<version>.+?)\](\((?<url>.+?)\))?( \((?<date>.+?)\))?$/, # rubocop:disable Lint/MixedRegexpCaptureTypes
           /^## (?<version>.+?)( \((?<date>.+?)\))?$/ # rubocop:disable Lint/MixedRegexpCaptureTypes
         ]
       }
@@ -45,6 +45,8 @@ module GitHubChangelogGenerator
     # The following heading structures are currently valid:
     # - ## [v1.0.2](https://github.com/zanui/chef-thumbor/tree/v1.0.1) (2015-03-24)
     # - ## [v1.0.2](https://github.com/zanui/chef-thumbor/tree/v1.0.1)
+    # - ## [v1.0.2] (2015-03-24)
+    # - ## [v1.0.2]
     # - ## v1.0.2 (2015-03-24)
     # - ## v1.0.2
     #
