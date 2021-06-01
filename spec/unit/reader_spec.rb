@@ -38,6 +38,15 @@ describe GitHubChangelogGenerator::Reader do
       it { is_expected.to include("url" => "https://github.com/github-changelog-generator/Github-Changelog-Generator/tree/1.3.10") }
       it { is_expected.to include("date" => "2015-03-18") }
     end
+    context "when given a named link" do
+      subject { @reader.parse_heading("## [1.3.10]") }
+      it { is_expected.to include("version" => "1.3.10") }
+    end
+    context "when given a named link with date" do
+      subject { @reader.parse_heading("## [1.3.10] (2015-03-18)") }
+      it { is_expected.to include("version" => "1.3.10") }
+      it { is_expected.to include("date" => "2015-03-18") }
+    end
     context "when no url and date is provided" do
       subject { @reader.parse_heading("## foobar") }
       it { is_expected.to include("version" => "foobar", "url" => nil, "date" => nil) }
