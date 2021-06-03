@@ -31,5 +31,4 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency("octokit", ["~> 4.6"])
   spec.add_runtime_dependency "rainbow", ">= 2.2.1"
   spec.add_runtime_dependency "rake", ">= 10.0"
-  spec.add_runtime_dependency("retriable", ["~> 3.0"])
 end

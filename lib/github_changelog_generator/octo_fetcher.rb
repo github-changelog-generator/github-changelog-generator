@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "tmpdir"
-require "retriable"
 require "set"
 require "async"
 require "async/barrier"
@@ -456,10 +455,21 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     #
     # @return [Object] returns exactly the same, what you put in the block, but wrap it with begin-rescue block
     # @param [Proc] block
-    def check_github_response(&block)
-      Retriable.retriable(retry_options, &block)
+    def check_github_response
+      yield
     rescue MovedPermanentlyError => e
       fail_with_message(e, "The repository has moved, update your configuration")
+    rescue Octokit::TooManyRequests => e
+      resets_in = client.rate_limit.resets_in
+      Helper.log.error("#{e.class} #{e.message}; sleeping for #{resets_in}s...")
+
+      if (task = Async::Task.current?)
+        task.sleep(resets_in)
+      else
+        sleep(resets_in)
+      end
+
+      retry
     rescue Octokit::Forbidden => e
       fail_with_message(e, "Exceeded retry limit")
     rescue Octokit::Unauthorized => e
@@ -472,31 +482,6 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     def fail_with_message(error, message)
       Helper.log.error("#{error.class}: #{error.message}")
       sys_abort(message)
-    end
-
-    # Exponential backoff
-    def retry_options
-      {
-        on: [Octokit::Forbidden],
-        tries: MAX_FORBIDDEN_RETRIES,
-        base_interval: sleep_base_interval,
-        multiplier: 1.0,
-        rand_factor: 0.0,
-        on_retry: retry_callback
-      }
-    end
-
-    def sleep_base_interval
-      1.0
-    end
-
-    def retry_callback
-      proc do |exception, try, elapsed_time, next_interval|
-        Helper.log.warn("RETRY - #{exception.class}: '#{exception.message}'")
-        Helper.log.warn("#{try} tries in #{elapsed_time} seconds and #{next_interval} seconds until the next try")
-        Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG
-        Helper.log.warn(client.rate_limit)
-      end
     end
 
     # @param [Object] msg
