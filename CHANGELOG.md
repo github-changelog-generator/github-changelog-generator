@@ -1,8 +1,21 @@
 # Changelog
 
-## [1.16.3](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.16.3) (2021-05-14)
+## [1.16.4](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.16.4) (2021-06-03)
 
-[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/v1.16.2...1.16.3)
+[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/v1.16.3...1.16.4)
+
+**Closed issues:**
+
+- Stuck on "Fetching closed dates for issues" [\#961](https://github.com/github-changelog-generator/github-changelog-generator/issues/961)
+
+**Merged pull requests:**
+
+- Directly handle rate limiting using `client.rate_limit.resets_in`. [\#967](https://github.com/github-changelog-generator/github-changelog-generator/pull/967) ([ioquatix](https://github.com/ioquatix))
+- Feat: Allow named markdown anchor links [\#966](https://github.com/github-changelog-generator/github-changelog-generator/pull/966) ([kikito](https://github.com/kikito))
+
+## [v1.16.3](https://github.com/github-changelog-generator/github-changelog-generator/tree/v1.16.3) (2021-05-14)
+
+[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/v1.16.2...v1.16.3)
 
 **Fixed bugs:**
 
