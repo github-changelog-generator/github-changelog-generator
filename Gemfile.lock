@@ -10,7 +10,6 @@ PATH
       octokit (~> 4.6)
       rainbow (>= 2.2.1)
       rake (>= 10.0)
-      retriable (~> 3.0)
 
 GEM
   remote: https://rubygems.org/
@@ -95,7 +94,6 @@ GEM
     rainbow (3.0.0)
     rake (13.0.1)
     regexp_parser (1.8.1)
-    retriable (3.1.2)
     rexml (3.2.5)
     rspec (3.9.0)
       rspec-core (~> 3.9.0)
