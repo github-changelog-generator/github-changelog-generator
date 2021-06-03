@@ -463,7 +463,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       resets_in = client.rate_limit.resets_in
       Helper.log.error("#{e.class} #{e.message}; sleeping for #{resets_in}s...")
 
-      if task = Async::Task.current?
+      if (task = Async::Task.current?)
         task.sleep(resets_in)
       else
         sleep(resets_in)
