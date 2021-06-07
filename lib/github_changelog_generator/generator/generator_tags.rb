@@ -26,11 +26,14 @@ module GitHubChangelogGenerator
     # rubocop:disable Style/For - for allows us to be more concise
     def build_tag_section_mapping(section_tags, filtered_tags)
       tag_mapping = {}
+
       for i in 0..(section_tags.length - 1)
         tag = section_tags[i]
 
         # Don't create section header for the "since" tag
-        next if since_tag && tag["name"] == since_tag
+        if since_tag
+          next if (tag["name"] == since_tag) || (get_rev_tag_index(since_tag) == i)
+        end
 
         # Don't create a section header for the first tag in between_tags
         next if options[:between_tags] && tag == section_tags.last
@@ -122,6 +125,9 @@ module GitHubChangelogGenerator
       filtered_tags = all_tags
       tag = since_tag
       if tag
+        rev = get_rev_tag_index(tag)
+        return all_tags[0..rev] if rev
+
         if all_tags.map { |t| t["name"] }.include? tag
           idx = all_tags.index { |t| t["name"] == tag }
           filtered_tags = if idx
@@ -204,6 +210,12 @@ module GitHubChangelogGenerator
         warn_if_tag_not_found(all_tags, tag)
       end
       all_tags.reject { |tag| options[:exclude_tags].include?(tag["name"]) }
+    end
+
+    def get_rev_tag_index(since_tag)
+      since_tag.match(/TAG~(\d+)/).captures[0].to_i - 1
+    rescue StandardError
+      nil
     end
 
     def warn_if_nonmatching_regex(all_tags, regex, regex_option_name)
