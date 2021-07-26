@@ -205,6 +205,9 @@ module GitHubChangelogGenerator
         opts.on("--[no-]verbose", "Run verbosely. Default is true.") do |v|
           options[:verbose] = v
         end
+        opts.on("--continue-with-errors", "Allow generator to continue even if any errors are encountered in the fetch comparison.") do |continue_with_errors|
+          options[:continue_with_errors] = continue_with_errors
+        end
         opts.on("-v", "--version", "Print version number.") do |_v|
           puts "Version: #{GitHubChangelogGenerator::VERSION}"
           exit
