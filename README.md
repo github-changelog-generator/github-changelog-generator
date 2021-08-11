@@ -270,7 +270,7 @@ If you've used this project in a live app, please let me know! Nothing makes me 
 
 - **Nothing is impossible!**
 
-- Open an [issue](https://github.com/github-changelog-generator/Github-Changelog-Generator/issues/new) and let's make the generator better together!
+- Open an [issue](https://github.com/github-changelog-generator/Github-Changelog-Generator/issues/new/choose) and let's make the generator better together!
 
 - *Bug reports, feature requests, patches, and well-wishes are always welcome.* :heavy_exclamation_mark:
 
