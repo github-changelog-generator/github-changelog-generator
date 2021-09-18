@@ -76,7 +76,7 @@ module GitHubChangelogGenerator
 
       if newer_tag.nil? && filtered_issues.empty? && filtered_pull_requests.empty?
         # do not generate empty unreleased section
-        return ""
+        return +""
       end
 
       newer_tag_link, newer_tag_name, newer_tag_time = detect_link_tag_time(newer_tag)
@@ -128,7 +128,7 @@ module GitHubChangelogGenerator
     end
 
     def generate_unreleased_entry
-      entry = ""
+      entry = +""
       if options[:unreleased]
         start_tag        = @filtered_tags[0] || @sorted_tags.last
         unreleased_entry = generate_entry_between_tags(start_tag, nil)
@@ -166,7 +166,7 @@ module GitHubChangelogGenerator
     # messages of the same wording are removed.
     # @param log [String]
     def insert_fixed_string(log)
-      ins = ""
+      ins = +""
       ins += @options[:frontmatter] if @options[:frontmatter]
       ins += "#{@options[:header]}\n\n"
       log.insert(0, ins)
