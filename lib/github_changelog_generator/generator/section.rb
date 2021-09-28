@@ -39,7 +39,7 @@ module GitHubChangelogGenerator
     #
     # @return [String] Generated section content
     def generate_content
-      content = ""
+      content = +""
 
       if @issues.any?
         content += "#{@prefix}\n\n" unless @options[:simple_list] || @prefix.blank?
