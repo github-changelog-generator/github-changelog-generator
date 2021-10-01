@@ -4,6 +4,7 @@
 require "github_changelog_generator/helper"
 require "github_changelog_generator/argv_parser"
 require "github_changelog_generator/parser_file"
+require "github_changelog_generator/file_parser_chooser"
 
 module GitHubChangelogGenerator
   class Parser
