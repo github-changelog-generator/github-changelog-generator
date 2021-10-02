@@ -119,41 +119,29 @@ module GitHubChangelogGenerator
     # @param [Array] all_tags all tags
     # @return [Array] filtered tags according :since_tag option
     def filter_since_tag(all_tags)
-      filtered_tags = all_tags
-      tag = since_tag
-      if tag
-        if all_tags.map { |t| t["name"] }.include? tag
-          idx = all_tags.index { |t| t["name"] == tag }
-          filtered_tags = if idx
-                            all_tags[0..idx]
-                          else
-                            []
-                          end
-        else
-          raise ChangelogGeneratorError, "Error: can't find tag #{tag}, specified with --since-tag option."
-        end
+      return all_tags unless (tag = since_tag)
+
+      raise ChangelogGeneratorError, "Error: can't find tag #{tag}, specified with --since-tag option." if all_tags.none? { |t| t["name"] == tag }
+
+      if (idx = all_tags.index { |t| t["name"] == tag })
+        all_tags[0..idx]
+      else
+        []
       end
-      filtered_tags
     end
 
     # @param [Array] all_tags all tags
     # @return [Array] filtered tags according :due_tag option
     def filter_due_tag(all_tags)
-      filtered_tags = all_tags
-      tag           = due_tag
-      if tag
-        if all_tags.any? && all_tags.map { |t| t["name"] }.include?(tag)
-          idx = all_tags.index { |t| t["name"] == tag }
-          filtered_tags = if idx > 0
-                            all_tags[(idx + 1)..-1]
-                          else
-                            []
-                          end
-        else
-          raise ChangelogGeneratorError, "Error: can't find tag #{tag}, specified with --due-tag option."
-        end
+      return all_tags unless (tag = due_tag)
+
+      raise ChangelogGeneratorError, "Error: can't find tag #{tag}, specified with --due-tag option." if all_tags.none? { |t| t["name"] == tag }
+
+      if (idx = all_tags.index { |t| t["name"] == tag }) > 0
+        all_tags[(idx + 1)..-1]
+      else
+        []
       end
-      filtered_tags
     end
 
     # @param [Array] all_tags all tags
@@ -207,14 +195,16 @@ module GitHubChangelogGenerator
     end
 
     def warn_if_nonmatching_regex(all_tags, regex, regex_option_name)
-      unless all_tags.map { |t| t["name"] }.any? { |t| regex =~ t }
-        Helper.log.warn "Warning: unable to reject any tag, using regex "\
-                        "#{regex.inspect} in #{regex_option_name} option."
-      end
+      return if all_tags.any? { |t| regex =~ t["name"] }
+
+      Helper.log.warn "Warning: unable to reject any tag, using regex "\
+                      "#{regex.inspect} in #{regex_option_name} option."
     end
 
     def warn_if_tag_not_found(all_tags, tag)
-      Helper.log.warn("Warning: can't find tag #{tag}, specified with --exclude-tags option.") unless all_tags.map { |t| t["name"] }.include?(tag)
+      return if all_tags.any? { |t| t["name"] == tag }
+
+      Helper.log.warn("Warning: can't find tag #{tag}, specified with --exclude-tags option.")
     end
   end
 end

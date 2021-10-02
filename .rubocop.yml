@@ -50,15 +50,10 @@ Naming/FileName:
 # TODOS
 # Offense count: 14
 Metrics/AbcSize:
-  Enabled: false
+  Enabled: false  
 
 # Offense count: 10
 Style/Documentation:
-  Enabled: false
-
-# Offense count: 1
-# Configuration parameters: MinBodyLength.
-Style/GuardClause:
   Enabled: false
 
 # Offense count: 2
