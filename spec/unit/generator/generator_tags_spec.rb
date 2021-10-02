@@ -49,7 +49,7 @@ describe GitHubChangelogGenerator::Generator do
     let(:generator) { described_class.new(default_options.merge(options)) }
 
     before do
-      allow_any_instance_of(GitHubChangelogGenerator::OctoFetcher).to receive(:get_all_tags).and_return(all_tags)
+      allow_any_instance_of(GitHubChangelogGenerator::OctoFetcher).to receive(:fetch_all_tags).and_return(all_tags)
       allow(generator).to receive(:fetch_tags_dates).with(all_tags)
       allow(generator).to receive(:sort_tags_by_date).with(all_tags).and_return(sorted_tags)
       generator.fetch_and_filter_tags

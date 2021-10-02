@@ -7,7 +7,7 @@ module GitHubChangelogGenerator
       since_tag
       due_tag
 
-      all_tags = @fetcher.get_all_tags
+      all_tags = @fetcher.fetch_all_tags
       fetch_tags_dates(all_tags) # Creates a Hash @tag_times_hash
       all_sorted_tags = sort_tags_by_date(all_tags)
 

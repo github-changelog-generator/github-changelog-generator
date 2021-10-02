@@ -95,7 +95,7 @@ module GitHubChangelogGenerator
     # Fetch all tags from repo
     #
     # @return [Array <Hash>] array of tags
-    def get_all_tags
+    def fetch_all_tags
       print "Fetching tags...\r" if @options[:verbose]
 
       check_github_response { github_fetch_tags }

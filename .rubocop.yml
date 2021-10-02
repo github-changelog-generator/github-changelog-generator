@@ -52,10 +52,6 @@ Naming/FileName:
 Metrics/AbcSize:
   Enabled: false
 
-# Offense count: 1
-Naming/AccessorMethodName:
-  Enabled: false
-
 # Offense count: 10
 Style/Documentation:
   Enabled: false

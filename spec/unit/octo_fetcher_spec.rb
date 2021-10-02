@@ -72,12 +72,12 @@ describe GitHubChangelogGenerator::OctoFetcher do
     end
   end
 
-  describe "#get_all_tags" do
+  describe "#fetch_all_tags" do
     context "when github_fetch_tags returns tags" do
       it "returns tags" do
         mock_tags = ["tag"]
         allow(fetcher).to receive(:github_fetch_tags).and_return(mock_tags)
-        expect(fetcher.get_all_tags).to eq(mock_tags)
+        expect(fetcher.fetch_all_tags).to eq(mock_tags)
       end
     end
   end
