@@ -61,7 +61,7 @@ module GitHubChangelogGenerator
         output_filename = (options[:output]).to_s
         File.open(output_filename, "w") { |file| file.write(log) }
         puts "Done!"
-        puts "Generated log placed in #{Dir.pwd}/#{output_filename}"
+        puts "Generated log placed in #{File.absolute_path(output_filename)}"
       end
     end
   end
