@@ -154,15 +154,15 @@ module GitHubChangelogGenerator
     # Fill :actual_date parameter of specified issue by closed date of the commit, if it was closed by commit.
     # @param [Hash] issue
     def find_closed_date_by_commit(issue)
-      unless issue["events"].nil?
-        # if it's PR -> then find "merged event", in case of usual issue -> fond closed date
-        compare_string = issue["merged_at"].nil? ? "closed" : "merged"
-        # reverse! - to find latest closed event. (event goes in date order)
-        issue["events"].reverse!.each do |event|
-          if event["event"].eql? compare_string
-            set_date_from_event(event, issue)
-            break
-          end
+      return if issue["events"].nil?
+
+      # if it's PR -> then find "merged event", in case of usual issue -> found closed date
+      compare_string = issue["merged_at"].nil? ? "closed" : "merged"
+      # reverse! - to find latest closed event. (event goes in date order)
+      issue["events"].reverse!.each do |event|
+        if event["event"] == compare_string
+          set_date_from_event(event, issue)
+          break
         end
       end
       # TODO: assert issues, that remain without 'actual_date' hash for some reason.
@@ -175,17 +175,16 @@ module GitHubChangelogGenerator
     def set_date_from_event(event, issue)
       if event["commit_id"].nil?
         issue["actual_date"] = issue["closed_at"]
-      else
-        begin
-          commit = @fetcher.fetch_commit(event["commit_id"])
-          issue["actual_date"] = commit["commit"]["author"]["date"]
-
-          # issue['actual_date'] = commit['author']['date']
-        rescue StandardError
-          puts "Warning: Can't fetch commit #{event['commit_id']}. It is probably referenced from another repo."
-          issue["actual_date"] = issue["closed_at"]
-        end
+        return
       end
+
+      commit = @fetcher.fetch_commit(event["commit_id"])
+      issue["actual_date"] = commit["commit"]["author"]["date"]
+
+      # issue['actual_date'] = commit['author']['date']
+    rescue StandardError
+      puts "Warning: Can't fetch commit #{event['commit_id']}. It is probably referenced from another repo."
+      issue["actual_date"] = issue["closed_at"]
     end
 
     private
