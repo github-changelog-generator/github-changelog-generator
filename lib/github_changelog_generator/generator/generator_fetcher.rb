@@ -160,7 +160,7 @@ module GitHubChangelogGenerator
       compare_string = issue["merged_at"].nil? ? "closed" : "merged"
       # reverse! - to find latest closed event. (event goes in date order)
       issue["events"].reverse!.each do |event|
-        if event["event"].eql? compare_string
+        if event["event"] == compare_string
           set_date_from_event(event, issue)
           break
         end

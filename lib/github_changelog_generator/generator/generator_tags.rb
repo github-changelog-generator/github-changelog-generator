@@ -195,7 +195,7 @@ module GitHubChangelogGenerator
     end
 
     def warn_if_nonmatching_regex(all_tags, regex, regex_option_name)
-      return if all_tags.any? { |t| regex =~ t["name"] }
+      return if all_tags.any? { |t| regex.match?(t["name"]) }
 
       Helper.log.warn "Warning: unable to reject any tag, using regex "\
                       "#{regex.inspect} in #{regex_option_name} option."
