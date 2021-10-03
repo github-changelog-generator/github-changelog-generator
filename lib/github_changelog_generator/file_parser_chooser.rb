@@ -5,7 +5,7 @@ require "pathname"
 module GitHubChangelogGenerator
   class FileParserChooser
     def initialize(options)
-      @options     = options
+      @options = options
       @config_file = Pathname.new(options[:config_file])
     end
 
