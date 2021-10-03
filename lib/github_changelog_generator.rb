@@ -1,4 +1,3 @@
-#!/usr/bin/env ruby
 # frozen_string_literal: true
 
 require "octokit"
@@ -24,24 +23,28 @@ module GitHubChangelogGenerator
   class ChangelogGenerator
     # Class, responsible for whole changelog generation cycle
     # @return initialised instance of ChangelogGenerator
-    def initialize
-      @options = Parser.parse_options
-      @generator = Generator.new @options
+    def initialize(params = ARGV)
+      @options = Parser.parse_options(params)
+      @generator = Generator.new(@options)
     end
 
     # The entry point of this script to generate changelog
     # @raise (ChangelogGeneratorError) Is thrown when one of specified tags was not found in list of tags.
     def run
-      log = @generator.compound_changelog
+      log = generator.compound_changelog
 
-      if @options.write_to_file?
-        output_filename = @options[:output].to_s
+      if options.write_to_file?
+        output_filename = options[:output].to_s
         File.open(output_filename, "wb") { |file| file.write(log) }
         puts "Done!"
-        puts "Generated log placed in #{Dir.pwd}/#{output_filename}"
+        puts "Generated log placed in #{File.absolute_path(output_filename)}"
       else
         puts log
       end
     end
+
+    private
+
+    attr_reader :generator, :options
   end
 end
