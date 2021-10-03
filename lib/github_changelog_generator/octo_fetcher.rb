@@ -101,6 +101,11 @@ module GitHubChangelogGenerator
       check_github_response { github_fetch_tags }
     end
 
+    def get_all_tags # rubocop:disable Naming/AccessorMethodName
+      warn("[DEPRECATED] GitHubChangelogGenerator::OctoFetcher#get_all_tags is deprecated; use fetch_all_tags instead.")
+      fetch_all_tags
+    end
+
     # Returns the number of pages for a API call
     #
     # @return [Integer] number of pages for this API call in total
