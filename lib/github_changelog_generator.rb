@@ -1,4 +1,3 @@
-#!/usr/bin/env ruby
 # frozen_string_literal: true
 
 require "octokit"
@@ -34,8 +33,8 @@ module GitHubChangelogGenerator
     def run
       log = generator.compound_changelog
 
-      if @options.write_to_file?
-        output_filename = @options[:output].to_s
+      if options.write_to_file?
+        output_filename = options[:output].to_s
         File.open(output_filename, "wb") { |file| file.write(log) }
         puts "Done!"
         puts "Generated log placed in #{File.absolute_path(output_filename)}"
@@ -46,6 +45,6 @@ module GitHubChangelogGenerator
 
     private
 
-    attr_reader :generator
+    attr_reader :generator, :options
   end
 end
