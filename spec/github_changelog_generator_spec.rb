@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe GitHubChangelogGenerator::ChangelogGenerator do
+RSpec.describe GitHubChangelogGenerator::ChangelogGenerator do
   describe "#run" do
     let(:arguments) { [] }
     let(:instance)  { described_class.new(arguments) }
