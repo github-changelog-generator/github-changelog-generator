@@ -22,23 +22,25 @@ describe GitHubChangelogGenerator::ParserFile do
     end
 
     context "when file is incorrect" do
-      let(:file) { <<~FILE.strip
-        unreleased_label=staging
-        unreleased: false
-      FILE
-      }
+      let(:file) do
+        <<~FILE.strip
+          unreleased_label=staging
+          unreleased: false
+        FILE
+      end
 
       it { expect { parser.parse! }.to raise_error(/line #2/) }
     end
 
     context "allows empty lines and comments with semi-colon or pound sign" do
-      let(:file) { "\n   \n" + <<~REMANING.strip
-        # Comment on first line
-        unreleased_label=staging
-        ; Comment on third line
-        unreleased=false
-      REMANING
-      }
+      let(:file) do
+        "\n   \n#{<<~REMANING.strip}"
+          # Comment on first line
+          unreleased_label=staging
+          ; Comment on third line
+          unreleased=false
+        REMANING
+      end
 
       it { expect { parser.parse! }.not_to raise_error }
     end
@@ -47,14 +49,15 @@ describe GitHubChangelogGenerator::ParserFile do
       let(:default_options) { GitHubChangelogGenerator::Parser.default_options.merge(verbose: false) }
       let(:options) { {}.merge(default_options) }
       let(:options_before_change) { options.dup }
-      let(:file) { <<~FILE.strip
+      let(:file) do
+        <<~FILE.strip
           unreleased_label=staging
           unreleased=false
           header==== Changelog ===
           max_issues=123
           simple-list=true
         FILE
-      }
+      end
 
       it "changes the options" do
         expect { parser.parse! }.to change { options }
@@ -67,11 +70,12 @@ describe GitHubChangelogGenerator::ParserFile do
       end
 
       context "turns exclude-labels into an Array", bug: "#327" do
-        let(:file) { <<~FILE
+        let(:file) do
+          <<~FILE
             exclude-labels=73a91042-da6f-11e5-9335-1040f38d7f90,7adf83b4-da6f-11e5-ae18-1040f38d7f90
             header_label=# My changelog
           FILE
-        }
+        end
 
         it "reads exclude_labels into an Array" do
           expect { parser.parse! }.to change { options[:exclude_labels] }
