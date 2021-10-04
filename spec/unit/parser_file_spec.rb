@@ -3,15 +3,18 @@
 describe GitHubChangelogGenerator::ParserFile do
   describe ".github_changelog_generator" do
     let(:options) { {} }
+    let(:parser) { GitHubChangelogGenerator::ParserFile.new(options, file) }
 
     context "when the well-known default file does not exist" do
-      let(:parser) { GitHubChangelogGenerator::ParserFile.new(options) }
+      let(:file) { nil }
+
       subject { parser.parse! }
+
       it { is_expected.to be_nil }
     end
 
     context "when file is empty" do
-      let(:parser) { GitHubChangelogGenerator::ParserFile.new(options, StringIO.new("")) }
+      let(:file) { StringIO.new("") }
 
       it "does not change the options" do
         expect { parser.parse! }.to_not(change { options })
@@ -19,19 +22,14 @@ describe GitHubChangelogGenerator::ParserFile do
     end
 
     context "when file is incorrect" do
-      let(:options_before_change) { options.dup }
       let(:file) { StringIO.new("unreleased_label=staging\nunreleased: false") }
-      let(:parser) do
-        GitHubChangelogGenerator::ParserFile.new(options, file)
-      end
+
       it { expect { parser.parse! }.to raise_error(/line #2/) }
     end
 
     context "allows empty lines and comments with semi-colon or pound sign" do
       let(:file) { StringIO.new("\n   \n# Comment on first line\nunreleased_label=staging\n; Comment on third line\nunreleased=false") }
-      let(:parser) do
-        GitHubChangelogGenerator::ParserFile.new(options, file)
-      end
+
       it { expect { parser.parse! }.not_to raise_error }
     end
 
@@ -40,7 +38,6 @@ describe GitHubChangelogGenerator::ParserFile do
       let(:options) { {}.merge(default_options) }
       let(:options_before_change) { options.dup }
       let(:file) { StringIO.new("unreleased_label=staging\nunreleased=false\nheader==== Changelog ===") }
-      let(:parser) { GitHubChangelogGenerator::ParserFile.new(options, file) }
 
       it "changes the options" do
         expect { parser.parse! }.to change { options }
