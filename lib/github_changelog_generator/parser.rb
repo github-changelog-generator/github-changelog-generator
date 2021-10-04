@@ -1,4 +1,3 @@
-#!/usr/bin/env ruby
 # frozen_string_literal: true
 
 require "github_changelog_generator/helper"
