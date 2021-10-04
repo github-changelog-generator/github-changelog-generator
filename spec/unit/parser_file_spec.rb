@@ -3,10 +3,10 @@
 describe GitHubChangelogGenerator::ParserFile do
   describe ".github_changelog_generator" do
     let(:options) { {} }
-    let(:parser) { GitHubChangelogGenerator::ParserFile.new(options, StringIO.new(file)) }
+    let(:parser) { described_class.new(options, StringIO.new(file)) }
 
     context "when the well-known default file does not exist" do
-      let(:parser) { GitHubChangelogGenerator::ParserFile.new(options) }
+      let(:parser) { described_class.new(options) }
 
       subject { parser.parse! }
 
