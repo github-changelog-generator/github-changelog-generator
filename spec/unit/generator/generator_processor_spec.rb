@@ -137,6 +137,37 @@ module GitHubChangelogGenerator
           it { is_expected.to eq(expected_issues) }
         end
       end
+
+      describe "#remove_issues_in_milestones" do
+        let(:issues) { [issue] }
+
+        context "issue without milestone" do
+          let(:issue) { { "labels" => [] } }
+
+          it "is not filtered" do
+            expect { generator.remove_issues_in_milestones(issues) }.to_not(change { issues })
+          end
+        end
+
+        context "remove issues of open milestones if option is set" do
+          let(:issue) { { "milestone" => { "state" => "open" } } }
+          let(:options) { { issues_of_open_milestones: false } }
+
+          it "is filtered" do
+            expect { generator.remove_issues_in_milestones(issues) }.to change { issues }.to([])
+          end
+        end
+
+        context "milestone in the tag list" do
+          let(:milestone_name) { "milestone name" }
+          let(:issue) { { "milestone" => { "title" => milestone_name } } }
+
+          it "is filtered" do
+            generator.instance_variable_set(:@filtered_tags, [ { "name" => milestone_name } ])
+            expect { generator.remove_issues_in_milestones(issues) }.to change { issues }.to([])
+          end
+        end
+      end
     end
   end
 end
