@@ -34,12 +34,12 @@ describe GitHubChangelogGenerator::ParserFile do
 
     context "allows empty lines and comments with semi-colon or pound sign" do
       let(:file) do
-        "\n   \n#{<<~REMANING.strip}"
+        "\n   \n#{<<~REMAINING.strip}"
           # Comment on first line
           unreleased_label=staging
           ; Comment on third line
           unreleased=false
-        REMANING
+        REMAINING
       end
 
       it { expect { parser.parse! }.not_to raise_error }
