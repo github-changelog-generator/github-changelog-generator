@@ -193,7 +193,7 @@ module GitHubChangelogGenerator
           let(:issue) { { "milestone" => { "title" => milestone_name } } }
 
           it "is filtered" do
-            generator.instance_variable_set(:@filtered_tags, [ { "name" => milestone_name } ])
+            generator.instance_variable_set(:@filtered_tags, [{ "name" => milestone_name }])
             expect { generator.remove_issues_in_milestones(issues) }.to change { issues }.to([])
           end
         end
