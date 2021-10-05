@@ -138,6 +138,36 @@ module GitHubChangelogGenerator
         end
       end
 
+      describe "#find_issues_to_add" do
+        let(:issues) { [issue] }
+        let(:tag_name) { nil }
+        let(:filtered_tags) { [] }
+        before { generator.instance_variable_set(:@filtered_tags, filtered_tags) }
+
+        subject { generator.find_issues_to_add(issues, tag_name) }
+
+        context "issue without milestone" do
+          let(:issue) { { "labels" => [] } }
+
+          it { is_expected.to be_empty }
+        end
+
+        context "milestone title not in the filtered tags" do
+          let(:issue) { { "milestone" => { "title" => "a title" } } }
+          let(:filtered_tags) { [{ "name" => "another name" }] }
+
+          it { is_expected.to be_empty }
+        end
+
+        context "milestone title matches the tag name" do
+          let(:tag_name) { "tag name" }
+          let(:issue) { { "milestone" => { "title" => tag_name } } }
+          let(:filtered_tags) { [{ "name" => tag_name }] }
+
+          it { is_expected.to contain_exactly(issue) }
+        end
+      end
+
       describe "#remove_issues_in_milestones" do
         let(:issues) { [issue] }
 
