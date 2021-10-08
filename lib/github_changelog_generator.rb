@@ -6,7 +6,6 @@ require "logger"
 require "active_support"
 require "active_support/core_ext/object/blank"
 require "json"
-require "multi_json"
 require "benchmark"
 
 require "github_changelog_generator/helper"
