@@ -22,10 +22,9 @@ end
 group :test do
   gem "codeclimate-test-reporter", "~> 1.0"
   gem "json"
-  gem "multi_json"
   gem "rspec", "< 4"
   gem "rspec_junit_formatter"
   gem "simplecov", "~>0.10", require: false
-  gem "vcr"
+  gem "vcr", "~> 6"
   gem "webmock"
 end

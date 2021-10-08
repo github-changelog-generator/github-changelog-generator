@@ -27,7 +27,6 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency("async", ">= 1.25.0")
   spec.add_runtime_dependency("async-http-faraday")
   spec.add_runtime_dependency("faraday-http-cache")
-  spec.add_runtime_dependency("multi_json")
   spec.add_runtime_dependency("octokit", ["~> 4.6"])
   spec.add_runtime_dependency "rainbow", ">= 2.2.1"
   spec.add_runtime_dependency "rake", ">= 10.0"
