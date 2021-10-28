@@ -175,7 +175,7 @@ module GitHubChangelogGenerator
         # default sections followed by any --add-sections sections in
         # user-defined order, or --configure-sections in user-defined order.
         # Ignore the order of the issue labels from github which cannot be
-        # controled by the user.
+        # controlled by the user.
         @sections.each do |section|
           unless (section.labels & label_names).empty?
             section.issues << issue
