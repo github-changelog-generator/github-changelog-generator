@@ -12,14 +12,14 @@ To update TOC, please run:
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
   - [Changelog generation has never been so easy](#changelog-generation-has-never-been-so-easy)
   - [*What’s the point of a changelog?*](#whats-the-point-of-a-changelog)
   - [*Why should I care?*](#why-should-i-care)
 - [Installation](#installation)
-- [Running with Docker](#running-with-docker)
-- [Output example](#output-example)
 - [Usage](#usage)
+  - [Running with CLI:](#running-with-cli)
+  - [Running with Docker](#running-with-docker)
+- [Output example](#output-example)
   - [Params](#params)
   - [Params File](#params-file)
   - [GitHub token](#github-token)
@@ -29,9 +29,12 @@ To update TOC, please run:
   - [Using the summary section feature](#using-the-summary-section-feature)
   - [Alternatives](#alternatives)
   - [Projects using this library](#projects-using-this-library)
+- [Practical Use Cases](#practical-use-cases)
+  - [Creating Github Release Notes](#creating-github-release-notes)
 - [Am I missing some essential feature?](#am-i-missing-some-essential-feature)
 - [FAQ](#faq)
 - [Contributing](#contributing)
+- [Contact us](#contact-us)
 - [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -265,6 +268,28 @@ Here's a [wikipage list of projects](https://github.com/github-changelog-generat
 If you've used this project in a live app, please let me know! Nothing makes me happier than seeing someone else take my work and go wild with it.
 
 *If you are using `github_changelog_generator` to generate your project's changelog, or know of other projects using it, please [add it to this list](https://github.com/github-changelog-generator/github-changelog-generator/wiki/Projects-using-Github-Changelog-Generator).*
+
+## Practical Use Cases
+
+### Creating Github Release Notes
+
+`github_changelog_generator` can be used in combination with the [github cli](https://cli.github.com/) to create release notes.  Use the `--since-tag` and `--output` options of `github_changelog_generator` to create a changelog for the current release and store the results in a file.  In the
+example below, version `2.0.0` is the current release and version `1.0.0` is the previous release.
+
+```
+mkdir -p build
+github_changelog_generator \
+  --since-tag 1.0.0 \
+  --output build/changelog.md
+```
+
+Then use the [release create](https://cli.github.com/manual/gh_release_create) feature of the github cli to create a new github release
+
+```
+gh release create 2.0.0 \
+  --notes-file build/changelog \
+  --title 2.0.0
+```
 
 ## Am I missing some essential feature?
 
