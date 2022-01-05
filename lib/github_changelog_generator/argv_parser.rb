@@ -205,6 +205,9 @@ module GitHubChangelogGenerator
         opts.on("--[no-]verbose", "Run verbosely. Default is true.") do |v|
           options[:verbose] = v
         end
+        opts.on("--contributors-on-own-line", "Place contributors on their own line in italics. Default is false.") do |v|
+          options[:verbose] = v
+        end
         opts.on("-v", "--version", "Print version number.") do |_v|
           puts "Version: #{GitHubChangelogGenerator::VERSION}"
           exit
