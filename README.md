@@ -287,7 +287,7 @@ Then use the [release create](https://cli.github.com/manual/gh_release_create) f
 
 ```
 gh release create 2.0.0 \
-  --notes-file build/changelog \
+  --notes-file build/changelog.md \
   --title 2.0.0
 ```
 
