@@ -519,7 +519,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       env_var
     end
 
-    # @return [String] helper to return Github "user/project"
+    # @return [String] helper to return GitHub "user/project"
     def user_project
       "#{@options[:user]}/#{@options[:project]}"
     end
