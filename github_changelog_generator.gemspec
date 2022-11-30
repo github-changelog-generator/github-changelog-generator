@@ -14,7 +14,7 @@ Gem::Specification.new do |spec|
 
   spec.summary = "Script that automatically generates a changelog from your tags, issues, labels and pull requests."
   spec.description = "Changelog generation has never been so easy. Fully automate changelog generation - this gem generate changelog file based on tags, issues and merged pull requests from GitHub."
-  spec.homepage = "https://github.com/github-changelog-generator/Github-Changelog-Generator"
+  spec.homepage = "https://github.com/github-changelog-generator/github-changelog-generator"
   spec.license = "MIT"
 
   spec.files = Dir["{bin,lib,man,spec}/**/*"] + %w[LICENSE Rakefile README.md]
