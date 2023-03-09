@@ -222,6 +222,7 @@ You can look for params names from the [parser source code (#setup_parser)](http
     - Bug fixes (issues labeled `bug`) :beetle:
     - Enhancements (issues labeled `enhancement`) :star2:
     - Issues (closed issues with no labels) :non-potable_water:
+    - Plus any additional custom label-to-section mappings you want :gear:
 
 - Manually include or exclude issues by labels :wrench:
 - Customize lots more! Tweak the changelog to fit your preferences :tophat:
@@ -311,6 +312,17 @@ I'm not trying to compare the quality of handwritten and auto-generated logs. Th
 
 An auto-generated changelog really helps, even if you manually fill in the release notes!
 
+- **I want to define my own label-to-section mapping, how can I do it?**
+
+This is possible using either the ``add-sections`` or ``configure-sections``
+entry in ``.github_changelog_generator``. For example, to add a single new
+entry called "Maintenance" that will catch PRs tagged with your ``maintenance``
+label, you can add to ``.github_changelog_generator`` the line:
+```
+add-sections= {"maintenance":{"prefix":"**Project maintenance**","labels":["maintenance"]}}
+```
+A similar approach can be used via ``configure-sections`` to set all section
+properties (including adding new ones!).
 
 - ***My Ruby version is very old, can I use this?***
 
