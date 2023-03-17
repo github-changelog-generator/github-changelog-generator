@@ -13,7 +13,7 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (6.1.7.1)
+    activesupport (6.1.7.3)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
@@ -45,7 +45,7 @@ GEM
     childprocess (4.0.0)
     codeclimate-test-reporter (1.0.7)
       simplecov
-    concurrent-ruby (1.1.10)
+    concurrent-ruby (1.2.2)
     console (1.12.0)
       fiber-local
     crack (0.4.5)
@@ -137,7 +137,7 @@ GEM
     simplecov-html (0.12.3)
     timers (4.3.3)
     tty-color (0.5.2)
-    tzinfo (2.0.5)
+    tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode-display_width (1.7.0)
     vcr (6.0.0)
@@ -151,7 +151,7 @@ GEM
       rainbow
       tty-color
       yard
-    zeitwerk (2.6.6)
+    zeitwerk (2.6.7)
 
 PLATFORMS
   ruby
