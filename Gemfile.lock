@@ -13,7 +13,7 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (6.1.7.3)
+    activesupport (6.1.7.6)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
@@ -69,7 +69,7 @@ GEM
     faraday-net_http_persistent (1.1.0)
     fiber-local (1.0.0)
     hashdiff (1.0.1)
-    i18n (1.12.0)
+    i18n (1.14.1)
       concurrent-ruby (~> 1.0)
     iniparse (1.5.0)
     json (2.3.1)
@@ -151,7 +151,7 @@ GEM
       rainbow
       tty-color
       yard
-    zeitwerk (2.6.7)
+    zeitwerk (2.6.11)
 
 PLATFORMS
   ruby
