@@ -4,7 +4,7 @@
 #
 version: 2.1
 orbs:
-  ruby: circleci/ruby@1.1.2
+  ruby: circleci/ruby@2.1
 
 jobs:
   rspec:
@@ -27,17 +27,5 @@ workflows:
   build:
     jobs:
       - rspec:
-          name: Ruby 2.5
-          image: cimg/ruby:2.5
-      - rspec:
-          name: Ruby 2.6
-          image: cimg/ruby:2.6
-      - rspec:
-          name: Ruby 2.7
-          image: cimg/ruby:2.7
-      - rspec:
-          name: Ruby 3.0
-          image: cimg/ruby:3.0
-      - rspec:
-          name: JRuby 9.2
-          image: circleci/jruby:9.2
+          name: Ruby 3.2.2
+          image: cimg/ruby:3.2.2
