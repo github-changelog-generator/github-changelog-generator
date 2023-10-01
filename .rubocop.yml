@@ -2,7 +2,7 @@ inherit_from: .rubocop_todo.yml
 require: rubocop-performance
 
 AllCops:
-  TargetRubyVersion: 2.5
+  TargetRubyVersion: 3.2
   DisplayCopNames: true
   DisplayStyleGuide: true
   Exclude:
@@ -50,7 +50,7 @@ Naming/FileName:
 # TODOS
 # Offense count: 14
 Metrics/AbcSize:
-  Enabled: false  
+  Enabled: false
 
 # Offense count: 10
 Style/Documentation:

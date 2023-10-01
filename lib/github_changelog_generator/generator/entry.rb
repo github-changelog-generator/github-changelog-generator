@@ -72,7 +72,7 @@ module GitHubChangelogGenerator
     def parse_sections(sections_desc)
       require "json"
 
-      sections_desc = sections_desc.to_json if sections_desc.class == Hash
+      sections_desc = sections_desc.to_json if sections_desc.instance_of?(Hash)
 
       begin
         sections_json = JSON.parse(sections_desc)
@@ -209,7 +209,7 @@ module GitHubChangelogGenerator
                        # Only add unmapped issues
                        issues.select { |issue| issue["labels"].any? }
                      end
-        merged = Section.new(name: name, prefix: prefix, labels: [], issues: add_issues, options: @options) unless add_issues.empty?
+        merged = Section.new(name:, prefix:, labels: [], issues: add_issues, options: @options) unless add_issues.empty?
         @sections << merged
       end
       nil

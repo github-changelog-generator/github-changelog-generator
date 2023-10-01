@@ -8,9 +8,9 @@ gemspec
 
 group :development, :test do
   gem "bundler"
-  gem "overcommit", ">= 0.31"
+  gem "overcommit", ">= 0.60"
   gem "rake"
-  gem "rubocop", ">= 0.50"
+  gem "rubocop", ">= 1.38"
   gem "rubocop-performance"
   gem "yard-junk"
 end
