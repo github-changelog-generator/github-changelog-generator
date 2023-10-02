@@ -27,5 +27,9 @@ workflows:
   build:
     jobs:
       - rspec:
-          name: Ruby 3.2.2
-          image: cimg/ruby:3.2.2
+          name: Ruby 3.0
+          image: cimg/ruby:3.0
+          name: Ruby 3.1
+          image: cimg/ruby:3.1
+          name: Ruby 3.2
+          image: cimg/ruby:3.2
