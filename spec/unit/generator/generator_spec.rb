@@ -4,7 +4,7 @@ require "github_changelog_generator/generator/generator"
 
 RSpec.describe GitHubChangelogGenerator::Generator do
   let(:header) { "# Changelog" }
-  let(:generator) { described_class.new({ header: }) }
+  let(:generator) { described_class.new({ header: header }) }
   let(:content) do
     <<~'BASE'
       ## [1.3.10](https://github.com/xxx/yyy/tree/1.3.10) (2015-03-18)

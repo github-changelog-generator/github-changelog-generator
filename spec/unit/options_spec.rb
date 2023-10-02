@@ -44,7 +44,7 @@ RSpec.describe GitHubChangelogGenerator::Options do
   describe "#write_to_file?" do
     subject { options.write_to_file? }
 
-    let(:options) { described_class.new(output:) }
+    let(:options) { described_class.new(output: output) }
 
     context "with filename" do
       let(:output) { "CHANGELOG.md" }

@@ -209,7 +209,7 @@ module GitHubChangelogGenerator
                        # Only add unmapped issues
                        issues.select { |issue| issue["labels"].any? }
                      end
-        merged = Section.new(name:, prefix:, labels: [], issues: add_issues, options: @options) unless add_issues.empty?
+        merged = Section.new(name: name, prefix: prefix, labels: [], issues: add_issues, options: @options) unless add_issues.empty?
         @sections << merged
       end
       nil

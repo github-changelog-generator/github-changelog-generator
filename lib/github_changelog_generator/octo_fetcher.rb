@@ -65,13 +65,13 @@ module GitHubChangelogGenerator
     def connection_options
       ca_file = @options[:ssl_ca_file] || ENV["SSL_CA_FILE"] || File.expand_path("ssl_certs/cacert.pem", __dir__)
 
-      Octokit.connection_options.merge({ ssl: { ca_file: } })
+      Octokit.connection_options.merge({ ssl: { ca_file: ca_file } })
     end
 
     def client_options
       options = {
-        middleware:,
-        connection_options:
+        middleware: middleware,
+        connection_options: connection_options
       }
 
       if (github_token = fetch_github_token)
@@ -449,7 +449,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
 
         (2..last_page).each do |page|
           parent.async do
-            data = check_github_response { client.send(method, user_project, *arguments, page:, **options) }
+            data = check_github_response { client.send(method, user_project, *arguments, page: page, **options) }
             yield data
           end
         end
