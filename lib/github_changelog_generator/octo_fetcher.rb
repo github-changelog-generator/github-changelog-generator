@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "tmpdir"
-require "set"
 require "async"
 require "async/barrier"
 require "async/semaphore"

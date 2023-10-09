@@ -120,7 +120,7 @@ module GitHubChangelogGenerator
 
       let(:pull_requests) do
         [
-          pr("no labels", [], "",  "20", "login" => "user1"),
+          pr("no labels", [], "", "20", "login" => "user1"),
           pr("breaking", ["breaking"], "", "23", "login" => "user5"),
           pr("enhancement", ["enhancement"], "",  "21", "login" => "user5"),
           pr("bug", ["bug"], "", "22", "login" => "user5"),
@@ -129,7 +129,7 @@ module GitHubChangelogGenerator
           pr("security", ["security"], "", "30", "login" => "user5"),
           pr("all the labels", %w[breaking enhancement bug deprecated removed security], "", "24", "login" => "user5"),
           pr("all the labels different order", %w[bug breaking enhancement security remove deprecated], "", "25", "login" => "user5"),
-          pr("some unmapped labels", %w[tests-fail bug], "",  "26", "login" => "user5"),
+          pr("some unmapped labels", %w[tests-fail bug], "", "26", "login" => "user5"),
           pr("no mapped labels", %w[docs maintenance], "", "27", "login" => "user5")
         ]
       end

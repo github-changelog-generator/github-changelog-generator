@@ -114,7 +114,7 @@ module GitHubChangelogGenerator
     # @param [String] string
     # @return [String] encapsulated input string
     def encapsulate_string(string)
-      string = string.gsub('\\', '\\\\')
+      string = string.gsub("\\", "\\\\")
 
       ENCAPSULATED_CHARACTERS.each do |char|
         # Only replace char with escaped version if it isn't inside backticks (markdown inline code).

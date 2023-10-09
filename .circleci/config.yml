@@ -4,40 +4,32 @@
 #
 version: 2.1
 orbs:
-  ruby: circleci/ruby@1.1.2
-
+  ruby: circleci/ruby@2.1
 jobs:
   rspec:
     parameters:
       image:
-        description: "Name of the Docker image."
+        description: Name of the Docker image.
         type: string
-        default: "cimg/ruby"
+        default: cimg/ruby
     docker:
       - image: << parameters.image >>
     environment:
-      JRUBY_OPTS: "--debug"
+      JRUBY_OPTS: --debug
     steps:
       - checkout
       - run: bundle install
       - run: bundle exec rubocop
       - run: bundle exec rspec
-
 workflows:
   build:
     jobs:
       - rspec:
-          name: Ruby 2.5
-          image: cimg/ruby:2.5
-      - rspec:
-          name: Ruby 2.6
-          image: cimg/ruby:2.6
-      - rspec:
-          name: Ruby 2.7
-          image: cimg/ruby:2.7
-      - rspec:
           name: Ruby 3.0
           image: cimg/ruby:3.0
       - rspec:
-          name: JRuby 9.2
-          image: circleci/jruby:9.2
+          name: Ruby 3.1
+          image: cimg/ruby:3.1
+      - rspec:
+          name: Ruby 3.2
+          image: cimg/ruby:3.2

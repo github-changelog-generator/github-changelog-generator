@@ -138,7 +138,7 @@ module GitHubChangelogGenerator
       raise ChangelogGeneratorError, "Error: can't find tag #{tag}, specified with --due-tag option." if all_tags.none? { |t| t["name"] == tag }
 
       if (idx = all_tags.index { |t| t["name"] == tag }) > 0
-        all_tags[(idx + 1)..-1]
+        all_tags[(idx + 1)..]
       else
         []
       end
