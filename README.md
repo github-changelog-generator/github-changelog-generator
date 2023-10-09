@@ -1,5 +1,4 @@
 [![Gem Version](https://badge.fury.io/rb/github_changelog_generator.svg)](http://badge.fury.io/rb/github_changelog_generator)
-[![CircleCI](https://circleci.com/gh/github-changelog-generator/github-changelog-generator.svg?style=svg)](https://circleci.com/gh/github-changelog-generator/github-changelog-generator)
 [![Join the chat at https://gitter.im/github-changelog-generator/chat](https://badges.gitter.im/github-changelog-generator/chat.svg)](https://gitter.im/github-changelog-generator/chat?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 # github-changelog-generator ![GitHub Logo](../master/images/logo.jpg)
