@@ -8,9 +8,12 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ${{matrix.os}}-latest
     strategy:
       matrix:
+        os:
+          - ubuntu
+          - windows
         ruby-version:
           - 3.2
           - 3.1
