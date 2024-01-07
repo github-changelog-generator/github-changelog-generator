@@ -48,11 +48,10 @@ module GitHubChangelogGenerator
       prs_left = associate_tagged_prs(tags, prs, total)
       prs_left = associate_release_branch_prs(prs_left, total)
       prs_left = associate_rebase_comment_prs(tags, prs_left, total) if prs_left.any?
-      # PRs in prs_left will be untagged, not in release branch, and not
-      # rebased. They should not be included in the changelog as they probably
-      # have been merged to a branch other than the release branch.
-      @pull_requests -= prs_left
+
       Helper.log.info "Associating PRs with tags: #{total}/#{total}"
+
+      prs_left
     end
 
     # Associate merged PRs by the merge SHA contained in each tag. If the
