@@ -149,7 +149,12 @@ module GitHubChangelogGenerator
 
       fetch_events_for_issues_and_pr
       detect_actual_closed_dates(@issues + @pull_requests)
-      add_first_occurring_tag_to_prs(@sorted_tags, @pull_requests)
+      prs_left = add_first_occurring_tag_to_prs(@sorted_tags, @pull_requests)
+
+      # PRs in prs_left will be untagged, not in release branch, and not
+      # rebased. They should not be included in the changelog as they probably
+      # have been merged to a branch other than the release branch.
+      @pull_requests -= prs_left
       nil
     end
 
