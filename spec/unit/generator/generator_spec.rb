@@ -44,4 +44,85 @@ RSpec.describe GitHubChangelogGenerator::Generator do
       end
     end
   end
+
+  describe "#add_first_occurring_tag_to_prs" do
+    def sha(num)
+      base = num.to_s
+      pad_length = 40 - base.length
+      "#{'a' * pad_length}#{base}"
+    end
+    let(:release_branch_name) { "release" }
+    let(:generator) { described_class.new({ release_branch: release_branch_name }) }
+
+    before do
+      fake_fetcher = instance_double(GitHubChangelogGenerator::OctoFetcher,
+                                     fetch_tag_shas: nil,
+                                     fetch_comments_async: nil)
+      allow(fake_fetcher)
+        .to receive(:commits_in_branch).with(release_branch_name)
+                                       .and_return([sha(1), sha(2), sha(3), sha(4)])
+      allow(GitHubChangelogGenerator::OctoFetcher).to receive(:new).and_return(fake_fetcher)
+    end
+
+    it "associates prs to the oldest tag containing the merge commit" do
+      prs = [{ "events" => [{ "event" => "merged", "commit_id" => sha(2) }] }]
+      tags = [
+        { "name" => "newer2.0", "shas_in_tag" => [sha(1), sha(2), sha(3)] },
+        { "name" => "older1.0", "shas_in_tag" => [sha(1), sha(2)] }
+      ]
+
+      prs_left = generator.send(:add_first_occurring_tag_to_prs, tags, prs)
+
+      expect(prs_left).to be_empty
+      expect(prs.first["first_occurring_tag"]).to eq "older1.0"
+    end
+
+    it "detects prs merged in the release branch" do
+      prs = [{ "events" => [{ "event" => "merged", "commit_id" => sha(4) }] }]
+      tags = [{ "name" => "v1.0", "shas_in_tag" => [sha(1), sha(2)] }]
+
+      prs_left = generator.send(:add_first_occurring_tag_to_prs, tags, prs)
+
+      expect(prs_left).to be_empty
+      expect(prs.first["first_occurring_tag"]).to be_nil
+    end
+
+    it "detects prs merged via rebase in a tag" do
+      prs = [{ "comments" => [{ "body" => "rebased commit: #{sha(2)}" }] }]
+      tags = [{ "name" => "v1.0", "shas_in_tag" => [sha(1), sha(2)] }]
+
+      prs_left = generator.send(:add_first_occurring_tag_to_prs, tags, prs)
+
+      expect(prs_left).to be_empty
+      expect(prs.first["first_occurring_tag"]).to eq "v1.0"
+    end
+
+    it "detects prs merged via rebase in the release branch" do
+      prs = [{ "comments" => [{ "body" => "rebased commit: #{sha(4)}" }] }]
+      tags = [{ "name" => "v1.0", "shas_in_tag" => [sha(1), sha(2)] }]
+
+      prs_left = generator.send(:add_first_occurring_tag_to_prs, tags, prs)
+
+      expect(prs_left).to be_empty
+      expect(prs.first["first_occurring_tag"]).to be_nil
+    end
+
+    it "leaves prs merged in another branch" do
+      prs = [{ "events" => [{ "event" => "merged", "commit_id" => sha(5) }] }]
+      tags = [{ "name" => "v1.0", "shas_in_tag" => [sha(1), sha(2)] }]
+
+      prs_left = generator.send(:add_first_occurring_tag_to_prs, tags, prs)
+
+      expect(prs_left).to eq prs
+      expect(prs.first["first_occurring_tag"]).to be_nil
+    end
+
+    it "raises an error for prs merged via rebase into another branch" do
+      prs = [{ "number" => "23", "comments" => [{ "body" => "rebased commit: #{sha(5)}" }] }]
+      tags = [{ "name" => "v1.0", "shas_in_tag" => [sha(1), sha(2)] }]
+
+      expect { generator.send(:add_first_occurring_tag_to_prs, tags, prs) }
+        .to raise_error StandardError, "PR 23 has a rebased SHA comment but that SHA was not found in the release branch or any tags"
+    end
+  end
 end
