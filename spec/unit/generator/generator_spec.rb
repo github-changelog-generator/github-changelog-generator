@@ -51,13 +51,16 @@ RSpec.describe GitHubChangelogGenerator::Generator do
       pad_length = 40 - base.length
       "#{'a' * pad_length}#{base}"
     end
+
     let(:release_branch_name) { "release" }
     let(:generator) { described_class.new({ release_branch: release_branch_name }) }
+    let(:fake_fetcher) do
+      instance_double(GitHubChangelogGenerator::OctoFetcher,
+                      fetch_tag_shas: nil,
+                      fetch_comments_async: nil)
+    end
 
     before do
-      fake_fetcher = instance_double(GitHubChangelogGenerator::OctoFetcher,
-                                     fetch_tag_shas: nil,
-                                     fetch_comments_async: nil)
       allow(fake_fetcher)
         .to receive(:commits_in_branch).with(release_branch_name)
                                        .and_return([sha(1), sha(2), sha(3), sha(4)])
@@ -73,8 +76,13 @@ RSpec.describe GitHubChangelogGenerator::Generator do
 
       prs_left = generator.send(:add_first_occurring_tag_to_prs, tags, prs)
 
-      expect(prs_left).to be_empty
-      expect(prs.first["first_occurring_tag"]).to eq "older1.0"
+      aggregate_failures do
+        expect(prs_left).to be_empty
+        expect(prs.first["first_occurring_tag"]).to eq "older1.0"
+
+        expect(fake_fetcher).to have_received(:fetch_tag_shas)
+        expect(fake_fetcher).not_to have_received(:fetch_comments_async)
+      end
     end
 
     it "detects prs merged in the release branch" do
@@ -83,8 +91,13 @@ RSpec.describe GitHubChangelogGenerator::Generator do
 
       prs_left = generator.send(:add_first_occurring_tag_to_prs, tags, prs)
 
-      expect(prs_left).to be_empty
-      expect(prs.first["first_occurring_tag"]).to be_nil
+      aggregate_failures do
+        expect(prs_left).to be_empty
+        expect(prs.first["first_occurring_tag"]).to be_nil
+
+        expect(fake_fetcher).to have_received(:fetch_tag_shas)
+        expect(fake_fetcher).not_to have_received(:fetch_comments_async)
+      end
     end
 
     it "detects prs merged via rebase in a tag" do
@@ -93,8 +106,13 @@ RSpec.describe GitHubChangelogGenerator::Generator do
 
       prs_left = generator.send(:add_first_occurring_tag_to_prs, tags, prs)
 
-      expect(prs_left).to be_empty
-      expect(prs.first["first_occurring_tag"]).to eq "v1.0"
+      aggregate_failures do
+        expect(prs_left).to be_empty
+        expect(prs.first["first_occurring_tag"]).to eq "v1.0"
+
+        expect(fake_fetcher).to have_received(:fetch_tag_shas)
+        expect(fake_fetcher).to have_received(:fetch_comments_async)
+      end
     end
 
     it "detects prs merged via rebase in the release branch" do
@@ -103,8 +121,13 @@ RSpec.describe GitHubChangelogGenerator::Generator do
 
       prs_left = generator.send(:add_first_occurring_tag_to_prs, tags, prs)
 
-      expect(prs_left).to be_empty
-      expect(prs.first["first_occurring_tag"]).to be_nil
+      aggregate_failures do
+        expect(prs_left).to be_empty
+        expect(prs.first["first_occurring_tag"]).to be_nil
+
+        expect(fake_fetcher).to have_received(:fetch_tag_shas)
+        expect(fake_fetcher).to have_received(:fetch_comments_async)
+      end
     end
 
     it "leaves prs merged in another branch" do
@@ -113,8 +136,13 @@ RSpec.describe GitHubChangelogGenerator::Generator do
 
       prs_left = generator.send(:add_first_occurring_tag_to_prs, tags, prs)
 
-      expect(prs_left).to eq prs
-      expect(prs.first["first_occurring_tag"]).to be_nil
+      aggregate_failures do
+        expect(prs_left).to eq prs
+        expect(prs.first["first_occurring_tag"]).to be_nil
+
+        expect(fake_fetcher).to have_received(:fetch_tag_shas)
+        expect(fake_fetcher).to have_received(:fetch_comments_async)
+      end
     end
 
     it "raises an error for prs merged via rebase into another branch" do
