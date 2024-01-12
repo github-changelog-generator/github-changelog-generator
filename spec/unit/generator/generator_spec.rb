@@ -152,5 +152,13 @@ RSpec.describe GitHubChangelogGenerator::Generator do
       expect { generator.send(:add_first_occurring_tag_to_prs, tags, prs) }
         .to raise_error StandardError, "PR 23 has a rebased SHA comment but that SHA was not found in the release branch or any tags"
     end
+
+    it "raises an error for prs without merge commit or rebase comment" do
+      prs = [{ "number" => "23" }]
+      tags = [{ "name" => "v1.0", "shas_in_tag" => [sha(1), sha(2)] }]
+
+      expect { generator.send(:add_first_occurring_tag_to_prs, tags, prs) }
+        .to raise_error StandardError, "No merge sha found for PR 23 via the GitHub API"
+    end
   end
 end
