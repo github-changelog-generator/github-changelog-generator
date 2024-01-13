@@ -100,7 +100,7 @@ RSpec.describe GitHubChangelogGenerator::Generator do
       end
     end
 
-    it "detects prs merged via rebase in a tag" do
+    it "detects closed prs marked as rebased in a tag" do
       prs = [{ "comments" => [{ "body" => "rebased commit: #{sha(2)}" }] }]
       tags = [{ "name" => "v1.0", "shas_in_tag" => [sha(1), sha(2)] }]
 
@@ -115,7 +115,7 @@ RSpec.describe GitHubChangelogGenerator::Generator do
       end
     end
 
-    it "detects prs merged via rebase in the release branch" do
+    it "detects closed prs marked as rebased in the release branch" do
       prs = [{ "comments" => [{ "body" => "rebased commit: #{sha(4)}" }] }]
       tags = [{ "name" => "v1.0", "shas_in_tag" => [sha(1), sha(2)] }]
 
@@ -145,7 +145,7 @@ RSpec.describe GitHubChangelogGenerator::Generator do
       end
     end
 
-    it "raises an error for prs merged via rebase into another branch" do
+    it "raises an error for closed prs marked as rebased to an unknown commit" do
       prs = [{ "number" => "23", "comments" => [{ "body" => "rebased commit: #{sha(5)}" }] }]
       tags = [{ "name" => "v1.0", "shas_in_tag" => [sha(1), sha(2)] }]
 
@@ -153,7 +153,7 @@ RSpec.describe GitHubChangelogGenerator::Generator do
         .to raise_error StandardError, "PR 23 has a rebased SHA comment but that SHA was not found in the release branch or any tags"
     end
 
-    it "raises an error for prs without merge commit or rebase comment" do
+    it "raises an error for prs without merge event or rebase comment" do
       prs = [{ "number" => "23" }]
       tags = [{ "name" => "v1.0", "shas_in_tag" => [sha(1), sha(2)] }]
 
