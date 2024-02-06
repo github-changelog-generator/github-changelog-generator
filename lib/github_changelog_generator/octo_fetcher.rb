@@ -254,7 +254,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
           semaphore.async do
             pr["comments"] = []
             iterate_pages(client, "issue_comments", pr["number"]) do |new_comment|
-              pr["comments"].concat(new_comment)
+              pr["comments"].concat(new_comment) if new_comment
             end
             pr["comments"] = pr["comments"].map { |comment| stringify_keys_deep(comment.to_hash) }
           end
