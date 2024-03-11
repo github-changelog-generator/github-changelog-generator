@@ -254,7 +254,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
           semaphore.async do
             pr["comments"] = []
             iterate_pages(client, "issue_comments", pr["number"]) do |new_comment|
-              pr["comments"].concat(new_comment) if new_comment
+              pr["comments"].concat(new_comment)
             end
             pr["comments"] = pr["comments"].map { |comment| stringify_keys_deep(comment.to_hash) }
           end
@@ -434,13 +434,15 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
         raise(MovedPermanentlyError, response.data[:url]) if response.status == 301
       end
 
-      yield(last_response.data)
+      if not last_response.data.nil?
+        yield(last_response.data)
 
       if parent.nil?
         # The snail visits one leaf at a time:
         until (next_one = last_response.rels[:next]).nil?
           last_response = check_github_response { next_one.get }
-          yield(last_response.data)
+          if not last_response.data.nil?
+            yield(last_response.data)
         end
       elsif (last = last_response.rels[:last])
         # OR we bring out the gatling gun:
@@ -450,7 +452,8 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
         (2..last_page).each do |page|
           parent.async do
             data = check_github_response { client.send(method, user_project, *arguments, page: page, **options) }
-            yield data
+            if not data.nil?
+              yield data
           end
         end
       end
