@@ -2,7 +2,6 @@
 
 require "delegate"
 require "github_changelog_generator/helper"
-require "byebug"
 
 module GitHubChangelogGenerator
   # This class wraps Options, and knows a list of known options. Others options
@@ -146,7 +145,6 @@ module GitHubChangelogGenerator
     #
     # @return [Hash] The GitHub `:token` key is censored in the output.
     def censored_values
-      # byebug
       values.clone.tap { |opts| opts[:token] = censored_token(opts[:token]) }
     end
 
