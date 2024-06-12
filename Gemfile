@@ -13,6 +13,7 @@ group :development, :test do
   gem "rubocop", ">= 1.38"
   gem "rubocop-performance"
   gem "yard-junk"
+  gem "byebug"
 end
 
 group :development do
