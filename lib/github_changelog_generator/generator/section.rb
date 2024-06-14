@@ -47,6 +47,7 @@ module GitHubChangelogGenerator
           merge_string = get_string_for_issue(issue)
           content += "- " unless @body_only
           content += "#{merge_string}\n"
+          content += "\n" if @options[:contributors_on_own_line] && issue["pull_request"] && issue != @issues.last
         end
         content += "\n"
       end
@@ -97,14 +98,18 @@ module GitHubChangelogGenerator
     def issue_line_with_user(line, issue)
       return line if !@options[:author] || issue["pull_request"].nil?
 
-      user = issue["user"]
+      user = user(issue["user"])
       return "#{line} ({Null user})" unless user
 
-      if @options[:usernames_as_github_logins]
-        "#{line} (@#{user['login']})"
-      else
-        "#{line} ([#{user['login']}](#{user['html_url']}))"
-      end
+      return "#{line} (#{user})" unless @options[:contributors_on_own_line]
+
+      "#{line}\n\n  *#{user}*"
+    end
+
+    def user(user)
+      return "{Null user}" unless user
+
+      @options[:usernames_as_github_logins] ? "@#{user['login']}" : "[#{user['login']}](#{user['html_url']})"
     end
 
     ENCAPSULATED_CHARACTERS = %w(< > * _ \( \) [ ] #)
