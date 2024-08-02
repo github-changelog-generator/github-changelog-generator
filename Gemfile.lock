@@ -112,8 +112,8 @@ GEM
     rainbow (3.1.1)
     rake (13.0.1)
     regexp_parser (2.8.1)
-    rexml (3.2.8)
-      strscan (>= 3.0.9)
+    rexml (3.3.3)
+      strscan
     rspec (3.9.0)
       rspec-core (~> 3.9.0)
       rspec-expectations (~> 3.9.0)
