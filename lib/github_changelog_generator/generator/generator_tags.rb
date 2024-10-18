@@ -9,7 +9,14 @@ module GitHubChangelogGenerator
 
       all_tags = @fetcher.fetch_all_tags
       fetch_tags_dates(all_tags) # Creates a Hash @tag_times_hash
-      all_sorted_tags = sort_tags_by_date(all_tags)
+      all_sorted_tags = []
+      if options[:tag_order] == "date"
+        all_sorted_tags = sort_tags_by_date(all_tags)
+      elsif options[:tag_order] == "semver"
+        all_sorted_tags = sort_tags_by_semantic_version(all_tags)
+      else
+        raise ChangelogGeneratorError, "unknown tag ordering method"
+      end
 
       @sorted_tags   = filter_included_tags(all_sorted_tags)
       @sorted_tags   = filter_excluded_tags(@sorted_tags)
@@ -57,11 +64,12 @@ module GitHubChangelogGenerator
     def sort_tags_by_semantic_version(tags)
       puts "Sorting tags by semantic version..." if options[:verbose]
       tags.sort_by! do |x|
-        parts = x.split("-")
+        name_of_tag = x.fetch("name")
+        parts = name_of_tag.split("-")
         main_parts = parts[0].split(".")
         pre_release_parts = parts[1] ? parts[1].split(".") : []
         build_metadata_parts = parts[2] ? parts[2].split(".") : []
-        [main_parts.map(&:to_id), pre_release_parts, build_metadata_parts]
+        [main_parts.map(&:to_i), pre_release_parts, build_metadata_parts]
       end.reverse!
     end
 

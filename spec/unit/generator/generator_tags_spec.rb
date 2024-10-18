@@ -321,14 +321,45 @@ describe GitHubChangelogGenerator::Generator do
     subject do
       @generator.sort_tags_by_date(tags)
     end
-    context "sort unsorted tags" do
+    context "sort unsorted date tags" do
       let(:tags) { tags_from_strings %w[valid_tag1 valid_tag2 valid_tag3] }
 
       it { is_expected.to be_a_kind_of(Array) }
       it { is_expected.to match_array(tags.reverse!) }
     end
-    context "sort sorted tags" do
+    context "sort sorted date tags" do
       let(:tags) { tags_from_strings %w[valid_tag3 valid_tag2 valid_tag1] }
+
+      it { is_expected.to be_a_kind_of(Array) }
+      it { is_expected.to match_array(tags) }
+    end
+  end
+
+  describe "#sort_tags_by_semantic_version" do
+    let(:time1) { Time.now }
+
+    before(:all) do
+      @generator = GitHubChangelogGenerator::Generator.new
+    end
+
+    subject do
+      @generator.sort_tags_by_semantic_version(tags)
+    end
+    context "sort unsorted semver tags" do
+      let(:tags) { tags_from_strings ["2.0.0", "1.2.4", "1.2.3+build.1", "1.2.3-beta.1", "2.1.0"] }
+      let(:sorted_tags) { tags_from_strings ["2.1.0", "2.0.0", "1.2.4", "1.2.3+build.1", "1.2.3-beta.1"] }
+      it { is_expected.to be_a_kind_of(Array) }
+      it { is_expected.to match_array(sorted_tags) }
+    end
+    context "sort sorted semver tags" do
+      let(:tags) { tags_from_strings ["2.1.0", "2.0.0", "1.2.4", "1.2.3+build.1", "1.2.3-beta.1"] }
+
+      it { is_expected.to be_a_kind_of(Array) }
+      it { is_expected.to match_array(tags) }
+    end
+
+    context "sort non-semver tags" do
+      let(:tags) { tags_from_strings %w[some_tag1 some_tag2] }
 
       it { is_expected.to be_a_kind_of(Array) }
       it { is_expected.to match_array(tags) }

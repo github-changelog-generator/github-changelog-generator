@@ -205,6 +205,9 @@ module GitHubChangelogGenerator
         opts.on("--[no-]verbose", "Run verbosely. Default is true.") do |v|
           options[:verbose] = v
         end
+        opts.on("--tag-order ORDER", "Tag ordering method. Two methods available: 'date' and 'semver'. Default is 'date'.") do |tag_order|
+          options[:tag_order] = tag_order
+        end
         opts.on("-v", "--version", "Print version number.") do |_v|
           puts "Version: #{GitHubChangelogGenerator::VERSION}"
           exit
