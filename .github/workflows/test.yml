@@ -2,7 +2,7 @@ name: Ruby CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, feature/semantic-version-sort ]
   pull_request:
     branches: [ master ]
 
