@@ -336,8 +336,6 @@ describe GitHubChangelogGenerator::Generator do
   end
 
   describe "#sort_tags_by_semantic_version" do
-    let(:time1) { Time.now }
-
     before(:all) do
       @generator = GitHubChangelogGenerator::Generator.new
     end
