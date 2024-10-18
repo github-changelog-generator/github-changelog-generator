@@ -53,15 +53,14 @@ module GitHubChangelogGenerator
       end.reverse!
     end
 
-    
     # Sort all tags by semantic version
     def sort_tags_by_semantic_version(tags)
       puts "Sorting tags by semantic version..." if options[:verbose]
       tags.sort_by! do |x|
-        parts = version.split('-')
-        main_parts = parts[0].split('.')
-        pre_release_parts = parts[1] ? parts[1].split('.') : []
-        build_metadata_parts = parts[2] ? parts[2].split('.') : []
+        parts = x.split("-")
+        main_parts = parts[0].split(".")
+        pre_release_parts = parts[1] ? parts[1].split(".") : []
+        build_metadata_parts = parts[2] ? parts[2].split(".") : []
         [main_parts.map(&:to_id), pre_release_parts, build_metadata_parts]
       end.reverse!
     end
