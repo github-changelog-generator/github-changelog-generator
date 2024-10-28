@@ -112,8 +112,7 @@ GEM
     rainbow (3.1.1)
     rake (13.0.1)
     regexp_parser (2.8.1)
-    rexml (3.3.6)
-      strscan
+    rexml (3.3.9)
     rspec (3.9.0)
       rspec-core (~> 3.9.0)
       rspec-expectations (~> 3.9.0)
@@ -155,7 +154,6 @@ GEM
       docile (~> 1.1)
       simplecov-html (~> 0.11)
     simplecov-html (0.12.3)
-    strscan (3.1.0)
     timers (4.3.3)
     traces (0.11.1)
     tty-color (0.5.2)
