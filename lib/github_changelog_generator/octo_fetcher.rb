@@ -347,11 +347,11 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     def commits_in_branch(name)
       @branches ||= lambda do
         iterate_pages(client, "branches") do |branches|
-          branches_map = branches.map { |branch| [branch[:name], branch] }.to_h
+          branches_map = branches.to_h { |branch| [branch[:name], branch] }
           return branches_map if branches_map[name]
         end
         return {}
-      end[]
+      end.call
 
       if (branch = @branches[name])
         commits_in_tag(branch[:commit][:sha])
