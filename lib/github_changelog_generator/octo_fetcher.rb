@@ -386,9 +386,15 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
       queue = [current]
       while queue.any?
         commit = queue.shift
-        # If we've already processed this sha, just grab it's parents from the cache
         if @commits_in_tag_cache.key?(commit[:sha])
+          # If we've already processed this sha in a previous run, just grab
+          # its parents from the cache
           shas.merge(@commits_in_tag_cache[commit[:sha]])
+        elsif shas.include?(commit[:sha])
+          # If we've already processed this sha in the current run, stop there
+          # for the current commit because its parents have already been
+          # queued/processed. Jump to the next queued commit.
+          next
         else
           shas.add(commit[:sha])
           commit[:parents].each do |p|
