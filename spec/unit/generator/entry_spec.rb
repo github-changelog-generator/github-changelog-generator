@@ -139,6 +139,107 @@ module GitHubChangelogGenerator
       end
 
       subject { described_class.new(options) }
+
+      describe "contributors on own line" do
+        let(:options) do
+          Parser.default_options.merge(
+            user: "owner",
+            project: "repo",
+            breaking_labels: ["breaking"],
+            enhancement_labels: ["enhancement"],
+            bug_labels: ["bug"],
+            deprecated_labels: ["deprecated"],
+            removed_labels: ["removed"],
+            security_labels: ["security"],
+            verbose: false,
+            contributors_on_own_line: true
+          )
+        end
+
+        it "generates a header and body" do
+          changelog = <<-CHANGELOG.gsub(/^ {10}/, "")
+          ## [1.0.1](https://github.com/owner/repo/tree/1.0.1) (2017-12-04)
+
+          [Full Changelog](https://github.com/owner/repo/compare/1.0.0...1.0.1)
+
+          **Breaking changes:**
+
+          - issue breaking [\\#8](https://github.com/owner/repo/issue/8)
+          - issue all the labels [\\#9](https://github.com/owner/repo/issue/9)
+          - issue all the labels different order [\\#10](https://github.com/owner/repo/issue/10)
+          - pr breaking [\\#23](https://github.com/owner/repo/pull/23)
+
+            *[user5](https://github.com/user5)*
+
+          - pr all the labels [\\#24](https://github.com/owner/repo/pull/24)
+
+            *[user5](https://github.com/user5)*
+
+          - pr all the labels different order [\\#25](https://github.com/owner/repo/pull/25)
+
+            *[user5](https://github.com/user5)*
+
+          **Implemented enhancements:**
+
+          - issue enhancement [\\#6](https://github.com/owner/repo/issue/6)
+          - pr enhancement [\\#21](https://github.com/owner/repo/pull/21)
+
+            *[user5](https://github.com/user5)*
+
+          **Fixed bugs:**
+
+          - issue bug [\\#7](https://github.com/owner/repo/issue/7)
+          - issue some unmapped labels [\\#11](https://github.com/owner/repo/issue/11)
+          - pr bug [\\#22](https://github.com/owner/repo/pull/22)
+
+            *[user5](https://github.com/user5)*
+
+          - pr some unmapped labels [\\#26](https://github.com/owner/repo/pull/26)
+
+            *[user5](https://github.com/user5)*
+
+          **Deprecated:**
+
+          - issue deprecated [\\#13](https://github.com/owner/repo/issue/13)
+          - pr deprecated [\\#28](https://github.com/owner/repo/pull/28)
+
+            *[user5](https://github.com/user5)*
+
+          **Removed:**
+
+          - issue removed [\\#14](https://github.com/owner/repo/issue/14)
+          - pr removed [\\#29](https://github.com/owner/repo/pull/29)
+
+            *[user2](https://github.com/user2)*
+
+          **Security fixes:**
+
+          - issue security [\\#15](https://github.com/owner/repo/issue/15)
+          - pr security [\\#30](https://github.com/owner/repo/pull/30)
+
+            *[user5](https://github.com/user5)*
+
+          **Closed issues:**
+
+          - issue no labels [\\#5](https://github.com/owner/repo/issue/5)
+          - issue no mapped labels [\\#12](https://github.com/owner/repo/issue/12)
+
+          **Merged pull requests:**
+
+          - pr no labels [\\#20](https://github.com/owner/repo/pull/20)
+
+            *[user1](https://github.com/user1)*
+
+          - pr no mapped labels [\\#27](https://github.com/owner/repo/pull/27)
+
+            *[user5](https://github.com/user5)*
+
+          CHANGELOG
+
+          expect(subject.generate_entry_for_tag(pull_requests, issues, "1.0.1", "1.0.1", Time.new(2017, 12, 4, 12, 0, 0, "+00:00").utc, "1.0.0")).to eq(changelog)
+        end
+      end
+
       describe "include issues without labels" do
         let(:options) do
           Parser.default_options.merge(
