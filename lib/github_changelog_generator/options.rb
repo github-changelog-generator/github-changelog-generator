@@ -69,6 +69,7 @@ module GitHubChangelogGenerator
       ssl_ca_file
       summary_labels
       summary_prefix
+      tag_order
       token
       unreleased
       unreleased_label
