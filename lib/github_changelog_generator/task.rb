@@ -58,7 +58,7 @@ module GitHubChangelogGenerator
 
         log = generator.compound_changelog
 
-        output_filename = (options[:output]).to_s
+        output_filename = options[:output].to_s
         File.open(output_filename, "w") { |file| file.write(log) }
         puts "Done!"
         puts "Generated log placed in #{File.absolute_path(output_filename)}"
