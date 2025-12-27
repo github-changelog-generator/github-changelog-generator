@@ -3,6 +3,7 @@ bin/
 !bin/github_changelog_generator
 pkg/
 coverage/
+Gemfile.lock
 .bundle
 doc
 .yardoc
