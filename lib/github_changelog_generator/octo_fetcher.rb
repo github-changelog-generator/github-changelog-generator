@@ -350,7 +350,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
           branches_map = branches.to_h { |branch| [branch[:name], branch] }
           return branches_map if branches_map[name]
         end
-        return {}
+        {}
       end.call
 
       if (branch = @branches[name])

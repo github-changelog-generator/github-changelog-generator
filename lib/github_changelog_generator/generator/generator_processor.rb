@@ -131,19 +131,11 @@ module GitHubChangelogGenerator
     end
 
     def tag_older_new_tag?(newer_tag_time, time)
-      if newer_tag_time.nil?
-        true
-      else
-        time <= newer_tag_time
-      end
+      newer_tag_time.nil? || time <= newer_tag_time
     end
 
     def tag_newer_old_tag?(older_tag_time, time)
-      if older_tag_time.nil?
-        true
-      else
-        time > older_tag_time
-      end
+      older_tag_time.nil? || time > older_tag_time
     end
 
     # Include issues with labels, specified in :include_labels
