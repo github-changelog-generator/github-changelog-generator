@@ -28,6 +28,7 @@ module GitHubChangelogGenerator
       config_file
       compare_link
       configure_sections
+      contributors_on_own_line
       date_format
       deprecated_labels
       deprecated_prefix
