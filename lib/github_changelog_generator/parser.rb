@@ -81,7 +81,8 @@ module GitHubChangelogGenerator
           security_prefix: "**Security fixes:**",
           http_cache: true,
           require: [],
-          config_file: ".github_changelog_generator"
+          config_file: ".github_changelog_generator",
+          tag_order: "date"
         )
       end
     end
