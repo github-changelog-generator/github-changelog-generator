@@ -58,7 +58,7 @@ module GitHubChangelogGenerator
         end
 
         builder.use Octokit::Response::RaiseError
-        builder.adapter :async_http
+        builder.adapter Faraday.default_adapter
       end
     end
 
