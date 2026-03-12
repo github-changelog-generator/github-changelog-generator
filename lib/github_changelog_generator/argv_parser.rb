@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "optparse"
-require "github_changelog_generator/version"
+require_relative "version"
 
 module GitHubChangelogGenerator
   class ArgvParser

@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require "github_changelog_generator/helper"
-require "github_changelog_generator/argv_parser"
-require "github_changelog_generator/parser_file"
-require "github_changelog_generator/file_parser_chooser"
+require_relative "helper"
+require_relative "argv_parser"
+require_relative "parser_file"
+require_relative "file_parser_chooser"
 
 module GitHubChangelogGenerator
   class Parser
