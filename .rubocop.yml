@@ -1,8 +1,10 @@
 inherit_from: .rubocop_todo.yml
-require: rubocop-performance
+plugins: rubocop-performance
 
 AllCops:
   TargetRubyVersion: 3.0
+  NewCops: disable
+  SuggestExtensions: false
   DisplayCopNames: true
   DisplayStyleGuide: true
   Exclude:
@@ -40,8 +42,8 @@ Metrics/MethodLength:
   Enabled: false
 
 Metrics/ModuleLength:
-    Exclude:
-      - 'spec/**/*'
+  Exclude:
+    - 'spec/**/*'
 
 Naming/FileName:
   Exclude:
