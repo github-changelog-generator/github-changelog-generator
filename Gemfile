@@ -6,6 +6,8 @@ ruby RUBY_VERSION
 
 gemspec
 
+gem "ffi"
+
 group :development, :test do
   gem "bundler"
   gem "overcommit", ">= 0.60"
