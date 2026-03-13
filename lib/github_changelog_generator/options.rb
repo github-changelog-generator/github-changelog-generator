@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "delegate"
-require "github_changelog_generator/helper"
+require_relative "helper"
 
 module GitHubChangelogGenerator
   # This class wraps Options, and knows a list of known options. Others options

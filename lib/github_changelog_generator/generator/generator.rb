@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require "github_changelog_generator/octo_fetcher"
-require "github_changelog_generator/generator/generator_fetcher"
-require "github_changelog_generator/generator/generator_processor"
-require "github_changelog_generator/generator/generator_tags"
-require "github_changelog_generator/generator/entry"
-require "github_changelog_generator/generator/section"
+require_relative "../octo_fetcher"
+require_relative "generator_fetcher"
+require_relative "generator_processor"
+require_relative "generator_tags"
+require_relative "entry"
+require_relative "section"
 
 module GitHubChangelogGenerator
   # Default error for ChangelogGenerator
