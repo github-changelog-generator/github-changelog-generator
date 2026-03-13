@@ -1,8 +1,69 @@
 # Changelog
 
-## [1.16.4](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.16.4) (2021-06-03)
+## [v1.17.0](https://github.com/github-changelog-generator/github-changelog-generator/tree/v1.17.0) (2026-03-13)
 
-[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/v1.16.3...1.16.4)
+[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/v1.16.4...v1.17.0)
+
+**Implemented enhancements:**
+
+- Add support for Ruby 4.0 [\#1062](https://github.com/github-changelog-generator/github-changelog-generator/pull/1062) ([smortex](https://github.com/smortex))
+- Add Token Location to Verbose Output [\#1048](https://github.com/github-changelog-generator/github-changelog-generator/pull/1048) ([pseudotsuga-fir](https://github.com/pseudotsuga-fir))
+- Update to Ruby 3.2.2, raise lowest-supported Ruby version to 3.0 [\#1032](https://github.com/github-changelog-generator/github-changelog-generator/pull/1032) ([mencarellic](https://github.com/mencarellic))
+- Remove `multi_json` gem dependency [\#991](https://github.com/github-changelog-generator/github-changelog-generator/pull/991) ([aried3r](https://github.com/aried3r))
+
+**Fixed bugs:**
+
+- Verbose output says token is not in use [\#1047](https://github.com/github-changelog-generator/github-changelog-generator/issues/1047)
+- No common ancestor between XXXXX and v1.30.0. [\#994](https://github.com/github-changelog-generator/github-changelog-generator/issues/994)
+- `gsub!': can't modify frozen String \(FrozenError\) causing changelog generator exiting with error code 1 [\#977](https://github.com/github-changelog-generator/github-changelog-generator/issues/977)
+- Error: log writing failed. Attempt to unlock a mutex which is locked by another thread/fiber [\#974](https://github.com/github-changelog-generator/github-changelog-generator/issues/974)
+- Generated log path incorrect [\#892](https://github.com/github-changelog-generator/github-changelog-generator/issues/892)
+- --no-issues-wo-labels should not exclude Pull Requests [\#821](https://github.com/github-changelog-generator/github-changelog-generator/issues/821)
+- Mixed line endings in output file when using 'release summaries' [\#715](https://github.com/github-changelog-generator/github-changelog-generator/issues/715)
+- Error when run against module with a second module merged into it. [\#665](https://github.com/github-changelog-generator/github-changelog-generator/issues/665)
+- Specifying since-tag on a PR merge commit can cause that PR to be included [\#615](https://github.com/github-changelog-generator/github-changelog-generator/issues/615)
+- Cannot use --exclude-tags option after upgrade to Ruby 2.4.0 [\#469](https://github.com/github-changelog-generator/github-changelog-generator/issues/469)
+- Can't exclude issues without labels [\#302](https://github.com/github-changelog-generator/github-changelog-generator/issues/302)
+- Cannot exclude PRs without labels. [\#292](https://github.com/github-changelog-generator/github-changelog-generator/issues/292)
+- PR appears as part of "unreleased [\#282](https://github.com/github-changelog-generator/github-changelog-generator/issues/282)
+- old merged PR listed for a wrong release [\#256](https://github.com/github-changelog-generator/github-changelog-generator/issues/256)
+- Fix SSL certificate errors and update RuboCop config [\#1064](https://github.com/github-changelog-generator/github-changelog-generator/pull/1064) ([skywinder](https://github.com/skywinder))
+- Avoid processing a single commit multiple times [\#1058](https://github.com/github-changelog-generator/github-changelog-generator/pull/1058) ([smortex](https://github.com/smortex))
+- Fix missing release branch when looking for commits [\#1055](https://github.com/github-changelog-generator/github-changelog-generator/pull/1055) ([sdb9696](https://github.com/sdb9696))
+- fix: remove an unneeded shebang and fix another one [\#987](https://github.com/github-changelog-generator/github-changelog-generator/pull/987) ([MatteoPierro](https://github.com/MatteoPierro))
+- Fix for echoing the complete output path [\#986](https://github.com/github-changelog-generator/github-changelog-generator/pull/986) ([anakinj](https://github.com/anakinj))
+- Use mutable empty strings when needed [\#981](https://github.com/github-changelog-generator/github-changelog-generator/pull/981) ([adangel](https://github.com/adangel))
+- Get commits from release branch [\#979](https://github.com/github-changelog-generator/github-changelog-generator/pull/979) ([pokey](https://github.com/pokey))
+- section: Make sure to normalize line endings in body [\#808](https://github.com/github-changelog-generator/github-changelog-generator/pull/808) ([lazyfrosch](https://github.com/lazyfrosch))
+
+**Closed issues:**
+
+- Allow passing location of configuration file to ParseFile [\#925](https://github.com/github-changelog-generator/github-changelog-generator/issues/925)
+- Use GitHub's GraphQL v4 API [\#524](https://github.com/github-changelog-generator/github-changelog-generator/issues/524)
+- \[wishlist\] --include-tags-regex [\#376](https://github.com/github-changelog-generator/github-changelog-generator/issues/376)
+- Add support for custom sections [\#316](https://github.com/github-changelog-generator/github-changelog-generator/issues/316)
+
+**Merged pull requests:**
+
+- Replace require with require\_relative for internal files [\#1063](https://github.com/github-changelog-generator/github-changelog-generator/pull/1063) ([skywinder](https://github.com/skywinder))
+- Improve spec coverage for pull request association [\#1037](https://github.com/github-changelog-generator/github-changelog-generator/pull/1037) ([mvz](https://github.com/mvz))
+- CI: Configure GitHub Actions [\#1034](https://github.com/github-changelog-generator/github-changelog-generator/pull/1034) ([olleolleolle](https://github.com/olleolleolle))
+- DOC: Document custom label-\>section mapping [\#1026](https://github.com/github-changelog-generator/github-changelog-generator/pull/1026) ([larsoner](https://github.com/larsoner))
+- Fix GitHub spelling [\#1021](https://github.com/github-changelog-generator/github-changelog-generator/pull/1021) ([friederbluemle](https://github.com/friederbluemle))
+- docs: Fix filename in option to gh release command [\#1009](https://github.com/github-changelog-generator/github-changelog-generator/pull/1009) ([olleolleolle](https://github.com/olleolleolle))
+- document how to create release notes [\#999](https://github.com/github-changelog-generator/github-changelog-generator/pull/999) ([bruce-szalwinski](https://github.com/bruce-szalwinski))
+- Fixed typo [\#997](https://github.com/github-changelog-generator/github-changelog-generator/pull/997) ([hsbt](https://github.com/hsbt))
+- Extract find\_tag\_for\_milestone method [\#990](https://github.com/github-changelog-generator/github-changelog-generator/pull/990) ([MatteoPierro](https://github.com/MatteoPierro))
+- Add tests for GitHubChangelogGenerator::Generator\#remove\_issues\_in\_milestones [\#989](https://github.com/github-changelog-generator/github-changelog-generator/pull/989) ([MatteoPierro](https://github.com/MatteoPierro))
+- Add coverage to parser file spec [\#988](https://github.com/github-changelog-generator/github-changelog-generator/pull/988) ([MatteoPierro](https://github.com/MatteoPierro))
+- refactor: Unnest conditionals in tag-related methods, deprecate an ill-named method [\#985](https://github.com/github-changelog-generator/github-changelog-generator/pull/985) ([anakinj](https://github.com/anakinj))
+- Extract GitHubChangelogGenerator::FileParserChooser to its own file [\#984](https://github.com/github-changelog-generator/github-changelog-generator/pull/984) ([anakinj](https://github.com/anakinj))
+- Bump the minor version for development environment [\#983](https://github.com/github-changelog-generator/github-changelog-generator/pull/983) ([anakinj](https://github.com/anakinj))
+- README: Link to GitHub Issue type chooser [\#976](https://github.com/github-changelog-generator/github-changelog-generator/pull/976) ([olleolleolle](https://github.com/olleolleolle))
+
+## [v1.16.4](https://github.com/github-changelog-generator/github-changelog-generator/tree/v1.16.4) (2021-06-03)
+
+[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/v1.16.3...v1.16.4)
 
 **Closed issues:**
 
@@ -81,8 +142,6 @@
 
 - Footer message that keeps replicating [\#787](https://github.com/github-changelog-generator/github-changelog-generator/issues/787)
 - `Octokit::NotFound' error happens since 372875f7  [\#695](https://github.com/github-changelog-generator/github-changelog-generator/issues/695)
-- Fix not parsing body\_only param for sections [\#755](https://github.com/github-changelog-generator/github-changelog-generator/pull/755) ([dusan-dragon](https://github.com/dusan-dragon))
-- Bugfix: undefined method line\_labels\_for [\#753](https://github.com/github-changelog-generator/github-changelog-generator/pull/753) ([dusan-dragon](https://github.com/dusan-dragon))
 
 **Closed issues:**
 
@@ -223,7 +282,7 @@
 - Rubocop maintenance for 0.64.0 [\#703](https://github.com/github-changelog-generator/github-changelog-generator/pull/703) ([olleolleolle](https://github.com/olleolleolle))
 - Gemspec: drop old setting default\_executable [\#702](https://github.com/github-changelog-generator/github-changelog-generator/pull/702) ([olleolleolle](https://github.com/olleolleolle))
 - Fix tests [\#700](https://github.com/github-changelog-generator/github-changelog-generator/pull/700) ([unicolet](https://github.com/unicolet))
-- Replace all skywinder occurrences to github-changelog-generator [\#698](https://github.com/github-changelog-generator/github-changelog-generator/pull/698) ([bodazhao](https://github.com/bodazhao))
+- Replace all skywinder occurrences to github-changelog-generator [\#698](https://github.com/github-changelog-generator/github-changelog-generator/pull/698) ([bodadotsh](https://github.com/bodadotsh))
 - Update license date [\#696](https://github.com/github-changelog-generator/github-changelog-generator/pull/696) ([blrhc](https://github.com/blrhc))
 - README: Install wording, notes on Docker [\#689](https://github.com/github-changelog-generator/github-changelog-generator/pull/689) ([aredshaw](https://github.com/aredshaw))
 - Linting updates, spec fixes [\#680](https://github.com/github-changelog-generator/github-changelog-generator/pull/680) ([mob-sakai](https://github.com/mob-sakai))
@@ -313,7 +372,7 @@
 **Implemented enhancements:**
 
 - Add newline after version name and Full Changelog link [\#548](https://github.com/github-changelog-generator/github-changelog-generator/pull/548) ([ianroberts131](https://github.com/ianroberts131))
-- Update the token failure example to OctoKit 404 failure [\#525](https://github.com/github-changelog-generator/github-changelog-generator/pull/525) ([wompq](https://github.com/wompq))
+- Update the token failure example to OctoKit 404 failure [\#525](https://github.com/github-changelog-generator/github-changelog-generator/pull/525) ([alexdebugs](https://github.com/alexdebugs))
 - Rescue invalid commands and present the valid options list [\#498](https://github.com/github-changelog-generator/github-changelog-generator/pull/498) ([Lucashuang0802](https://github.com/Lucashuang0802))
 - bundled cacert.pem with --ssl-ca-file PATH option [\#480](https://github.com/github-changelog-generator/github-changelog-generator/pull/480) ([olleolleolle](https://github.com/olleolleolle))
 - Option parsing: Remove tag1, tag2 cruft [\#479](https://github.com/github-changelog-generator/github-changelog-generator/pull/479) ([olleolleolle](https://github.com/olleolleolle))
@@ -418,7 +477,7 @@
 
 ## [v1.14.0](https://github.com/github-changelog-generator/github-changelog-generator/tree/v1.14.0) (2016-11-05)
 
-[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.13.2...v1.14.0)
+[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/v1.13.2...v1.14.0)
 
 **Implemented enhancements:**
 
@@ -454,13 +513,13 @@
 - Drop a stray Markdown file [\#426](https://github.com/github-changelog-generator/github-changelog-generator/pull/426) ([olleolleolle](https://github.com/olleolleolle))
 - Travis: Add JRuby 9.1.5.0 to matrix [\#424](https://github.com/github-changelog-generator/github-changelog-generator/pull/424) ([olleolleolle](https://github.com/olleolleolle))
 
-## [1.13.2](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.13.2) (2016-09-29)
-
-[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/v1.13.2...1.13.2)
-
 ## [v1.13.2](https://github.com/github-changelog-generator/github-changelog-generator/tree/v1.13.2) (2016-09-29)
 
-[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.13.1...v1.13.2)
+[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.13.2...v1.13.2)
+
+## [1.13.2](https://github.com/github-changelog-generator/github-changelog-generator/tree/1.13.2) (2016-09-29)
+
+[Full Changelog](https://github.com/github-changelog-generator/github-changelog-generator/compare/1.13.1...1.13.2)
 
 **Implemented enhancements:**
 
@@ -505,7 +564,7 @@
 
 - Ability to implicity set user and project from command line [\#401](https://github.com/github-changelog-generator/github-changelog-generator/pull/401) ([skywinder](https://github.com/skywinder))
 - Show how to use it with Rakefile [\#399](https://github.com/github-changelog-generator/github-changelog-generator/pull/399) ([edusantana](https://github.com/edusantana))
-- Adds documentation on using a GHE endpoint [\#396](https://github.com/github-changelog-generator/github-changelog-generator/pull/396) ([cormacmccarthy](https://github.com/cormacmccarthy))
+- Adds documentation on using a GHE endpoint [\#396](https://github.com/github-changelog-generator/github-changelog-generator/pull/396) ([cmcculloh-kr](https://github.com/cmcculloh-kr))
 - Rake task usage: Added a missing option exclude\_tags\_regex [\#393](https://github.com/github-changelog-generator/github-changelog-generator/pull/393) ([perlun](https://github.com/perlun))
 - Parser: YARD docstrings and a rename, and RegExp named capture groups [\#391](https://github.com/github-changelog-generator/github-changelog-generator/pull/391) ([olleolleolle](https://github.com/olleolleolle))
 
