@@ -6,6 +6,7 @@ describe GitHubChangelogGenerator::Parser do
   before do
     # Calling abort will abort the test run, allow calls to abort to not accidentaly get positive falses
     allow(Kernel).to receive(:abort)
+    allow(GitHubChangelogGenerator::GitRemote).to receive(:user_and_project).and_return(nil)
   end
 
   describe ".parse_options" do
@@ -48,6 +49,37 @@ describe GitHubChangelogGenerator::Parser do
 
       it "uses the values from the arguments" do
         expect { described_class.parse_options(argv) }.to output(/stronger_project/).to_stdout
+      end
+    end
+
+    context "when user and project can be inferred from the git remote" do
+      let(:argv) { ["--config-file", "does_not_exist"] }
+
+      before do
+        allow(GitHubChangelogGenerator::GitRemote).to receive(:user_and_project).and_return(
+          user: "remote-user",
+          project: "remote-project"
+        )
+      end
+
+      it "uses the values from the current repository" do
+        expect { described_class.parse_options(argv) }.to output(/remote-project/).to_stdout
+      end
+    end
+
+    context "when only one required argument is given" do
+      let(:argv) { ["--user", "cli-user", "--config-file", "does_not_exist"] }
+
+      before do
+        allow(GitHubChangelogGenerator::GitRemote).to receive(:user_and_project).and_return(
+          user: "remote-user",
+          project: "remote-project"
+        )
+      end
+
+      it "only fills in the missing value from the current repository" do
+        expect { described_class.parse_options(argv) }
+          .to output(/:user=>\"cli-user\".*:project=>\"remote-project\"/m).to_stdout
       end
     end
   end
