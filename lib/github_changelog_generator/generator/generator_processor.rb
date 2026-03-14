@@ -127,7 +127,7 @@ module GitHubChangelogGenerator
       # skip if we are already at the oldest element
       return if idx == sorted_tags.size - 1
 
-      sorted_tags[idx - 1]
+      sorted_tags[idx + 1]
     end
 
     def tag_older_new_tag?(newer_tag_time, time)
