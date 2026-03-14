@@ -79,7 +79,7 @@ describe GitHubChangelogGenerator::Parser do
 
       it "only fills in the missing value from the current repository" do
         expect { described_class.parse_options(argv) }
-          .to output(/:user=>\"cli-user\".*:project=>\"remote-project\"/m).to_stdout
+          .to output(/:user=>"cli-user".*:project=>"remote-project"/m).to_stdout
       end
     end
   end

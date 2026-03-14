@@ -22,10 +22,11 @@ module GitHubChangelogGenerator
         stdout, status = Open3.capture2("git", "config", "--get-regexp", "^remote\\..*\\.url$")
         return [] unless status.success?
 
-        stdout.each_line.map { |line| parse_remote_line(line) }
-              .compact
-              .sort_by { |name, _url| name == "origin" ? 0 : 1 }
-              .map(&:last)
+        remote_lines = stdout.each_line.map { |line| parse_remote_line(line) }
+
+        remote_lines.compact
+                    .sort_by { |name, _url| name == "origin" ? 0 : 1 }
+                    .map(&:last)
       rescue Errno::ENOENT
         []
       end
@@ -65,7 +66,10 @@ module GitHubChangelogGenerator
       # Extracts the last two path segments as user/project.
       # Handles standard "owner/repo" as well as deeper paths (e.g. GHE with path prefixes).
       def extract_from_path(path)
-        segments = path.sub(%r{\A/+}, "").sub(%r{/\z}, "").sub(/\.git\z/, "").split("/")
+        normalized_path = path.sub(%r{\A/+}, "")
+                              .delete_suffix("/")
+                              .delete_suffix(".git")
+        segments = normalized_path.split("/")
         return if segments.length < 2
 
         {
