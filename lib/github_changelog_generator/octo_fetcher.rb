@@ -208,7 +208,8 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     # @param [Array] issues
     # @return [Void]
     def fetch_events_async(issues)
-      i = 0
+      fetched_count = 0
+      mutex = Mutex.new
       # Add accept option explicitly for disabling the warning of preview API.
       preview = { accept: Octokit::Preview::PREVIEW_TYPES[:project_card_events] }
 
@@ -225,8 +226,8 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
               issue["events"].concat(new_event)
             end
             issue["events"] = issue["events"].map { |event| stringify_keys_deep(event.to_hash) }
-            print_in_same_line("Fetching events for issues and PR: #{i + 1}/#{issues.count}")
-            i += 1
+            current = mutex.synchronize { fetched_count += 1 }
+            print_in_same_line("Fetching events for issues and PR: #{current}/#{issues.count}")
           end
         end
 
@@ -236,7 +237,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
         print_empty_line
       end
 
-      Helper.log.info "Fetching events for issues and PR: #{i}"
+      Helper.log.info "Fetching events for issues and PR: #{fetched_count}"
     end
 
     # Fetch comments for PRs and add them to "comments"
@@ -345,13 +346,13 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
     # @param [String] name
     # @return [Array<String>]
     def commits_in_branch(name)
-      @branches ||= lambda do
+      @branches ||= begin
+        all_branches = {}
         iterate_pages(client, "branches") do |branches|
-          branches_map = branches.to_h { |branch| [branch[:name], branch] }
-          return branches_map if branches_map[name]
+          branches.each { |branch| all_branches[branch[:name]] = branch }
         end
-        {}
-      end.call
+        all_branches
+      end
 
       if (branch = @branches[name])
         commits_in_tag(branch[:commit][:sha])

@@ -17,7 +17,7 @@ module GitHubChangelogGenerator
 
     def initialize(options = Options.new({}))
       @content = ""
-      @options = Options.new(options)
+      @options = options.is_a?(Options) ? options : Options.new(options)
     end
 
     # Generates log entry with header and body
@@ -209,8 +209,10 @@ module GitHubChangelogGenerator
                        # Only add unmapped issues
                        issues.select { |issue| issue["labels"].any? }
                      end
-        merged = Section.new(name: name, prefix: prefix, labels: [], issues: add_issues, options: @options) unless add_issues.empty?
-        @sections << merged
+        unless add_issues.empty?
+          merged = Section.new(name: name, prefix: prefix, labels: [], issues: add_issues, options: @options)
+          @sections << merged
+        end
       end
       nil
     end
