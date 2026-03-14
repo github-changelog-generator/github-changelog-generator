@@ -20,11 +20,11 @@ module GitHubChangelogGenerator
 
     def parser
       @parser ||= OptionParser.new do |opts| # rubocop:disable Metrics/BlockLength
-        opts.banner = "Usage: github_changelog_generator --user USER --project PROJECT [options]"
-        opts.on("-u", "--user USER", "Username of the owner of the target GitHub repo OR the namespace of target GitHub repo if owned by an organization.") do |last|
+        opts.banner = "Usage: github_changelog_generator [options]"
+        opts.on("-u", "--user USER", "Username of the owner of the target GitHub repo OR the namespace of target GitHub repo if owned by an organization. Defaults to the current git remote owner when available.") do |last|
           options[:user] = last
         end
-        opts.on("-p", "--project PROJECT", "Name of project on GitHub.") do |last|
+        opts.on("-p", "--project PROJECT", "Name of project on GitHub. Defaults to the current git remote repository when available.") do |last|
           options[:project] = last
         end
         opts.on("-t", "--token TOKEN", "To make more than 50 requests per hour your GitHub token is required. You can generate it at: https://github.com/settings/tokens/new") do |last|
