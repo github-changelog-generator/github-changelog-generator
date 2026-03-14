@@ -10,3 +10,4 @@ doc
 github-changelog-generator.iml
 github_changelog_generator-*.gem
 vendor/
+.claude/
