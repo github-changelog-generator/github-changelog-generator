@@ -447,15 +447,13 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
         raise(MovedPermanentlyError, response.data[:url]) if response.status == 301
       end
 
-      if not last_response.data.nil?
-        yield(last_response.data)
+      yield(last_response.data) if last_response.data
 
       if parent.nil?
         # The snail visits one leaf at a time:
         until (next_one = last_response.rels[:next]).nil?
           last_response = check_github_response { next_one.get }
-          if not last_response.data.nil?
-            yield(last_response.data)
+          yield(last_response.data) if last_response.data
         end
       elsif (last = last_response.rels[:last])
         # OR we bring out the gatling gun:
@@ -465,8 +463,7 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
         (2..last_page).each do |page|
           parent.async do
             data = check_github_response { client.send(method, user_project, *arguments, page: page, **options) }
-            if not data.nil?
-              yield data
+            yield data if data
           end
         end
       end
