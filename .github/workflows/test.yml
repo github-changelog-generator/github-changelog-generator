@@ -8,9 +8,12 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ${{matrix.os}}-latest
     strategy:
       matrix:
+        os:
+          - ubuntu
+          - windows
         ruby-version:
           - "3.0"
           - "3.1"
@@ -26,5 +29,12 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby-version }}
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+      # Verify the packaged gem installs on Windows, not just the development bundle.
+      - name: Verify gem install
+        if: matrix.os == 'windows'
+        shell: bash
+        run: |
+          gem build github_changelog_generator.gemspec
+          gem install ./github_changelog_generator-*.gem
       - name: Run tests
         run: bundle exec rake
